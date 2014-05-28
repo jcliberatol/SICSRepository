@@ -8,8 +8,14 @@
 #ifndef INPUT_H_
 #define INPUT_H_
 
-#include <boost/filesystem.hpp>
-using namespace boost::filesystem;
+#include <map>
+#include <cstdio>
+#include <cstring>
+#include <string>
+#include <cmath>
+#include <iostream>
+#include <ctype.h>
+
 
 class input {
 
@@ -22,7 +28,7 @@ private:
 public:
 	input();
 	virtual ~input();
-	bool checkFile(path file);
+	//bool importCSV(char*, GeMatrix<FullStorage<int, RowMajor> >&, int, int);
 };
 
 #endif /* INPUT_H_ */

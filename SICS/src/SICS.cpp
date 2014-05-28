@@ -7,13 +7,13 @@
 //============================================================================
 
 #include "SICS.h"
+#include <OpenBlas/cblas.h>
+#include <OpenBlas/common.h>
 
 using namespace std;
 
 int main() {
 	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
-	input iobj;
-	bool t = iobj.checkFile("/home/mirt/git/testo");
-	cout<<"t := "<<t<<endl;
+
 	return 0;
 }

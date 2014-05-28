@@ -1,9 +1,0 @@
-*.o
-*.a
-*.so
-*.out
-*.f
-flens/examples/*
-!flens/examples/*.cc
-!flens/examples/*.doc
-!flens/examples/Makefile
