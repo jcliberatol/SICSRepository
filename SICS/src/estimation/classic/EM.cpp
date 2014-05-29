@@ -1,18 +1,18 @@
 /*
- * numerical.cpp
+ * EM.cpp
  *
- *  Created on: May 27, 2014
+ *  Created on: May 29, 2014
  *      Author: mirt
  */
 
-#include "numerical.h"
+#include "EM.h"
 
-numerical::numerical() {
+EM::EM() {
 	// TODO Auto-generated constructor stub
 
 }
 
-numerical::~numerical() {
+EM::~EM() {
 	// TODO Auto-generated destructor stub
 }
 
