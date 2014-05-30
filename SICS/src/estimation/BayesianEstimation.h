@@ -7,6 +7,7 @@
 
 #ifndef BAYESIANESTIMATION_H_
 #define BAYESIANESTIMATION_H_
+#include <estimation/Estimation.h>
 
 class BayesianEstimation : public Estimation{
 public:

@@ -7,6 +7,7 @@
 
 #ifndef NEWTONOPTIMIZER_H_
 #define NEWTONOPTIMIZER_H_
+#include <core/optimizer/Optimizer.h>
 
 class NewtonOptimizer : public Optimizer{
 public:

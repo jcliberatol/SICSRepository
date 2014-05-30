@@ -7,6 +7,7 @@
 
 #ifndef EM_H_
 #define EM_H_
+#include "estimation/ClassicalEstimation.h"
 
 class EM : public ClassicalEstimation{
 public:

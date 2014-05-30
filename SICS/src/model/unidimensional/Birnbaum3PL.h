@@ -7,6 +7,7 @@
 
 #ifndef BIRNBAUM3PL_H_
 #define BIRNBAUM3PL_H_
+#include "model/Model.h"
 
 class Birnbaum3PL : public Model {
 public:

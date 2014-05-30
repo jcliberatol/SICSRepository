@@ -29,9 +29,10 @@
 								<option id="gnu.cpp.compiler.option.debugging.level.1977103182" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.723842463" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="/home/mirt/git/lib"/>
+									<listOptionValue builtIn="false" value="/home/mirt/git/SICSRepository/SICS/src"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.other.other.1877876475" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value=" -c -fmessage-length=0 -std=c++11" valueType="string"/>
-								<option id="gnu.cpp.compiler.option.include.files.407836542" name="Include files (-include)" superClass="gnu.cpp.compiler.option.include.files" valueType="includeFiles"/>
+								<option id="gnu.cpp.compiler.option.include.files.407836542" name="Include files (-include)" superClass="gnu.cpp.compiler.option.include.files"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.926137501" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.base.1302773911" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base">

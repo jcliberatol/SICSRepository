@@ -1,18 +1,18 @@
 /*
- * Matrix.cpp
+ * Vector.cpp
  *
- *  Created on: May 28, 2014
+ *  Created on: May 30, 2014
  *      Author: mirt
  */
 
-#include "Matrix.h"
+#include "Vector.h"
 
-Matrix::Matrix() {
+Vector::Vector() {
 	// TODO Auto-generated constructor stub
 
 }
 
-Matrix::~Matrix() {
+Vector::~Vector() {
 	// TODO Auto-generated destructor stub
 }
 

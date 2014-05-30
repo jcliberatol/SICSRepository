@@ -9,7 +9,9 @@
 #define SICS_H_
 
 #include <iostream>
-#include "util/input.h"
+#include <types/Matrix.h>
+
+using namespace std;
 
 
 
