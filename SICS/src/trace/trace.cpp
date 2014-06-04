@@ -7,18 +7,11 @@
 
 #include "trace.h"
 
-trace::trace(char f) {
+trace::trace() {
 	// TODO Auto-generated constructor stub
-	filename = f;
 
 }
 
 trace::~trace() {
 	// TODO Auto-generated destructor stub
-}
-
-void trace::log ( std::ostream & message) {
-
-
-
 }

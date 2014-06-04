@@ -28,8 +28,7 @@ public:
 	Matrix(Matrix&);//Copy constructor
 	int nR(); // Returns number of rows
 	int nC(); //Returns number of columns
-	double& operator()(const int nCol, const int nRow); //Accessing operator for a element
-	double& operator()(const int nCol);//Accessing operator for a row
+	T & operator()(const int nCol, const int nRow); //Accessing operator for a element
 	friend ostream& operator<< <T>(ostream &, Matrix<T> &);//Output operator
 
 
@@ -61,9 +60,9 @@ Matrix<T>::Matrix(int r, int c){
 	memory = new T [c*r];
 }
 template <class T>
-double & Matrix<T>::operator()(const int c, const int r)
+T & Matrix<T>::operator()(const int c, const int r)
 {
-    return memory[nRow][nCol];
+    return memory[nCol*r+c];
 }
 template <class T>
 Matrix<T>::~Matrix() {

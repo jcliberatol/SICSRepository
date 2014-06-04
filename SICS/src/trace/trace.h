@@ -10,9 +10,8 @@
 
 class trace {
 private:
-	char filename;
 public:
-	trace(char);
+	trace();
 	void log(std::ostream &);
 	virtual ~trace();
 };
