@@ -7,12 +7,45 @@
 
 #include "trace.h"
 
-trace::trace() {
-	// TODO Auto-generated constructor stub
+Trace::Trace( const char * filename ) {
+
+	this->filename = filename;
 
 }
 
-trace::~trace() {
+void Trace::operator() ( string message ) {
+
+	ofstream file;
+	file.open ( filename, ofstream::app );
+
+	file << message;
+
+	file.close ();
+
+}
+
+void Trace::operator() ( const char * message ) {
+
+	ofstream file;
+	file.open ( filename, ofstream::app );
+
+	file << message;
+
+	file.close ();
+}
+
+void Trace::operator() ( ostream & message ) {
+
+	ofstream file;
+	file.open ( filename, ofstream::app );
+
+	file << message;
+
+	file.close ();
+}
+
+
+Trace::~Trace() {
 	// TODO Auto-generated destructor stub
 }
 

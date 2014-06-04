@@ -8,10 +8,21 @@
 #ifndef TRACE_H_
 #define TRACE_H_
 
-class trace {
+#include <string>
+#include <fstream>
+
+using namespace std;
+
+class Trace {
+	const char * filename;
+
 public:
-	trace();
-	virtual ~trace();
+	Trace( const char * );
+	void operator() ( string );
+	void operator() ( const char * );
+	void operator() ( ostream & );
+
+	virtual ~Trace();
 };
 
 #endif /* TRACE_H_ */
