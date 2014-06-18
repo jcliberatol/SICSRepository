@@ -12,6 +12,12 @@ Estimation::Estimation() {
 
 }
 
+void Estimation::setModel ( Model * model ) {
+	this->model = model;
+}
+
+
+
 Estimation::~Estimation() {
 	// TODO Auto-generated destructor stub
 }

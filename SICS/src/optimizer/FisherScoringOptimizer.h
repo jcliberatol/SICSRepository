@@ -7,7 +7,7 @@
 
 #ifndef FISHERSCORINGOPTIMIZER_H_
 #define FISHERSCORINGOPTIMIZER_H_
-#include <core/optimizer/Optimizer.h>
+#include <optimizer/Optimizer.h>
 
 class FisherScoringOptimizer : public Optimizer{
 public:

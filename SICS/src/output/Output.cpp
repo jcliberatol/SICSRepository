@@ -1,18 +1,18 @@
 /*
- * Vector.cpp
+ * output.cpp
  *
- *  Created on: May 30, 2014
+ *  Created on: May 27, 2014
  *      Author: mirt
  */
 
-#include "Vector.h"
+#include "Output.h"
 
-Vector::Vector() {
+Output::Output() {
 	// TODO Auto-generated constructor stub
 
 }
 
-Vector::~Vector() {
+Output::~Output() {
 	// TODO Auto-generated destructor stub
 }
 

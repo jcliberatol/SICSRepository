@@ -12,7 +12,14 @@ ClassicalEstimation::ClassicalEstimation() {
 
 }
 
+void ClassicalEstimation::estimate(){
+
+
+}
+
 ClassicalEstimation::~ClassicalEstimation() {
 	// TODO Auto-generated destructor stub
 }
+
+
 

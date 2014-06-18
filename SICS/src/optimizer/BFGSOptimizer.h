@@ -7,7 +7,7 @@
 
 #ifndef BFGSOPTIMIZER_H_
 #define BFGSOPTIMIZER_H_
-#include <core/optimizer/Optimizer.h>
+#include <optimizer/Optimizer.h>
 
 class BFGSOptimizer : public Optimizer{
 public:

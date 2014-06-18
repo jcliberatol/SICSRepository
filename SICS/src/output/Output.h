@@ -8,10 +8,10 @@
 #ifndef OUTPUT_H_
 #define OUTPUT_H_
 
-class output {
+class Output {
 public:
-	output();
-	virtual ~output();
+	Output();
+	virtual ~Output();
 };
 
 #endif /* OUTPUT_H_ */

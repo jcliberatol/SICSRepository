@@ -10,6 +10,7 @@
 
 #include <string>
 #include <fstream>
+#include <type/Matrix.h>
 
 using namespace std;
 
@@ -20,9 +21,23 @@ public:
 	Trace( const char * );
 	void operator() ( string );
 	void operator() ( const char * );
-	void operator() ( ostream & );
+	template<typename T>
+	void operator() ( Matrix<T>&);
 
 	virtual ~Trace();
 };
+
+
+template<typename T>
+void Trace::operator() ( Matrix<T> & message ) {
+
+	ofstream file;
+	file.open ( filename, ofstream::app );
+
+	file << message;
+
+	file.close ();
+}
+
 
 #endif /* TRACE_H_ */

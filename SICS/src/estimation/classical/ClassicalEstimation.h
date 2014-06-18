@@ -10,8 +10,12 @@
 #include <estimation/Estimation.h>
 
 class ClassicalEstimation : public Estimation {
+	Matrix<double> parameters;
 public:
-	ClassicalEstimation();
+	ClassicalEstimation ();
+	void estimate ();
+	void EM ();
+
 	virtual ~ClassicalEstimation();
 };
 

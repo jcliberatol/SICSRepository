@@ -29,7 +29,9 @@
 								<option id="gnu.cpp.compiler.option.debugging.level.1977103182" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.723842463" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="/home/mirt/git/lib"/>
+									<listOptionValue builtIn="false" value="/home/jlgpisa/git/lib"/>
 									<listOptionValue builtIn="false" value="/home/mirt/git/SICSRepository/SICS/src"/>
+									<listOptionValue builtIn="false" value="/home/jlgpisa/git/SICSRepository/SICS/src"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.other.other.1877876475" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value=" -c -fmessage-length=0 -std=c++11" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.include.files.407836542" name="Include files (-include)" superClass="gnu.cpp.compiler.option.include.files"/>
@@ -63,6 +65,7 @@
 									<listOptionValue builtIn="false" value="/home/mirt/git/SICSRepository/SICS/src/lib/boost"/>
 									<listOptionValue builtIn="false" value="/home/mirt/git/SICSRepository/SICS/src/lib/boost/boost"/>
 									<listOptionValue builtIn="false" value="/home/mirt/git/SICSRepository/SICS/src/lib/FLENS"/>
+									<listOptionValue builtIn="false" value="/home/jlgpisa/git/lib/boost"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.647624984" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>

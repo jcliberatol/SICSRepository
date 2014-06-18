@@ -5,7 +5,7 @@
  *      Author: mirt
  */
 
-#include "trace.h"
+#include "Trace.h"
 
 Trace::Trace( const char * filename ) {
 
@@ -18,7 +18,7 @@ void Trace::operator() ( string message ) {
 	ofstream file;
 	file.open ( filename, ofstream::app );
 
-	file << message;
+	file << message << endl;
 
 	file.close ();
 
@@ -29,17 +29,7 @@ void Trace::operator() ( const char * message ) {
 	ofstream file;
 	file.open ( filename, ofstream::app );
 
-	file << message;
-
-	file.close ();
-}
-
-void Trace::operator() ( ostream & message ) {
-
-	ofstream file;
-	file.open ( filename, ofstream::app );
-
-	file << message;
+	file << message << endl;
 
 	file.close ();
 }
@@ -48,4 +38,3 @@ void Trace::operator() ( ostream & message ) {
 Trace::~Trace() {
 	// TODO Auto-generated destructor stub
 }
-

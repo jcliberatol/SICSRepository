@@ -15,20 +15,29 @@
 #include <cmath>
 #include <iostream>
 #include <ctype.h>
+#include <fstream>
+#include <type/PatternMatrix.h>
+#include <trace/Trace.h>
+
+using namespace std;
 
 
-class input {
+class Input {
 
 private:
 	/*
 	 * Checks if a file exists, relative to the program
 	 */
-
+	char del = ',';
 
 public:
-	input();
-	virtual ~input();
-	//bool importCSV(char*, GeMatrix<FullStorage<int, RowMajor> >&, int, int);
+	Input();
+	virtual ~Input();
+	bool importCSV ( char*, PatternMatrix&, unsigned int, unsigned int );
+
+	char getDel() const;
+	void setDel(char);
+
 };
 
 #endif /* INPUT_H_ */
