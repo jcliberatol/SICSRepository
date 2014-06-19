@@ -8,9 +8,21 @@
 #ifndef DICHOTOMOUSMODEL_H_
 #define DICHOTOMOUSMODEL_H_
 
-class DichotomousModel {
+#include <model/item/ItemModel.h>
+
+class DichotomousModel : public ItemModel {
 public:
+	// Constructor
 	DichotomousModel();
+
+	// Methods
+	int getCategories ();
+
+	// Getters and Setters
+	const DataSet* getDataset() const;
+	void setDataset(DataSet* dataset);
+
+	// Destructor
 	virtual ~DichotomousModel();
 };
 

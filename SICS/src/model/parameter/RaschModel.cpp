@@ -12,6 +12,26 @@ RaschModel::RaschModel() {
 
 }
 
+void RaschModel::buildParameterSet(ItemModel*, DimensionModel*) {
+}
+
+void RaschModel::setInitialPars(map<Parameter, Matrix<double> >* pair) {
+}
+
+void RaschModel::calculateInitialPars() {
+}
+
+void RaschModel::successProbability() {
+}
+
+const map<Parameter, Matrix<double> >* RaschModel::getParameterSet() const {
+	return parameterSet;
+}
+
+void RaschModel::setParameterSet(map<Parameter, Matrix<double> >* parameterSet ) {
+	this->parameterSet = parameterSet;
+}
+
 RaschModel::~RaschModel() {
 	// TODO Auto-generated destructor stub
 }

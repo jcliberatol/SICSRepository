@@ -8,9 +8,20 @@
 #ifndef UNIDIMENSIONALMODEL_H_
 #define UNIDIMENSIONALMODEL_H_
 
-class UnidimensionalModel {
+#include <model/dimension/DimensionModel.h>
+
+class UnidimensionalModel : public DimensionModel {
 public:
 	UnidimensionalModel();
+
+	// Methods
+	int getNumDimensions ();
+	vector<double> getDimVector();
+
+	// Getters and Setters
+	const LatentTraitSet* getLatentTraitSet() const;
+	void setLatentTraitSet(LatentTraitSet* latentTraitSet);
+
 	virtual ~UnidimensionalModel();
 };
 

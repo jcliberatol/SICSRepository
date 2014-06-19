@@ -8,9 +8,23 @@
 #ifndef THREEPLMODEL_H_
 #define THREEPLMODEL_H_
 
-class ThreePLModel {
+#include <model/parameter/ParameterModel.h>
+
+class ThreePLModel : public ParameterModel {
 public:
+	// Constructor
 	ThreePLModel();
+
+	// Methods
+	void buildParameterSet ( ItemModel *, DimensionModel * );
+	void setInitialPars ( map <Parameter, Matrix<double> > * );
+	void calculateInitialPars ();
+	void successProbability ();
+
+	// Getters and Setters
+	const map<Parameter, Matrix<double> >* getParameterSet() const;
+	void setParameterSet(map<Parameter, Matrix<double> >*);
+
 	virtual ~ThreePLModel();
 };
 

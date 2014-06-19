@@ -12,6 +12,17 @@ PolytomousModel::PolytomousModel() {
 
 }
 
+int PolytomousModel::getCategories() {
+}
+
+const DataSet* PolytomousModel::getDataset() const {
+	return dataSet;
+}
+
+void PolytomousModel::setDataset(DataSet* dataset) {
+	this->dataSet = dataset;
+}
+
 PolytomousModel::~PolytomousModel() {
 	// TODO Auto-generated destructor stub
 }

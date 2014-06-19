@@ -8,9 +8,20 @@
 #ifndef ITEMMODEL_H_
 #define ITEMMODEL_H_
 
+#include <type/DataSet.h>
+
 class ItemModel {
+protected:
+	DataSet *dataSet;
 public:
-	ItemModel();
+	// Methods
+	virtual int getCategories () = 0;
+
+	// Getters and Setters
+	virtual const DataSet* getDataset() const = 0;
+	virtual void setDataset(const DataSet*& dataset) = 0;
+
+	// Destructor
 	virtual ~ItemModel();
 };
 

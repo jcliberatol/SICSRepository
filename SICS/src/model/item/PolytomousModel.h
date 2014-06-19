@@ -8,9 +8,21 @@
 #ifndef POLYTOMOUSMODEL_H_
 #define POLYTOMOUSMODEL_H_
 
-class PolytomousModel {
+#include <model/item/ItemModel.h>
+
+class PolytomousModel : public ItemModel {
 public:
+	// Constructor
 	PolytomousModel();
+
+	// Methods
+	int getCategories ();
+
+	// Getters and Setters
+	const DataSet* getDataset() const;
+	void setDataset(DataSet* dataset);
+
+	// Destructor
 	virtual ~PolytomousModel();
 };
 

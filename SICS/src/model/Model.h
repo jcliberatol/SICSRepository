@@ -14,9 +14,9 @@
 #include <model/ModelFactory.h>
 
 class Model {
-	ParameterModel parameterModel;
-	ItemModel itemModel;
-	DimensionModel dimensionModel;
+	ParameterModel *parameterModel;
+	ItemModel *itemModel;
+	DimensionModel *dimensionModel;
 
 public:
 	// Constructor
@@ -26,12 +26,14 @@ public:
 	void setModel ( ModelFactory * );
 
 	// Getters and Setters
-	const DimensionModel& getDimensionModel() const;
-	void setDimensionModel(const DimensionModel& dimensionModel);
-	const ItemModel& getItemModel() const;
-	void setItemModel(const ItemModel& itemModel);
-	const ParameterModel& getParameterModel() const;
-	void setParameterModel(const ParameterModel& parameterModel);
+	const DimensionModel* getDimensionModel() const;
+	void setDimensionModel(DimensionModel* dimensionModel);
+
+	const ItemModel* getItemModel() const;
+	void setItemModel(ItemModel* itemModel);
+
+	const ParameterModel* getParameterModel() const;
+	void setParameterModel(ParameterModel* parameterModel);
 
 	// Destructor
 	virtual ~Model();

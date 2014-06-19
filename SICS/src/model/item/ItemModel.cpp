@@ -7,10 +7,6 @@
 
 #include <model/item/ItemModel.h>
 
-ItemModel::ItemModel() {
-	// TODO Auto-generated constructor stub
-
-}
 
 ItemModel::~ItemModel() {
 	// TODO Auto-generated destructor stub

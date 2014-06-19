@@ -12,6 +12,20 @@ UnidimensionalModel::UnidimensionalModel() {
 
 }
 
+int UnidimensionalModel::getNumDimensions() {
+}
+
+vector<double> UnidimensionalModel::getDimVector() {
+}
+
+const LatentTraitSet* UnidimensionalModel::getLatentTraitSet() const {
+	return latentTraitSet;
+}
+
+void UnidimensionalModel::setLatentTraitSet(LatentTraitSet* latentTraitSet) {
+	this->latentTraitSet = latentTraitSet;
+}
+
 UnidimensionalModel::~UnidimensionalModel() {
 	// TODO Auto-generated destructor stub
 }

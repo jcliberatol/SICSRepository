@@ -8,9 +8,26 @@
 #ifndef MULTIDIMENSIONALMODEL_H_
 #define MULTIDIMENSIONALMODEL_H_
 
-class MultidimensionalModel {
+#include <vector>
+#include <type/LatentTraitSet.h>
+#include <model/dimension/DimensionModel.h>
+
+using namespace std;
+
+class MultidimensionalModel : public DimensionModel {
 public:
+	// Constructor
 	MultidimensionalModel();
+
+	// Methods
+	int getNumDimensions ();
+	vector<double> getDimVector();
+
+	// Getters and Setters
+	const LatentTraitSet* getLatentTraitSet() const;
+	void setLatentTraitSet(LatentTraitSet* latentTraitSet);
+
+	// Destructor
 	virtual ~MultidimensionalModel();
 };
 

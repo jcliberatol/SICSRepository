@@ -12,6 +12,18 @@ DichotomousModel::DichotomousModel() {
 
 }
 
+int DichotomousModel::getCategories() {
+	return 2;
+}
+
+const DataSet* DichotomousModel::getDataset() const {
+	return dataSet;
+}
+
+void DichotomousModel::setDataset(DataSet* dataset) {
+	this->dataSet = dataSet;
+}
+
 DichotomousModel::~DichotomousModel() {
 	// TODO Auto-generated destructor stub
 }

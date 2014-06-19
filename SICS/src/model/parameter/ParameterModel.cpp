@@ -7,11 +7,6 @@
 
 #include <model/parameter/ParameterModel.h>
 
-ParameterModel::ParameterModel() {
-	// TODO Auto-generated constructor stub
-
-}
-
 ParameterModel::~ParameterModel() {
 	// TODO Auto-generated destructor stub
 }
