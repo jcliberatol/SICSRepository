@@ -11,7 +11,12 @@
 
 class BayesianEstimation : public Estimation{
 public:
+	// Constructor
 	BayesianEstimation();
+
+	void estimate ();
+	void setModel ( Model * );
+
 	virtual ~BayesianEstimation();
 };
 

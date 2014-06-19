@@ -9,7 +9,12 @@
 
 BayesianEstimation::BayesianEstimation() {
 	// TODO Auto-generated constructor stub
+}
 
+void BayesianEstimation::estimate() {
+}
+
+void BayesianEstimation::setModel(Model* model) {
 }
 
 BayesianEstimation::~BayesianEstimation() {

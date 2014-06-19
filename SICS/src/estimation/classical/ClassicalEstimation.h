@@ -10,11 +10,11 @@
 #include <estimation/Estimation.h>
 
 class ClassicalEstimation : public Estimation {
-	Matrix<double> parameters;
 public:
 	ClassicalEstimation ();
+
 	void estimate ();
-	void EM ();
+	void setModel ( Model * );
 
 	virtual ~ClassicalEstimation();
 };

@@ -9,12 +9,12 @@
 
 ClassicalEstimation::ClassicalEstimation() {
 	// TODO Auto-generated constructor stub
-
 }
 
 void ClassicalEstimation::estimate(){
+}
 
-
+void ClassicalEstimation::setModel(Model* model) {
 }
 
 ClassicalEstimation::~ClassicalEstimation() {

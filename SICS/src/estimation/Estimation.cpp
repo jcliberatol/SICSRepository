@@ -7,17 +7,6 @@
 
 #include "Estimation.h"
 
-Estimation::Estimation() {
-	// TODO Auto-generated constructor stub
-
-}
-
-void Estimation::setModel ( Model * model ) {
-	this->model = model;
-}
-
-
-
 Estimation::~Estimation() {
 	// TODO Auto-generated destructor stub
 }

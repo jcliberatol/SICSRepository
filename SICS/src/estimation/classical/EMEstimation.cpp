@@ -5,14 +5,14 @@
  *      Author: mirt
  */
 
-#include "EM.h"
+#include "EMEstimation.h"
 
-EM::EM() {
+EMEstimation::EMEstimation() {
 	// TODO Auto-generated constructor stub
 
 }
 
-EM::~EM() {
+EMEstimation::~EMEstimation() {
 	// TODO Auto-generated destructor stub
 }
 

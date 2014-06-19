@@ -9,10 +9,10 @@
 #define EM_H_
 #include <estimation/classical/ClassicalEstimation.h>
 
-class EM : public ClassicalEstimation{
+class EMEstimation : public ClassicalEstimation{
 public:
-	EM();
-	virtual ~EM();
+	EMEstimation();
+	virtual ~EMEstimation();
 };
 
 #endif /* EM_H_ */
