@@ -56,16 +56,19 @@ bool Input::importCSV( char* filename, PatternMatrix& M, unsigned int rowIdx, un
 
 		//Count the binary characters
 		int i = 0;
-		int dlen=0;
+		int dlen = 0;
+
 		while( processLine[i]!='\0' ) {
 			if( processLine[i]=='0'||processLine[i]=='1' ) dlen ++;
 			i++;
 		}
+
 		//bitset that holds the bits of a row
 		boost::dynamic_bitset<> dset (dlen);
 
-		i=0;
+		i = 0;
 		int chars = 1;
+
 		while( processLine[i]!= '\0' ) {
 
 			if( processLine[i]=='0') {
@@ -81,7 +84,9 @@ bool Input::importCSV( char* filename, PatternMatrix& M, unsigned int rowIdx, un
 		//Bitset is now filled
 		M.push(dset);
 	}
+
 	inFile.close();
+
 	return 1;
 }
 
