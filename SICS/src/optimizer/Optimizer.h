@@ -10,7 +10,6 @@
 
 class Optimizer {
 public:
-	Optimizer();
 	virtual ~Optimizer();
 };
 
