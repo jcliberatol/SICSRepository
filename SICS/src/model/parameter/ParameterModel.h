@@ -19,7 +19,7 @@ enum Parameter {a,b,c,d};
 
 class ParameterModel {
 protected:
-	map <Parameter, Matrix<double> > *parameterSet;
+	map <Parameter, Matrix<double> * > parameterSet;
 public:
 	// Methods
 	virtual void buildParameterSet ( ItemModel *, DimensionModel * ) = 0;
@@ -28,12 +28,11 @@ public:
 	virtual void successProbability () = 0;
 
 	// Getters and Setters
-	virtual const map<Parameter, Matrix<double> >* getParameterSet() const = 0;
-	virtual void setParameterSet(map<Parameter, Matrix<double> >*) = 0;
+	virtual const map<Parameter, Matrix<double> *>& getParameterSet() const = 0;
+	virtual void setParameterSet(const map<Parameter, Matrix<double> *>& parameterSet) = 0;
 
 	// Destructor
 	virtual ~ParameterModel();
-
 };
 
 #endif /* PARAMETERMODEL_H_ */

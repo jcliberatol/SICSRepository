@@ -24,11 +24,11 @@ void RaschModel::calculateInitialPars() {
 void RaschModel::successProbability() {
 }
 
-const map<Parameter, Matrix<double> >* RaschModel::getParameterSet() const {
-	return parameterSet;
+const map<Parameter, Matrix<double> *>& RaschModel::getParameterSet() const {
+	return this->parameterSet;
 }
 
-void RaschModel::setParameterSet(map<Parameter, Matrix<double> >* parameterSet ) {
+void RaschModel::setParameterSet(const map<Parameter, Matrix<double> *>& pair) {
 	this->parameterSet = parameterSet;
 }
 

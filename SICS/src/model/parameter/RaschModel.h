@@ -22,8 +22,8 @@ public:
 	void successProbability();
 
 	// Getters and Setters
-	const map<Parameter, Matrix<double> >* getParameterSet() const;
-	void setParameterSet(map<Parameter, Matrix<double> >*);
+	const map<Parameter, Matrix<double> *>& getParameterSet() const;
+	void setParameterSet(const map<Parameter, Matrix<double> *>&);
 
 	// Destructor
 	virtual ~RaschModel();

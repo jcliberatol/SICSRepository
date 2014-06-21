@@ -25,11 +25,11 @@ void TwoPLModel::calculateInitialPars() {
 void TwoPLModel::successProbability() {
 }
 
-const map<Parameter, Matrix<double> >* TwoPLModel::getParameterSet() const {
-	return parameterSet;
+const map<Parameter, Matrix<double> *>& TwoPLModel::getParameterSet() const {
+	return this->parameterSet;
 }
 
-void TwoPLModel::setParameterSet(map<Parameter, Matrix<double> >* parameterSet) {
+void TwoPLModel::setParameterSet(const map<Parameter, Matrix<double> *>& pair) {
 	this->parameterSet = parameterSet;
 }
 
