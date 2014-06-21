@@ -10,13 +10,14 @@
 
 #include <model/item/ItemModel.h>
 
-class DichotomousModel : public ItemModel {
+class DichotomousModel: public ItemModel {
 public:
 	// Constructor
 	DichotomousModel();
 
 	// Methods
-	int getCategories ();
+	int countCategories();
+	int countItems();
 
 	// Getters and Setters
 	const DataSet* getDataset() const;

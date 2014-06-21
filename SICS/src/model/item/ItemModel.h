@@ -15,7 +15,8 @@ protected:
 	DataSet *dataSet;
 public:
 	// Methods
-	virtual int getCategories () = 0;
+	virtual int countCategories() = 0;
+	virtual int countItems() = 0;
 
 	// Getters and Setters
 	virtual const DataSet* getDataset() const = 0;

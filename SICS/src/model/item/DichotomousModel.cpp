@@ -12,7 +12,7 @@ DichotomousModel::DichotomousModel() {
 
 }
 
-int DichotomousModel::getCategories() {
+int DichotomousModel::countCategories() {
 	return 2;
 }
 
@@ -22,6 +22,9 @@ const DataSet* DichotomousModel::getDataset() const {
 
 void DichotomousModel::setDataset(DataSet* dataset) {
 	this->dataSet = dataSet;
+}
+
+int DichotomousModel::countItems() {
 }
 
 DichotomousModel::~DichotomousModel() {

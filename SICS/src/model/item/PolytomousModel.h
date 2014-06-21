@@ -10,13 +10,14 @@
 
 #include <model/item/ItemModel.h>
 
-class PolytomousModel : public ItemModel {
+class PolytomousModel: public ItemModel {
 public:
 	// Constructor
 	PolytomousModel();
 
 	// Methods
-	int getCategories ();
+	int countCategories();
+	int countItems();
 
 	// Getters and Setters
 	const DataSet* getDataset() const;

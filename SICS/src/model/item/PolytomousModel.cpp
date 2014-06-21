@@ -12,7 +12,7 @@ PolytomousModel::PolytomousModel() {
 
 }
 
-int PolytomousModel::getCategories() {
+int PolytomousModel::countCategories() {
 }
 
 const DataSet* PolytomousModel::getDataset() const {
@@ -21,6 +21,9 @@ const DataSet* PolytomousModel::getDataset() const {
 
 void PolytomousModel::setDataset(DataSet* dataset) {
 	this->dataSet = dataset;
+}
+
+int PolytomousModel::countItems() {
 }
 
 PolytomousModel::~PolytomousModel() {
