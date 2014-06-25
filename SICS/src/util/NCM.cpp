@@ -5,14 +5,14 @@
  *      Author: mirt
  */
 
-#include "NearPD.h"
+#include "NCM.h"
 
-NearPD::NearPD() {
+NCM::NCM() {
 	// TODO Auto-generated constructor stub
 
 }
 
-NearPD::~NearPD() {
+NCM::~NCM() {
 	// TODO Auto-generated destructor stub
 }
 

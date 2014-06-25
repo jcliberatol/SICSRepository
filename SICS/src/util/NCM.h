@@ -8,10 +8,10 @@
 #ifndef NEARPD_H_
 #define NEARPD_H_
 
-class NearPD {
+class NCM {
 public:
-	NearPD();
-	virtual ~NearPD();
+	NCM();
+	virtual ~NCM();
 };
 
 #endif /* NEARPD_H_ */
