@@ -28,7 +28,7 @@ int main() {
 	m.flush();
 
 	Input input;
-	input.importCSV( "input.csv", m, 1, 1 );
+	input.importCSV((char *) "input.csv", m, 1, 1 );
 
 	cout << m;
 
