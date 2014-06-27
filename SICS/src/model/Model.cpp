@@ -8,15 +8,21 @@
 #include "Model.h"
 
 Model::Model ( ) {
-	// TODO Auto-generated constructor stub
-
+	parameterModel = NULL;
+	itemModel = NULL;
+	dimensionModel = NULL;
 }
 
-void Model::setModel ( ModelFactory * modelFactory ) {
+void Model::setModel(ModelFactory * modelFactory) {
+	parameterModel = modelFactory->createParameterModel();
+	itemModel = modelFactory->createItemModel();
+	dimensionModel = modelFactory->createDimensionModel();
 }
 
 Model::~Model() {
-	// TODO Auto-generated destructor stub
+	delete parameterModel;
+	delete itemModel;
+	delete dimensionModel;
 }
 
 const DimensionModel* Model::getDimensionModel() const {

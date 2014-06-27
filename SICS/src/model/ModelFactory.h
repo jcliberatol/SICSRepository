@@ -8,15 +8,19 @@
 #ifndef MODELFACTORY_H_
 #define MODELFACTORY_H_
 
+#include <model/parameter/ParameterModel.h>
+#include <model/item/ItemModel.h>
+#include <model/dimension/DimensionModel.h>
+
 class ModelFactory {
 public:
 	// Constructor
 	ModelFactory();
 
 	// Methods
-	virtual void createParameterModel() = 0;
-	virtual void createItemModel() = 0;
-	virtual void createDimensionModel() = 0;
+	virtual ParameterModel *createParameterModel() = 0;
+	virtual ItemModel *createItemModel() = 0;
+	virtual DimensionModel *createDimensionModel() = 0;
 
 	// Destructor
 	virtual ~ModelFactory();

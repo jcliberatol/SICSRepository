@@ -20,7 +20,7 @@ public:
 
 	// Getters and Setters
 	virtual const DataSet* getDataset() const = 0;
-	virtual void setDataset(const DataSet*& dataset) = 0;
+	virtual void setDataset(const DataSet* dataset) = 0;
 
 	// Destructor
 	virtual ~ItemModel();

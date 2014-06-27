@@ -20,7 +20,7 @@ const DataSet* DichotomousModel::getDataset() const {
 	return dataSet;
 }
 
-void DichotomousModel::setDataset(DataSet* dataset) {
+void DichotomousModel::setDataset(const DataSet* dataset) {
 	this->dataSet = dataSet;
 }
 

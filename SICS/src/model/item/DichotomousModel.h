@@ -21,7 +21,7 @@ public:
 
 	// Getters and Setters
 	const DataSet* getDataset() const;
-	void setDataset(DataSet* dataset);
+	void setDataset(const DataSet* dataset);
 
 	// Destructor
 	virtual ~DichotomousModel();

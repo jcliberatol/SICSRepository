@@ -12,6 +12,21 @@ SICSGeneralModel::SICSGeneralModel() {
 
 }
 
+ParameterModel* SICSGeneralModel::createParameterModel() {
+	ParameterModel *parameterModel = new ThreePLModel();
+	return parameterModel;
+}
+
+ItemModel* SICSGeneralModel::createItemModel() {
+	ItemModel *itemModel = new DichotomousModel();
+	return itemModel;
+}
+
+DimensionModel* SICSGeneralModel::createDimensionModel() {
+	DimensionModel *dimensionModel = new UnidimensionalModel();
+	return dimensionModel;
+}
+
 SICSGeneralModel::~SICSGeneralModel() {
 	// TODO Auto-generated destructor stub
 }

@@ -8,9 +8,22 @@
 #ifndef SICSGENERALMODEL_H_
 #define SICSGENERALMODEL_H_
 
-class SICSGeneralModel {
+#include <model/ModelFactory.h>
+#include <model/parameter/ThreePLModel.h>
+#include <model/item/DichotomousModel.h>
+#include <model/dimension/UnidimensionalModel.h>
+
+class SICSGeneralModel : public ModelFactory {
 public:
+	// Constructor
 	SICSGeneralModel();
+
+	// Methods
+	ParameterModel *createParameterModel();
+	ItemModel *createItemModel();
+	DimensionModel *createDimensionModel();
+
+	// Destructor
 	virtual ~SICSGeneralModel();
 };
 
