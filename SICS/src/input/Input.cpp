@@ -49,7 +49,7 @@ bool Input::importCSV( char* filename, PatternMatrix& M, unsigned int rowIdx, un
 		const char* processLine = currentLine.c_str();
 
 		//Clean string of the ignored columns
-		for (int k = 0; k < colIdx; ++k) {
+		for (unsigned int k = 0; k < colIdx; ++k) {
 			processLine = strchr ( processLine, del );
 			processLine = &processLine[1]; //Skip one character
 		}
