@@ -7,14 +7,6 @@
 
 #include <type/DataSet.h>
 
-DataSet::DataSet(  ) {
-	// TODO Auto-generated constructor stub
-
-}
-
-vector<int> DataSet::countItems() {
-}
-
 DataSet::~DataSet() {
 	// TODO Auto-generated destructor stub
 }

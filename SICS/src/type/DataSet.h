@@ -8,19 +8,12 @@
 #ifndef DATASET_H_
 #define DATASET_H_
 
-#include <type/PatternMatrix.h>
-#include <vector>
-
-using namespace std;
-
 class DataSet {
 private:
 public:
-	// Constructor
-	DataSet ( );
-
 	// Methods
-	vector<int> countItems ();
+	virtual int countItems () const = 0;
+	virtual int countIndividuals () const = 0;
 
 	// Destructor
 	virtual ~DataSet();
