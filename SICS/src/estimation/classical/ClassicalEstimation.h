@@ -13,8 +13,8 @@ class ClassicalEstimation : public Estimation {
 public:
 	ClassicalEstimation ();
 
-	void estimate ();
-	void setModel ( Model * );
+	virtual void estimate () = 0;
+	virtual void setModel ( Model * ) = 0;
 
 	virtual ~ClassicalEstimation();
 };

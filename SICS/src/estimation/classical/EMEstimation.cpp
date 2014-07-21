@@ -15,4 +15,29 @@ EMEstimation::EMEstimation() {
 EMEstimation::~EMEstimation() {
 	// TODO Auto-generated destructor stub
 }
+/*
+ * Model is set.
+ */
+void EMEstimation::setModel(Model* Model){
+	this->model=Model;
+}
+/*
+ * Sets or selects the initial values
+ */
+//Sets
+void EMEstimation::setInitialValues(map<Parameter, Matrix<double> >* parameterSet){
+	model->getParameterModel()->setInitialPars(parameterSet);
+}
+//Selects
+void EMEstimation::setInitialValues(string method){
+	/*
+	 * Possible methods
+	 * ANDRADE
+	 * OSPINA
+	 * RANDOM
+	 *
+	 * The default method is OSPINA
+	 */
+}
+
 
