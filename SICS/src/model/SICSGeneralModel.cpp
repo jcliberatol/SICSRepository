@@ -14,17 +14,17 @@ SICSGeneralModel::SICSGeneralModel() {
 
 ParameterModel* SICSGeneralModel::createParameterModel() {
 	ParameterModel *parameterModel = new ThreePLModel();
-	return parameterModel;
+	return (parameterModel);
 }
 
 ItemModel* SICSGeneralModel::createItemModel() {
 	ItemModel *itemModel = new DichotomousModel();
-	return itemModel;
+	return (itemModel);
 }
 
 DimensionModel* SICSGeneralModel::createDimensionModel() {
 	DimensionModel *dimensionModel = new UnidimensionalModel();
-	return dimensionModel;
+	return (dimensionModel);
 }
 
 SICSGeneralModel::~SICSGeneralModel() {

@@ -4,19 +4,21 @@
  *  Created on: May 30, 2014
  *      Author: mirt
  */
-#include <boost/dynamic_bitset.hpp>
-#include <map>
-#include <iostream>
-
-
 
 #ifndef PATTERNMATRIX_H_
 #define PATTERNMATRIX_H_
 
-class PatternMatrix {
+#include <boost/dynamic_bitset.hpp>
+#include <map>
+#include <iostream>
+#include <type/DataSet.h>
+
+using namespace std;
+
+class PatternMatrix : public DataSet {
 
 private:
-	std::map<boost::dynamic_bitset<>, long int> matrix;
+	map<boost::dynamic_bitset<>, long int> matrix;
 
 public:
 	PatternMatrix();
@@ -30,7 +32,8 @@ public:
 	long int& operator()(boost::dynamic_bitset<>); //Use this to access a specific pattern frecuency and modify it
 	friend std::ostream& operator<< (std::ostream &, PatternMatrix &);//Output operator
 
-	int getBitsetLength() const;
+	int countItems () const;
+	int countIndividuals () const;
 
 	virtual ~PatternMatrix();
 };
