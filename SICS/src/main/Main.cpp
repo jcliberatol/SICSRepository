@@ -31,5 +31,8 @@ int main() {
 	Matrix<double> mat(3,3);
 	input.importCSV((char * ) "decimals.csv",mat,0,0);
 	cout << mat;
+	Matrix<double> cuad(41,2);
+	input.importCSV((char * ) "Cuads.csv",cuad,1,0);
+	cout << cuad;
 	return 0;
 }

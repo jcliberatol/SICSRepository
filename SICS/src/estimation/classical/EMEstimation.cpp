@@ -59,3 +59,24 @@ void EMEstimation::estimate(){
 }
 
 
+//Sets the method of getting boundary conditions and applying them
+void EMEstimation::setBoundaryConditions(string option, string filename){
+
+}
+//Check if all the conditions are met for running the model, can report an error to a logger
+void EMEstimation::checkRunningConditions(){
+
+}
+	//Sets the optimization algorithm
+void EMEstimation::setOptimizationAlgorithm(string algorithm){
+
+}
+	//Sets the reporter for the trace
+void EMEstimation::setTrace(string filename){
+
+}
+void EMEstimation::setTrace(Trace trace){
+
+}
+
+
