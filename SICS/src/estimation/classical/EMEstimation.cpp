@@ -80,41 +80,26 @@ void EMEstimation::stepE () {
 	r->reset();
 
 	for (data->resetIterator();data->checkEnd();data->iterate()){
-
-	}
-	/*
-	std::map<boost::dynamic_bitset<>, long int>::const_iterator iterator;
-
-	long double faux[q];
-	long double sum = 0.0;
-	int pat = 0; // N of patterns
-
-	memset(f, 0.0, q * sizeof(long double));
-	memset(r, 0.0, q * items * sizeof(long double));
-
-	for ( iterator = u.U.begin(); iterator != u.U.end(); ++iterator ) {
-
-		pat++;
 		//Initialize faux in 1 to later calculate the productory
 		for ( int k = 0; k < q; k++ ) {
-			faux[k] = 1;
-		}
-
+					faux[k] = 1;
+				}
 		//Calculate g*(k) for all the k's
 		//first calculate the P for each k and store it in the array f aux
 		for (int k = 0; k < q; k++) {
-
 			//Calculate the p (iterate over the items in the productory)
 			for ( unsigned int i = 0; i < items; i++ ) {
-				faux[k] = faux[k]
-						* successProbability(theta[k], a[i], b[i], c[i],
-								(bool) iterator->first[i]);
+				double prob = pm->getProbability(k,i);
+				if(!data->getCurrentBitSet()[i]){
+					prob = 1-prob;
+				}
+				faux[k] = faux[k]*prob;
 			}
 
-			//At this point the productory is calculated and faux[k] is equivalent to p(u_j,theta_k)
-			//Now multiply by the weight
+		//At this point the productory is calculated and faux[k] is equivalent to p(u_j,theta_k)
+		//Now multiply by the weight
 
-			faux[k] = faux[k] * nodeWeight[k];
+		faux[k] = faux[k] * (*weights)(0,k);
 		}
 
 		//compute the total of the p*a' (denominator of the g*)
@@ -127,23 +112,20 @@ void EMEstimation::stepE () {
 			faux[k] = faux[k] / sum;	//This is g*_j_k
 
 			//Multiply the f to the frequency of the pattern
-			faux[k] = ((long double) iterator->second) * faux[k];
-			f[k] = faux[k] + f[k];
+			faux[k] = ((long double) data->getCurrentFrequency()) * faux[k];
+			(*f)(1,k) = faux[k] = (*f)(0,k);
 
 			//Now selectively add the faux to the r
 			for ( unsigned int i = 0; i < items; i++ ) {
-
-				if (iterator->first[i]) {
-					r_ki(k,i)= r_ki(k,i) + faux[k];
-
+				if (data->getCurrentBitSet()[i]) {
+					(*r)(k,i)= (*r)(k,i) + faux[k];
 				} // if
-
 			} // for
-
 		} // for
 
-	}*/
 
+	}
+	/*
 } //end E step
 
 void EMEstimation::stepM(){
