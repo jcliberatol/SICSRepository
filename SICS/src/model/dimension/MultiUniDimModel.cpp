@@ -18,7 +18,7 @@ int MultiUniDimModel::getNumDimensions() {
 vector<double> MultiUniDimModel::getDimVector() {
 }
 
-const LatentTraitSet* MultiUniDimModel::getLatentTraitSet() const {
+LatentTraitSet* MultiUniDimModel::getLatentTraitSet() const {
 	return latentTraitSet;
 }
 

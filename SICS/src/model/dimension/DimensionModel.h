@@ -22,7 +22,7 @@ public:
 	virtual vector<double> getDimVector() = 0;
 
 	// Getters and Setters
-	virtual const LatentTraitSet* getLatentTraitSet() const = 0;
+	virtual LatentTraitSet* getLatentTraitSet() const = 0;
 	virtual void setLatentTraitSet(LatentTraitSet* latentTraitSet) = 0;
 
 	// Destructor

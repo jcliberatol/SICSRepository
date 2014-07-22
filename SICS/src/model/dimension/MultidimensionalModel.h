@@ -24,7 +24,7 @@ public:
 	vector<double> getDimVector();
 
 	// Getters and Setters
-	const LatentTraitSet* getLatentTraitSet() const;
+	LatentTraitSet* getLatentTraitSet() const;
 	void setLatentTraitSet(LatentTraitSet* latentTraitSet);
 
 	// Destructor

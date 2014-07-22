@@ -19,7 +19,7 @@ MultidimensionalModel::~MultidimensionalModel() {
 	// TODO Auto-generated destructor stub
 }
 
-const LatentTraitSet* MultidimensionalModel::getLatentTraitSet() const {
+LatentTraitSet* MultidimensionalModel::getLatentTraitSet() const {
 	return latentTraitSet;
 }
 
