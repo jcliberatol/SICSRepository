@@ -53,8 +53,8 @@ public:
 
 private:
 	//F and R Matrices, remember to set to zero and open memory in process
-	Matrix<double> *f;
-	Matrix<double> *r;
+	Matrix<double>* f;
+	Matrix<double>* r;
 	//Holds the trace for the logger outputs
 	Trace* logger;
 	//Model on which the algorithm operates
