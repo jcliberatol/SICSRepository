@@ -15,21 +15,18 @@ RaschModel::RaschModel() {
 void RaschModel::buildParameterSet(ItemModel*, DimensionModel*) {
 }
 
-void RaschModel::setInitialPars(map<Parameter, Matrix<double> >* pair) {
+void RaschModel::successProbability(DimensionModel *) {
 }
 
-void RaschModel::calculateInitialPars() {
-}
-
-void RaschModel::successProbability() {
-}
-
-const map<Parameter, Matrix<double> *>& RaschModel::getParameterSet() const {
-	return this->parameterSet;
-}
-
-void RaschModel::setParameterSet(const map<Parameter, Matrix<double> *>& pair) {
+void RaschModel::setParameterSet(map<Parameter, Matrix<double> *> pair) {
 	this->parameterSet = parameterSet;
+}
+
+map<Parameter, Matrix<double> *> RaschModel::getParameterSet() const {
+	return (this->parameterSet);
+}
+
+double RaschModel::getProbability(int node, int item) {
 }
 
 RaschModel::~RaschModel() {

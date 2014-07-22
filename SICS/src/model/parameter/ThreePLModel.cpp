@@ -47,23 +47,101 @@ void ThreePLModel::buildParameterSet(ItemModel* itemModel,
 
 }
 
-void ThreePLModel::setInitialPars(
-		map<Parameter, Matrix<double> >* parameterSet) {
+void ThreePLModel::successProbability(DimensionModel *dimensionModel) {
+
+	int q = 0;
+	double a_d, d_d, c_d, theta_d; // d stands from "double"
+
+	if ( dimensionModel != NULL ) {
+		q = dimensionModel->getLatentTraitSet()->getTheta()->nC();
+	}
+
+	if(typeid(*dimensionModel)==typeid(UnidimensionalModel)) {
+		int I = parameterSet[a]->nC();
+
+		for (int k = 0; k < q; k++) {
+			for ( int i = 0; i < I; i++ ){
+
+				// 3PL Success Probability Function
+				theta_d = dimensionModel->getLatentTraitSet()->getTheta()->operator ()(1,k);
+				a_d = parameterSet[a] -> operator ()(1,i);
+				d_d = parameterSet[d] -> operator ()(1,i);
+				c_d = parameterSet[c] -> operator ()(1,i);
+
+				double p_d = successProbability ( theta_d, a_d, d_d, c_d );
+				probabilityMatrix-> operator ()(k,i) = p_d;
+
+			}
+		}
+	}
+
 }
 
-void ThreePLModel::calculateInitialPars() {
-}
-
-void ThreePLModel::successProbability() {
-}
-
-const map<Parameter, Matrix<double> *>& ThreePLModel::getParameterSet() const {
-	return this->parameterSet;
+map<Parameter, Matrix<double> *> ThreePLModel::getParameterSet() const {
+	return (this->parameterSet);
 }
 
 void ThreePLModel::setParameterSet(
-		const map<Parameter, Matrix<double> *>& parameterSet) {
+		map<Parameter, Matrix<double> *> parameterSet) {
 	this->parameterSet = parameterSet;
+}
+
+double ThreePLModel::successProbability(double theta, double a, double d,
+		double c) {
+	long double exponential = (Constant::NORM_CONST)*(a*theta+d);
+
+	if ( exponential > Constant::MAX_EXP ) {
+		exponential = Constant::MAX_EXP;
+	}
+
+	else if ( exponential < -(Constant::MAX_EXP*1.0) ) {
+		exponential = -Constant::MAX_EXP;
+	}
+
+	exponential = exp(-exponential) ;
+
+	return (c + (1.0 - c)/(1.0 + exponential));
+}
+
+double ThreePLModel::getProbability(int node, int item) {
+	return (probabilityMatrix->operator ()(node, item));
+}
+
+double ThreePLModel::LogLikelihood (double* args, double* pars, int nargs,
+		int npars) {
+
+	//args
+	/*
+	 * a[i]
+	 * b[i]
+	 * c[i]
+	 */
+
+	//pars
+	/*
+	 * q
+	 * I
+	 * theta[q]
+	 * r[q]
+	 * f[q*I]
+	 */
+	long double tp , tq;
+	long double sum = 0;
+
+	/*for (int k = 0; k < q; ++k) {
+		for (unsigned int i = 0; i < I; ++i) {
+			tp = successProbability_cPrime ( theta[k], a[i], b[i], c[i] );
+			if (tp==0)tp=1e-08;
+				tq = 1-tp;
+				if (tq==0)tq=1e-08;
+				//suma = suma + (rki*logg(pki)+(fki-rki)*logg(qki))
+				sum+=(r_ki(k,i)*log(tp))+(f[k]-r_ki(k,i))*log(tq);
+			}
+		}*/
+		//antiLogit(c, I);
+		return (-sum);
+
+
 }
 
 ThreePLModel::~ThreePLModel() {

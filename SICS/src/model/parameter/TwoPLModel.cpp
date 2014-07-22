@@ -16,21 +16,18 @@ void TwoPLModel::buildParameterSet(ItemModel* itemModel,
 		DimensionModel* dimensionModel) {
 }
 
-void TwoPLModel::setInitialPars(map<Parameter, Matrix<double> >* pair) {
+void TwoPLModel::successProbability(DimensionModel *dimensionModel) {
 }
 
-void TwoPLModel::calculateInitialPars() {
+map<Parameter, Matrix<double> *> TwoPLModel::getParameterSet() const {
+	return (this->parameterSet);
 }
 
-void TwoPLModel::successProbability() {
-}
-
-const map<Parameter, Matrix<double> *>& TwoPLModel::getParameterSet() const {
-	return this->parameterSet;
-}
-
-void TwoPLModel::setParameterSet(const map<Parameter, Matrix<double> *>& pair) {
+void TwoPLModel::setParameterSet(map<Parameter, Matrix<double> *> pair) {
 	this->parameterSet = parameterSet;
+}
+
+double TwoPLModel::getProbability(int node, int item) {
 }
 
 TwoPLModel::~TwoPLModel() {

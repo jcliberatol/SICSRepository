@@ -17,13 +17,12 @@ public:
 
 	// Methods
 	void buildParameterSet(ItemModel *, DimensionModel *);
-	void setInitialPars(map<Parameter, Matrix<double> > *);
-	void calculateInitialPars();
-	void successProbability();
+	void successProbability(DimensionModel *);
 
 	// Getters and Setters
-	const map<Parameter, Matrix<double> *>& getParameterSet() const;
-	void setParameterSet(const map<Parameter, Matrix<double> *>&);
+	map<Parameter, Matrix<double> *> getParameterSet() const;
+	void setParameterSet(map<Parameter, Matrix<double> *>);
+	double getProbability (int, int);
 
 	// Destructor
 	virtual ~RaschModel();

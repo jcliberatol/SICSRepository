@@ -15,21 +15,24 @@
 #include <model/dimension/UnidimensionalModel.h>
 #include <model/dimension/MultidimensionalModel.h>
 #include <model/dimension/MultiUniDimModel.h>
+#include <type/PatternMatrix.h>
+#include <type/Constant.h>
 
 class ThreePLModel: public ParameterModel {
+	double successProbability(double, double, double, double);
 public:
 	// Constructor
 	ThreePLModel();
 
 	// Methods
 	void buildParameterSet(ItemModel *, DimensionModel *);
-	void setInitialPars(map<Parameter, Matrix<double> > *);
-	void calculateInitialPars();
-	void successProbability();
+	void successProbability(DimensionModel *);
+	double LogLikelihood(double*, double*, int, int);
 
 	// Getters and Setters
-	const map<Parameter, Matrix<double> *>& getParameterSet() const;
-	void setParameterSet(const map<Parameter, Matrix<double> *>&);
+	map<Parameter, Matrix<double> *> getParameterSet() const;
+	void setParameterSet(map<Parameter, Matrix<double> *>);
+	double getProbability(int, int);
 
 	// Destructor
 	virtual ~ThreePLModel();

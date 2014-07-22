@@ -12,6 +12,7 @@
 #include <type/Matrix.h>
 #include <model/item/ItemModel.h>
 #include <model/dimension/DimensionModel.h>
+#include <type/DataSet.h>
 
 using namespace std;
 
@@ -19,17 +20,17 @@ enum Parameter {a,b,c,d};
 
 class ParameterModel {
 protected:
+	Matrix<double> * probabilityMatrix;
 	map <Parameter, Matrix<double> * > parameterSet;
 public:
 	// Methods
 	virtual void buildParameterSet ( ItemModel *, DimensionModel * ) = 0;
-	virtual void setInitialPars ( map <Parameter, Matrix<double> > * ) = 0;
-	virtual void calculateInitialPars () = 0;
-	virtual void successProbability () = 0;
+	virtual void successProbability (DimensionModel *) = 0;
 
 	// Getters and Setters
-	virtual const map<Parameter, Matrix<double> *>& getParameterSet() const = 0;
-	virtual void setParameterSet(const map<Parameter, Matrix<double> *>& parameterSet) = 0;
+	virtual map<Parameter, Matrix<double> *> getParameterSet() const = 0;
+	virtual void setParameterSet(map<Parameter, Matrix<double> *> parameterSet) = 0;
+	virtual double getProbability (int, int) = 0;
 
 	// Destructor
 	virtual ~ParameterModel();
