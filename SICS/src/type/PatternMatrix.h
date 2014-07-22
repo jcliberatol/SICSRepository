@@ -21,8 +21,13 @@ private:
 	map<boost::dynamic_bitset<>, long int> matrix;
 
 public:
+	//Constructor
 	PatternMatrix();
+
+	// Methods
 	std::map<boost::dynamic_bitset<>, long int>::const_iterator iterator; //use this when reading in order
+	std::map<boost::dynamic_bitset<>, long int>::const_iterator begin ();
+	std::map<boost::dynamic_bitset<>, long int>::const_iterator end ();
 
 	void push(boost::dynamic_bitset<>);//Use this to fill the pattern matrix
 	void push(boost::dynamic_bitset<>,int);//Use this to fill the pattern matrix many times with a pattern
@@ -32,9 +37,11 @@ public:
 	long int& operator()(boost::dynamic_bitset<>); //Use this to access a specific pattern frecuency and modify it
 	friend std::ostream& operator<< (std::ostream &, PatternMatrix &);//Output operator
 
+	//DataSet implementations
 	int countItems () const;
 	int countIndividuals () const;
 
+	//Destructor
 	virtual ~PatternMatrix();
 };
 

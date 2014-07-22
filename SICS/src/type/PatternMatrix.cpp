@@ -29,6 +29,14 @@ int PatternMatrix::countIndividuals() const {
 	return (counter);
 }
 
+std::map<boost::dynamic_bitset<>, long int>::const_iterator PatternMatrix::begin() {
+	return (matrix.begin());
+}
+
+std::map<boost::dynamic_bitset<>, long int>::const_iterator PatternMatrix::end() {
+	return (matrix.end());
+}
+
 PatternMatrix::~PatternMatrix() {
 	// TODO Auto-generated destructor stub
 }

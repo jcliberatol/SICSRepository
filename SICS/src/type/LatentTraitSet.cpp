@@ -16,3 +16,18 @@ LatentTraitSet::~LatentTraitSet() {
 	// TODO Auto-generated destructor stub
 }
 
+Matrix<double>* LatentTraitSet::getTheta() const {
+	return theta;
+}
+
+void LatentTraitSet::setTheta(Matrix<double>* theta) {
+	this->theta = theta;
+}
+
+Matrix<double>* LatentTraitSet::getWeight() const {
+	return weight;
+}
+
+void LatentTraitSet::setWeight(Matrix<double>* weight) {
+	this->weight = weight;
+}

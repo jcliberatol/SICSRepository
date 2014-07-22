@@ -8,6 +8,7 @@
 #define MATRIX_H_
 
 #include <iostream>
+#include <stdio.h>
 using namespace std;
 
 template<typename T>
