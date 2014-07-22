@@ -63,13 +63,13 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel) {
 			for ( int i = 0; i < I; i++ ){
 
 				// 3PL Success Probability Function
-				theta_d = dimensionModel->getLatentTraitSet()->getTheta()->operator ()(1,k);
-				a_d = parameterSet[a] -> operator ()(1,i);
-				d_d = parameterSet[d] -> operator ()(1,i);
-				c_d = parameterSet[c] -> operator ()(1,i);
+				theta_d = (*dimensionModel->getLatentTraitSet()->getTheta())(1,k);
+				a_d = (*parameterSet[a])(1,i);
+				d_d = (*parameterSet[d])(1,i);
+				c_d = (*parameterSet[c])(1,i);
 
 				double p_d = successProbability ( theta_d, a_d, d_d, c_d );
-				probabilityMatrix-> operator ()(k,i) = p_d;
+				(*probabilityMatrix)(k,i) = p_d;
 
 			}
 		}
@@ -104,7 +104,7 @@ double ThreePLModel::successProbability(double theta, double a, double d,
 }
 
 double ThreePLModel::getProbability(int node, int item) {
-	return (probabilityMatrix->operator ()(node, item));
+	return ((*probabilityMatrix)(node, item));
 }
 
 double ThreePLModel::LogLikelihood (double* args, double* pars, int nargs,
