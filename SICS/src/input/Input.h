@@ -17,6 +17,7 @@
 #include <ctype.h>
 #include <fstream>
 #include <type/PatternMatrix.h>
+#include <type/Matrix.h>
 #include <trace/Trace.h>
 
 using namespace std;
@@ -34,7 +35,7 @@ public:
 	Input();
 	virtual ~Input();
 	bool importCSV ( char*, PatternMatrix&, unsigned int, unsigned int );
-
+	bool importCSV ( char*, Matrix<double>&, unsigned int , unsigned int);
 	char getDel() const;
 	void setDel(char);
 

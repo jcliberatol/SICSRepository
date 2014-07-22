@@ -60,8 +60,8 @@ Matrix<T>::Matrix(int r, int c) {
 	memory = new T[c * r];
 }
 template<class T>
-T & Matrix<T>::operator()(const int c, const int r) {
-	return memory[nCol * r + c];
+T & Matrix<T>::operator()(const int r, const int c) {
+	return memory[nCol * c + r];
 }
 template<class T>
 Matrix<T>::~Matrix() {
