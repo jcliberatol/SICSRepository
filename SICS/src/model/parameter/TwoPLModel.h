@@ -21,7 +21,7 @@ public:
 	void successProbability(DimensionModel *);
 
 	// Getters and Setters
-	map<Parameter, Matrix<double> *> getParameterSet() const;
+	map<Parameter, Matrix<double> *> getParameterSet() ;
 	void setParameterSet(map<Parameter, Matrix<double> *>);
 	double getProbability (int, int);
 

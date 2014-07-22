@@ -25,18 +25,36 @@ void EMEstimation::setModel(Model* Model){
  * Sets or selects the initial values
  */
 //Sets
-void EMEstimation::setInitialValues(map<Parameter, Matrix<double> >* parameterSet){
-	model->getParameterModel()->setInitialPars(parameterSet);
+void EMEstimation::setInitialValues(map<Parameter, Matrix<double>*> parameterSet){
+	model->getParameterModel()->setParameterSet(parameterSet);
 }
 //Selects
 void EMEstimation::setInitialValues(string method){
-	/*
+	/*TODO
 	 * Possible methods
 	 * ANDRADE
 	 * OSPINA
 	 * RANDOM
 	 *
 	 * The default method is OSPINA
+	 */
+}
+
+void EMEstimation::stepE(){
+	/*
+	 * TODO Step E for EML3M
+	 */
+
+}
+
+void EMEstimation::stepM(){
+	/*
+	 * TODO Step M for EML3M
+	 */
+}
+void EMEstimation::estimate(){
+	/*
+	 * TODO Estimate
 	 */
 }
 

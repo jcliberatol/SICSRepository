@@ -19,7 +19,7 @@ void TwoPLModel::buildParameterSet(ItemModel* itemModel,
 void TwoPLModel::successProbability(DimensionModel *dimensionModel) {
 }
 
-map<Parameter, Matrix<double> *> TwoPLModel::getParameterSet() const {
+map<Parameter, Matrix<double> *> TwoPLModel::getParameterSet()  {
 	return (this->parameterSet);
 }
 

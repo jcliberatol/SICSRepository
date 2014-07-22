@@ -22,7 +22,7 @@ void RaschModel::setParameterSet(map<Parameter, Matrix<double> *> pair) {
 	this->parameterSet = parameterSet;
 }
 
-map<Parameter, Matrix<double> *> RaschModel::getParameterSet() const {
+map<Parameter, Matrix<double> *> RaschModel::getParameterSet()  {
 	return (this->parameterSet);
 }
 

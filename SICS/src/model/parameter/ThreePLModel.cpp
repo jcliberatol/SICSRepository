@@ -77,7 +77,7 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel) {
 
 }
 
-map<Parameter, Matrix<double> *> ThreePLModel::getParameterSet() const {
+map<Parameter, Matrix<double> *> ThreePLModel::getParameterSet()  {
 	return (this->parameterSet);
 }
 

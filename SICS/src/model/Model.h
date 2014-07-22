@@ -32,7 +32,7 @@ public:
 	const ItemModel* getItemModel() const;
 	void setItemModel(ItemModel* itemModel);
 
-	const ParameterModel* getParameterModel() const;
+	ParameterModel* getParameterModel();
 	void setParameterModel(ParameterModel* parameterModel);
 
 	// Destructor

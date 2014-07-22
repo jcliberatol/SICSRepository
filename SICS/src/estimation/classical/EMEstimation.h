@@ -47,7 +47,7 @@ public:
 	void setTrace(string filename);
 	void setTrace(Trace trace);
 	//Sets the initial values
-	void setInitialValues(map<Parameter, Matrix<double> >* parameterSet);
+	void setInitialValues(map<Parameter, Matrix<double>* > parameterSet);
 	void setInitialValues(string method);
 
 private:

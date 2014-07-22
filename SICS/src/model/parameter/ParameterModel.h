@@ -27,8 +27,9 @@ public:
 	virtual void buildParameterSet ( ItemModel *, DimensionModel * ) = 0;
 	virtual void successProbability (DimensionModel *) = 0;
 
+
 	// Getters and Setters
-	virtual map<Parameter, Matrix<double> *> getParameterSet() const = 0;
+	virtual map<Parameter, Matrix<double> *> getParameterSet()  = 0;
 	virtual void setParameterSet(map<Parameter, Matrix<double> *> parameterSet) = 0;
 	virtual double getProbability (int, int) = 0;
 

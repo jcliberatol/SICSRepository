@@ -41,7 +41,7 @@ void Model::setItemModel(ItemModel* itemModel) {
 	this->itemModel = itemModel;
 }
 
-const ParameterModel* Model::getParameterModel() const {
+ParameterModel* Model::getParameterModel()  {
 	return parameterModel;
 }
 
