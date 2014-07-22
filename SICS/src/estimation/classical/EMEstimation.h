@@ -12,6 +12,7 @@
 #include <optimizer/Optimizer.h>
 #include <trace/Trace.h>
 #include <type/Matrix.h>
+#include <type/PatternMatrix.h>
 
 class EMEstimation : public ClassicalEstimation{
 public:
@@ -51,7 +52,7 @@ public:
 	void setInitialValues(string method);
 
 private:
-	//F and R Matrices
+	//F and R Matrices, remember to set to zero and open memory in process
 	Matrix<double> *f;
 	Matrix<double> *r;
 	//Holds the trace for the logger outputs

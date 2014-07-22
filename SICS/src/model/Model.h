@@ -26,10 +26,10 @@ public:
 	void setModel ( ModelFactory * );
 
 	// Getters and Setters
-	const DimensionModel* getDimensionModel() const;
+	DimensionModel* getDimensionModel();
 	void setDimensionModel(DimensionModel* dimensionModel);
 
-	const ItemModel* getItemModel() const;
+	ItemModel* getItemModel();
 	void setItemModel(ItemModel* itemModel);
 
 	ParameterModel* getParameterModel();

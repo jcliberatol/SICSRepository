@@ -20,7 +20,7 @@ public:
 	int countItems();
 
 	// Getters and Setters
-	const DataSet* getDataset() const;
+	 DataSet* getDataset() ;
 	void setDataset(DataSet* dataset);
 
 	// Destructor

@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <stdio.h>
+#include <cstring>
 using namespace std;
 
 template<typename T>
@@ -27,6 +28,7 @@ public:
 	Matrix(); //Empty object
 	Matrix(int, int); //Two dimensional Matrix Constructor allocates memory
 	Matrix(Matrix&); //Copy constructor
+	void reset();
 	int nR(); // Returns number of rows
 	int nC(); //Returns number of columns
 	T & operator()(const int nCol, const int nRow); //Accessing operator for a element
@@ -61,13 +63,19 @@ Matrix<T>::Matrix(int r, int c) {
 }
 template<class T>
 T & Matrix<T>::operator()(const int r, const int c) {
-	return memory[nCol * c + r];
+	return (memory[nCol * c + r]);
 }
 template<class T>
 Matrix<T>::~Matrix() {
 	// TODO Auto-generated destructor stub
 	delete[] memory;
 }
+
+template<class T>
+void Matrix<T>::reset() {
+	memset(memory, 0.0,(nCol * nRow)  * sizeof(T));
+}
+
 template<class T>
 ostream& operator<<(ostream &out, Matrix<T> &M) {
 	// Since operator<< is a friend of the Point class, we can access
@@ -78,7 +86,7 @@ ostream& operator<<(ostream &out, Matrix<T> &M) {
 		}
 		out << endl;
 	}
-	return out;
+	return (out);
 }
 
 #endif /* MATRIX_H_ */

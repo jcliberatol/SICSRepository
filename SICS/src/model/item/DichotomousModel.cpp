@@ -16,11 +16,11 @@ int DichotomousModel::countCategories() {
 	return 2;
 }
 
-const DataSet* DichotomousModel::getDataset() const {
+DataSet* DichotomousModel::getDataset() {
 	return dataSet;
 }
 
-void DichotomousModel::setDataset(const DataSet* dataset) {
+void DichotomousModel::setDataset(DataSet* dataset) {
 	this->dataSet = dataSet;
 }
 

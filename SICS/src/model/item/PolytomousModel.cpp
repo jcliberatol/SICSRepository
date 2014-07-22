@@ -15,7 +15,7 @@ PolytomousModel::PolytomousModel() {
 int PolytomousModel::countCategories() {
 }
 
-const DataSet* PolytomousModel::getDataset() const {
+ DataSet* PolytomousModel::getDataset()  {
 	return dataSet;
 }
 

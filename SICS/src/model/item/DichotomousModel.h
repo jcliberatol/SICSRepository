@@ -20,8 +20,8 @@ public:
 	int countItems();
 
 	// Getters and Setters
-	const DataSet* getDataset() const;
-	void setDataset(const DataSet* dataset);
+	DataSet* getDataset();
+	void setDataset( DataSet* dataset);
 
 	// Destructor
 	virtual ~DichotomousModel();

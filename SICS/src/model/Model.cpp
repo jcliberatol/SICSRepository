@@ -24,8 +24,7 @@ Model::~Model() {
 	delete itemModel;
 	delete dimensionModel;
 }
-
-const DimensionModel* Model::getDimensionModel() const {
+DimensionModel* Model::getDimensionModel()  {
 	return dimensionModel;
 }
 
@@ -33,7 +32,7 @@ void Model::setDimensionModel(DimensionModel* dimensionModel) {
 	this->dimensionModel = dimensionModel;
 }
 
-const ItemModel* Model::getItemModel() const {
+ItemModel* Model::getItemModel() {
 	return itemModel;
 }
 

@@ -19,8 +19,8 @@ public:
 	virtual int countItems() = 0;
 
 	// Getters and Setters
-	virtual const DataSet* getDataset() const = 0;
-	virtual void setDataset(const DataSet* dataset) = 0;
+	virtual DataSet* getDataset()  = 0;
+	virtual void setDataset(DataSet* dataset) = 0;
 
 	// Destructor
 	virtual ~ItemModel();

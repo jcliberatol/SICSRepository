@@ -26,9 +26,9 @@ public:
 
 	// Methods
 	std::map<boost::dynamic_bitset<>, long int>::const_iterator iterator; //use this when reading in order
-	std::map<boost::dynamic_bitset<>, long int>::const_iterator begin ();
-	std::map<boost::dynamic_bitset<>, long int>::const_iterator end ();
-
+	inline void resetIterator(){iterator = matrix.begin();}
+	inline bool checkEnd(){return (iterator==matrix.end());}
+	inline void iterate(){++iterator;}
 	void push(boost::dynamic_bitset<>);//Use this to fill the pattern matrix
 	void push(boost::dynamic_bitset<>,int);//Use this to fill the pattern matrix many times with a pattern
 
