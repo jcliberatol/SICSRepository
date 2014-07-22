@@ -51,18 +51,19 @@ bool Input::importCSV( char* filename, Matrix<double>& M, unsigned int rowIdx, u
 				processLine = strchr ( processLine, del );
 				processLine = &processLine[1]; //Skip one character
 			}
-
 			/*
 			 * Now we must parse the line into the doubles.
 			 *for this we take the current address and hold it, then we find the next address and hold it , pass the
 			 *double into a string very carefully until the memory addresses are the same
 			 */
+			col = 0;
 			while(strlen(processLine)>0){
-				const char * nextDouble = strchr(processLine,del);
-				int numlen = strlen(processLine)-strlen(nextDouble);
-				char * doubleString = NULL;
-				memcpy(doubleString,processLine,numlen);
-				M(row,col) = strtod(doubleString,NULL);
+				char * auxptr;
+				M(row,col) = strtod(processLine,&auxptr);
+				processLine = auxptr;
+				if(strlen(processLine)>0){
+				processLine = &processLine[1];
+				}
 				col++;
 			}
 
@@ -99,15 +100,25 @@ bool Input::importCSV( char* filename, PatternMatrix& M, unsigned int rowIdx, un
 		getline ( inFile, currentLine );
 	}
 
-
+	int line = 0;
+	int linelen = 0;
 	while ( !eof ) {
-
 		getline ( inFile, currentLine );
+		if(line==0)
+			{
+			linelen=currentLine.length();
+			}
+		else{
+			if(linelen!=currentLine.length()){
+				trace("Inconsistent line length , stopped importing");
+				break;
+			}
 
+		}
+		line++;
 		eof = inFile.eof();
 
 		const char* processLine = currentLine.c_str();
-
 		//Clean string of the ignored columns
 		for (unsigned int k = 0; k < colIdx; ++k) {
 			processLine = strchr ( processLine, del );
@@ -143,6 +154,7 @@ bool Input::importCSV( char* filename, PatternMatrix& M, unsigned int rowIdx, un
 		}
 		//Bitset is now filled
 		M.push(dset);
+
 	}
 
 	inFile.close();

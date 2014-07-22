@@ -26,11 +26,10 @@ int main() {
 	cout<<endl;
 
 	m.flush();
-
 	Input input;
-	input.importCSV((char *) "input.csv", m, 1, 1 );
-
-	cout << m;
-
+	input.importCSV((char *) "input.csv", m, 0, 0 );
+	Matrix<double> mat(3,3);
+	input.importCSV((char * ) "decimals.csv",mat,0,0);
+	cout << mat;
 	return 0;
 }
