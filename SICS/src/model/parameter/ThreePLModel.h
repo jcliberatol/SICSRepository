@@ -19,7 +19,8 @@
 #include <type/Constant.h>
 
 class ThreePLModel: public ParameterModel {
-	double successProbability(double, double, double, double);
+	static double successProbability(double, double, double, double);
+	static double successProbability_cPrime (double, double, double, double);
 public:
 	// Constructor
 	ThreePLModel();
@@ -27,7 +28,7 @@ public:
 	// Methods
 	void buildParameterSet(ItemModel *, DimensionModel *);
 	void successProbability(DimensionModel *);
-	double LogLikelihood(double*, double*, int, int);
+	static double LogLikelihood(double*, double*, int, int);
 
 	// Getters and Setters
 	map<Parameter, Matrix<double> *> getParameterSet() ;
