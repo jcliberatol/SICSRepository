@@ -25,7 +25,7 @@ Model::~Model() {
 	delete dimensionModel;
 }
 DimensionModel* Model::getDimensionModel()  {
-	return dimensionModel;
+	return (dimensionModel);
 }
 
 void Model::setDimensionModel(DimensionModel* dimensionModel) {
@@ -33,7 +33,7 @@ void Model::setDimensionModel(DimensionModel* dimensionModel) {
 }
 
 ItemModel* Model::getItemModel() {
-	return itemModel;
+	return (itemModel);
 }
 
 void Model::setItemModel(ItemModel* itemModel) {
@@ -41,7 +41,7 @@ void Model::setItemModel(ItemModel* itemModel) {
 }
 
 ParameterModel* Model::getParameterModel()  {
-	return parameterModel;
+	return (parameterModel);
 }
 
 void Model::setParameterModel(ParameterModel* parameterModel) {
