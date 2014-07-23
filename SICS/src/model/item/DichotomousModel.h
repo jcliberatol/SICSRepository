@@ -9,6 +9,7 @@
 #define DICHOTOMOUSMODEL_H_
 
 #include <model/item/ItemModel.h>
+#include <type/PatternMatrix.h>
 
 class DichotomousModel: public ItemModel {
 public:

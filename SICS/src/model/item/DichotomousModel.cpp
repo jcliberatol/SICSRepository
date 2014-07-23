@@ -13,18 +13,20 @@ DichotomousModel::DichotomousModel() {
 }
 
 int DichotomousModel::countCategories() {
-	return 2;
+	return (2);
 }
 
 DataSet* DichotomousModel::getDataset() {
-	return dataSet;
+	return (dataSet);
 }
 
 void DichotomousModel::setDataset(DataSet* dataset) {
-	this->dataSet = dataSet;
+	this->dataSet = dataset;
 }
 
 int DichotomousModel::countItems() {
+	PatternMatrix * pM = dynamic_cast<PatternMatrix *>(this->dataSet);
+	return (pM->countItems());
 }
 
 DichotomousModel::~DichotomousModel() {
