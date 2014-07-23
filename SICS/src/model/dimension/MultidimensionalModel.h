@@ -21,7 +21,7 @@ public:
 
 	// Methods
 	int getNumDimensions ();
-	vector<double> getDimVector();
+	vector<int> getDimVector();
 
 	// Getters and Setters
 	LatentTraitSet* getLatentTraitSet() const;

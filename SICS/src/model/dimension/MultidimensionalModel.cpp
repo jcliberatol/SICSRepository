@@ -12,7 +12,7 @@ MultidimensionalModel::MultidimensionalModel() {
 
 }
 
-vector<double> MultidimensionalModel::getDimVector() {
+vector<int> MultidimensionalModel::getDimVector() {
 }
 
 MultidimensionalModel::~MultidimensionalModel() {

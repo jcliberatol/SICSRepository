@@ -19,7 +19,7 @@ protected:
 public:
 	// Methods
 	virtual int getNumDimensions () = 0;
-	virtual vector<double> getDimVector() = 0;
+	virtual vector<int> getDimVector() = 0;
 
 	// Getters and Setters
 	virtual LatentTraitSet* getLatentTraitSet() const = 0;
