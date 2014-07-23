@@ -12,8 +12,9 @@ EMEstimation::EMEstimation() {
 	model = NULL;
 	f = NULL;
 	r = NULL;
-	optim = NULL;
 	logger = NULL;
+	optim = NULL;
+	optim = new Optimizer();
 
 }
 
@@ -27,8 +28,8 @@ EMEstimation::~EMEstimation() {
 	if (logger != NULL ) {
 		delete logger;
 	}
-	if ( optim != NULL ) {
-		delete optim;
+	if (optim != NULL ) {
+			delete optim;
 	}
 }
 /*
@@ -137,7 +138,7 @@ void EMEstimation::stepE () {
 
 			//Multiply the f to the frequency of the pattern
 			faux[k] = ((long double) data->getCurrentFrequency()) * faux[k];
-			(*f)(1,k) = faux[k] = (*f)(0,k);
+			(*f)(1,k) = faux[k] = (*f)(0,k);//TODO Possible mistake here JLP
 
 			//Now selectively add the faux to the r
 			for ( unsigned int i = 0; i < items; i++ ) {
@@ -155,6 +156,101 @@ void EMEstimation::stepM(){
 	/*
 	 * TODO Step M for EML3M
 	 */
+	//Step M implementation using the BFGS Algorithm
+	/*
+	 * What we need
+	 * fptr the pointer to loglik
+	 * gprt the pointer to gradient
+	 * hessptr the pointer to hessian matrix calculatrix
+	 * args the a,b, and c
+	 * pars, the other parameters q and stuff
+	 * nargs, npars, sizes.
+	 */
+	//fptr
+	double (*fptr)(double*,double*,int,int);
+	void (*gptr)(double*,double*,int,int,double*);
+	void (*hptr)(double*,double*,int,int,double*);
+	fptr = &ThreePLModel::logLikelihood;
+	gptr = &ThreePLModel::gradient;
+	hptr = NULL;
+	int I = model->getItemModel()->getDataset()->countItems();
+	int q = model->getDimensionModel()->getLatentTraitSet()->getTheta()->nC();
+	double args[3*I];
+	double pars[2+2*q+q*I];
+	int nargs = 3*I;
+	int npars = 2+2*q+q*I;
+	//filling args
+	int nA=0;
+	// Obtain a
+	//A Matrix
+	Matrix<double>* A = model->getParameterModel()->getParameterSet()[a];
+	//B Matrix
+	Matrix<double>* B = model->getParameterModel()->getParameterSet()[b];
+	//C Matrix
+	Matrix<double>* C = model->getParameterModel()->getParameterSet()[c];
+		for (int i=0; i<I; i++) {
+			args[nA] = (*A)(0,i);
+			nA++;
+		}
+
+		// Obtain b
+		for (int i=0; i<I; i++) {
+			args[nA] = (*B)(0,i);
+			nA++;
+		}
+
+		// Obtain c
+		for (int i=0; i<I; i++) {
+			args[nA] = (*C)(0,i);
+			nA++;
+		}
+	//Filling pars
+	int nP=0;
+	// Obtain q
+	pars[nP] = q;
+	nP++;
+	// Obtain I
+	pars[nP] = I;
+	nP++;
+	// Obtain theta
+	//Thetas
+	Matrix<double>* thetas = model->getDimensionModel()->getLatentTraitSet()->getTheta();
+	for (int k=0; k<q; k++) {
+		pars[nP]=(*thetas)(0,q);//TODO correct indexing on this and nearby matrices
+		nP++;
+	}
+	// Obtain f
+	for (int k=0; k<q; k++) {
+		pars[nP]=(*f)(0,k);
+		nP++;
+	}
+	// Obtain r
+	for (int k=0; k<q; k++) {
+		for (int i=0; i<I; i++) {
+			pars[nP]=(*r)(k,i);
+			nP++;
+		}
+	}
+	nargs = nA;
+	npars = nP;
+	optim->searchOptimal(fptr,gptr,hptr,args,pars,nargs,npars);
+	 // Now pass the optimals to the Arrays.
+	nA = 0;
+	// Obtain a
+	for (int i=0; i<I; i++) {
+		(*A)(0,i) = args [nA ++];
+	}
+	// Obtain b
+	for (int i=0; i<I; i++) {
+		(*B)(0,i) = args [nA ++];
+	}
+	// Obtain c
+	for (int i=0; i<I; i++) {
+		(*C)(0,i) = args [nA ++];
+	}
+
+	//And set the parameter sets
+	//model->parameterModel->
 }
 void EMEstimation::estimate(){
 	/*

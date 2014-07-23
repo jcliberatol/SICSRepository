@@ -128,7 +128,7 @@ void printMatrix(struct matrix* M);
 /* PURPOSE: prints a given matrix on screen											*/
 /* INPUT:   struct matrix* M														*/
 
-Matrix NCM(Matrix m){
+Matrix<double> NCM(Matrix<double> m){
 	struct matrix G;
 	G.rows = m.nR();
 	G.columns = m.nC();

@@ -9,10 +9,10 @@
 #define EM_H_
 #include <estimation/classical/ClassicalEstimation.h>
 #include <string>
-#include <optimizer/Optimizer.h>
 #include <trace/Trace.h>
 #include <type/Matrix.h>
 #include <type/PatternMatrix.h>
+//#include <optimizer/BFGSOptimizer.h>
 
 class EMEstimation : public ClassicalEstimation{
 public:
@@ -57,8 +57,8 @@ private:
 	Trace* logger;
 	//Model on which the algorithm operates
 	Model* model;
-	Optimizer* optim;
 	//Algorithm of optimization used
+	Optimizer* optim;
 };
 
 #endif /* EM_H_ */

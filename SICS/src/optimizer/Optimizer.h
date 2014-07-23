@@ -7,11 +7,18 @@
 
 #ifndef OPTIMIZER_H_
 #define OPTIMIZER_H_
+//#include <optimizer/BFGSOptimizer.h>
+#include <optimizer/NewtonOptimizer.h>
+#include <optimizer/FisherScoringOptimizer.h>
+#include <optimizer/BFGSOptimizer.h>
 
 class Optimizer {
 public:
-	virtual void Optimize();
-	virtual ~Optimizer();
+	void searchOptimal(double (*functionPtr)(double*,double*,int,int),
+			void (*gradientPtr)(double*,double*,int,int,double*),
+			void (*HessianPtr)(double*,double*,int,int,double*),
+			double* args, double* pars, int nargs, int npars);
+	~Optimizer();
 	//The optimizers general functions
 	//The parameters are :
 	/*
@@ -20,11 +27,7 @@ public:
 	 * int nargs Number of arguments
 	 * int npars Number of parameters
 	 * double * return (Return of the function is put in this array.)
-	 * int Size of the return array
 	 */
-	void (*functionPtr)(double*,double*,int,int,double*,int);
-	void (*gradientPtr)(double*,double*,int,int,double*,int);
-	void (*HessianPtr)(double*,double*,int,int,double*,int);
 };
 
 #endif /* OPTIMIZER_H_ */

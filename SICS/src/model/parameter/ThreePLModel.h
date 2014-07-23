@@ -19,9 +19,10 @@
 #include <type/Constant.h>
 
 class ThreePLModel: public ParameterModel {
+public:
+
 	static double successProbability(double, double, double, double);
 	static double successProbability_cPrime (double, double, double, double);
-public:
 	// Constructor
 	ThreePLModel();
 

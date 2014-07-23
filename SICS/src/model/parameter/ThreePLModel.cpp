@@ -279,7 +279,8 @@ double ThreePLModel::logLikelihood (double* args, double* pars, int nargs,
 
 	for (int k = 0; k < q; ++k) {
 		for (unsigned int i = 0; i < I; ++i) {
-			tp = successProbability_cPrime ( theta[k], a[i], b[i], c[i] );
+			long double cPrime = exp(c[i])/(1+exp(c[i]));
+			tp = (ThreePLModel::successProbability ( theta[k], a[i], b[i], cPrime ));
 			if (tp==0)tp=1e-08;
 			tq = 1-tp;
 			if (tq==0)tq=1e-08;

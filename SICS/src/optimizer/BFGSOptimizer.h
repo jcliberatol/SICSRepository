@@ -8,13 +8,10 @@
 #ifndef BFGSOPTIMIZER_H_
 #define BFGSOPTIMIZER_H_
 #include <type/Constant.h>
+#include <cmath>
 
-class BFGSOptimizer{
-public:
-	int bfgs(double (*&fntomin)(double*,double*,int,int),void (*&gradient)(double*,double*,int,int,double*),double * args, double * pars , int nvars ,int npars , int maxiter, double * optimpts);
-};
 
-int bfgs(double (*&fntomin)(double*,double*,int,int),void (*&gradient)(double*,double*,int,int,double*),double * args, double * pars , int nvars ,int npars , int maxiter, double * optimpts){
+int static bfgs(double (*&fntomin)(double*,double*,int,int),void (*&gradient)(double*,double*,int,int,double*),double * args, double * pars , int nvars ,int npars , int maxiter){
 	/*
 	//call of function
 	 double result;
@@ -51,14 +48,14 @@ int bfgs(double (*&fntomin)(double*,double*,int,int),void (*&gradient)(double*,d
     n = nvars;
 
     //Assign memory
-    *g = new double [n];
-    *t = new double [n];
-    *X = new double [n];
-    *c = new double [n];
+    g = new double [n];
+    t = new double [n];
+    X = new double [n];
+    c = new double [n];
     //Assign memory to the triangular lower matrix
-    *B = new double [n*(n+1)/2];
+    B = new double [n*(n+1)/2];
     //evaluate the function at the initial points
-    f = (this->*fntomin)(args, pars, nvars, npars);
+    f = (*fntomin)(args, pars, nvars, npars);
     if (!(f<Constant::INFINITE)){
     	return (2);//BAD_INITIAL_VALUES;
     }
@@ -66,7 +63,7 @@ int bfgs(double (*&fntomin)(double*,double*,int,int),void (*&gradient)(double*,d
     fmin = f;
     funcount = gradcount = 1;
     //run the gradient
-    (this->*gradient) (args,pars,nvars,npars,g);
+    (*gradient) (args,pars,nvars,npars,g);
     iter++;
     ilast = gradcount;
 
@@ -74,8 +71,8 @@ int bfgs(double (*&fntomin)(double*,double*,int,int),void (*&gradient)(double*,d
     do {
 	if (ilast == gradcount) {
 	    for (i = 0; i < n; i++) {
-		for (j = 0; j < i; j++) B(i,j) = 0.0;
-		B(i,i) = 1.0;
+		for (j = 0; j < i; j++) B[((( i + 1 )*( i + 2 ) / 2 )-( i - j )- 1 )] = 0.0;
+		B[((( i + 1 )*( i + 2 ) / 2 )-( i - i )- 1 )] = 1.0;
 	    }
 	}
 	for (i = 0; i < n; i++) {
@@ -85,8 +82,8 @@ int bfgs(double (*&fntomin)(double*,double*,int,int),void (*&gradient)(double*,d
 	gradproj = 0.0;
 	for (i = 0; i < n; i++) {
 	    s = 0.0;
-	    for (j = 0; j <= i; j++) s -= B(i,j) * g[l[j]];
-	    for (j = i + 1; j < n; j++) s -= B(j,i) * g[l[j]];
+	    for (j = 0; j <= i; j++) s -= B[((( i + 1 )*( i + 2 ) / 2 )-( i - j )- 1 )] * g[l[j]];
+	    for (j = i + 1; j < n; j++) s -= B[((( j + 1 )*( j + 2 ) / 2 )-( j - i )- 1 )] * g[l[j]];
 	    t[i] = s;
 	    gradproj += s * g[l[i]];
 	}
@@ -103,7 +100,7 @@ int bfgs(double (*&fntomin)(double*,double*,int,int),void (*&gradient)(double*,d
 		}
 //
 		if (count < n) {
-		    f = (this->*fntomin)(args, pars, nvars, npars);
+		    f = (*fntomin)(args, pars, nvars, npars);
 		    funcount++;
 		    //
 		    accpoint = (f<Constant::INFINITE) &&
@@ -124,7 +121,7 @@ int bfgs(double (*&fntomin)(double*,double*,int,int),void (*&gradient)(double*,d
 	    //
 	    if (count < n) {/* making progress */
 		fmin = f;
-		(this->*gradient) (args,pars,nvars,npars,g);
+		(*gradient) (args,pars,nvars,npars,g);
 		gradcount++;
 		iter++;
 		D1 = 0.0;
@@ -138,16 +135,16 @@ int bfgs(double (*&fntomin)(double*,double*,int,int),void (*&gradient)(double*,d
 		    for (i = 0; i < n; i++) {
 			s = 0.0;
 			for (j = 0; j <= i; j++)
-			    s += B(i,j) * c[j];
+			    s += B[((( i + 1 )*( i + 2 ) / 2 )-( i - j )- 1 )] * c[j];
 			for (j = i + 1; j < n; j++)
-			    s += B(j,i) * c[j];
+			    s += B[((( j + 1 )*( j + 2 ) / 2 )-( j - i )- 1 )] * c[j];
 			X[i] = s;
 			D2 += s * c[i];
 		    }
 		    D2 = 1.0 + D2 / D1;
 		    for (i = 0; i < n; i++) {
 			for (j = 0; j <= i; j++)
-			    B(i,j) += (D2 * t[i] * t[j]
+				B[((( i + 1 )*( i + 2 ) / 2 )-( i - j )- 1 )] += (D2 * t[i] * t[j]
 					- X[i] * t[j] - t[i] * X[j]) / D1;
 		    }
 		} else {	/* D1 < 0 */
@@ -171,7 +168,6 @@ int bfgs(double (*&fntomin)(double*,double*,int,int),void (*&gradient)(double*,d
 	    ilast = gradcount;	/* periodic restart */
     } while (count != n || ilast != gradcount);
     if (iter < maxiter) {
-    	cout<<"Converged \n "<<endl;
     	return (0);//SUCCESS;
     }
     return (3);//N_CONVERGENCE;
