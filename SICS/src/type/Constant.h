@@ -19,6 +19,12 @@ public:
 	static double INFINITE;
 	static double EPSILON;
 	static string INITIAL_VALUE_METHOD;
+	//BFGS METHOD SPECIFIC CONSTANTS
+	static double stepredn ;
+	static double acctol ;
+	static double reltest ;
+	static double abstol ;
+	static double reltol ;
 };
 
 #endif /* CONSTANT_H_ */

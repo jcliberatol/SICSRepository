@@ -7,12 +7,10 @@
 
 #ifndef FISHERSCORINGOPTIMIZER_H_
 #define FISHERSCORINGOPTIMIZER_H_
-#include <optimizer/Optimizer.h>
 
-class FisherScoringOptimizer : public Optimizer{
+class FisherScoringOptimizer{
 public:
-	FisherScoringOptimizer();
-	virtual ~FisherScoringOptimizer();
+
 };
 
 #endif /* FISHERSCORINGOPTIMIZER_H_ */

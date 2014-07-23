@@ -7,12 +7,9 @@
 
 #ifndef NEWTONOPTIMIZER_H_
 #define NEWTONOPTIMIZER_H_
-#include <optimizer/Optimizer.h>
 
-class NewtonOptimizer : public Optimizer{
+class NewtonOptimizer{
 public:
-	NewtonOptimizer();
-	virtual ~NewtonOptimizer();
 };
 
 #endif /* NEWTONOPTIMIZER_H_ */
