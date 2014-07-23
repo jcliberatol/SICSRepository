@@ -134,8 +134,8 @@ Matrix<double> NCM(Matrix<double> m){
 	G.columns = m.nC();
 	G.entries = (double*) malloc(sizeof(double) * m.nR() * m.nC());
 	for (int i = 0; i < m.nR(); ++i) {
-		for(int j= 0; i < m.nC(); ++j){
-			G.entries[i*m.nR()+m.nC()]=m(i,j);
+		for(int j= 0; j < m.nC(); ++j){
+			G.entries[i*m.nC()+j]=m(i,j);
 		}
 	}
 	struct matrix X;
@@ -144,10 +144,10 @@ Matrix<double> NCM(Matrix<double> m){
 	double y[m.nR()];
 	Correlation_Newton(&G, &X, y);
 	for (int i = 0; i < m.nR(); ++i) {
-			for(int j= 0; i < m.nC(); ++j){
-				m(i,j)=X.entries[i*m.nR()+m.nC()];
-			}
-	return m;
+		for(int j= 0; j < m.nC(); ++j){
+			m(i,j)=X.entries[i*m.nC()+j];
+	}
+	return (m);
 }
 
 inline double max (double a, double b) {if(a>b) return a; return b;}
