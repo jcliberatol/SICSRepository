@@ -41,7 +41,7 @@ int main() {
 
 	// Initial Parameters
 	for (int i = 0; i < I; i++) {
-		(*model->getParameterModel()->getParameterSet()[a])(0, i) = double(0.851);
+		(*model->getParameterModel()->getParameterSet()[a])(0, i) = 0.851;
 		(*model->getParameterModel()->getParameterSet()[d])(0, i) = 0.272;
 		(*model->getParameterModel()->getParameterSet()[c])(0, i) = 0.2;
 	}
@@ -62,11 +62,11 @@ int main() {
 	em->setModel(model);
 
 	// run estimation
-	//em->stepE();
+	em->stepE();
 
-	delete model;
 	delete modelFactory;
 	delete dataSet;
+	delete model;
 	delete em;
 
 	return (0);

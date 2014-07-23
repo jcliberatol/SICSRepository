@@ -8,18 +8,42 @@
 #include "EMEstimation.h"
 
 EMEstimation::EMEstimation() {
-	// TODO Auto-generated constructor stub
+
+	model = NULL;
+	f = NULL;
+	r = NULL;
+	optim = NULL;
+	logger = NULL;
 
 }
 
 EMEstimation::~EMEstimation() {
-	// TODO Auto-generated destructor stub
+	if( f!= NULL ) {
+		delete f;
+	}
+	if( r!= NULL ) {
+		delete r;
+	}
+	if (logger != NULL ) {
+		delete logger;
+	}
+	if ( optim != NULL ) {
+		delete optim;
+	}
 }
 /*
  * Model is set.
  */
 void EMEstimation::setModel(Model* Model){
+	int q;
+	int I;
 	this->model=Model;
+	q = model->getDimensionModel()->getLatentTraitSet()->getTheta()->nC();
+	I = model->getItemModel()->countItems();
+
+	f = new Matrix<double> (1,q);
+	r = new Matrix<double> (q,I);
+
 }
 /*
  * Sets or selects the initial values
