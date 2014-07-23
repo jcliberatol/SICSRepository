@@ -106,8 +106,112 @@ double ThreePLModel::successProbability(double theta, double a, double d,
 double ThreePLModel::getProbability(int node, int item) {
 	return ((*probabilityMatrix)(node, item));
 }
+void ThreePLModel::gradient (double* args, double* pars, int nargs, int npars, double* gradient){
 
-double ThreePLModel::LogLikelihood (double* args, double* pars, int nargs,
+	/*
+	 * TODO
+	 * What we need
+	 * items
+	 * q
+	 * theta array
+	 * D
+	 * a, b, c
+	 * f and r
+	 */
+	int nA = 0;
+	int nP = 0;
+	int q, items;
+	double *theta, *r, *f, *a, *b, *c;
+
+	// Obtain q
+	q = pars[nP ++]; // q is obtained and npars is augmented
+	// Obtain I
+	items = pars[nP ++];
+
+	// Obtain f
+	for (int k=0; k<q; k++) {
+		f[k] = pars[nP ++];
+	}
+
+	// Obtain r
+	for (int k=0; k<q; k++) {
+		for (int i=0; i<items; i++) {
+			r[k*items+i] = pars[nP ++];
+		}
+	}
+
+	// Obtain a
+	for (int i=0; i<items; i++) {
+		a[i] = args [nA ++];
+	}
+	// Obtain b
+	for (int i=0; i<items; i++) {
+		b[i] = args [nA ++];
+	}
+	// Obtain c
+	for (int i=0; i<items; i++) {
+		c[i] = args [nA ++];
+	}
+
+	double D = Constant::NORM_CONST;
+	long double *h_0; // Block Matrix of size q*I. Each block-element has size of 1*3
+	long double *h; // Block vector of size I (i.e. I blocks). Each block-element has size of 1*3
+	long double *P_Star, *P;  // Matrix of size q*I
+	long double *W;           // Matrix of size q*I
+	long double *factor;	  // Matrix of product (r-fP)W
+	long double *ec;            // e^c_i
+	long double *ecPlus1Inv;	// 1 / (e^c_i + 1)
+	h = new long double [3*items];
+	h_0 = new long double [q*3*items];
+	P_Star = new long double [q*items];
+	factor = new long double [q*items];
+	W = new long double [q*items];
+	ec = new long double [items];
+	ecPlus1Inv = new long double [items];
+	for ( int k = 0; k < q; k++ ) {
+		for ( unsigned  int i = 0; i < items; i++ ) {
+
+			P[k * items + i] = successProbability_cPrime ( theta[k], a[i], b[i], c[i] );
+			P_Star[k * items + i] = successProbability ( theta[k], a[i], b[i], 0.0 );
+
+			W[k * items + i] = P_Star[k * items + i] * ( 1 - P_Star[k * items + i] ); // Numerator
+			W[k * items + i] /= P[k * items + i] * ( 1 - P[k * items + i] );// Denominator
+
+			factor[k * items + i] = ( r[k * items + i] - f[k]*P[k * items + i] ) * W[k * items + i];
+			// h_0 / (P_star*Q_star)
+			h_0[3 * i * k + 3 * i + 0] = D * theta[k] * ecPlus1Inv[i];
+			h_0[3 * i * k + 3 * i + 1] = D * ecPlus1Inv[i];
+			h_0[3 * i * k + 3 * i + 2] = ec[i] * (ecPlus1Inv[i]*ecPlus1Inv[i]) / P_Star[k * items + i];
+
+		}
+	}
+	for ( unsigned int i = 0; i < items; i++ ) {
+		h[3 * i + 0] = 0.0;
+		h[3 * i + 1] = 0.0;
+		h[3 * i + 2] = 0.0;
+
+		for ( int k = 0; k < q; k++ ) {
+			h[3 * i + 0] += factor[k * items + i] * h_0[3 * items * k + 3 * i + 0];
+			h[3 * i + 1] += factor[k * items + i] * h_0[3 * items * k + 3 * i + 1];
+			h[3 * i + 2] += factor[k * items + i] * h_0[3 * items * k + 3 * i + 2];
+		}
+	}
+
+	delete [] h_0;
+	delete [] P_Star;
+	delete [] P;
+	delete [] W;
+	delete [] factor;
+	delete [] ec;
+	delete [] ecPlus1Inv;
+
+//return h as the gradient
+	for (int cpy = 0; cpy < 3*items; ++cpy) {
+		gradient[cpy]=h[cpy];
+	}
+	delete [] h;
+}
+double ThreePLModel::logLikelihood (double* args, double* pars, int nargs,
 		int npars) {
 
 	//args

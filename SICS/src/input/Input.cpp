@@ -77,7 +77,7 @@ bool Input::importCSV( char* filename, Matrix<double>& M, unsigned int rowIdx, u
 
 		inFile.close();
 
-		return 1;
+		return (1);
 }
 /*
  * Imports a CSV file whose elements repeat and generally is composed of only zeroes and ones.
@@ -163,11 +163,11 @@ bool Input::importCSV( char* filename, PatternMatrix& M, unsigned int rowIdx, un
 
 	inFile.close();
 
-	return 1;
+	return (1);
 }
 
 char Input::getDel() const {
-	return del;
+	return (del);
 }
 
 void Input::setDel(char del) {

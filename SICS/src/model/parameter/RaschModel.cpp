@@ -27,6 +27,7 @@ map<Parameter, Matrix<double> *> RaschModel::getParameterSet()  {
 }
 
 double RaschModel::getProbability(int node, int item) {
+	return (0);
 }
 
 RaschModel::~RaschModel() {

@@ -38,8 +38,6 @@ public:
 	void stepM();
 	//Sets the model to estimate
 	void setModel(Model* model);
-	//Sets the method of getting boundary conditions and applying them
-	void setBoundaryConditions(string option, string filename);
 	//Check if all the conditions are met for running the model, can report an error to a logger
 	void checkRunningConditions();
 	//Sets the optimization algorithm
@@ -59,8 +57,6 @@ private:
 	Trace* logger;
 	//Model on which the algorithm operates
 	Model* model;
-	//Boundary matrix
-	Matrix<double> *boundaryConditions;
 	Optimizer* optim;
 	//Algorithm of optimization used
 };

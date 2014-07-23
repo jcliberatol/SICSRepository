@@ -12,7 +12,6 @@
 class BFGSOptimizer{
 public:
 	int bfgs(double (*&fntomin)(double*,double*,int,int),void (*&gradient)(double*,double*,int,int,double*),double * args, double * pars , int nvars ,int npars , int maxiter, double * optimpts);
-	inline bool isFinite(double k){return (k<Constant::INFINITE);}
 };
 
 int bfgs(double (*&fntomin)(double*,double*,int,int),void (*&gradient)(double*,double*,int,int,double*),double * args, double * pars , int nvars ,int npars , int maxiter, double * optimpts){
@@ -42,7 +41,7 @@ int bfgs(double (*&fntomin)(double*,double*,int,int),void (*&gradient)(double*,d
     double fmin = Constant::INFINITE;
     //carefull of negative max iterations
     if (maxiter <= 0) {
-	return 1;//MAX_ITER_REACHED;
+	return (1);//MAX_ITER_REACHED;
     }
     //allocate l
     l = (int *) malloc(nvars* sizeof(int));
@@ -60,8 +59,8 @@ int bfgs(double (*&fntomin)(double*,double*,int,int),void (*&gradient)(double*,d
     *B = new double [n*(n+1)/2];
     //evaluate the function at the initial points
     f = (this->*fntomin)(args, pars, nvars, npars);
-    if (!isFinite(f)){
-    	return 2;//BAD_INITIAL_VALUES;
+    if (!(f<Constant::INFINITE)){
+    	return (2);//BAD_INITIAL_VALUES;
     }
     //the optimal point for now is f.
     fmin = f;
@@ -107,7 +106,7 @@ int bfgs(double (*&fntomin)(double*,double*,int,int),void (*&gradient)(double*,d
 		    f = (this->*fntomin)(args, pars, nvars, npars);
 		    funcount++;
 		    //
-		    accpoint = isFinite(f) &&
+		    accpoint = (f<Constant::INFINITE) &&
 			(f <= fmin + gradproj * steplength * Constant::acctol);
 		    if (!accpoint) {
 			steplength *= Constant::stepredn;
@@ -173,9 +172,9 @@ int bfgs(double (*&fntomin)(double*,double*,int,int),void (*&gradient)(double*,d
     } while (count != n || ilast != gradcount);
     if (iter < maxiter) {
     	cout<<"Converged \n "<<endl;
-    	return 0;//SUCCESS;
+    	return (0);//SUCCESS;
     }
-    return 3;//N_CONVERGENCE;
+    return (3);//N_CONVERGENCE;
 }
 
 #endif /* BFGSOPTIMIZER_H_ */

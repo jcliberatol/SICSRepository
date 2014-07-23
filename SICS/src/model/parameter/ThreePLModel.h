@@ -28,7 +28,8 @@ public:
 	// Methods
 	void buildParameterSet(ItemModel *, DimensionModel *);
 	void successProbability(DimensionModel *);
-	static double LogLikelihood(double*, double*, int, int);
+	static double logLikelihood(double*, double*, int, int);
+	static void gradient(double*,double*,int,int,double*);
 
 	// Getters and Setters
 	map<Parameter, Matrix<double> *> getParameterSet() ;

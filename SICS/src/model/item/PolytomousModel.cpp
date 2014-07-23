@@ -13,10 +13,11 @@ PolytomousModel::PolytomousModel() {
 }
 
 int PolytomousModel::countCategories() {
+	return (0);
 }
 
  DataSet* PolytomousModel::getDataset()  {
-	return dataSet;
+	return (dataSet);
 }
 
 void PolytomousModel::setDataset(DataSet* dataset) {
@@ -24,6 +25,7 @@ void PolytomousModel::setDataset(DataSet* dataset) {
 }
 
 int PolytomousModel::countItems() {
+	return (0);
 }
 
 PolytomousModel::~PolytomousModel() {

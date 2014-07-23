@@ -39,12 +39,12 @@ public:
 
 template<class T>
 int Matrix<T>::nR() {
-	return nRow;
+	return (nRow);
 }
 
 template<class T>
 int Matrix<T>::nC() {
-	return nCol;
+	return (nCol);
 }
 
 template<class T>

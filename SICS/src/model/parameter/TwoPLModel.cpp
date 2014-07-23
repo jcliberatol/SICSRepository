@@ -28,6 +28,7 @@ void TwoPLModel::setParameterSet(map<Parameter, Matrix<double> *> pair) {
 }
 
 double TwoPLModel::getProbability(int node, int item) {
+	return (0);
 }
 
 TwoPLModel::~TwoPLModel() {

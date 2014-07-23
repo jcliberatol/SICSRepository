@@ -149,7 +149,6 @@ void EMEstimation::stepE () {
 
 
 	}
-	/*
 } //end E step
 
 void EMEstimation::stepM(){
@@ -161,12 +160,6 @@ void EMEstimation::estimate(){
 	/*
 	 * TODO Estimate
 	 */
-}
-
-
-//Sets the method of getting boundary conditions and applying them
-void EMEstimation::setBoundaryConditions(string option, string filename){
-
 }
 //Check if all the conditions are met for running the model, can report an error to a logger
 void EMEstimation::checkRunningConditions(){
