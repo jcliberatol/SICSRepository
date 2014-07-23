@@ -8,26 +8,31 @@
 #include <type/LatentTraitSet.h>
 
 LatentTraitSet::LatentTraitSet() {
-	// TODO Auto-generated constructor stub
-
+	theta = NULL;
+	weight = NULL;
 }
 
-LatentTraitSet::~LatentTraitSet() {
-	// TODO Auto-generated destructor stub
-}
-
-Matrix<double>* LatentTraitSet::getTheta() const {
-	return theta;
+Matrix<double>* LatentTraitSet::getTheta() {
+	return (theta);
 }
 
 void LatentTraitSet::setTheta(Matrix<double>* theta) {
 	this->theta = theta;
 }
 
-Matrix<double>* LatentTraitSet::getWeight() const {
-	return weight;
+Matrix<double>* LatentTraitSet::getWeight() {
+	return (weight);
 }
 
 void LatentTraitSet::setWeight(Matrix<double>* weight) {
 	this->weight = weight;
+}
+
+LatentTraitSet::~LatentTraitSet() {
+	if (theta != NULL) {
+		delete theta;
+	}
+	if (weight != NULL) {
+		delete weight;
+	}
 }

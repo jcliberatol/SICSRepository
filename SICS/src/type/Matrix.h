@@ -63,12 +63,13 @@ Matrix<T>::Matrix(int r, int c) {
 }
 template<class T>
 T & Matrix<T>::operator()(const int r, const int c) {
-	return (memory[nCol * c + r]);
+	return (memory[nCol * r + c]);
 }
 template<class T>
 Matrix<T>::~Matrix() {
-	// TODO Auto-generated destructor stub
-	delete[] memory;
+	if( memory != NULL ){
+		delete[] memory;
+	}
 }
 
 template<class T>

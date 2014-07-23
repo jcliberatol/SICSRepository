@@ -18,9 +18,9 @@ public:
 	LatentTraitSet();
 	
 	// Getters and Setters  
-	Matrix<double>* getTheta() const;
+	Matrix<double>* getTheta();
 	void setTheta(Matrix<double>* theta);
-	Matrix<double>* getWeight() const;
+	Matrix<double>* getWeight();
 	void setWeight(Matrix<double>* weight);
 
 	// Destructor
