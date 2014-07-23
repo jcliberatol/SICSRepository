@@ -14,6 +14,10 @@
 #include <OpenBlas/common.h>
 #include <boost/dynamic_bitset.hpp>
 #include <type/PatternMatrix.h>
+#include <model/Model.h>
+#include <model/ModelFactory.h>
+#include <model/SICSGeneralModel.h>
+#include <estimation/classical/EMEstimation.h>
 #include <input/Input.h>
 
 using namespace std;
