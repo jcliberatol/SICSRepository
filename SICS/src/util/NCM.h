@@ -68,7 +68,7 @@ struct matrix
 /*
  * 	Full run of the NCM procedure on the oncoming matrix.
  */
-Matrix NCM(Matrix m);
+Matrix<double> NCM(Matrix<double> m);
 void Correlation_Newton(struct matrix* G, struct matrix* X, double* y);
 /* PURPOSE: calculating the nearest correlation matrix of G							*/
 /* INPUT:	struct matrix* G														*/
@@ -146,6 +146,7 @@ Matrix<double> NCM(Matrix<double> m){
 	for (int i = 0; i < m.nR(); ++i) {
 		for(int j= 0; j < m.nC(); ++j){
 			m(i,j)=X.entries[i*m.nC()+j];
+		}
 	}
 	return (m);
 }
@@ -156,7 +157,7 @@ inline double norm (double*a, int n)
 	double tmp = 0;
 	int i;
 	for(i=0; i<n; i++) tmp+=pow(a[i], 2.);
-	return sqrt(tmp);
+	return (sqrt(tmp));
 }
 
 void printMatrix(struct matrix* M)

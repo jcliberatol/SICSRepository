@@ -16,11 +16,16 @@ int main() {
 	Matrix<double> cuad(41, 2);
 	input.importCSV((char *) "Cuads.csv", cuad, 1, 0);
 	//cout << cuad;
+	Matrix<double> pacho(3,3);
+	input.importCSV((char *) "pacho.csv",pacho,0,0);
+	cout<<pacho<<endl;
+	NCM(pacho);
+	cout<<pacho<<endl;
 
 	// **** **** Run model complete and ordered process **** ****
 
 	// Create general pars
-	int I; // Number of items
+	int It; // Number of items
 
 	// Create general model
 	Model *model = new Model();
@@ -37,10 +42,10 @@ int main() {
 	model->getParameterModel()->buildParameterSet(model->getItemModel(),
 			model->getDimensionModel());
 
-	I = model->getItemModel()->countItems();
+	It = model->getItemModel()->countItems();
 
 	// Initial Parameters
-	for (int i = 0; i < I; i++) {
+	for (int i = 0; i < It; i++) {
 		(*model->getParameterModel()->getParameterSet()[a])(0, i) = 0.851;
 		(*model->getParameterModel()->getParameterSet()[d])(0, i) = 0.272;
 		(*model->getParameterModel()->getParameterSet()[c])(0, i) = 0.2;

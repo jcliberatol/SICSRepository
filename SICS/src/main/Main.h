@@ -19,6 +19,7 @@
 #include <model/SICSGeneralModel.h>
 #include <estimation/classical/EMEstimation.h>
 #include <input/Input.h>
+#include <util/NCM.h>
 
 
 using namespace std;
