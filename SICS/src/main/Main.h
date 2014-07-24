@@ -10,8 +10,6 @@
 
 #include <iostream>
 #include <type/Matrix.h>
-#include <OpenBlas/cblas.h>
-#include <OpenBlas/common.h>
 #include <boost/dynamic_bitset.hpp>
 #include <type/PatternMatrix.h>
 #include <model/Model.h>

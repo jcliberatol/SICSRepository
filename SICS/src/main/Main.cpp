@@ -19,7 +19,7 @@ int main() {
 	Matrix<double> pacho(3,3);
 	input.importCSV((char *) "pacho.csv",pacho,0,0);
 	cout<<pacho<<endl;
-	NCM(pacho);
+	NCM(&pacho);
 	cout<<pacho<<endl;
 
 	// **** **** Run model complete and ordered process **** ****

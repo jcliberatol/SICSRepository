@@ -45,8 +45,11 @@
 
 /* Warning: Accuracy may not be guaranteed!!!!!										*/
 #include <type/Matrix.h>
+//#include <openblas/cblas.h>
 #include <openblas/cblas.h>
 #include <openblas/lapacke/lapacke.h>
+//#include <OpenBlas/lapack-netlib/lapacke/include/lapacke.h>
+//#include <openblas/lapacke/lapacke.h>
 #include <iostream>
 #include <cstdio>
 #include <cmath>
@@ -68,7 +71,7 @@ struct matrix
 /*
  * 	Full run of the NCM procedure on the oncoming matrix.
  */
-Matrix<double> NCM(Matrix<double> m);
+void NCM(Matrix<double>* m);
 void Correlation_Newton(struct matrix* G, struct matrix* X, double* y);
 /* PURPOSE: calculating the nearest correlation matrix of G							*/
 /* INPUT:	struct matrix* G														*/
@@ -128,27 +131,26 @@ void printMatrix(struct matrix* M);
 /* PURPOSE: prints a given matrix on screen											*/
 /* INPUT:   struct matrix* M														*/
 
-Matrix<double> NCM(Matrix<double> m){
+void NCM(Matrix<double>* m){
 	struct matrix G;
-	G.rows = m.nR();
-	G.columns = m.nC();
-	G.entries = (double*) malloc(sizeof(double) * m.nR() * m.nC());
-	for (int i = 0; i < m.nR(); ++i) {
-		for(int j= 0; j < m.nC(); ++j){
-			G.entries[i*m.nC()+j]=m(i,j);
+	G.rows = m->nR();
+	G.columns = m->nC();
+	G.entries = (double*) malloc(sizeof(double) * m->nR() * m->nC());
+	for (int i = 0; i < m->nR(); ++i) {
+		for(int j= 0; j < m->nC(); ++j){
+			G.entries[i*m->nC()+j]=(*m)(i,j);
 		}
 	}
 	struct matrix X;
-	X.rows = m.nR();
-	X.columns = m.nC();
-	double y[m.nR()];
+	X.rows = m->nR();
+	X.columns = m->nC();
+	double y[m->nR()];
 	Correlation_Newton(&G, &X, y);
-	for (int i = 0; i < m.nR(); ++i) {
-		for(int j= 0; j < m.nC(); ++j){
-			m(i,j)=X.entries[i*m.nC()+j];
+	for (int i = 0; i < m->nR(); ++i) {
+		for(int j= 0; j < m->nC(); ++j){
+			(*m)(i,j)=X.entries[i*m->nC()+j];
 		}
 	}
-	return (m);
 }
 
 inline double max (double a, double b) {if(a>b) return a; return b;}

@@ -29,7 +29,7 @@ private:
 	/*
 	 * Checks if a file exists, relative to the program
 	 */
-	char del = ',';
+	char del;
 
 public:
 	Input();

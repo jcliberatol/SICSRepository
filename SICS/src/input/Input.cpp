@@ -9,7 +9,7 @@
 
 Input::Input() {
 	// TODO Auto-generated constructor stub
-
+	del = ',';
 }
 
 Input::~Input() {

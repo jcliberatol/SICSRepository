@@ -17,6 +17,7 @@
 #include <model/dimension/MultiUniDimModel.h>
 #include <type/PatternMatrix.h>
 #include <type/Constant.h>
+#include <cmath>
 
 class ThreePLModel: public ParameterModel {
 public:

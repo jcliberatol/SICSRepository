@@ -21,8 +21,8 @@ ostream& operator<<(ostream &, Matrix<T> &);
 template<class T>
 class Matrix {
 private:
-	int nCol = 0;
-	int nRow = 0;
+	int nCol;
+	int nRow;
 	T *memory;
 public:
 	Matrix(); //Empty object

@@ -9,6 +9,7 @@
 #define BFGSOPTIMIZER_H_
 #include <type/Constant.h>
 #include <cmath>
+#include <stdlib.h>
 
 
 int static bfgs(double (*&fntomin)(double*,double*,int,int),void (*&gradient)(double*,double*,int,int,double*),double * args, double * pars , int nvars ,int npars , int maxiter){
