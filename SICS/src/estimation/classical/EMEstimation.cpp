@@ -94,9 +94,10 @@ void EMEstimation::stepE () {
 	//A Matrix
 	Matrix<double>* A = model->getParameterModel()->getParameterSet()[a];
 	//B Matrix
-	Matrix<double>* B = model->getParameterModel()->getParameterSet()[b];
+	Matrix<double>* B = model->getParameterModel()->getParameterSet()[d];
 	//C Matrix
 	Matrix<double>* C = model->getParameterModel()->getParameterSet()[c];
+	cout<<(*A)<<endl<<(*B)<<endl<<(*C)<<endl;
 	//Auxiliar array for the nodes
 	long double faux[q];
 	long double sum = 0.0;
@@ -105,9 +106,10 @@ void EMEstimation::stepE () {
 	f->reset();
 	r->reset();
 	cout<<"E1"<<endl;
-	for (data->resetIterator();data->checkEnd();data->iterate()){
+	//cout<<(* data)<<endl;
+	model->successProbability();
+	for (data->resetIterator();!data->checkEnd();data->iterate()){
 		//Initialize faux in 1 to later calculate the productory
-		cout<<"E2"<<endl;
 		for ( int k = 0; k < q; k++ ) {
 					faux[k] = 1;
 				}
@@ -122,25 +124,22 @@ void EMEstimation::stepE () {
 				}
 				faux[k] = faux[k]*prob;
 			}
-
 		//At this point the productory is calculated and faux[k] is equivalent to p(u_j,theta_k)
 		//Now multiply by the weight
-
-		faux[k] = faux[k] * (*weights)(0,k);
+		faux[0]  = 1;//faux[k] * (*weights)(0,k);
 		}
-		cout<<weights;
+		//cout<<(*weights);
 		//compute the total of the p*a' (denominator of the g*)
 		sum = 0.0;
 		for (int k = 0; k < q; k++) {
 			sum += faux[k];
 		}
-
 		for (int k = 0; k < q; k++) {
 			faux[k] = faux[k] / sum;	//This is g*_j_k
 
 			//Multiply the f to the frequency of the pattern
 			faux[k] = ((long double) data->getCurrentFrequency()) * faux[k];
-			(*f)(0,k) = faux[k]; //= (*f)(0,k);//TODO Possible mistake here JLP
+			(*f)(0,k) += faux[k]; //= (*f)(0,k);//TODO Possible mistake here JLP
 			//Now selectively add the faux to the r
 			for ( unsigned int i = 0; i < items; i++ ) {
 				if (data->getCurrentBitSet()[i]) {
@@ -148,10 +147,10 @@ void EMEstimation::stepE () {
 				} // if
 			} // for
 		} // for
-		cout<<"f "<<f;
 
 	}
-	cout<<(*f)<<(*r)<<endl;
+	cout << "f Sum = " << f->sum() << endl;
+	cout << "r Sum = " <<  r->sum() << endl;
 } //end E step
 
 void EMEstimation::stepM(){
@@ -223,10 +222,9 @@ void EMEstimation::stepM(){
 	//Thetas
 
 	Matrix<double>* thetas = model->getDimensionModel()->getLatentTraitSet()->getTheta();
-
-
+	cout<<"2.6"<<endl;
 	for (int k=0; k<q; k++) {
-		pars[nP]=(*thetas)(0,q);//TODO correct indexing on this and nearby matrices
+		pars[nP]=(*thetas)(0,k);//TODO correct indexing on this and nearby matrices
 		nP++;
 	}
 	// Obtain f

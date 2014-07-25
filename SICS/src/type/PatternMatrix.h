@@ -27,8 +27,8 @@ public:
 	// Methods
 	std::map<boost::dynamic_bitset<>, long int>::const_iterator iterator; //use this when reading in order
 	inline void resetIterator(){iterator = matrix.begin();}
-	inline bool checkEnd(){cout<<(iterator==matrix.end())<<" p "<<endl;return (iterator==matrix.end());}
-	inline void iterate(){cout<<"Increasing"<<endl;values();++iterator;values();}
+	inline bool checkEnd(){return (iterator==matrix.end());}
+	inline void iterate(){++iterator;}
 	inline void values(){cout<<iterator->first<<" values  "<<iterator->second<<endl;}
 	inline boost::dynamic_bitset<> getCurrentBitSet(){return (iterator->first);}
 	inline long int getCurrentFrequency(){return (iterator->second);}

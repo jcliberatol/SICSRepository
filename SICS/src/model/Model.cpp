@@ -47,3 +47,7 @@ ParameterModel* Model::getParameterModel()  {
 void Model::setParameterModel(ParameterModel* parameterModel) {
 	this->parameterModel = parameterModel;
 }
+
+void Model::successProbability() {
+	parameterModel->successProbability(dimensionModel);
+}

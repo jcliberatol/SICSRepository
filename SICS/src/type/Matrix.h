@@ -31,6 +31,7 @@ public:
 	void reset();
 	int nR(); // Returns number of rows
 	int nC(); //Returns number of columns
+	T sum(); // Returns the sum of all objects
 	T & operator()(const int nCol, const int nRow); //Accessing operator for a element
 	friend ostream& operator<<<T>(ostream &, Matrix<T> &); //Output operator
 	//Matrix<T>& operator+=(const Matrix<T>& rhs);
@@ -38,6 +39,16 @@ public:
 	virtual ~Matrix();
 };
 
+template<class T>
+T Matrix<T>::sum() {
+	T sum = 0;
+
+	for (int i = 0; i < nRow * nCol; i++) {
+		sum += memory[i];
+	}
+
+	return (sum);
+}
 
 template<class T>
 int Matrix<T>::nR() {
@@ -69,14 +80,14 @@ T & Matrix<T>::operator()(const int r, const int c) {
 }
 template<class T>
 Matrix<T>::~Matrix() {
-	if( memory != NULL ){
+	if (memory != NULL) {
 		delete[] memory;
 	}
 }
 
 template<class T>
 void Matrix<T>::reset() {
-	memset(memory, 0.0,(nCol * nRow)  * sizeof(T));
+	memset(memory, 0.0, (nCol * nRow) * sizeof(T));
 }
 
 template<class T>

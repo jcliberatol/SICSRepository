@@ -13,6 +13,7 @@ ThreePLModel::ThreePLModel() {
 	parameterSet[b] = NULL;
 	parameterSet[c] = NULL;
 	parameterSet[d] = NULL;
+	probabilityMatrix=NULL;
 
 }
 
@@ -24,7 +25,8 @@ void ThreePLModel::buildParameterSet(ItemModel* itemModel,
 		if (typeid(*dimensionModel) == typeid(UnidimensionalModel)) {
 
 			int items = itemModel->countItems();
-
+			int q = dimensionModel->getLatentTraitSet()->getTheta()->nC();
+			probabilityMatrix = new Matrix<double>(q,items);
 			parameterSet[a] = new Matrix<double>(1, items);
 			parameterSet[d] = new Matrix<double>(1, items);
 			parameterSet[c] = new Matrix<double>(1, items);
@@ -55,19 +57,17 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel) {
 	if ( dimensionModel != NULL ) {
 		q = dimensionModel->getLatentTraitSet()->getTheta()->nC();
 	}
-
 	if(typeid(*dimensionModel)==typeid(UnidimensionalModel)) {
+
 		int I = parameterSet[a]->nC();
 
 		for (int k = 0; k < q; k++) {
 			for ( int i = 0; i < I; i++ ){
-
 				// 3PL Success Probability Function
 				theta_d = (*dimensionModel->getLatentTraitSet()->getTheta())(0,k);
 				a_d = (*parameterSet[a])(0,i);
 				d_d = (*parameterSet[d])(0,i);
 				c_d = (*parameterSet[c])(0,i);
-
 				double p_d = successProbability ( theta_d, a_d, d_d, c_d );
 				(*probabilityMatrix)(k,i) = p_d;
 
@@ -88,6 +88,7 @@ void ThreePLModel::setParameterSet(
 
 double ThreePLModel::successProbability(double theta, double a, double d,
 		double c) {
+
 	long double exponential = (Constant::NORM_CONST)*(a*theta+d);
 
 	if ( exponential > Constant::MAX_EXP ) {
@@ -128,6 +129,18 @@ void ThreePLModel::gradient (double* args, double* pars, int nargs, int npars, d
 	// Obtain I
 	items = pars[nP ++];
 
+	theta = new double[q];
+	r = new double[q*items];
+	f = new double[q];
+	a = new double[items];
+	b = new double[items];
+	c = new double[items];
+
+	// Obtain theta
+	for (int k=0; k<q; k++) {
+		theta[k] = pars[nP ++];
+	}
+
 	// Obtain f
 	for (int k=0; k<q; k++) {
 		f[k] = pars[nP ++];
@@ -161,13 +174,16 @@ void ThreePLModel::gradient (double* args, double* pars, int nargs, int npars, d
 	long double *factor;	  // Matrix of product (r-fP)W
 	long double *ec;            // e^c_i
 	long double *ecPlus1Inv;	// 1 / (e^c_i + 1)
+
 	h = new long double [3*items];
 	h_0 = new long double [q*3*items];
+	P = new long double [q*items];
 	P_Star = new long double [q*items];
 	factor = new long double [q*items];
 	W = new long double [q*items];
 	ec = new long double [items];
 	ecPlus1Inv = new long double [items];
+
 	for ( int k = 0; k < q; k++ ) {
 		for ( unsigned  int i = 0; i < items; i++ ) {
 
@@ -236,11 +252,20 @@ double ThreePLModel::logLikelihood (double* args, double* pars, int nargs,
 	int q, I;
 	double *theta, *r, *f, *a, *b, *c;
 
+
 	// Obtain q
 	q = pars[nP ++]; // q is obtained and npars is augmented
 
 	// Obtain I
 	I = pars[nP ++];
+
+	theta = new double[q];
+	r = new double[q*I];
+	f = new double[q];
+	a = new double[I];
+	b = new double[I];
+	c = new double[I];
+
 
 	// Obtain theta
 	for (int k=0; k<q; k++) {
@@ -289,6 +314,13 @@ double ThreePLModel::logLikelihood (double* args, double* pars, int nargs,
 		}
 	}
 	//antiLogit(c, I);
+	delete[] theta;
+	delete[] f;
+	delete[] r;
+	delete[] a;
+	delete[] b;
+	delete[] c;
+
 	return (-sum);
 
 

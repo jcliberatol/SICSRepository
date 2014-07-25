@@ -10,7 +10,7 @@
 #include <type/Constant.h>
 #include <cmath>
 #include <stdlib.h>
-
+#include <iostream>
 
 int static bfgs(double (*&fntomin)(double*,double*,int,int),void (*&gradient)(double*,double*,int,int,double*),double * args, double * pars , int nvars ,int npars , int maxiter){
 	/*
@@ -90,6 +90,7 @@ int static bfgs(double (*&fntomin)(double*,double*,int,int),void (*&gradient)(do
 	}
 //
 	if (gradproj < 0.0) {	/* search direction is downhill */
+		std::cout << "Downhill" << std::endl;
 	    steplength = 1.0;
 	    accpoint = false;
 	    do {
@@ -99,6 +100,7 @@ int static bfgs(double (*&fntomin)(double*,double*,int,int),void (*&gradient)(do
 		    if (Constant::reltest + X[i] == Constant::reltest + args[l[i]]) /* no change */
 			count++;
 		}
+
 //
 		if (count < n) {
 		    f = (*fntomin)(args, pars, nvars, npars);
@@ -158,12 +160,14 @@ int static bfgs(double (*&fntomin)(double*,double*,int,int),void (*&gradient)(do
 		}
 	    }
 	} else {		/* uphill search */
+		std::cout << "Uphill" << std::endl;
 	    count = 0;
 	    if (ilast == gradcount) count = n;
 	    else ilast = gradcount;
 	    /* Resets unless has just been reset */
 	}
 	//
+	std::cout << "Outhill" << std::endl;
 	if (iter >= maxiter) break;
 	if (gradcount - ilast > 2 * n)
 	    ilast = gradcount;	/* periodic restart */
