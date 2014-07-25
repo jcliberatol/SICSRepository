@@ -59,6 +59,7 @@ private:
 	Model* model;
 	//Algorithm of optimization used
 	Optimizer* optim;
+	bool convergenceSignal;
 };
 
 #endif /* EM_H_ */

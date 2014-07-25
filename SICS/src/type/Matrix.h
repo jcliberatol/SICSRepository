@@ -33,9 +33,11 @@ public:
 	int nC(); //Returns number of columns
 	T & operator()(const int nCol, const int nRow); //Accessing operator for a element
 	friend ostream& operator<<<T>(ostream &, Matrix<T> &); //Output operator
-
+	//Matrix<T>& operator+=(const Matrix<T>& rhs);
+	//Matrix<T> operator+(Matrix<T> lhs , const Matrix<T>rhs);
 	virtual ~Matrix();
 };
+
 
 template<class T>
 int Matrix<T>::nR() {

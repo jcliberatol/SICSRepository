@@ -16,14 +16,8 @@ int main() {
 	Matrix<double> cuad(41, 2);
 	input.importCSV((char *) "Cuads.csv", cuad, 1, 0);
 	//cout << cuad;
-	Matrix<double> pacho(3,3);
-	input.importCSV((char *) "pacho.csv",pacho,0,0);
-	cout<<pacho<<endl;
-	NCM(&pacho);
-	cout<<pacho<<endl;
-
 	// **** **** Run model complete and ordered process **** ****
-
+	cout<<"Imported cuadratures"<<endl;
 	// Create general pars
 	int It; // Number of items
 
@@ -31,17 +25,17 @@ int main() {
 	Model *model = new Model();
 	ModelFactory *modelFactory = new SICSGeneralModel();
 	PatternMatrix *dataSet= new PatternMatrix();
-
+	cout<<"Created model"<<endl;
 	model->setModel(modelFactory);
 
 	// Load matrix
-	input.importCSV((char *) "input.csv", *dataSet, 0, 0);
+	input.importCSV((char *) "Test_10_1_1000.csv", *dataSet, 1, 0);
 	// set dataset
+	cout<<"Dataset size : "<<(*dataSet).countItems()<<" x "<<(*dataSet).countIndividuals()<<endl;
 	model->getItemModel()->setDataset(dataSet);
 	// build parameter set
-	model->getParameterModel()->buildParameterSet(model->getItemModel(),
-			model->getDimensionModel());
-
+	model->getParameterModel()->buildParameterSet(model->getItemModel(),model->getDimensionModel());
+	cout<<"Loaded input matrix"<<endl;
 	It = model->getItemModel()->countItems();
 
 	// Initial Parameters
@@ -50,7 +44,7 @@ int main() {
 		(*model->getParameterModel()->getParameterSet()[d])(0, i) = 0.272;
 		(*model->getParameterModel()->getParameterSet()[c])(0, i) = 0.2;
 	}
-
+	cout<<"Initial Pars setted"<<endl;
 	// set Theta and weight
 	Matrix<double> *theta = new Matrix<double> (1, 41);
 	Matrix<double> *weight = new Matrix<double>(1, 41);
@@ -61,13 +55,13 @@ int main() {
 	}
 	model->getDimensionModel()->getLatentTraitSet()->setTheta(theta);
 	model->getDimensionModel()->getLatentTraitSet()->setWeight(weight);
-
+	cout<<"Quadratures transferred"<<endl;
 	// Create estimation
 	EMEstimation *em = new EMEstimation();
 	em->setModel(model);
-
+	cout<<"Model setted"<<endl;
 	// run estimation
-	em->stepE();
+	em->estimate();
 
 	delete modelFactory;
 	delete dataSet;
