@@ -78,7 +78,6 @@ void EMEstimation::stepE () {
 	 * parameter set
 	 */
 	//Dataset by patterns
-	cout<<"Step E"<<endl;
 	PatternMatrix* data = dynamic_cast <PatternMatrix * > (model->getItemModel()->getDataset()) ;
 	//Pattern iterator is data->iterator
 	//Item number
@@ -97,15 +96,12 @@ void EMEstimation::stepE () {
 	Matrix<double>* B = model->getParameterModel()->getParameterSet()[d];
 	//C Matrix
 	Matrix<double>* C = model->getParameterModel()->getParameterSet()[c];
-	cout<<(*A)<<endl<<(*B)<<endl<<(*C)<<endl;
 	//Auxiliar array for the nodes
 	long double faux[q];
 	long double sum = 0.0;
-	int pat = 0; // N of patterns
 	//Restart f and r to zero
 	f->reset();
 	r->reset();
-	cout<<"E1"<<endl;
 	//cout<<(* data)<<endl;
 	model->successProbability();
 	for (data->resetIterator();!data->checkEnd();data->iterate()){
@@ -126,7 +122,7 @@ void EMEstimation::stepE () {
 			}
 		//At this point the productory is calculated and faux[k] is equivalent to p(u_j,theta_k)
 		//Now multiply by the weight
-		faux[0]  = 1;//faux[k] * (*weights)(0,k);
+		faux[k]  = faux[k] * (*weights)(0,k);
 		}
 		//cout<<(*weights);
 		//compute the total of the p*a' (denominator of the g*)
@@ -149,8 +145,6 @@ void EMEstimation::stepE () {
 		} // for
 
 	}
-	cout << "f Sum = " << f->sum() << endl;
-	cout << "r Sum = " <<  r->sum() << endl;
 } //end E step
 
 void EMEstimation::stepM(){
@@ -172,9 +166,8 @@ void EMEstimation::stepM(){
 	void (*gptr)(double*,double*,int,int,double*);
 	void (*hptr)(double*,double*,int,int,double*);
 	fptr = &ThreePLModel::logLikelihood;
-	gptr = &ThreePLModel::gradient;
+	gptr = &ThreePLModel::Ngradient;
 	hptr = NULL;
-	cout<<"Step M , 1"<<endl;
 	int I = model->getItemModel()->getDataset()->countItems();
 	int q = model->getDimensionModel()->getLatentTraitSet()->getTheta()->nC();
 	double args[3*I];
@@ -185,13 +178,15 @@ void EMEstimation::stepM(){
 	int nA=0;
 	// Obtain a
 	//A Matrix
-	cout<<"2"<<endl;
 	Matrix<double>* A = model->getParameterModel()->getParameterSet()[a];
 	//B Matrix
 	Matrix<double>* B = model->getParameterModel()->getParameterSet()[d];
 	//C Matrix
 	Matrix<double>* C = model->getParameterModel()->getParameterSet()[c];
-	cout<<"2.2"<<endl;
+
+	Matrix<double> DA(*A);
+	Matrix<double> DB(*B);
+	Matrix<double> DC(*C);
 
 		for (int i=0; i<I; i++) {
 			args[nA] = (*A)(0,i);
@@ -209,7 +204,6 @@ void EMEstimation::stepM(){
 			args[nA] = (*C)(0,i);
 			nA++;
 		}
-		cout<<"2.5"<<endl;
 	//Filling pars
 	int nP=0;
 	// Obtain q
@@ -222,7 +216,6 @@ void EMEstimation::stepM(){
 	//Thetas
 
 	Matrix<double>* thetas = model->getDimensionModel()->getLatentTraitSet()->getTheta();
-	cout<<"2.6"<<endl;
 	for (int k=0; k<q; k++) {
 		pars[nP]=(*thetas)(0,k);//TODO correct indexing on this and nearby matrices
 		nP++;
@@ -241,7 +234,6 @@ void EMEstimation::stepM(){
 	}
 	nargs = nA;
 	npars = nP;
-	cout<<"3"<<endl;
 	optim->searchOptimal(fptr,gptr,hptr,args,pars,nargs,npars);
 	 // Now pass the optimals to the Arrays.
 	nA = 0;
@@ -257,26 +249,19 @@ void EMEstimation::stepM(){
 	for (int i=0; i<I; i++) {
 		(*C)(0,i) = args [nA ++];
 	}
-
 	//Obtain the deltas
-	//A Matrix
-	Matrix<double>* DA = model->getParameterModel()->getParameterSet()[a];
-	//B Matrix
-	Matrix<double>* DB = model->getParameterModel()->getParameterSet()[d];
-	//C Matrix
-	Matrix<double>* DC = model->getParameterModel()->getParameterSet()[c];
 	//Perform substracts
 	double maxDelta = 0;
 	for (int v1 = 0; v1 < I; ++v1) {
-		(*DA)(0,v1)=(*DA)(0,v1)-(*A)(0,v1);
-		(*DB)(0,v1)=(*DB)(0,v1)-(*B)(0,v1);
-		(*DC)(0,v1)=(*DC)(0,v1)-(*C)(0,v1);
-		if(fabs((*DA)(0,v1))>maxDelta){maxDelta=fabs((*DA)(0,v1));}
-		if(fabs((*DB)(0,v1))>maxDelta){maxDelta=fabs((*DB)(0,v1));}
-		if(fabs((*DC)(0,v1))>maxDelta){maxDelta=fabs((*DC)(0,v1));}
+		DA(0,v1)=DA(0,v1)-(*A)(0,v1);
+		DB(0,v1)=DB(0,v1)-(*B)(0,v1);
+		DC(0,v1)=DC(0,v1)-(*C)(0,v1);
+		if(fabs(DA(0,v1))>maxDelta){maxDelta=fabs(DA(0,v1));}
+		if(fabs(DB(0,v1))>maxDelta){maxDelta=fabs(DB(0,v1));}
+		if(fabs(DC(0,v1))>maxDelta){maxDelta=fabs(DC(0,v1));}
 	}
-	if(maxDelta,0.001){convergenceSignal=true;}
-	cout<<"Iterated mxd : "<<maxDelta<<endl;
+	if(maxDelta<0.001){convergenceSignal=true;}
+	//cout<<"Max Delta : "<<maxDelta<<endl;
 	//And set the parameter sets
 	map<Parameter, Matrix<double> *> parSet;
 	parSet [a] = A;
@@ -289,16 +274,43 @@ void EMEstimation::estimate(){
 	/*
 	 * TODO Estimate
 	 */
+	//Transform B and C
+	cout<<"Item impression"<<endl;
+	for (int i = 0; i < model->getItemModel()->countItems(); ++i) {
+		double qa=(*model->getParameterModel()->getParameterSet()[a])(0,i);
+		double qb=(*model->getParameterModel()->getParameterSet()[d])(0,i);
+		double qc=(*model->getParameterModel()->getParameterSet()[c])(0,i);
+		(*model->getParameterModel()->getParameterSet()[d])(0,i)= -qb*qa;
+		(*model->getParameterModel()->getParameterSet()[c])(0,i)=log( qc / ( 1 - qc ) );
+	}
 	int iterations = 0;
 	while(!convergenceSignal){
-		cout<<"Iteration 1 "<<endl;
+		//cout<<"Iteration "<<iterations<<endl;
 		stepE();
+		//cout<<"____________________________________________________________________________"<<endl;
+		//cout<<*model->getParameterModel()->getParameterSet()[a]
+		//    <<*model->getParameterModel()->getParameterSet()[d]
+		//    <<*model->getParameterModel()->getParameterSet()[c];
 		stepM();
 		iterations ++;
 		if(iterations>100){
 			convergenceSignal=true;
 		}
 	}
+	//Transform B
+	//Transform C
+	for (int i = 0; i < model->getItemModel()->countItems(); ++i) {
+			double qa=(*model->getParameterModel()->getParameterSet()[a])(0,i);
+			double qb=(*model->getParameterModel()->getParameterSet()[d])(0,i);
+			double qc=(*model->getParameterModel()->getParameterSet()[c])(0,i);
+			(*model->getParameterModel()->getParameterSet()[d])(0,i)= -qb/qa;
+			double ec = exp(qc);
+			(*model->getParameterModel()->getParameterSet()[c])(0,i)=ec/(1+ec);
+		}
+	cout<<"______________FINAL VALUES FOR A  B AND THE C________________________"<<endl;
+			cout<<*model->getParameterModel()->getParameterSet()[a]
+			    <<*model->getParameterModel()->getParameterSet()[d]
+			    <<*model->getParameterModel()->getParameterSet()[c];
 }
 //Check if all the conditions are met for running the model, can report an error to a logger
 void EMEstimation::checkRunningConditions(){

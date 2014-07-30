@@ -100,12 +100,25 @@ double ThreePLModel::successProbability(double theta, double a, double d,
 	}
 
 	exponential = exp(-exponential) ;
-
-	return (c + (1.0 - c)/(1.0 + exponential));
+	double ec = exp(c);
+	return ((ec/(1+ec))+((1-ec)/((1+ec)*(1+exponential))));
+	//return (c + (1.0 - c)/(1.0 + exponential));
 }
 
 double ThreePLModel::getProbability(int node, int item) {
 	return ((*probabilityMatrix)(node, item));
+}
+void ThreePLModel::Ngradient(double* args, double* pars, int nargs, int npars, double* gradient){
+	//	For each of the gradient thingies increase the args and apply richardsons
+	double h = 0.000001;
+	//(f(x+h)-f(x))/h
+	for(int i = 0 ; i < nargs; i++){
+		args[i]=args[i]+h;
+		gradient[i]=logLikelihood(args,pars,nargs,npars);
+		args[i]=args[i]-h;
+		gradient[i]-=logLikelihood(args,pars,nargs,npars);
+		gradient[i]=gradient[i]/h;
+	}
 }
 void ThreePLModel::gradient (double* args, double* pars, int nargs, int npars, double* gradient){
 
@@ -184,6 +197,11 @@ void ThreePLModel::gradient (double* args, double* pars, int nargs, int npars, d
 	ec = new long double [items];
 	ecPlus1Inv = new long double [items];
 
+	for( unsigned  int i = 0; i < items; i++ ) {
+		ecPlus1Inv[i]=1/(exp(c[i])+1);
+		ec[i]=exp(c[i]);
+	}
+
 	for ( int k = 0; k < q; k++ ) {
 		for ( unsigned  int i = 0; i < items; i++ ) {
 
@@ -194,13 +212,14 @@ void ThreePLModel::gradient (double* args, double* pars, int nargs, int npars, d
 			W[k * items + i] /= P[k * items + i] * ( 1 - P[k * items + i] );// Denominator
 
 			factor[k * items + i] = ( r[k * items + i] - f[k]*P[k * items + i] ) * W[k * items + i];
-			// h_0 / (P_star*Q_star)
-			h_0[3 * i * k + 3 * i + 0] = D * theta[k] * ecPlus1Inv[i];
-			h_0[3 * i * k + 3 * i + 1] = D * ecPlus1Inv[i];
-			h_0[3 * i * k + 3 * i + 2] = ec[i] * (ecPlus1Inv[i]*ecPlus1Inv[i]) / P_Star[k * items + i];
 
+			// h_0 / (P_star*Q_star)
+			h_0[3 * items * k + 3 * i + 0] = D * theta[k] * ecPlus1Inv[i];
+			h_0[3 * items * k + 3 * i + 1] = D * ecPlus1Inv[i];
+			h_0[3 * items * k + 3 * i + 2] = ec[i] * (ecPlus1Inv[i]*ecPlus1Inv[i]) / P_Star[k * items + i];
 		}
 	}
+	memset(h,0,sizeof(double)*3*items);
 	for ( unsigned int i = 0; i < items; i++ ) {
 		h[3 * i + 0] = 0.0;
 		h[3 * i + 1] = 0.0;
@@ -223,7 +242,8 @@ void ThreePLModel::gradient (double* args, double* pars, int nargs, int npars, d
 
 //return h as the gradient
 	for (int cpy = 0; cpy < 3*items; ++cpy) {
-		gradient[cpy]=h[cpy];
+		gradient[cpy]=0;
+		gradient[cpy]=static_cast<double>(h[cpy]);
 	}
 	delete [] h;
 }
@@ -297,15 +317,15 @@ double ThreePLModel::logLikelihood (double* args, double* pars, int nargs,
 	// Obtain c
 	for (int i=0; i<I; i++) {
 		c[i] = args [nA ++];
-	}
+		//cout<<" "<<c[i];
+	}//cout<<endl;
 
 	long double tp , tq;
 	long double sum = 0;
 
 	for (int k = 0; k < q; ++k) {
 		for (unsigned int i = 0; i < I; ++i) {
-			long double cPrime = exp(c[i])/(1+exp(c[i]));
-			tp = (ThreePLModel::successProbability ( theta[k], a[i], b[i], cPrime ));
+			tp = (ThreePLModel::successProbability ( theta[k], a[i], b[i], c[i]));
 			if (tp==0)tp=1e-08;
 			tq = 1-tp;
 			if (tq==0)tq=1e-08;
@@ -313,6 +333,8 @@ double ThreePLModel::logLikelihood (double* args, double* pars, int nargs,
 			sum+=(r[k * I + i]*log(tp))+(f[k]-r[k * I + i])*log(tq);
 		}
 	}
+
+
 	//antiLogit(c, I);
 	delete[] theta;
 	delete[] f;

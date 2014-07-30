@@ -32,6 +32,7 @@ public:
 	void successProbability(DimensionModel *);
 	static double logLikelihood(double*, double*, int, int);
 	static void gradient(double*,double*,int,int,double*);
+	static void Ngradient(double* args, double* pars, int nargs, int npars, double* gradient);
 
 	// Getters and Setters
 	map<Parameter, Matrix<double> *> getParameterSet() ;

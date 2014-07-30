@@ -27,7 +27,7 @@ private:
 public:
 	Matrix(); //Empty object
 	Matrix(int, int); //Two dimensional Matrix Constructor allocates memory
-	Matrix(Matrix&); //Copy constructor
+	Matrix(Matrix<T>&); //Copy constructor
 	void reset();
 	int nR(); // Returns number of rows
 	int nC(); //Returns number of columns
@@ -66,6 +66,15 @@ Matrix<T>::Matrix() {
 	nCol = 0;
 	nRow = 0;
 	memory = NULL;
+}
+
+template<class T>
+Matrix<T>::Matrix(Matrix<T>& a) {
+	// TODO Auto-generated constructor stub
+	nCol = a.nCol;
+	nRow = a.nRow;
+	memory = new T[nCol * nRow];
+	memcpy(memory,a.memory,sizeof(T)*nCol*nRow);
 }
 
 template<class T>
