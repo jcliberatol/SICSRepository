@@ -66,13 +66,13 @@ void rosenbrockTest(){
 
 
 int main() {
-	rosenbrockTest();
-
+	//rosenbrockTest();
+	cout<<1-ThreePLModel::successProbability(-5.1225,1.55162,1.52326,-1.44746)<<" The pii"<<endl;
 	Input input;
 	Matrix<double> cuad(41, 2);
 	input.importCSV((char *) "Cuads.csv", cuad, 1, 0);
 	// **** **** Run model complete and ordered process **** ****
-	cout << "Imported cuadratures" << endl;
+	cout << "Imported cuadratures" << cuad<< endl;
 	// Create general pars
 	int It; // Number of items
 
@@ -89,7 +89,7 @@ int main() {
 	cout << "Dataset size : " << (*dataSet).countItems() << " x "
 			<< (*dataSet).countIndividuals() << endl;
 	model->getItemModel()->setDataset(dataSet);
-
+	//cout<<*dataSet<<endl;
 	// set Theta and weight
 	Matrix<double> *theta = new Matrix<double>(1, 41);
 	Matrix<double> *weight = new Matrix<double>(1, 41);
@@ -112,8 +112,23 @@ int main() {
 	for (int i = 0; i < It; i++) {
 		(*model->getParameterModel()->getParameterSet()[a])(0, i) = 0.851;
 		(*model->getParameterModel()->getParameterSet()[d])(0, i) = 0.272;
-		(*model->getParameterModel()->getParameterSet()[c])(0, i) = 0.2;
+		(*model->getParameterModel()->getParameterSet()[c])(0, i) = 0.15;
 	}
+	/*
+	(*model->getParameterModel()->getParameterSet()[a])(0, 0) = 0.6609297;
+	(*model->getParameterModel()->getParameterSet()[a])(0, 1) = 0.8741322;
+	(*model->getParameterModel()->getParameterSet()[a])(0, 2) = 0.7340038;
+	(*model->getParameterModel()->getParameterSet()[a])(0, 3) = 0.5422908;
+	(*model->getParameterModel()->getParameterSet()[a])(0, 4) = 0.9116418;
+	(*model->getParameterModel()->getParameterSet()[a])(0, 5) = 0.7105918;
+	*/
+	(*model->getParameterModel()->getParameterSet()[d])(0, 0) = 1.612291;
+	(*model->getParameterModel()->getParameterSet()[d])(0, 1) = 0.4928179;
+	(*model->getParameterModel()->getParameterSet()[d])(0, 2) = 0.6055251;
+	(*model->getParameterModel()->getParameterSet()[d])(0, 3) = -1.294814;
+	(*model->getParameterModel()->getParameterSet()[d])(0, 4) = 0.1676967;
+	(*model->getParameterModel()->getParameterSet()[d])(0, 5) = 1.445592;
+
 	cout << "Initial Pars setted" << endl;
 
 	// Create estimation

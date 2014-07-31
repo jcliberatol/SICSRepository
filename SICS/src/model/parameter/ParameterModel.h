@@ -20,9 +20,10 @@ enum Parameter {a,b,c,d};
 
 class ParameterModel {
 protected:
-	Matrix<double> * probabilityMatrix;
+
 	map <Parameter, Matrix<double> * > parameterSet;
 public:
+	Matrix<double> * probabilityMatrix;
 	// Methods
 	virtual void buildParameterSet ( ItemModel *, DimensionModel * ) = 0;
 	virtual void successProbability (DimensionModel *) = 0;

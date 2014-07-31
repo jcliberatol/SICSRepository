@@ -69,6 +69,7 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel) {
 				d_d = (*parameterSet[d])(0,i);
 				c_d = (*parameterSet[c])(0,i);
 				double p_d = successProbability ( theta_d, a_d, d_d, c_d );
+				//cout<<a_d<<" "<<d_d<<" "<<c_d<<" "<<theta_d<<" "<<p_d<<" the prox"<<endl;
 				(*probabilityMatrix)(k,i) = p_d;
 
 			}
@@ -101,7 +102,9 @@ double ThreePLModel::successProbability(double theta, double a, double d,
 
 	exponential = exp(-exponential) ;
 	double ec = exp(c);
-	return ((ec/(1+ec))+((1-ec)/((1+ec)*(1+exponential))));
+	return ( (ec/(1+ec)) + (1 - (ec/(1+ec))) * (1/(1+exponential)) );
+
+	//return ((ec/(1+ec))+((ec)/((1+ec)*(1+exponential))));
 	//return (c + (1.0 - c)/(1.0 + exponential));
 }
 

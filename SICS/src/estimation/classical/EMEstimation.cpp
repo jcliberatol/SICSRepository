@@ -104,6 +104,8 @@ void EMEstimation::stepE () {
 	r->reset();
 	//cout<<(* data)<<endl;
 	model->successProbability();
+	//cout<<(*pm->probabilityMatrix)<<endl<<"pm"<<endl;
+
 	for (data->resetIterator();!data->checkEnd();data->iterate()){
 		//Initialize faux in 1 to later calculate the productory
 		for ( int k = 0; k < q; k++ ) {
@@ -115,11 +117,12 @@ void EMEstimation::stepE () {
 			//Calculate the p (iterate over the items in the productory)
 			for ( unsigned int i = 0; i < items; i++ ) {
 				double prob = pm->getProbability(k,i);
-				if(!data->getCurrentBitSet()[i]){
+				//cout<<data->getCurrentBitSet()[items-i-1];
+				if(!data->getCurrentBitSet()[items-i-1]){
 					prob = 1-prob;
 				}
 				faux[k] = faux[k]*prob;
-			}
+			}//cout<<endl;
 		//At this point the productory is calculated and faux[k] is equivalent to p(u_j,theta_k)
 		//Now multiply by the weight
 		faux[k]  = faux[k] * (*weights)(0,k);
@@ -129,22 +132,26 @@ void EMEstimation::stepE () {
 		sum = 0.0;
 		for (int k = 0; k < q; k++) {
 			sum += faux[k];
-		}
+			//cout<<faux[k]<<" ";
+		}//cout<<"Da sum ist : "<<sum<<endl;
 		for (int k = 0; k < q; k++) {
 			faux[k] = faux[k] / sum;	//This is g*_j_k
-
+			//if(k==0)cout<<faux[k]<<"faux after div"<<endl;
 			//Multiply the f to the frequency of the pattern
 			faux[k] = ((long double) data->getCurrentFrequency()) * faux[k];
-			(*f)(0,k) += faux[k]; //= (*f)(0,k);//TODO Possible mistake here JLP
+			//if(k==0)cout<<faux[k]<<"faux after freq"<<endl;
+			(*f)(0,k) += faux[k];
+			//if(k==0)cout<<(*f)(0,k)<<"The f "<<((long double) data->getCurrentFrequency())<<endl;
 			//Now selectively add the faux to the r
 			for ( unsigned int i = 0; i < items; i++ ) {
-				if (data->getCurrentBitSet()[i]) {
+				if (data->getCurrentBitSet()[items-i-1]) {
 					(*r)(k,i)= (*r)(k,i) + faux[k];
 				} // if
 			} // for
 		} // for
 
 	}
+	//cout<<(*r)<<endl;
 } //end E step
 
 void EMEstimation::stepM(){
@@ -280,12 +287,12 @@ void EMEstimation::estimate(){
 		double qa=(*model->getParameterModel()->getParameterSet()[a])(0,i);
 		double qb=(*model->getParameterModel()->getParameterSet()[d])(0,i);
 		double qc=(*model->getParameterModel()->getParameterSet()[c])(0,i);
-		(*model->getParameterModel()->getParameterSet()[d])(0,i)= -qb*qa;
+		//(*model->getParameterModel()->getParameterSet()[d])(0,i)= -qb*qa;
 		(*model->getParameterModel()->getParameterSet()[c])(0,i)=log( qc / ( 1 - qc ) );
 	}
 	int iterations = 0;
 	while(!convergenceSignal){
-		//cout<<"Iteration "<<iterations<<endl;
+		cout<<"Iteration "<<iterations<<endl;
 		stepE();
 		//cout<<"____________________________________________________________________________"<<endl;
 		//cout<<*model->getParameterModel()->getParameterSet()[a]
@@ -303,7 +310,7 @@ void EMEstimation::estimate(){
 			double qa=(*model->getParameterModel()->getParameterSet()[a])(0,i);
 			double qb=(*model->getParameterModel()->getParameterSet()[d])(0,i);
 			double qc=(*model->getParameterModel()->getParameterSet()[c])(0,i);
-			(*model->getParameterModel()->getParameterSet()[d])(0,i)= -qb/qa;
+			//(*model->getParameterModel()->getParameterSet()[d])(0,i)= -qb/qa;
 			double ec = exp(qc);
 			(*model->getParameterModel()->getParameterSet()[c])(0,i)=ec/(1+ec);
 		}
