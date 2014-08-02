@@ -173,8 +173,9 @@ void EMEstimation::stepM(){
 	void (*gptr)(double*,double*,int,int,double*);
 	void (*hptr)(double*,double*,int,int,double*);
 	fptr = &ThreePLModel::logLikelihood;
-	gptr = &ThreePLModel::Ngradient;
+	gptr = &ThreePLModel::gradient;
 	hptr = NULL;
+	//cout<<"Address : "<<&gptr<<" "<<&hptr<<endl;
 	int I = model->getItemModel()->getDataset()->countItems();
 	int q = model->getDimensionModel()->getLatentTraitSet()->getTheta()->nC();
 	double args[3*I];
@@ -241,6 +242,9 @@ void EMEstimation::stepM(){
 	}
 	nargs = nA;
 	npars = nP;
+
+	double grad[3*I];
+
 	optim->searchOptimal(fptr,gptr,hptr,args,pars,nargs,npars);
 	 // Now pass the optimals to the Arrays.
 	nA = 0;

@@ -113,18 +113,17 @@ double ThreePLModel::getProbability(int node, int item) {
 }
 void ThreePLModel::Ngradient(double* args, double* pars, int nargs, int npars, double* gradient){
 	//	For each of the gradient thingies increase the args and apply richardsons
-	double h = 0.000001;
+	double hh = 0.000001;
 	//(f(x+h)-f(x))/h
 	for(int i = 0 ; i < nargs; i++){
-		args[i]=args[i]+h;
+		args[i]=args[i]+hh;
 		gradient[i]=logLikelihood(args,pars,nargs,npars);
-		args[i]=args[i]-h;
+		args[i]=args[i]-hh;
 		gradient[i]-=logLikelihood(args,pars,nargs,npars);
-		gradient[i]=gradient[i]/h;
+		gradient[i]=gradient[i]/hh;
 	}
 }
 void ThreePLModel::gradient (double* args, double* pars, int nargs, int npars, double* gradient){
-
 	/*
 	 * TODO
 	 * What we need
@@ -151,7 +150,6 @@ void ThreePLModel::gradient (double* args, double* pars, int nargs, int npars, d
 	a = new double[items];
 	b = new double[items];
 	c = new double[items];
-
 	// Obtain theta
 	for (int k=0; k<q; k++) {
 		theta[k] = pars[nP ++];
@@ -201,15 +199,16 @@ void ThreePLModel::gradient (double* args, double* pars, int nargs, int npars, d
 	ecPlus1Inv = new long double [items];
 
 	for( unsigned  int i = 0; i < items; i++ ) {
-		ecPlus1Inv[i]=1/(exp(c[i])+1);
+		ecPlus1Inv[i]=1/(1+exp(c[i]));
 		ec[i]=exp(c[i]);
 	}
 
 	for ( int k = 0; k < q; k++ ) {
 		for ( unsigned  int i = 0; i < items; i++ ) {
 
-			P[k * items + i] = successProbability_cPrime ( theta[k], a[i], b[i], c[i] );
-			P_Star[k * items + i] = successProbability ( theta[k], a[i], b[i], 0.0 );
+			P[k * items + i] = successProbability ( theta[k], a[i], b[i], c[i] );
+			//P_Star[k * items + i] = successProbability ( theta[k], a[i], b[i], 0.0 );
+			P_Star[k * items + i] = 1/(1+exp(-D*(a[i]*theta[k]+b[i])));
 
 			W[k * items + i] = P_Star[k * items + i] * ( 1 - P_Star[k * items + i] ); // Numerator
 			W[k * items + i] /= P[k * items + i] * ( 1 - P[k * items + i] );// Denominator
@@ -220,21 +219,18 @@ void ThreePLModel::gradient (double* args, double* pars, int nargs, int npars, d
 			h_0[3 * items * k + 3 * i + 0] = D * theta[k] * ecPlus1Inv[i];
 			h_0[3 * items * k + 3 * i + 1] = D * ecPlus1Inv[i];
 			h_0[3 * items * k + 3 * i + 2] = ec[i] * (ecPlus1Inv[i]*ecPlus1Inv[i]) / P_Star[k * items + i];
+
 		}
 	}
-	memset(h,0,sizeof(double)*3*items);
+	memset(h,0,sizeof(long double)*3*items);
+	memset(gradient,0,sizeof(double)*3*items);
 	for ( unsigned int i = 0; i < items; i++ ) {
-		h[3 * i + 0] = 0.0;
-		h[3 * i + 1] = 0.0;
-		h[3 * i + 2] = 0.0;
-
 		for ( int k = 0; k < q; k++ ) {
 			h[3 * i + 0] += factor[k * items + i] * h_0[3 * items * k + 3 * i + 0];
 			h[3 * i + 1] += factor[k * items + i] * h_0[3 * items * k + 3 * i + 1];
 			h[3 * i + 2] += factor[k * items + i] * h_0[3 * items * k + 3 * i + 2];
 		}
 	}
-
 	delete [] h_0;
 	delete [] P_Star;
 	delete [] P;
@@ -243,10 +239,19 @@ void ThreePLModel::gradient (double* args, double* pars, int nargs, int npars, d
 	delete [] ec;
 	delete [] ecPlus1Inv;
 
+	delete [] theta;
+	delete [] r;
+	delete [] f;
+	delete [] a;
+	delete [] b;
+	delete [] c;
+
 //return h as the gradient
-	for (int cpy = 0; cpy < 3*items; ++cpy) {
-		gradient[cpy]=0;
-		gradient[cpy]=static_cast<double>(h[cpy]);
+	int hc=0;
+	for (int n = 0; n < 3; ++n) {
+		for(int i = 0 ; i < items ; ++i){
+			gradient[hc++]= -static_cast<double>(h[i*3+n]);
+		}
 	}
 	delete [] h;
 }
