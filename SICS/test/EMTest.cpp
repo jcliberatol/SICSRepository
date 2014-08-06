@@ -189,21 +189,20 @@ void EMTest::runTest() {
 					(*initialValues)(2, i);
 		}
 
+		cout << *initialValues << endl;
+
 		// Create estimation
 		EMEstimation *em = new EMEstimation();
 		em->setModel(model);
 
+		report.startTime();
 		em->estimate();
+		report.endTime();
 
-		/*
-		 * REPORT
-		 */
-		(*report.getTrace())(paths[DATASET]);
-		(*report.getTrace())("MIRT DIFFERENCES");
-		report.reportDif(convergence, model->getParameterModel());
-		(*report.getTrace())("POBLATIONAL DIFFERENCES:");
-		report.reportDif(pob,model->getParameterModel());
-		(*report.getTrace())("------------------------------------------------");
+		report.setModel(model);
+		report.setEmEstimation(em);
+		report.setReportName(paths[DATASET]);
+		report.report(convergence, pob);
 
 		delete modelFactory;
 		delete em;

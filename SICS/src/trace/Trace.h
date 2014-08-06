@@ -19,10 +19,11 @@ class Trace {
 
 public:
 	Trace( const char * );
-	void operator() ( string );
-	void operator() ( const char * );
+
 	template<typename T>
 	void operator() ( Matrix<T>&);
+	template<typename T>
+	void operator() ( T );
 
 	virtual ~Trace();
 };
@@ -39,5 +40,16 @@ void Trace::operator() ( Matrix<T> & message ) {
 	file.close ();
 }
 
+template<typename T>
+void Trace::operator ()(T message) {
+	ofstream file;
+	file.open ( filename, ofstream::app );
+
+	file << message;
+
+	file << endl;
+
+	file.close ();
+}
 
 #endif /* TRACE_H_ */

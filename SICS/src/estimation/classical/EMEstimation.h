@@ -48,6 +48,7 @@ public:
 	//Sets the initial values
 	void setInitialValues(map<Parameter, Matrix<double>* > parameterSet);
 	void setInitialValues(string method);
+	int getIterations() const;
 
 private:
 	//F and R Matrices, remember to set to zero and open memory in process
@@ -59,7 +60,10 @@ private:
 	Model* model;
 	//Algorithm of optimization used
 	Optimizer* optim;
+	// true when convergence is reached
 	bool convergenceSignal;
+	//Number of iterations
+	int iterations;
 };
 
 #endif /* EM_H_ */

@@ -10,6 +10,30 @@
 TestReport::TestReport(string reportFile) {
 	trace = new Trace((const char *) reportFile.c_str());
 	maxDif = new Matrix<double> (1,3);
+	emEstimation = NULL;
+	model = NULL;
+}
+
+void TestReport::report(Matrix<double> * convergence,  Matrix<double> * pob) {
+
+	(*trace)(reportName);
+
+	(*trace)("TIME");
+	(*trace)(timeSpent);
+
+	(*trace)("ITERATIONS");
+	(*trace)(emEstimation->getIterations() );
+
+	(*trace)("MIRT DIFFERENCES");
+	reportDif(convergence, model->getParameterModel());
+
+	(*trace)("POBLATIONAL DIFFERENCES:");
+	reportDif(pob, model->getParameterModel());
+
+	(*trace)("MIRT - POB DIFFERENCES:");
+	reportMatrixDif(pob, convergence);
+	(*trace)("------------------------------------------------");
+
 }
 
 
@@ -46,9 +70,30 @@ void TestReport::reportDif(Matrix<double>* theoric, ParameterModel* paramModel) 
 	}
 
 	// Matrix of diff is printed
+	diff.del = ',';
 	(*trace)(diff);
 	(*trace)("");
 }
+
+void TestReport::reportMatrixDif(Matrix<double>* theoric1, Matrix<double>* theoric2) {
+	int items = theoric1->nC();
+	Matrix<double> diff(3, items);
+
+	for ( int j=0; j<3; j++ ) {
+		for (int i=0;i<items;i++){
+
+			diff(j,i) = (*theoric1)(j,i);
+			diff(j,i) -= (*theoric2)(j,i);
+			diff(j,i) = abs(diff(j,i));
+
+		}
+	}
+
+	// Matrix of diff is printed
+	(*trace)(diff);
+	(*trace)("");
+}
+
 
 void TestReport::reportMaxDif() {
 	(*trace)("\nMaximum differences reported were:");
@@ -57,6 +102,23 @@ void TestReport::reportMaxDif() {
 
 Matrix<double>* TestReport::getMaxDif() {
 	return (maxDif);
+}
+
+void TestReport::startTime() {
+	start = clock();
+}
+
+void TestReport::endTime() {
+	clock_t end = clock();
+	clock_t timediff = end - start;
+	timeSpent = ((float)timediff) / CLOCKS_PER_SEC;
+}
+
+TestReport::~TestReport() {
+	delete trace;
+	delete maxDif;
+	delete model;
+	delete emEstimation;
 }
 
 void TestReport::setMaxDif(Matrix<double>* maxDif) {
@@ -71,8 +133,27 @@ void TestReport::setTrace(Trace* trace) {
 	this->trace = trace;
 }
 
-TestReport::~TestReport() {
-	delete trace;
-	delete maxDif;
+EMEstimation* TestReport::getEmEstimation() {
+	return (emEstimation);
+}
+
+void TestReport::setEmEstimation(EMEstimation* emEstimation) {
+	this->emEstimation = emEstimation;
+}
+
+Model* TestReport::getModel()  {
+	return (model);
+}
+
+void TestReport::setModel(Model* model) {
+	this->model = model;
+}
+
+const string& TestReport::getReportName() const {
+	return (reportName);
+}
+
+void TestReport::setReportName(const string& reportName) {
+	this->reportName = reportName;
 }
 

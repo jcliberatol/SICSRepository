@@ -13,27 +13,6 @@ Trace::Trace( const char * filename ) {
 
 }
 
-void Trace::operator() ( string message ) {
-
-	ofstream file;
-	file.open ( filename, ofstream::app );
-
-	file << message << endl;
-
-	file.close ();
-
-}
-
-void Trace::operator() ( const char * message ) {
-
-	ofstream file;
-	file.open ( filename, ofstream::app );
-
-	file << message << endl;
-
-	file.close ();
-}
-
 
 Trace::~Trace() {
 	// TODO Auto-generated destructor stub

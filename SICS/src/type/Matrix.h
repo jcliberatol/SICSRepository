@@ -25,6 +25,7 @@ private:
 	int nRow;
 	T *memory;
 public:
+	static char del;
 	Matrix(); //Empty object
 	Matrix(int, int); //Two dimensional Matrix Constructor allocates memory
 	Matrix(Matrix<T>&); //Copy constructor
@@ -38,6 +39,9 @@ public:
 	//Matrix<T> operator+(Matrix<T> lhs , const Matrix<T>rhs);
 	virtual ~Matrix();
 };
+
+template<class T>
+char Matrix<T>::del = ' ';
 
 template<class T>
 T Matrix<T>::sum() {
@@ -105,7 +109,7 @@ ostream& operator<<(ostream &out, Matrix<T> &M) {
 	// Point's members directly.
 	for (int i = 0; i < M.nR(); ++i) {
 		for (int j = 0; j < M.nC(); j++) {
-			out << M(i, j) << " ";
+			out << M(i, j) << M.del;
 		}
 		out << endl;
 	}

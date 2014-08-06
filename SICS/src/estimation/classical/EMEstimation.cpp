@@ -294,7 +294,7 @@ void EMEstimation::estimate(){
 		//(*model->getParameterModel()->getParameterSet()[d])(0,i)= -qb*qa;
 		(*model->getParameterModel()->getParameterSet()[c])(0,i)=log( qc / ( 1 - qc ) );
 	}
-	int iterations = 0;
+	iterations = 0;
 	while(!convergenceSignal){
 		cout<<"Iteration "<<iterations<<endl;
 		stepE();
@@ -339,4 +339,6 @@ void EMEstimation::setTrace(Trace trace){
 
 }
 
-
+int EMEstimation::getIterations() const {
+	return (iterations);
+}
