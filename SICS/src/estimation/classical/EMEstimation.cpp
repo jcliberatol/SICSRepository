@@ -242,9 +242,43 @@ void EMEstimation::stepM(){
 	}
 	nargs = nA;
 	npars = nP;
-
-	double grad[3*I];
-
+	/*double protograd[3*I];
+	ThreePLModel::gradient(args,pars,nargs,npars,protograd);
+	cout<<"Gradient calculated"<<endl;
+	for (int p = 0; p < 3; ++p) {
+		for (int g = 0; g < I; ++g) {
+			cout<<protograd[p*3+g]<<" ";
+		}cout<<endl;
+	}
+	double grad[3*3*I];
+	cout<<endl;
+	ThreePLModel::Hessian(args,pars,nargs,npars,grad);
+	for (int var = 0; var < I; ++var) {
+		for(int s = 0 ; s < 9 ; ++s){
+		cout<<var*9+s<<"  ";
+		cout<<grad[var*I+s]<<"  ";
+		}cout<<endl;
+	}cout<<endl;
+	cout<<"Hessian Calculated"<<endl;
+	for (int var = 0; var < I; ++var) {
+		for (int var2 = 0; var2 < 3; ++var2) {
+			for(int v = 0 ; v < 3 ; ++v){
+				cout<<grad[var*9+var2*3+v]<<"  "<<var*9+var2*3+v<<"   ";
+			}cout<<endl;
+		}
+		cout<<endl<<endl;
+	}
+	ThreePLModel::NHessian(args,pars,nargs,npars,grad);
+	cout<<"Second attempt"<<endl;
+		for (int var = 0; var < I; ++var) {
+			for (int var2 = 0; var2 < 3; ++var2) {
+				for(int v = 0 ; v < 3 ; ++v){
+					cout<<grad[var*9+var2*3+v]<<"  ";
+				}cout<<endl;
+			}
+			cout<<endl<<endl;
+		}
+	*/
 	optim->searchOptimal(fptr,gptr,hptr,args,pars,nargs,npars);
 	 // Now pass the optimals to the Arrays.
 	nA = 0;

@@ -111,6 +111,183 @@ double ThreePLModel::successProbability(double theta, double a, double d,
 double ThreePLModel::getProbability(int node, int item) {
 	return ((*probabilityMatrix)(node, item));
 }
+
+void ThreePLModel::Hessian(double* args, double* pars, int nargs, int npars, double* hessian){
+	//Hessian is composed of 3 * 3 matrix for every item so item * 9 memories
+
+	/*
+		 * TODO
+		 * What we need
+		 * items
+		 * q
+		 * theta array
+		 * D
+		 * a, b, c
+		 * f and r
+		 */
+		int nA = 0;
+		int nP = 0;
+		int q, items;
+		double *theta, *r, *f, *a, *b, *c;
+
+		// Obtain q
+		q = pars[nP ++]; // q is obtained and npars is augmented
+		// Obtain I
+		items = pars[nP ++];
+
+		theta = new double[q];
+		r = new double[q*items];
+		f = new double[q];
+		a = new double[items];
+		b = new double[items];
+		c = new double[items];
+		// Obtain theta
+		for (int k=0; k<q; k++) {
+			theta[k] = pars[nP ++];
+		}
+
+		// Obtain f
+		for (int k=0; k<q; k++) {
+			f[k] = pars[nP ++];
+		}
+
+		// Obtain r
+		for (int k=0; k<q; k++) {
+			for (int i=0; i<items; i++) {
+				r[k*items+i] = pars[nP ++];
+			}
+		}
+
+		// Obtain a
+		for (int i=0; i<items; i++) {
+			a[i] = args [nA ++];
+		}
+		// Obtain b
+		for (int i=0; i<items; i++) {
+			b[i] = args [nA ++];
+		}
+		// Obtain c
+		for (int i=0; i<items; i++) {
+			c[i] = args [nA ++];
+		}
+
+		double D = Constant::NORM_CONST;
+		long double *h_0; // Block Matrix of size q*I. Each block-element has size of 1*3
+		long double *h; // Block vector of size I (i.e. I blocks). Each block-element has size of 1*3
+		long double *P_Star, *P;  // Matrix of size q*I
+		long double *W;           // Matrix of size q*I
+		long double *factor;	  // Matrix of product (r-fP)W
+		long double *ec;            // e^c_i
+		long double *ecPlus1Inv;	// 1 / (e^c_i + 1)
+
+		h = new long double [3*items];
+		h_0 = new long double [q*3*items];
+		P = new long double [q*items];
+		P_Star = new long double [q*items];
+		factor = new long double [q*items];
+		W = new long double [q*items];
+		ec = new long double [items];
+		ecPlus1Inv = new long double [items];
+
+		for( unsigned  int i = 0; i < items; i++ ) {
+			ecPlus1Inv[i]=1/(1+exp(c[i]));
+			ec[i]=exp(c[i]);
+		}
+
+		for ( int k = 0; k < q; k++ ) {
+			for ( unsigned  int i = 0; i < items; i++ ) {
+
+				P[k * items + i] = successProbability ( theta[k], a[i], b[i], c[i] );
+				//P_Star[k * items + i] = successProbability ( theta[k], a[i], b[i], 0.0 );
+				P_Star[k * items + i] = 1/(1+exp(-D*(a[i]*theta[k]+b[i])));
+
+				W[k * items + i] = P_Star[k * items + i] * ( 1 - P_Star[k * items + i] ); // Numerator
+				W[k * items + i] /= P[k * items + i] * ( 1 - P[k * items + i] );// Denominator
+
+				factor[k * items + i] = ( r[k * items + i] - f[k]*P[k * items + i] ) * W[k * items + i];
+
+				// h_0 / (P_star*Q_star)
+				h_0[3 * items * k + 3 * i + 0] = D * theta[k] * ecPlus1Inv[i];
+				h_0[3 * items * k + 3 * i + 1] = D * ecPlus1Inv[i];
+				h_0[3 * items * k + 3 * i + 2] = ec[i] * (ecPlus1Inv[i]*ecPlus1Inv[i]) / P_Star[k * items + i];
+
+			}
+		}
+		memset(h,0,sizeof(long double)*3*items);
+		//memset(gradient,0,sizeof(double)*3*items);
+		for ( unsigned int i = 0; i < items; i++ ) {
+			for ( int k = 0; k < q; k++ ) {
+				h[3 * i + 0] += factor[k * items + i] * h_0[3 * items * k + 3 * i + 0];
+				h[3 * i + 1] += factor[k * items + i] * h_0[3 * items * k + 3 * i + 1];
+				h[3 * i + 2] += factor[k * items + i] * h_0[3 * items * k + 3 * i + 2];
+			}
+		}
+
+		//Now we must start calculating the hessian matrix
+		long double *H_0;
+		H_0 = new long double [q*9*items];
+		memset(hessian,0,sizeof(double)*3*3*items);
+		memset(H_0,0,sizeof(long double)*q*3*3*items);
+		//#define H_0(k,i,m,n) H_0[9 * I * k + 9 * i + 3 * m + n]
+		//#define H(i,m,n) H[9 * i + 3 * m + n]
+		//Step 3: Calculate blocks of H_0
+			for ( int k = 0; k < q; k++ ) {
+				for ( unsigned int i = 0; i < items; i++ ) {
+					H_0[9 * items * k + 9 * i + 3 * 0 + 0] = (D*D) * (theta[k]*theta[k]) * ecPlus1Inv[i] * (1-2*P_Star[k * items + i] );
+					H_0[9 * items * k + 9 * i + 3 * 0 + 1] = H_0[9 * items * k + 9 * i + 3 * 1 + 0] = (D*D) * theta[k] * ecPlus1Inv[i] * (1-2*P_Star[k * items + i] );
+					H_0[9 * items * k + 9 * i + 3 * 1 + 1] = (D*D) * ecPlus1Inv[i] * (1-2*P_Star[k * items + i] );
+					H_0[9 * items * k + 9 * i + 3 * 0 + 2] = H_0[9 * items * k + 9 * i + 3 * 2 + 0] = - ec[i] * D * theta[k] * (ecPlus1Inv[i]*ecPlus1Inv[i]);
+					H_0[9 * items * k + 9 * i + 3 * 1 + 2] = H_0[9 * items * k + 9 * i + 3 * 2 + 1] = - ec[i] * D * (ecPlus1Inv[i]*ecPlus1Inv[i]);
+					H_0[9 * items * k + 9 * i + 3 * 2 + 2] = - ( ec[i] * (-1+ec[i]) * (ecPlus1Inv[i]*ecPlus1Inv[i]*ecPlus1Inv[i]) ) / P_Star[k * items + i] ;
+				}
+			}
+
+			for ( unsigned int i = 0; i < items; i++ ) {
+
+				// Fill block i of zeros
+				for ( int m = 0; m < 3; m++ ) {
+					for ( int n = 0; n < 3; n++ ) {
+						hessian[9 * i + 3 * m + n]= 0.0;
+					} // n
+				} // m
+
+				for ( int k = 0; k < q; k++ ) {
+					for ( int m = 0; m < 3; m++ ) {
+						// Add k-block values to block i
+						for ( int n = 0; n < 3; n++ ) {
+							//Begins the hessian multiplication
+							hessian[9 * i + 3 * m + n] +=
+									(
+									factor[k * items + i]*H_0[9 * items * k + 9 * i + 3 * m + n]
+									- ( r[k * items + i] - 2*P[k * items + i]*r[k * items + i]
+									+ f[k]*P[k * items + i]*P[k * items + i] )
+									* (W[k * items + i]*W[k * items + i] )*
+									(h_0[3 * items * k + 3 * i + m]	* h_0[3 * items * k + 3 * i + n] )
+									);
+						} // n
+					} // m
+				} // k
+
+			} // i
+
+		delete [] H_0;
+
+		delete [] h_0;
+		delete [] P_Star;
+		delete [] P;
+		delete [] W;
+		delete [] factor;
+		delete [] ec;
+		delete [] ecPlus1Inv;
+
+		delete [] theta;
+		delete [] r;
+		delete [] f;
+		delete [] a;
+		delete [] b;
+		delete [] c;
+}
+
 void ThreePLModel::Ngradient(double* args, double* pars, int nargs, int npars, double* gradient){
 	//	For each of the gradient thingies increase the args and apply richardsons
 	double hh = 0.000001;
@@ -123,9 +300,48 @@ void ThreePLModel::Ngradient(double* args, double* pars, int nargs, int npars, d
 		gradient[i]=gradient[i]/hh;
 	}
 }
+
+void ThreePLModel::NHessian(double*args, double* pars, int nargs, int npars, double* hessian){
+	//the gradient is composed of items a's items b's items c's take it as such
+	double hh = 0.001;
+	double gradiente[nargs];
+	int items = nargs/3;
+	gradient(args,pars,nargs,npars,gradiente);
+	//Calculate the hessian for each item order is a's b's c's in args
+	for (int i = 0; i < items; ++i) {
+				//Extract the gradient at the points (Put at the hessian)
+		for (int j = 0; j < 3; ++j) {
+			for (int k = 0; k < 3; ++k) {
+				//Now for each of these point change the k  parameter for deriving
+				hessian[i*items+j*3+k] = gradiente[j*items+i];
+			}
+		}
+	}
+
+	for (int i = 0; i < items; ++i) {
+					//Derivate two times for this item // matrix point
+					//Extract the gradient at the points (Put at the hessian)
+			for (int j = 0; j < 3; ++j) {
+				for (int k = 0; k < 3; ++k) {
+					memset(gradiente,0,sizeof(double)*items*3);
+					//Change the argument k in the item i
+					args[k*items+i]+=hh;
+					//Calculate le gradient
+					gradient(args,pars,nargs,npars,gradiente);
+					//Reset the parameter
+					args[k*items+i]-=hh;
+					//This is the gradient at the point
+					hessian[i*items+j*3+k]-= gradiente[j*items+i];
+					hessian[i*items+j*3+k]=hessian[i*items+j*3+k]/hh;
+					cout<<i<<" "<<j<<k<<"   ";
+				}cout<<endl;
+			}cout<<endl;
+		}
+
+}
 void ThreePLModel::gradient (double* args, double* pars, int nargs, int npars, double* gradient){
 	/*
-	 * TODO
+	 *
 	 * What we need
 	 * items
 	 * q
