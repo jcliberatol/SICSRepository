@@ -153,7 +153,7 @@ void NCM(Matrix<double>* m){
 	}
 }
 
-inline double max (double a, double b) {if(a>b) return a; return b;}
+inline double max (double a, double b) {if(a>b) return (a); return (b);}
 inline double norm (double*a, int n)
 {
 	double tmp = 0;
@@ -545,7 +545,7 @@ void Correlation_Newton(struct matrix* G, struct matrix* X, double* y)
 	while(lambda[r]>0 && r<n) r++;
 
 	if (r==0) for(i=0; i<n*n; i++) X->entries[i] = 0;
-	else if (r==n);
+	else if (r==n); // Suspicious semicolon , very probably case out if.
 	else
 	{
 		if((double) r<=(double) n /2.)
