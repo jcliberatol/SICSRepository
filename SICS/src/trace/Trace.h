@@ -26,6 +26,8 @@ public:
 	void operator() ( T );
 
 	virtual ~Trace();
+	const char* getFilename() const;
+	void setFilename(const char* filename);
 };
 
 

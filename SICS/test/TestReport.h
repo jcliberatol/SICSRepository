@@ -17,6 +17,10 @@
 #include <model/Model.h>
 #include <estimation/classical/EMEstimation.h>
 
+#include "json.h"
+
+using namespace std;
+
 using namespace std;
 
 class TestReport {
@@ -26,6 +30,9 @@ class TestReport {
 	Matrix<double> * maxDif;
 	string reportName;
 
+	json::Object jsonReport;
+	json::Array jsonResults;
+
 	clock_t start;
 	double timeSpent;
 public:
@@ -34,8 +41,10 @@ public:
 
 	// Methods
 	void report (Matrix<double> *,  Matrix<double> *);
-	void reportDif (Matrix<double> *,  ParameterModel *);
-	void reportMatrixDif (Matrix<double> *,  Matrix<double> *);
+	void addJsonResult (Matrix<double> *,  Matrix<double> *);
+	void reportJSON ();
+	Matrix<double> * reportDif (Matrix<double> *,  ParameterModel *);
+	Matrix<double> * reportMatrixDif (Matrix<double> *,  Matrix<double> *);
 	void reportMaxDif ();
 	void startTime();
 	void endTime();

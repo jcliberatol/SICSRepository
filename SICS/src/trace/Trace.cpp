@@ -17,3 +17,11 @@ Trace::Trace( const char * filename ) {
 Trace::~Trace() {
 	// TODO Auto-generated destructor stub
 }
+
+const char* Trace::getFilename() const {
+	return filename;
+}
+
+void Trace::setFilename(const char* filename) {
+	this->filename = filename;
+}

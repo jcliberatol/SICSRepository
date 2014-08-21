@@ -121,7 +121,7 @@ void EMTest::loadInput(map<InTestFiletype, string> paths) {
 
 void EMTest::runTest() {
 
-	string reportFilename = "TestReport";
+	string reportFilename = "TestReport.json";
 	TestReport report(reportFilename);
 
 	// Path file streams
@@ -202,7 +202,7 @@ void EMTest::runTest() {
 		report.setModel(model);
 		report.setEmEstimation(em);
 		report.setReportName(paths[DATASET]);
-		report.report(convergence, pob);
+		report.addJsonResult(convergence, pob);
 
 		delete modelFactory;
 		//delete em;
@@ -215,7 +215,7 @@ void EMTest::runTest() {
 
 	}
 
-	report.reportMaxDif();
+	report.reportJSON();
 
 	dataSetF.close();
 	convergenceF.close();
