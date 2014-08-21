@@ -6,7 +6,7 @@
 			double* args, double* pars, int nargs, int npars){
 	//TODO REAL OPTIMIZER
 	//FOR NOW ONLY OPTIMIZE USING BFGS
-	bfgs(functionPtr,gradientPtr,args,pars,nargs,npars,100);
+	bfgs(functionPtr,gradientPtr,args,pars,nargs,npars,10);
 }
 
 Optimizer::~Optimizer() {

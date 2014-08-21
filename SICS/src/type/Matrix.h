@@ -10,6 +10,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <cstring>
+#include <algorithm>
 using namespace std;
 
 template<typename T>
@@ -23,18 +24,27 @@ class Matrix {
 private:
 	int nCol;
 	int nRow;
+	bool transposed;
+	bool symmetric;
 	T *memory;
+
+	T m(char);
+	T get3x3determinant ();
 public:
 	static char del;
 	Matrix(); //Empty object
 	Matrix(int, int); //Two dimensional Matrix Constructor allocates memory
 	Matrix(Matrix<T>&); //Copy constructor
 	void reset();
+	void transpose ();
+	T getDeterminant ();
 	int nR(); // Returns number of rows
 	int nC(); //Returns number of columns
 	T sum(); // Returns the sum of all objects
 	T & operator()(const int nCol, const int nRow); //Accessing operator for a element
 	friend ostream& operator<<<T>(ostream &, Matrix<T> &); //Output operator
+	bool isSymmetric() const;
+	void setSymmetric(bool symmetric);
 	//Matrix<T>& operator+=(const Matrix<T>& rhs);
 	//Matrix<T> operator+(Matrix<T> lhs , const Matrix<T>rhs);
 	virtual ~Matrix();
@@ -42,6 +52,11 @@ public:
 
 template<class T>
 char Matrix<T>::del = ' ';
+
+template<class T>
+T Matrix<T>::m(char c){
+	return (memory[c - 'a']);
+}
 
 template<class T>
 T Matrix<T>::sum() {
@@ -70,6 +85,7 @@ Matrix<T>::Matrix() {
 	nCol = 0;
 	nRow = 0;
 	memory = NULL;
+	transposed = false;
 }
 
 template<class T>
@@ -79,18 +95,36 @@ Matrix<T>::Matrix(Matrix<T>& a) {
 	nRow = a.nRow;
 	memory = new T[nCol * nRow];
 	memcpy(memory,a.memory,sizeof(T)*nCol*nRow);
+	transposed = false;
 }
 
 template<class T>
 Matrix<T>::Matrix(int r, int c) {
 	nCol = c;
 	nRow = r;
+	transposed = false;
 	memory = new T[c * r];
 }
 template<class T>
 T & Matrix<T>::operator()(const int r, const int c) {
-	return (memory[nCol * r + c]);
+	if (!transposed) {
+		return (memory[nCol * r + c]);
+	}
+	else {
+		return (memory[nRow * c + r]);
+	}
 }
+
+template<class T>
+inline bool Matrix<T>::isSymmetric() const {
+	return (symmetric);
+}
+
+template<class T>
+inline void Matrix<T>::setSymmetric(bool symmetric) {
+	this->symmetric = symmetric;
+}
+
 template<class T>
 Matrix<T>::~Matrix() {
 	if (memory != NULL) {
@@ -101,6 +135,33 @@ Matrix<T>::~Matrix() {
 template<class T>
 void Matrix<T>::reset() {
 	memset(memory, 0.0, (nCol * nRow) * sizeof(T));
+}
+
+template<class T>
+void Matrix<T>::transpose() {
+	transposed = !transposed;
+	swap (nCol, nRow);
+}
+
+template<class T>
+T Matrix<T>::getDeterminant () {
+	T det = 0.0;
+
+	if ( nCol == 3 && nRow == 3 ) {
+		det = get3x3determinant();
+	}
+
+	return (det);
+}
+
+template<class T>
+T Matrix<T>::get3x3determinant () {
+	T det;
+
+	det = m('a')*m('e')*m('i') + m('d')*m('h')*m('c') + m('g')*m('b')*m('f');
+	det -= m('g')*m('e')*m('c') + m('a')*m('h')*m('f') + m('d')*m('b')*m('i');
+
+	return (det);
 }
 
 template<class T>

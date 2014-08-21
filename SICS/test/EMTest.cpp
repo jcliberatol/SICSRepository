@@ -205,7 +205,7 @@ void EMTest::runTest() {
 		report.report(convergence, pob);
 
 		delete modelFactory;
-		delete em;
+		//delete em;
 		//delete model;
 
 		delete pM;
@@ -222,8 +222,8 @@ void EMTest::runTest() {
 	initialValuesF.close();
 	pobF.close();
 
-	delete theta;
-	delete weight;
+	//delete theta;
+	//delete weight;
 }
 
 EMTest::~EMTest() {
