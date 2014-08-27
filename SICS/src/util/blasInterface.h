@@ -20,7 +20,7 @@
 
 
 //Double general matrix multiplication C = A.B
-int matrixMultiply(Matrix<double> A , Matrix<double> B , Matrix<double> C){
+int matrixMultiply(Matrix<double> A , Matrix<double> B , Matrix<double> &C){
 	//Operation C = A.B
 	//Determine Sizes
 	//A is m by k , B is k by n so C will be m by n
@@ -63,9 +63,9 @@ int ApproximateMatrixInverse(Matrix<double> M){
 	//a is M memory
 	//lda is n
 	//vl and vu lower and uper bounds of the interval
-	double vl = -1e100;
+	double vl = 1e-30;
 	double vu = 1e100;
-	double abstol = 1e-100;
+	double abstol = 1e-10;
 	//il and iu are not used since our search is interval based
 	int ilu = 0;
 	int m = 0 ; //Place holder for the number of eigenvalues found
@@ -102,6 +102,51 @@ int ApproximateMatrixInverse(Matrix<double> M){
 	cout<<"Matrice after eigendecompose"<<M<<endl;
 	cout<<"Eigenvalues"<<endl;
 	cout<<"N : "<<n<<"  "<<"W : "<<endl<<evals<<endl<<evecs<<endl;
+
+	//Desde aqui empezo jose
+	vector <double> eigenValV;
+	vector <vector <double> > eigenVectV;
+	for (int i=0; i<evals.nC(); i++ ){
+		if (evals(0,i)!=0) {
+			eigenValV.push_back(evals(0,i));
+
+			vector<double> eVTemp;
+			for (int j=0;j<evecs.nC();j++){
+				eVTemp.push_back(evecs(i,j));
+			}
+			eigenVectV.push_back(eVTemp);
+		}
+	}
+
+	// If all eigens values are zeroes, function is finished
+	if (eigenValV.size() == 0) {
+		return (3);
+	}
+
+	// final Eigen vectors and eigen values
+	Matrix<double> eigenvalues (1, eigenValV.size());
+	Matrix<double> eigenvectors ((int)eigenValV.size(), 3);
+	Matrix<double> identity ('I', eigenValV.size());
+	Matrix<double> eigenInv (identity.nR(),eigenvectors.nC());
+
+	for (int i=0; i<eigenValV.size(); i++ ){
+		eigenvalues(0,i) = eigenValV[i];
+
+		for (int j=0; j<eigenvectors.nC();j++){
+			eigenvectors(i,j) = 1/eigenVectV[i][j];
+		}
+	}
+
+	// Desde aqui son las dudas
+
+	matrixMultiply(identity, eigenvectors, eigenInv);
+
+	cout << "identity\n" << identity;
+	cout << "eigenvectors\n" << eigenvectors;
+	cout << "eigenInv\n" << eigenInv;
+
+
+	return (0);
 }
 
 

@@ -120,7 +120,7 @@ Matrix<T>::Matrix(char I, int c) {
 	symmetric = false;
 	if(I=='I'){
 		for(int i = 0 ; i < c ; i++){
-			(*this)(c,c)=1;
+			(*this)(i,i)=static_cast<T>(1);
 		}
 	}
 	if(I=='R'){
