@@ -11,6 +11,9 @@
 #include <stdio.h>
 #include <cstring>
 #include <algorithm>
+#include <cstdlib>
+#include <climits>
+
 using namespace std;
 
 template<typename T>
@@ -24,17 +27,20 @@ class Matrix {
 private:
 	int nCol;
 	int nRow;
-	bool transposed;
-	bool symmetric;
-	T *memory;
+
+
 
 	T m(char);
 	T get3x3determinant ();
 public:
+	bool transposed;
+	bool symmetric;
+	T *memory;
 	static char del;
 	Matrix(); //Empty object
 	Matrix(int, int); //Two dimensional Matrix Constructor allocates memory
 	Matrix(Matrix<T>&); //Copy constructor
+	Matrix(char I, int size); //Create special kinds of matrices (dense identity)
 	void reset();
 	void transpose ();
 	T getDeterminant ();
@@ -45,8 +51,6 @@ public:
 	friend ostream& operator<<<T>(ostream &, Matrix<T> &); //Output operator
 	bool isSymmetric() const;
 	void setSymmetric(bool symmetric);
-	//Matrix<T>& operator+=(const Matrix<T>& rhs);
-	//Matrix<T> operator+(Matrix<T> lhs , const Matrix<T>rhs);
 	virtual ~Matrix();
 };
 
@@ -81,21 +85,21 @@ int Matrix<T>::nC() {
 
 template<class T>
 Matrix<T>::Matrix() {
-	// TODO Auto-generated constructor stub
 	nCol = 0;
 	nRow = 0;
 	memory = NULL;
 	transposed = false;
+	symmetric = false;
 }
 
 template<class T>
 Matrix<T>::Matrix(Matrix<T>& a) {
-	// TODO Auto-generated constructor stub
 	nCol = a.nCol;
 	nRow = a.nRow;
 	memory = new T[nCol * nRow];
 	memcpy(memory,a.memory,sizeof(T)*nCol*nRow);
 	transposed = false;
+	symmetric = false;
 }
 
 template<class T>
@@ -104,7 +108,29 @@ Matrix<T>::Matrix(int r, int c) {
 	nRow = r;
 	transposed = false;
 	memory = new T[c * r];
+	symmetric = false;
 }
+
+template<class T>
+Matrix<T>::Matrix(char I, int c) {
+	nCol = c;
+	nRow = c;
+	transposed = false;
+	memory = new T[c * c];
+	symmetric = false;
+	if(I=='I'){
+		for(int i = 0 ; i < c ; i++){
+			(*this)(c,c)=1;
+		}
+	}
+	if(I=='R'){
+		srand(time(NULL));
+		for(int i = 0 ; i < c*c ; i++){
+			memory[i] = (T)(rand())/(T)(INT_MAX);
+		}
+	}
+}
+
 template<class T>
 T & Matrix<T>::operator()(const int r, const int c) {
 	if (!transposed) {
@@ -176,5 +202,6 @@ ostream& operator<<(ostream &out, Matrix<T> &M) {
 	}
 	return (out);
 }
+
 
 #endif /* MATRIX_H_ */
