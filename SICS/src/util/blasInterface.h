@@ -30,6 +30,7 @@ int matrixMultiply(Matrix<double> A , Matrix<double> B , Matrix<double> &C){
 	k = A.nC();
 	//Check for bad conditioned C matrix
 	if(C.nC()!= n or C.nR()!= m){
+		cout<<"BAD CONDS";
 		return (1); // Badly conditioned Output Matrix
 	}
 	int alpha = 1;
@@ -127,23 +128,24 @@ int ApproximateMatrixInverse(Matrix<double> M){
 	Matrix<double> eigenvalues (1, eigenValV.size());
 	Matrix<double> eigenvectors ((int)eigenValV.size(), 3);
 	Matrix<double> identity ('I', eigenValV.size());
-	Matrix<double> eigenInv (identity.nR(),eigenvectors.nC());
+
 
 	for (int i=0; i<eigenValV.size(); i++ ){
-		eigenvalues(0,i) = eigenValV[i];
-
+		identity(i,i) = 1/eigenValV[i];
 		for (int j=0; j<eigenvectors.nC();j++){
-			eigenvectors(i,j) = 1/eigenVectV[i][j];
-		}
+					eigenvectors(i,j) = 1/eigenVectV[i][j];
+				}
 	}
-
+	Matrix<double> tail (identity.nR(),eigenvectors.nC());
 	// Desde aqui son las dudas
 
-	matrixMultiply(identity, eigenvectors, eigenInv);
-
+	matrixMultiply(identity, eigenvectors, tail);
+	Matrix<double> inverse (eigenvectors.nC(),eigenvectors.nC());
+	eigenvectors.transpose();
+	matrixMultiply(eigenvectors, tail, inverse);
 	cout << "identity\n" << identity;
 	cout << "eigenvectors\n" << eigenvectors;
-	cout << "eigenInv\n" << eigenInv;
+	cout << "eigenInv\n" << inverse;
 
 
 	return (0);
