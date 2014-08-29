@@ -291,16 +291,17 @@ void ThreePLModel::Hessian(double* args, double* pars, int nargs, int npars, dou
 					} // m
 				} // k
 
-				// Debugging printing
-				/*
+	//Taking the negative
+
 								for ( int m = 0; m < 3; m++ ) {
 									for ( int n = 0; n < 3; n++ ) {
-										cout<<9 * i + 3 * m + n<<":"<<hessian[9 * i + 3 * m + n]<<" ";
+										hessian[9 * i + 3 * m + n]= -hessian[9 * i + 3 * m + n];
+										// Debugging printingcout<<9 * i + 3 * m + n<<":"<<hessian[9 * i + 3 * m + n]<<" ";
 									} // n
-									cout<<endl;
+									// Debugging printingcout<<endl;
 								} // m
-								cout<<endl;
-								*/
+								// Debugging printingcout<<endl;
+
 
 			} // i
 
