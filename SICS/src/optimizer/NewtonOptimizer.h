@@ -10,6 +10,7 @@
 
 #include <math.h>
 #include <type/Matrix.h>
+#include <util/blasInterface.h>
 
 
 //TODO OPTIMIZE NEWTONS USE OF NEWTON SIMPLE METHOD, PASS GRADIENT FOR INDEPENDANT POINTS
@@ -21,47 +22,51 @@
  *  2 Very probably bad conditioned matrix, no eigenvalue is positive , use other optimization method
  */
 int static newton(void (*&gradient)(double*, double*, int, int, double*),
-		void (*&hessian)(double*, double*, int, int, double*), double * args,
-		double * pars, int nvars, int npars, int maxiter, int hessianSize, int hessianCount){
-	//IN the three PL MODEL this newton procedure is called for each item.
-	int n = nvars;
-	double *g,*h;
-	g = new double[n];
-	h = new double[n*n];
+        void (*&hessian)(double*, double*, int, int, double*), double * args,
+        double * hpars,double * gpars, int nvars, int npars, int maxiter, double * g , double * h){
+    //IN the three PL MODEL this newton procedure is called for each item.
+    int n = nvars;
+    //double *g,*h;
+    //g = new double[n];
+    //h = new double[n*n];
 
-	//Step one, calculating the gradient of the function
-	(*gradient)(args, pars, nvars, npars, g);
-	//Step two , calculating the hessian of the function
-	(*hessian)(args, pars, nvars, npars, h);
+    //Step one, calculating the gradient of the function
+    (*gradient)(args, gpars, nvars, npars, g);
+    //Step two , calculating the hessian of the function
+    (*hessian)(args, hpars, nvars, npars, h);
 
-	Matrix<double> G(n,1);
-	Matrix<double> H(n,n);
-	Matrix<double> delta(n,1);
+    Matrix<double> G(n,1);
+    Matrix<double> H(n,n);
+    Matrix<double> delta(n,1);
 
-	//Pass gradient
-	for(int i=0;i<n;++i){
-		G(i,1) = g[i];
+    //Pass gradient
+    for(int i=0;i<n;++i){
+        G(i,1) = g[i];
 
-		//Pass hessian
-		for (int j=0;j<n;++j){
-		H(i,j) = h[i*n+j];
-		}
-	}
+        //Pass hessian
+        for (int j=0;j<n;++j){
+        H(i,j) = h[i*n+j];
+        }
+    }
 
-	//Set hessian as symm
-	//H.symmetry(true);
-	//Invert hessian
-	int inversionStatus = 0;
-	//inversionStatus = H.invert();
-	if (inversionStatus == 2){
-		cout<<"Badly Conditioned hessian matrix, all eigenvalues are near zero or negative"<<endl;
-		return (2);
-	}
-	//Make the operation (H^-1 . G) to obtain the deltas
-	//delta = H.Multiply(G);
-	return (inversionStatus);
+    //Set hessian as symm
+    //H.symmetry(true);
+    H.setSymmetric(true);
+    //Invert hessian
+    int inversionStatus = 0;
+    inversionStatus = ApproximateMatrixInverse(H);
+    if (inversionStatus == 3){
+        cout<<"Badly Conditioned hessian matrix, all eigenvalues are near zero or negative"<<endl;
+        return (2);
+    }
+    //make the deltas
+    matrixMultiply(H,G,delta);
+    //Substract
+    for(int i=0;i<n;++i){
+            args[i]= args[i]-delta(i,1);
+        }
+    return (inversionStatus);
 }
-
 
 int static multinewton(void (*&gradient)(double*, double*, int, int, double*),
 		void (*&hessian)(double*, double*, int, int, double*), double * args,

@@ -7,7 +7,7 @@
 //============================================================================
 
 #include "Main.h"
-#include "util/blasInterface.h"
+
 
 using namespace std;
 
@@ -66,18 +66,20 @@ void rosenbrockTest(){
 }
 
 
-int main() {
-	//rosenbrockTest();
+void pachotest(){
 	Input input;
 	Matrix<double> pachotest(3,3);
 	input.importCSV((char *) "pacho.csv", pachotest, 0, 0);
 	ApproximateMatrixInverse(pachotest);
-	return (0);
-	cout<<1-ThreePLModel::successProbability(-5.1225,1.55162,1.52326,-1.44746)<<" The pii"<<endl;
+}
+
+int main() {
+	//rosenbrockTest();
+	Input input;
 	Matrix<double> cuad(41, 2);
 	input.importCSV((char *) "Cuads.csv", cuad, 1, 0);
 	// **** **** Run model complete and ordered process **** ****
-	cout << "Imported cuadratures" << cuad<< endl;
+	cout << "Imported cuadratures"<< endl;
 	// Create general pars
 	int It; // Number of items
 

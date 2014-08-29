@@ -35,7 +35,8 @@ public:
 	static void Ngradient(double* args, double* pars, int nargs, int npars, double* gradient);
 	static void Hessian(double* args, double* pars, int nargs, int npars, double* Hessian);
 	static void NHessian(double* args, double* pars, int nargs, int npars, double* Hessian);
-
+	static void itemHessian(double* args, double* pars, int nargs, int npars, double* Hessian);
+	static void itemgradient(double*,double*,int,int,double*);
 	// Getters and Setters
 	map<Parameter, Matrix<double> *> getParameterSet() ;
 	void setParameterSet(map<Parameter, Matrix<double> *>);

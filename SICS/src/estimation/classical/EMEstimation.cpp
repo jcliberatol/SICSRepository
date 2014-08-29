@@ -38,13 +38,13 @@ EMEstimation::~EMEstimation() {
  */
 void EMEstimation::setModel(Model* Model){
 	int q;
-	int I;
+	int It;
 	this->model=Model;
 	q = model->getDimensionModel()->getLatentTraitSet()->getTheta()->nC();
-	I = model->getItemModel()->countItems();
+	It = model->getItemModel()->countItems();
 
 	f = new Matrix<double> (1,q);
-	r = new Matrix<double> (q,I);
+	r = new Matrix<double> (q,It);
 
 }
 /*
@@ -176,12 +176,12 @@ void EMEstimation::stepM(){
 	gptr = &ThreePLModel::gradient;
 	hptr = NULL;
 	//cout<<"Address : "<<&gptr<<" "<<&hptr<<endl;
-	int I = model->getItemModel()->getDataset()->countItems();
+	int It = model->getItemModel()->getDataset()->countItems();
 	int q = model->getDimensionModel()->getLatentTraitSet()->getTheta()->nC();
-	double args[3*I];
-	double pars[2+2*q+q*I];
-	int nargs = 3*I;
-	int npars = 2+2*q+q*I;
+	double args[3*It];
+	double pars[2+2*q+q*It];
+	int nargs = 3*It;
+	int npars = 2+2*q+q*It;
 	//filling args
 	int nA=0;
 	// Obtain a
@@ -196,19 +196,19 @@ void EMEstimation::stepM(){
 	Matrix<double> DB(*B);
 	Matrix<double> DC(*C);
 
-		for (int i=0; i<I; i++) {
+		for (int i=0; i<It; i++) {
 			args[nA] = (*A)(0,i);
 			nA++;
 		}
 
 		// Obtain b
-		for (int i=0; i<I; i++) {
+		for (int i=0; i<It; i++) {
 			args[nA] = (*B)(0,i);
 			nA++;
 		}
 
 		// Obtain c
-		for (int i=0; i<I; i++) {
+		for (int i=0; i<It; i++) {
 			args[nA] = (*C)(0,i);
 			nA++;
 		}
@@ -218,7 +218,7 @@ void EMEstimation::stepM(){
 	pars[nP] = q;
 	nP++;
 	// Obtain I
-	pars[nP] = I;
+	pars[nP] = It;
 	nP++;
 	// Obtain theta
 	//Thetas
@@ -235,69 +235,81 @@ void EMEstimation::stepM(){
 	}
 	// Obtain r
 	for (int k=0; k<q; k++) {
-		for (int i=0; i<I; i++) {
+		for (int i=0; i<It; i++) {
 			pars[nP]=(*r)(k,i);
 			nP++;
 		}
 	}
 	nargs = nA;
 	npars = nP;
-	/*double protograd[3*I];
-	ThreePLModel::gradient(args,pars,nargs,npars,protograd);
+	double grad[3*It];
+	ThreePLModel::gradient(args,pars,nargs,npars,grad);
 	cout<<"Gradient calculated"<<endl;
 	for (int p = 0; p < 3; ++p) {
-		for (int g = 0; g < I; ++g) {
-			cout<<protograd[p*3+g]<<" ";
+		for (int g = 0; g < It; ++g) {
+			cout<<grad[p*It+g]<<" ";
 		}cout<<endl;
 	}
-	double grad[3*3*I];
+	cout<<"Hessian Calculated"<<endl;
+	double hess[3*3*It];
 	cout<<endl;
-	ThreePLModel::Hessian(args,pars,nargs,npars,grad);
-	for (int var = 0; var < I; ++var) {
+	ThreePLModel::Hessian(args,pars,nargs,npars,hess);
+	for (int var = 0; var < It; ++var) {
 		for(int s = 0 ; s < 9 ; ++s){
-		cout<<var*9+s<<"  ";
-		cout<<grad[var*I+s]<<"  ";
+		cout<<hess[var*9+s]<<"  ";
 		}cout<<endl;
 	}cout<<endl;
-	cout<<"Hessian Calculated"<<endl;
-	for (int var = 0; var < I; ++var) {
-		for (int var2 = 0; var2 < 3; ++var2) {
-			for(int v = 0 ; v < 3 ; ++v){
-				cout<<grad[var*9+var2*3+v]<<"  "<<var*9+var2*3+v<<"   ";
-			}cout<<endl;
-		}
-		cout<<endl<<endl;
+
+	//Enter this loop for newton
+
+	for (int i = 0 ; i < It ; ++i){
+		double targs[3];
+		//fill the args for the item
+		targs[0] = args [i];
+		targs[1] = args [It+i];
+		targs[2] = args [2*It+i];
+		double tgrad[3];
+		double thess[9];
+		//Pass the item number through the tunnel in memory
+		tgrad[0] = It;
+		thess[0] = It;
+		//Create the gradient pointer
+		void (*tgptr)(double*,double*,int,int,double*);
+		void (*thptr)(double*,double*,int,int,double*);
+		tgptr = &ThreePLModel::itemgradient;
+		thptr = &ThreePLModel::itemHessian;
+
+		//optimize with these parameters changing the args
+		newton(tgptr,thptr,targs,hess,grad,3,i,100,tgrad,thess);
+		cout<<"Made it this far";
+		//update the args
+		args [i] = targs[0] ;
+		args [It+i] = targs[1] ;
+		args [2*It+i] = targs[2] ;
+
+		cout<<args[i]<<" "<<args[It+i]<<" "<<args[2*It+i]<<" "<<endl;
 	}
-	ThreePLModel::NHessian(args,pars,nargs,npars,grad);
-	cout<<"Second attempt"<<endl;
-		for (int var = 0; var < I; ++var) {
-			for (int var2 = 0; var2 < 3; ++var2) {
-				for(int v = 0 ; v < 3 ; ++v){
-					cout<<grad[var*9+var2*3+v]<<"  ";
-				}cout<<endl;
-			}
-			cout<<endl<<endl;
-		}
-	*/
-	optim->searchOptimal(fptr,gptr,hptr,args,pars,nargs,npars);
+
+	//Use this for bfgs
+	//optim->searchOptimal(fptr,gptr,hptr,args,pars,nargs,npars);
 	 // Now pass the optimals to the Arrays.
 	nA = 0;
 	// Obtain a
-	for (int i=0; i<I; i++) {
+	for (int i=0; i<It; i++) {
 		(*A)(0,i) = args [nA ++];
 	}
 	// Obtain b
-	for (int i=0; i<I; i++) {
+	for (int i=0; i<It; i++) {
 		(*B)(0,i) = args [nA ++];
 	}
 	// Obtain c
-	for (int i=0; i<I; i++) {
+	for (int i=0; i<It; i++) {
 		(*C)(0,i) = args [nA ++];
 	}
 	//Obtain the deltas
 	//Perform substracts
 	double maxDelta = 0;
-	for (int v1 = 0; v1 < I; ++v1) {
+	for (int v1 = 0; v1 < It; ++v1) {
 		DA(0,v1)=DA(0,v1)-(*A)(0,v1);
 		DB(0,v1)=DB(0,v1)-(*B)(0,v1);
 		DC(0,v1)=DC(0,v1)-(*C)(0,v1);
@@ -338,7 +350,7 @@ void EMEstimation::estimate(){
 		//    <<*model->getParameterModel()->getParameterSet()[c];
 		stepM();
 		iterations ++;
-		if(iterations>100){
+		if(iterations>2){
 			convergenceSignal=true;
 		}
 	}

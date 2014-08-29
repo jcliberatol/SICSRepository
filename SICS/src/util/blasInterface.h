@@ -10,6 +10,7 @@
 #include "type/Matrix.h"
 #include <openblas/cblas.h>
 #include <openblas/lapacke/lapacke.h>
+#include <vector>
 
 /*
  * Functions in this file
@@ -20,7 +21,7 @@
 
 
 //Double general matrix multiplication C = A.B
-int matrixMultiply(Matrix<double> A , Matrix<double> B , Matrix<double> &C){
+inline int matrixMultiply(Matrix<double> A , Matrix<double> B , Matrix<double> &C){
 	//Operation C = A.B
 	//Determine Sizes
 	//A is m by k , B is k by n so C will be m by n
@@ -49,7 +50,9 @@ int matrixMultiply(Matrix<double> A , Matrix<double> B , Matrix<double> &C){
 }
 
 
-int ApproximateMatrixInverse(Matrix<double> M){
+inline int ApproximateMatrixInverse(Matrix<double> M){
+	//Backup M
+	Matrix<double> cM(M);
 	//This procedure relies heavily on blas to determine if any eigenvalues are negative or near zero
 	//For the eigenvalues that arent  between the boundaries, the spectral composition is not performed
 
@@ -64,7 +67,7 @@ int ApproximateMatrixInverse(Matrix<double> M){
 	//a is M memory
 	//lda is n
 	//vl and vu lower and uper bounds of the interval
-	double vl = 1e-30;
+	double vl = 1e-80;
 	double vu = 1e100;
 	double abstol = 1e-10;
 	//il and iu are not used since our search is interval based
@@ -100,7 +103,7 @@ int ApproximateMatrixInverse(Matrix<double> M){
 	Matrix<int> iwork(1,liwork);
 	//Call the dsyevr procedure
 	dsyevr_(&jobs,&range,&uplo,&n,M.memory,&n,&vl,&vu,&ilu,&ilu,&abstol,&m,evals.memory,evecs.memory,&n,isuppz.memory,work.memory,&lwork,iwork.memory,&liwork,&info);
-	cout<<"Matrice after eigendecompose"<<M<<endl;
+	cout<<"Matrix after eigendecompose"<<M<<endl;
 	cout<<"Eigenvalues"<<endl;
 	cout<<"N : "<<n<<"  "<<"W : "<<endl<<evals<<endl<<evecs<<endl;
 
@@ -121,6 +124,8 @@ int ApproximateMatrixInverse(Matrix<double> M){
 
 	// If all eigens values are zeroes, function is finished
 	if (eigenValV.size() == 0) {
+	 //restore original matrix
+		memcpy(M.memory,cM.memory,sizeof(double)*M.nC()*M.nR());
 		return (3);
 	}
 

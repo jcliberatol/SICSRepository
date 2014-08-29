@@ -112,6 +112,29 @@ double ThreePLModel::getProbability(int node, int item) {
 	return ((*probabilityMatrix)(node, item));
 }
 
+void ThreePLModel::itemHessian(double* args, double* hess, int nargs, int i, double* thess){
+	int It = thess[0];
+	//fill the hessian for the item
+	for (int h = 0 ; h < 9 ; h++){
+		thess[h] = hess[i*It+h];
+	}
+}
+void ThreePLModel::itemgradient(double* args, double* grad, int nargs, int i, double* tgrad){
+    /*
+     * In the item gradient and hessians these procedures take an already calculated hessian
+     * and gradient and just access the item that is needed in the optimization step
+     * args will then be the ith args for the item
+     * pars is going to be the full array of gradients and npars is going to be used to take the ith element
+     * the gradient will then be copied to g
+     */
+	//The first element of tgrad is the number of items in total
+	int It = tgrad[0];
+	//fill the gradient for the item
+	tgrad[0] = grad[i];
+	tgrad[1] = grad[It+i];
+	tgrad[2] = grad[2*It+i];
+}
+
 void ThreePLModel::Hessian(double* args, double* pars, int nargs, int npars, double* hessian){
 	//Hessian is composed of 3 * 3 matrix for every item so item * 9 memories
 
@@ -267,6 +290,17 @@ void ThreePLModel::Hessian(double* args, double* pars, int nargs, int npars, dou
 						} // n
 					} // m
 				} // k
+
+				// Debugging printing
+				/*
+								for ( int m = 0; m < 3; m++ ) {
+									for ( int n = 0; n < 3; n++ ) {
+										cout<<9 * i + 3 * m + n<<":"<<hessian[9 * i + 3 * m + n]<<" ";
+									} // n
+									cout<<endl;
+								} // m
+								cout<<endl;
+								*/
 
 			} // i
 

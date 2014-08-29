@@ -18,6 +18,7 @@
 #include <estimation/classical/EMEstimation.h>
 #include <input/Input.h>
 #include <util/NCM.h>
+#include "util/blasInterface.h"
 #include <../test/EMTest.h>
 
 
