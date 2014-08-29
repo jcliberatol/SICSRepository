@@ -118,6 +118,7 @@ Matrix<T>::Matrix(char I, int c) {
 	transposed = false;
 	memory = new T[c * c];
 	symmetric = false;
+	this->reset();
 	if(I=='I'){
 		for(int i = 0 ; i < c ; i++){
 			(*this)(i,i)=static_cast<T>(1);

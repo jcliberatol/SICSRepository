@@ -131,24 +131,25 @@ inline int ApproximateMatrixInverse(Matrix<double> M){
 
 	// final Eigen vectors and eigen values
 	Matrix<double> eigenvalues (1, eigenValV.size());
-	Matrix<double> eigenvectors ((int)eigenValV.size(), 3);
+	Matrix<double> eigenvectors ((int)eigenValV.size(), n);
 	Matrix<double> identity ('I', eigenValV.size());
-
 
 	for (int i=0; i<eigenValV.size(); i++ ){
 		identity(i,i) = 1/eigenValV[i];
 		for (int j=0; j<eigenvectors.nC();j++){
-					eigenvectors(i,j) = 1/eigenVectV[i][j];
+					eigenvectors(i,j) = eigenVectV[i][j];
 				}
 	}
-	Matrix<double> tail (identity.nR(),eigenvectors.nC());
+	Matrix<double> head (eigenvectors.nC(),identity.nR());
 	// Desde aqui son las dudas
-
-	matrixMultiply(identity, eigenvectors, tail);
+	eigenvectors.transpose();
+	cout << "eigenvectors\n" << eigenvectors;
+	cout << "identity\n" << identity;
+	matrixMultiply(eigenvectors, identity, head);
+	cout << "head\n" << head;
 	Matrix<double> inverse (eigenvectors.nC(),eigenvectors.nC());
 	eigenvectors.transpose();
-	matrixMultiply(eigenvectors, tail, inverse);
-	cout << "identity\n" << identity;
+	matrixMultiply(head,eigenvectors, inverse);
 	cout << "eigenvectors\n" << eigenvectors;
 	cout << "eigenInv\n" << inverse;
 
