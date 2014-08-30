@@ -21,7 +21,7 @@
 
 
 //Double general matrix multiplication C = A.B
-inline int matrixMultiply(Matrix<double> A , Matrix<double> B , Matrix<double> &C){
+inline int matrixMultiply(Matrix<double> &A , Matrix<double> &B , Matrix<double> &C){
 	//Operation C = A.B
 	//Determine Sizes
 	//A is m by k , B is k by n so C will be m by n
@@ -34,7 +34,7 @@ inline int matrixMultiply(Matrix<double> A , Matrix<double> B , Matrix<double> &
 		cout<<"BAD CONDS";
 		return (1); // Badly conditioned Output Matrix
 	}
-	int alpha = 1;
+	double alpha = 1.0, beta = 0.0;
 	//Determine transposition of each matrix A and B
 	CBLAS_TRANSPOSE at,bt;
 	at = CblasNoTrans;
@@ -45,12 +45,13 @@ inline int matrixMultiply(Matrix<double> A , Matrix<double> B , Matrix<double> &
 	if(B.transposed){
 		bt = CblasTrans;
 	}
-	cblas_dgemm(CblasRowMajor,at,bt,m,n,k,alpha,A.memory,k,B.memory,n,alpha,C.memory,n);
+	cblas_dgemm(CblasRowMajor,at,bt,m,n,k,alpha,A.memory,k,B.memory,n,beta,C.memory,n);
+
 	return(0);
 }
 
 
-inline int ApproximateMatrixInverse(Matrix<double> M){
+inline int ApproximateMatrixInverse(Matrix<double> &M){
 	//Backup M
 	Matrix<double> cM(M);
 	//This procedure relies heavily on blas to determine if any eigenvalues are negative or near zero
@@ -109,19 +110,15 @@ inline int ApproximateMatrixInverse(Matrix<double> M){
 
 	//Desde aqui empezo jose
 	vector <double> eigenValV;
-	vector <vector <double> > eigenVectV;
+	Matrix<double> eigenVectV (evecs.nR(),evecs.nC());
 	for (int i=0; i<evals.nC(); i++ ){
 		if (evals(0,i)!=0) {
 			eigenValV.push_back(evals(0,i));
-
-			vector<double> eVTemp;
 			for (int j=0;j<evecs.nC();j++){
-				eVTemp.push_back(evecs(i,j));
+				eigenVectV(i,j) = evecs(i,j);
 			}
-			eigenVectV.push_back(eVTemp);
 		}
 	}
-
 	// If all eigens values are zeroes, function is finished
 	if (eigenValV.size() == 0) {
 	 //restore original matrix
@@ -137,7 +134,7 @@ inline int ApproximateMatrixInverse(Matrix<double> M){
 	for (int i=0; i<eigenValV.size(); i++ ){
 		identity(i,i) = 1/eigenValV[i];
 		for (int j=0; j<eigenvectors.nC();j++){
-					eigenvectors(i,j) = eigenVectV[i][j];
+					eigenvectors(i,j) = eigenVectV(i,j);
 				}
 	}
 	Matrix<double> head (eigenvectors.nC(),identity.nR());
@@ -152,7 +149,7 @@ inline int ApproximateMatrixInverse(Matrix<double> M){
 	matrixMultiply(head,eigenvectors, inverse);
 	cout << "eigenvectors\n" << eigenvectors;
 	cout << "eigenInv\n" << inverse;
-
+	M.copy(inverse);
 
 	return (0);
 }

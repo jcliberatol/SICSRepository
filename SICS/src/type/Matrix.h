@@ -43,6 +43,7 @@ public:
 	Matrix(char I, int size); //Create special kinds of matrices (dense identity)
 	void reset();
 	void transpose ();
+	void copy(Matrix<T>&);
 	T getDeterminant ();
 	int nR(); // Returns number of rows
 	int nC(); //Returns number of columns
@@ -94,12 +95,8 @@ Matrix<T>::Matrix() {
 
 template<class T>
 Matrix<T>::Matrix(Matrix<T>& a) {
-	nCol = a.nCol;
-	nRow = a.nRow;
-	memory = new T[nCol * nRow];
-	memcpy(memory,a.memory,sizeof(T)*nCol*nRow);
-	transposed = false;
-	symmetric = false;
+	memory = NULL;
+	copy(a);
 }
 
 template<class T>
@@ -155,7 +152,7 @@ inline void Matrix<T>::setSymmetric(bool symmetric) {
 template<class T>
 Matrix<T>::~Matrix() {
 	if (memory != NULL) {
-		delete[] memory;
+		//delete[] memory;
 	}
 }
 
@@ -168,6 +165,17 @@ template<class T>
 void Matrix<T>::transpose() {
 	transposed = !transposed;
 	swap (nCol, nRow);
+}
+
+template<class T>
+void Matrix<T>::copy(Matrix<T>& a) {
+	this->nCol = a.nC();
+	this->nRow = a.nR();
+	memory = new T[a.nC() * a.nR()];
+
+	memcpy(memory,a.memory,sizeof(T)*a.nC()*a.nR());
+	transposed = false;
+	symmetric = false;
 }
 
 template<class T>
