@@ -11,6 +11,7 @@
 #include <openblas/cblas.h>
 #include <openblas/lapacke/lapacke.h>
 #include <vector>
+#include <unistd.h>
 
 /*
  * Functions in this file
@@ -29,6 +30,8 @@ inline int matrixMultiply(Matrix<double> &A , Matrix<double> &B , Matrix<double>
 	m = A.nR();
 	n = B.nC();
 	k = A.nC();
+	cout<<"Multiplying 2 matrices of "<<m<<" by "<<k<<" and "<<B.nR()<<" by "<<n<<endl<<"with result of "
+			<<C.nR()<<" by "<<C.nC()<<endl;
 	//Check for bad conditioned C matrix
 	if(C.nC()!= n or C.nR()!= m){
 		cout<<"BAD CONDS";
@@ -41,12 +44,14 @@ inline int matrixMultiply(Matrix<double> &A , Matrix<double> &B , Matrix<double>
 	bt=at;
 	if(A.transposed){
 		at = CblasTrans;
+		cout<<"atrans"<<endl;
 	}
 	if(B.transposed){
 		bt = CblasTrans;
+		cout<<"b trans"<<endl;
 	}
 	cblas_dgemm(CblasRowMajor,at,bt,m,n,k,alpha,A.memory,k,B.memory,n,beta,C.memory,n);
-
+	cout<<"Matrice of output : "<<C.nR()<<" "<<C.nC()<<endl<<C<<endl;
 	return(0);
 }
 
@@ -150,6 +155,8 @@ inline int ApproximateMatrixInverse(Matrix<double> &M){
 	cout << "eigenvectors\n" << eigenvectors;
 	cout << "eigenInv\n" << inverse;
 	M.copy(inverse);
+	int x;
+	sleep(5);
 
 	return (0);
 }

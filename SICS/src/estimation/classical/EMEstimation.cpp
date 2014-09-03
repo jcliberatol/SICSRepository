@@ -350,7 +350,7 @@ void EMEstimation::estimate(){
 		//    <<*model->getParameterModel()->getParameterSet()[c];
 		stepM();
 		iterations ++;
-		if(iterations>2){
+		if(iterations>1){
 			convergenceSignal=true;
 		}
 	}
