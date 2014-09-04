@@ -74,8 +74,12 @@ void pachotest(){
 }
 
 int main() {
+	string testConfFile = "/home/path/config.conf";
+	EMTest *emTest = new EMTest (testConfFile );
+	emTest->runTest();
+
 	//rosenbrockTest();
-	Input input;
+	/*Input input;
 	Matrix<double> cuad(41, 2);
 	input.importCSV((char *) "Cuads.csv", cuad, 1, 0);
 	// **** **** Run model complete and ordered process **** ****
@@ -128,7 +132,7 @@ int main() {
 	(*model->getParameterModel()->getParameterSet()[a])(0, 3) = 0.5422908;
 	(*model->getParameterModel()->getParameterSet()[a])(0, 4) = 0.9116418;
 	(*model->getParameterModel()->getParameterSet()[a])(0, 5) = 0.7105918;
-	*/
+	*//*
 	(*model->getParameterModel()->getParameterSet()[d])(0, 0) = 1.612291;
 	(*model->getParameterModel()->getParameterSet()[d])(0, 1) = 0.4928179;
 	(*model->getParameterModel()->getParameterSet()[d])(0, 2) = 0.6055251;
@@ -148,7 +152,7 @@ int main() {
 	delete modelFactory;
 	delete dataSet;
 	delete model;
-	delete em;
+	delete em;*/
 
 	return (0);
 }
