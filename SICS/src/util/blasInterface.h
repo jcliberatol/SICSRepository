@@ -11,7 +11,7 @@
 #include <openblas/cblas.h>
 #include <openblas/lapacke/lapacke.h>
 #include <vector>
-#include <unistd.h>
+
 
 /*
  * Functions in this file
@@ -30,11 +30,10 @@ inline int matrixMultiply(Matrix<double> &A , Matrix<double> &B , Matrix<double>
 	m = A.nR();
 	n = B.nC();
 	k = A.nC();
-	cout<<"Multiplying 2 matrices of "<<m<<" by "<<k<<" and "<<B.nR()<<" by "<<n<<endl<<"with result of "
-			<<C.nR()<<" by "<<C.nC()<<endl;
+	//cout<<"Multiplying 2 matrices of "<<m<<" by "<<k<<" and "<<B.nR()<<" by "<<n<<endl<<"with result of "<<C.nR()<<" by "<<C.nC()<<endl;
 	//Check for bad conditioned C matrix
 	if(C.nC()!= n or C.nR()!= m){
-		cout<<"BAD CONDS";
+		cout<<"BAD CONDS";//TODO CHANGE TO LOGGER
 		return (1); // Badly conditioned Output Matrix
 	}
 	double alpha = 1.0, beta = 0.0;
@@ -44,14 +43,15 @@ inline int matrixMultiply(Matrix<double> &A , Matrix<double> &B , Matrix<double>
 	bt=at;
 	if(A.transposed){
 		at = CblasTrans;
-		cout<<"atrans"<<endl;
+		//cout<<"atrans"<<endl;
 	}
 	if(B.transposed){
 		bt = CblasTrans;
-		cout<<"b trans"<<endl;
+		//cout<<"b trans"<<endl;
 	}
-	cblas_dgemm(CblasRowMajor,at,bt,m,n,k,alpha,A.memory,k,B.memory,n,beta,C.memory,n);
-	cout<<"Matrice of output : "<<C.nR()<<" "<<C.nC()<<endl<<C<<endl;
+	//cout<<"Leading dims"<<k<<" "<<n<<" "<<n<<" "<<endl;
+	cblas_dgemm(CblasRowMajor,at,bt,m,n,k,alpha,A.memory,A.ld,B.memory,B.ld,beta,C.memory,C.ld);
+	//cout<<"Matrice of output : "<<C.nR()<<" "<<C.nC()<<endl<<C<<endl;
 	return(0);
 }
 
@@ -98,10 +98,10 @@ inline int ApproximateMatrixInverse(Matrix<double> &M){
 	doublereal *z__, integer *ldz, integer *isuppz, doublereal *work,
 	integer *lwork, integer *iwork, integer *liwork, integer *info)
 	 */
-	cout<<"Ready to start decompose"<<endl;
+	//cout<<"Ready to start decompose"<<endl;
 	//First queries the function for the size of the array that are used to work
 	dsyevr_(&jobs,&range,&uplo,&n,M.memory,&n,&vl,&vu,&ilu,&ilu,&abstol,&m,evals.memory,evecs.memory,&n,isuppz.memory,&flw,&lwork,&fliw,&liwork,&info);
-	cout<<endl<<"work size and lwork size : "<<flw<<" "<<fliw<<endl;
+	//cout<<endl<<"work size and lwork size : "<<flw<<" "<<fliw<<endl;
 	//Now create memory for the work spaces
 	lwork = (int)flw;
 	liwork = fliw;
@@ -109,16 +109,16 @@ inline int ApproximateMatrixInverse(Matrix<double> &M){
 	Matrix<int> iwork(1,liwork);
 	//Call the dsyevr procedure
 	dsyevr_(&jobs,&range,&uplo,&n,M.memory,&n,&vl,&vu,&ilu,&ilu,&abstol,&m,evals.memory,evecs.memory,&n,isuppz.memory,work.memory,&lwork,iwork.memory,&liwork,&info);
-	cout<<"Matrix after eigendecompose"<<M<<endl;
-	cout<<"Eigenvalues"<<endl;
-	cout<<"N : "<<n<<"  "<<"W : "<<endl<<evals<<endl<<evecs<<endl;
+	//cout<<"Matrix after eigendecompose"<<M<<endl;
+	//cout<<"Eigenvalues"<<endl;//TODO CHANGE TO LOGGER
+	//cout<<"N : "<<n<<"  "<<"W : "<<endl<<evals<<endl<<evecs<<endl;//TODO CHANGE TO LOGGER
 
 	//Desde aqui empezo jose
 	vector <double> eigenValV;
 	Matrix<double> eigenVectV (evecs.nR(),evecs.nC());
 	for (int i=0; i<evals.nC(); i++ ){
-		if (evals(0,i)!=0) {
-			eigenValV.push_back(evals(0,i));
+		if (evals(i)!=0) {
+			eigenValV.push_back(evals(i));
 			for (int j=0;j<evecs.nC();j++){
 				eigenVectV(i,j) = evecs(i,j);
 			}
@@ -142,22 +142,21 @@ inline int ApproximateMatrixInverse(Matrix<double> &M){
 					eigenvectors(i,j) = eigenVectV(i,j);
 				}
 	}
-	Matrix<double> head (eigenvectors.nC(),identity.nR());
+
 	// Desde aqui son las dudas
 	eigenvectors.transpose();
-	cout << "eigenvectors\n" << eigenvectors;
-	cout << "identity\n" << identity;
+	//cout << "eigenvectors\n" << eigenvectors;
+	//cout << "identity\n" << identity;
+	Matrix<double> head (eigenvectors.nR(),identity.nC());
 	matrixMultiply(eigenvectors, identity, head);
-	cout << "head\n" << head;
-	Matrix<double> inverse (eigenvectors.nC(),eigenvectors.nC());
+	//cout << "head\n" << head;
 	eigenvectors.transpose();
+	Matrix<double> inverse (eigenvectors.nC(),eigenvectors.nC());
 	matrixMultiply(head,eigenvectors, inverse);
-	cout << "eigenvectors\n" << eigenvectors;
-	cout << "eigenInv\n" << inverse;
+	//cout << "eigenvectors\n" << eigenvectors;
+	//cout << "eigenInv\n" << inverse;
 	M.copy(inverse);
 	int x;
-	sleep(5);
-
 	return (0);
 }
 
