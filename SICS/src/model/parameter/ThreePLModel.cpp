@@ -314,6 +314,7 @@ void ThreePLModel::Hessian(double* args, double* pars, int nargs, int npars, dou
 		delete [] factor;
 		delete [] ec;
 		delete [] ecPlus1Inv;
+		delete [] h;
 
 		delete [] theta;
 		delete [] r;

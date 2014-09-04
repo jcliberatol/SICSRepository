@@ -36,6 +36,7 @@ public:
 	bool transposed;
 	bool symmetric;
 	T *memory;
+	int ld;
 	static char del;
 	Matrix(); //Empty object
 	Matrix(int, int); //Two dimensional Matrix Constructor allocates memory
@@ -49,6 +50,7 @@ public:
 	int nC(); //Returns number of columns
 	T sum(); // Returns the sum of all objects
 	T & operator()(const int nCol, const int nRow); //Accessing operator for a element
+	T & operator()(const int element); //Accessing operator for a element
 	friend ostream& operator<<<T>(ostream &, Matrix<T> &); //Output operator
 	bool isSymmetric() const;
 	void setSymmetric(bool symmetric);
@@ -88,6 +90,7 @@ template<class T>
 Matrix<T>::Matrix() {
 	nCol = 0;
 	nRow = 0;
+	ld = 0;
 	memory = NULL;
 	transposed = false;
 	symmetric = false;
@@ -106,6 +109,7 @@ Matrix<T>::Matrix(int r, int c) {
 	transposed = false;
 	memory = new T[c * r];
 	symmetric = false;
+	ld = c;
 }
 
 template<class T>
@@ -114,6 +118,7 @@ Matrix<T>::Matrix(char I, int c) {
 	nRow = c;
 	transposed = false;
 	memory = new T[c * c];
+	ld = c;
 	symmetric = false;
 	this->reset();
 	if(I=='I'){
@@ -140,6 +145,11 @@ T & Matrix<T>::operator()(const int r, const int c) {
 }
 
 template<class T>
+T & Matrix<T>::operator()(const int el) {
+		return (memory[el]);
+}
+
+template<class T>
 inline bool Matrix<T>::isSymmetric() const {
 	return (symmetric);
 }
@@ -152,7 +162,7 @@ inline void Matrix<T>::setSymmetric(bool symmetric) {
 template<class T>
 Matrix<T>::~Matrix() {
 	if (memory != NULL) {
-		//delete[] memory;
+		delete[] memory;
 	}
 }
 
@@ -174,8 +184,8 @@ void Matrix<T>::copy(Matrix<T>& a) {
 	memory = new T[a.nC() * a.nR()];
 
 	memcpy(memory,a.memory,sizeof(T)*a.nC()*a.nR());
-	transposed = false;
-	symmetric = false;
+	transposed = a.transposed;
+	symmetric = a.symmetric;
 }
 
 template<class T>
