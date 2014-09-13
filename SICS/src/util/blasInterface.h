@@ -19,7 +19,16 @@
  * matrixInverse : doubles
  */
 
-
+inline void arrayPrint(double * t, int m){
+	for (int var = 0; var < m; ++var) {
+		cout<<t[var]<<" ";
+	}cout<<endl;
+}
+inline void arrayPrint(long double * t, int m){
+	for (int var = 0; var < m; ++var) {
+		cout<<t[var]<<" ";
+	}cout<<endl;
+}
 
 //Double general matrix multiplication C = A.B
 inline int matrixMultiply(Matrix<double> &A , Matrix<double> &B , Matrix<double> &C){
@@ -73,7 +82,7 @@ inline int ApproximateMatrixInverse(Matrix<double> &M){
 	//a is M memory
 	//lda is n
 	//vl and vu lower and uper bounds of the interval
-	double vl = 1e-80;
+	double vl = 1e-100;
 	double vu = 1e100;
 	double abstol = 1e-10;
 	//il and iu are not used since our search is interval based

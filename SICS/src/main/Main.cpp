@@ -73,88 +73,94 @@ void pachotest(){
 	ApproximateMatrixInverse(pachotest);
 }
 
-int main() {
-	string testConfFile = "/home/path/config.conf";
+void initTests(char *filename){
+	string testConfFile;
+	testConfFile.assign(filename);
+	//string testConfFile = "/home/mirt/Documentos/tests/config.conf";
 	EMTest *emTest = new EMTest (testConfFile );
 	emTest->runTest();
+}
 
-	//rosenbrockTest();
-	/*Input input;
-	Matrix<double> cuad(41, 2);
-	input.importCSV((char *) "Cuads.csv", cuad, 1, 0);
-	// **** **** Run model complete and ordered process **** ****
-	cout << "Imported cuadratures"<< endl;
-	// Create general pars
-	int It; // Number of items
+void oneRun(){
+	Input input;
+		Matrix<double> cuad(41, 2);
+		input.importCSV((char *) "Cuads.csv", cuad, 1, 0);
+		// **** **** Run model complete and ordered process **** ****
+		cout << "Imported cuadratures"<< cuad << endl;
+		// Create general pars
+		int It; // Number of items
 
-	// Create general model
-	Model *model = new Model();
-	ModelFactory *modelFactory = new SICSGeneralModel();
-	PatternMatrix *dataSet = new PatternMatrix();
-	cout << "Created model" << endl;
-	model->setModel(modelFactory);
+		// Create general model
+		Model *model = new Model();
+		ModelFactory *modelFactory = new SICSGeneralModel();
+		PatternMatrix *dataSet = new PatternMatrix();
+		cout << "Created model" << endl;
+		model->setModel(modelFactory);
 
-	// Load matrix
-	input.importCSV((char *) "Test_num_1_1000_individuos.csv", *dataSet, 1, 0);
-	// set dataset
-	cout << "Dataset size : " << (*dataSet).countItems() << " x "
-			<< (*dataSet).countIndividuals() << endl;
-	model->getItemModel()->setDataset(dataSet);
-	//cout<<*dataSet<<endl;
-	// set Theta and weight
-	Matrix<double> *theta = new Matrix<double>(1, 41);
-	Matrix<double> *weight = new Matrix<double>(1, 41);
+		// Load matrix
+		input.importCSV((char *) "Test_num_1_1000_individuos.csv", *dataSet, 1, 0);
+		// set dataset
+		cout << "Dataset size : " << (*dataSet).countItems() << " x "
+				<< (*dataSet).countIndividuals() << endl;
+		model->getItemModel()->setDataset(dataSet);
+		//cout<<*dataSet<<endl;
+		// set Theta and weight
+		Matrix<double> *theta = new Matrix<double>(1, 41);
+		Matrix<double> *weight = new Matrix<double>(1, 41);
 
-	for (int k = 0; k < cuad.nR(); k++) {
-		(*theta)(0, k) = cuad(k, 0);
-		(*weight)(0, k) = cuad(k, 1);
-	}
-	model->getDimensionModel()->getLatentTraitSet()->setTheta(theta);
-	model->getDimensionModel()->getLatentTraitSet()->setWeight(weight);
-	cout << "Quadratures transferred" << endl;
+		for (int k = 0; k < cuad.nR(); k++) {
+			(*theta)(0, k) = cuad(k, 0);
+			(*weight)(0, k) = cuad(k, 1);
+		}
+		model->getDimensionModel()->getLatentTraitSet()->setTheta(theta);
+		model->getDimensionModel()->getLatentTraitSet()->setWeight(weight);
+		cout << "Quadratures transferred" << endl;
 
-	// build parameter set
-	model->getParameterModel()->buildParameterSet(model->getItemModel(),
-			model->getDimensionModel());
-	cout << "Loaded input matrix" << endl;
-	It = model->getItemModel()->countItems();
+		// build parameter set
+		model->getParameterModel()->buildParameterSet(model->getItemModel(),
+				model->getDimensionModel());
+		cout << "Loaded input matrix" << endl;
+		It = model->getItemModel()->countItems();
 
-	// Initial Parameters
-	for (int i = 0; i < It; i++) {
-		(*model->getParameterModel()->getParameterSet()[a])(0, i) = 0.851;
-		(*model->getParameterModel()->getParameterSet()[d])(0, i) = 0.272;
-		(*model->getParameterModel()->getParameterSet()[c])(0, i) = 0.15;
-	}
-	/*
-	(*model->getParameterModel()->getParameterSet()[a])(0, 0) = 0.6609297;
-	(*model->getParameterModel()->getParameterSet()[a])(0, 1) = 0.8741322;
-	(*model->getParameterModel()->getParameterSet()[a])(0, 2) = 0.7340038;
-	(*model->getParameterModel()->getParameterSet()[a])(0, 3) = 0.5422908;
-	(*model->getParameterModel()->getParameterSet()[a])(0, 4) = 0.9116418;
-	(*model->getParameterModel()->getParameterSet()[a])(0, 5) = 0.7105918;
-	*//*
-	(*model->getParameterModel()->getParameterSet()[d])(0, 0) = 1.612291;
-	(*model->getParameterModel()->getParameterSet()[d])(0, 1) = 0.4928179;
-	(*model->getParameterModel()->getParameterSet()[d])(0, 2) = 0.6055251;
-	(*model->getParameterModel()->getParameterSet()[d])(0, 3) = -1.294814;
-	(*model->getParameterModel()->getParameterSet()[d])(0, 4) = 0.1676967;
-	(*model->getParameterModel()->getParameterSet()[d])(0, 5) = 1.445592;
+		// Initial Parameters
+		for (int i = 0; i < It; i++) {
+			(*model->getParameterModel()->getParameterSet()[a])(0, i) = 0.851;
+			(*model->getParameterModel()->getParameterSet()[d])(0, i) = 0.272;
+			(*model->getParameterModel()->getParameterSet()[c])(0, i) = 0.15;
+		}
 
-	cout << "Initial Pars setted" << endl;
+		(*model->getParameterModel()->getParameterSet()[a])(0, 0) = 0.6609297;
+		(*model->getParameterModel()->getParameterSet()[a])(0, 1) = 0.8741322;
+		(*model->getParameterModel()->getParameterSet()[a])(0, 2) = 0.7340038;
+		(*model->getParameterModel()->getParameterSet()[a])(0, 3) = 0.5422908;
+		(*model->getParameterModel()->getParameterSet()[a])(0, 4) = 0.9116418;
+		(*model->getParameterModel()->getParameterSet()[a])(0, 5) = 0.71059;
+		(*model->getParameterModel()->getParameterSet()[d])(0, 0) = 1.612291;
+		(*model->getParameterModel()->getParameterSet()[d])(0, 1) = 0.4928179;
+		(*model->getParameterModel()->getParameterSet()[d])(0, 2) = 0.6055251;
+		(*model->getParameterModel()->getParameterSet()[d])(0, 3) = -1.294814;
+		(*model->getParameterModel()->getParameterSet()[d])(0, 4) = 0.1676967;
+		(*model->getParameterModel()->getParameterSet()[d])(0, 5) = 1.445592;
 
-	// Create estimation
-	EMEstimation *em = new EMEstimation();
-	em->setModel(model);
-	cout << "Model setted" << endl;
-	// run estimation
-	em->estimate();
+		cout << "Initial Pars setted" << endl;
 
-	delete modelFactory;
-	delete dataSet;
-	delete model;
-	delete em;*/
+		// Create estimation
+		EMEstimation *em = new EMEstimation();
+		em->setModel(model);
+		cout << "Model setted" << endl;
+		// run estimation
+		em->estimate();
 
-	return (0);
+		delete modelFactory;
+		delete dataSet;
+		delete model;
+		delete em;
+}
+int main(int argc, char *argv[]) {
+
+	cout<<"The show begins";
+	initTests(argv[1]);
+	//oneRun();
 }
 
 

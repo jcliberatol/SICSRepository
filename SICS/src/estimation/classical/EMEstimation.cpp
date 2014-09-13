@@ -252,7 +252,7 @@ void EMEstimation::stepM() {
 	 * method 1 is NR
 	 * method 2 is BFGS
 	 */
-	int method = 1;
+	int method = 2;
 
 	if (method == 1) {
 		//Newton Raphson
@@ -260,23 +260,6 @@ void EMEstimation::stepM() {
 		double hess[3 * 3 * It];
 		ThreePLModel::gradient(args, pars, nargs, npars, grad);
 		ThreePLModel::Hessian(args, pars, nargs, npars, hess);
-		//TODO CHANGE TO LOGGER
-		/*
-		 cout<<"Gradient calculated"<<endl;
-		 for (int p = 0; p < 3; ++p) {
-		 for (int g = 0; g < It; ++g) {
-		 cout<<grad[p*It+g]<<" ";
-		 }cout<<endl;
-		 }
-		 cout<<"Hessian Calculated"<<endl;
-		 cout<<endl;
-
-		 for (int var = 0; var < It; ++var) {
-		 for(int s = 0 ; s < 9 ; ++s){
-		 cout<<hess[var*9+s]<<"  ";
-		 }cout<<endl;
-		 }cout<<endl;
-		 */
 		for (int i = 0; i < It; ++i) {
 			double targs[3];
 			//fill the args for the item
@@ -300,8 +283,6 @@ void EMEstimation::stepM() {
 			args[i] = targs[0];
 			args[It + i] = targs[1];
 			args[2 * It + i] = targs[2];
-
-			//cout<<"Args : 	"<<args[i]<<" "<<args[It+i]<<" "<<args[2*It+i]<<" "<<endl;
 		}
 	}
 	if (method == 2) {
@@ -366,12 +347,12 @@ void EMEstimation::stepM() {
 		}
 	}
 	meanDelta = meanDelta / DeltaC;
-	if (meanDelta < 0.0001) {
+	if (meanDelta < 0.0001 and maxDelta < 0.001) {
 		convergenceSignal = true;
 	}
-	cout << "Max Delta : " << maxDelta << endl;
-	cout << "Mean Delta : " << meanDelta << endl;
-	cout << "MATS : " << endl << (*A) << (*B) << (*C) << endl;
+	//cout << "Max Delta : " << maxDelta << endl;
+	//cout << "Mean Delta : " << meanDelta << endl;
+	//cout << "MATS : " << endl << (*A) << (*B) << (*C) << endl;
 	//And set the parameter sets
 	map<Parameter, Matrix<double> *> parSet;
 	parSet[a] = A;
@@ -387,7 +368,7 @@ void EMEstimation::estimate() {
 	 * TODO Estimate
 	 */
 	//Transform B and C
-	cout << "Item impression" << endl;
+	//cout << "Item impression" << endl;
 	for (int i = 0; i < model->getItemModel()->countItems(); ++i) {
 		double qa = (*model->getParameterModel()->getParameterSet()[a])(0, i);
 		double qb = (*model->getParameterModel()->getParameterSet()[d])(0, i);
@@ -406,8 +387,9 @@ void EMEstimation::estimate() {
 		//    <<*model->getParameterModel()->getParameterSet()[c];
 		stepM();
 		iterations++;
-		if (iterations > 100) {
+		if (iterations > 200) {
 			convergenceSignal = true;
+			cout<<"more than 200 iters, stopp"<<endl;
 		}
 	}
 	//Transform B
@@ -422,11 +404,12 @@ void EMEstimation::estimate() {
 				/ (1 + ec);
 	}
 	cout
-			<< "______________FINAL VALUES FOR A  B AND THE C________________________"
+			<< "___________________CONVERGENCE VALUES________________________"
 			<< endl;
-	cout << *model->getParameterModel()->getParameterSet()[a]
+	   cout << *model->getParameterModel()->getParameterSet()[a]
 			<< *model->getParameterModel()->getParameterSet()[d]
-			<< *model->getParameterModel()->getParameterSet()[c];
+			<< *model->getParameterModel()->getParameterSet()[c]
+			<<"______________________________________________________________"<<endl;
 }
 //Check if all the conditions are met for running the model, can report an error to a logger
 void EMEstimation::checkRunningConditions() {

@@ -59,10 +59,10 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel) {
 	}
 	if(typeid(*dimensionModel)==typeid(UnidimensionalModel)) {
 
-		int I = parameterSet[a]->nC();
+		int It = parameterSet[a]->nC();
 
 		for (int k = 0; k < q; k++) {
-			for ( int i = 0; i < I; i++ ){
+			for ( int i = 0; i < It; i++ ){
 				// 3PL Success Probability Function
 				theta_d = (*dimensionModel->getLatentTraitSet()->getTheta())(0,k);
 				a_d = (*parameterSet[a])(0,i);
@@ -369,9 +369,8 @@ void ThreePLModel::NHessian(double*args, double* pars, int nargs, int npars, dou
 					//This is the gradient at the point
 					hessian[i*items+j*3+k]-= gradiente[j*items+i];
 					hessian[i*items+j*3+k]=hessian[i*items+j*3+k]/hh;
-					cout<<i<<" "<<j<<k<<"   ";
-				}cout<<endl;
-			}cout<<endl;
+				}
+			}
 		}
 
 }
@@ -454,7 +453,6 @@ void ThreePLModel::gradient (double* args, double* pars, int nargs, int npars, d
 		ecPlus1Inv[i]=1/(1+exp(c[i]));
 		ec[i]=exp(c[i]);
 	}
-
 	for ( int k = 0; k < q; k++ ) {
 		for ( unsigned  int i = 0; i < items; i++ ) {
 
@@ -483,6 +481,7 @@ void ThreePLModel::gradient (double* args, double* pars, int nargs, int npars, d
 			h[3 * i + 2] += factor[k * items + i] * h_0[3 * items * k + 3 * i + 2];
 		}
 	}
+
 	delete [] h_0;
 	delete [] P_Star;
 	delete [] P;
@@ -529,7 +528,7 @@ double ThreePLModel::logLikelihood (double* args, double* pars, int nargs,
 	int nA = 0;
 	int nP = 0;
 
-	int q, I;
+	int q, It;
 	double *theta, *r, *f, *a, *b, *c;
 
 
@@ -537,14 +536,14 @@ double ThreePLModel::logLikelihood (double* args, double* pars, int nargs,
 	q = pars[nP ++]; // q is obtained and npars is augmented
 
 	// Obtain I
-	I = pars[nP ++];
+	It = pars[nP ++];
 
 	theta = new double[q];
-	r = new double[q*I];
+	r = new double[q*It];
 	f = new double[q];
-	a = new double[I];
-	b = new double[I];
-	c = new double[I];
+	a = new double[It];
+	b = new double[It];
+	c = new double[It];
 
 
 	// Obtain theta
@@ -559,23 +558,23 @@ double ThreePLModel::logLikelihood (double* args, double* pars, int nargs,
 
 	// Obtain r
 	for (int k=0; k<q; k++) {
-		for (int i=0; i<I; i++) {
-			r[k*I+i] = pars[nP ++];
+		for (int i=0; i<It; i++) {
+			r[k*It+i] = pars[nP ++];
 		}
 	}
 
 	// Obtain a
-	for (int i=0; i<I; i++) {
+	for (int i=0; i<It; i++) {
 		a[i] = args [nA ++];
 	}
 
 	// Obtain b
-	for (int i=0; i<I; i++) {
+	for (int i=0; i<It; i++) {
 		b[i] = args [nA ++];
 	}
 
 	// Obtain c
-	for (int i=0; i<I; i++) {
+	for (int i=0; i<It; i++) {
 		c[i] = args [nA ++];
 		//cout<<" "<<c[i];
 	}//cout<<endl;
@@ -584,13 +583,13 @@ double ThreePLModel::logLikelihood (double* args, double* pars, int nargs,
 	long double sum = 0;
 
 	for (int k = 0; k < q; ++k) {
-		for (unsigned int i = 0; i < I; ++i) {
+		for (unsigned int i = 0; i < It; ++i) {
 			tp = (ThreePLModel::successProbability ( theta[k], a[i], b[i], c[i]));
 			if (tp==0)tp=1e-08;
 			tq = 1-tp;
 			if (tq==0)tq=1e-08;
 			//suma = suma + (rki*logg(pki)+(fki-rki)*logg(qki))
-			sum+=(r[k * I + i]*log(tp))+(f[k]-r[k * I + i])*log(tq);
+			sum+=(r[k * It + i]*log(tp))+(f[k]-r[k * It + i])*log(tq);
 		}
 	}
 
