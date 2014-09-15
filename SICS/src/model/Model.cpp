@@ -51,3 +51,7 @@ void Model::setParameterModel(ParameterModel* parameterModel) {
 void Model::successProbability() {
 	parameterModel->successProbability(dimensionModel);
 }
+
+void Model::buildParameterSet() {
+	parameterModel->buildParameterSet(itemModel, dimensionModel);
+}

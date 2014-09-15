@@ -25,6 +25,7 @@ public:
 	// Methods
 	void setModel ( ModelFactory * );
 	void successProbability ();
+	void buildParameterSet ();
 
 	// Getters and Setters
 	DimensionModel* getDimensionModel();

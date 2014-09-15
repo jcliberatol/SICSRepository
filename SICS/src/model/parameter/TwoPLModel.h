@@ -17,7 +17,6 @@ public:
 
 	// Methods
 	void buildParameterSet(ItemModel *, DimensionModel *);
-	void setInitialPars(map<Parameter, Matrix<double> > *);
 	void successProbability(DimensionModel *);
 
 	// Getters and Setters
