@@ -109,6 +109,34 @@ void TestReport::addJsonResult(Matrix<double> * convergence,
 
 }
 
+void TestReport::reportProcess() {
+	int items = model->getParameterModel()->getParameterSet()[a]->nC();
+
+	json::Object repObject;
+	repObject["dataset"] = reportName;
+	repObject["time"] = timeSpent;
+	repObject["iterations"] = emEstimation->getIterations();
+
+	json::Array sicsPars;
+	json::Array aPars;
+	json::Array bPars;
+	json::Array cPars;
+	for (int i = 0; i < items; i++) {
+
+		aPars.push_back((*model->getParameterModel()->getParameterSet()[a])(0, i));
+		bPars.push_back((*model->getParameterModel()->getParameterSet()[d])(0, i));
+		cPars.push_back((*model->getParameterModel()->getParameterSet()[c])(0, i));
+
+	}
+	sicsPars.push_back(aPars);
+	sicsPars.push_back(bPars);
+	sicsPars.push_back(cPars);
+
+	repObject["SicsConvergence"] = sicsPars;
+	jsonResults.push_back(repObject);
+
+}
+
 Matrix<double> *TestReport::reportDif(Matrix<double>* theoric,
 		ParameterModel* paramModel) {
 	int items = paramModel->getParameterSet()[a]->nC();

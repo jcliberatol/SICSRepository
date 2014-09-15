@@ -45,6 +45,7 @@ public:
 	void loadConfiguration();
 	void loadInput(map<InTestFiletype, string>);
 	void runTest();
+	void runProcessor();
 
 	// Getters and Setters
 	const string& getConfigFile() const;

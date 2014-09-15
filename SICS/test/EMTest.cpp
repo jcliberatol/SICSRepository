@@ -226,6 +226,86 @@ void EMTest::runTest() {
 	//delete weight;
 }
 
+void EMTest::runProcessor () {
+
+	string reportFilename = "processReport.json";
+	TestReport report(reportFilename);
+
+	// Path file streams
+	ifstream dataSetF;
+
+	map<InTestFiletype, string> paths;
+
+	loadConfiguration();
+
+	dataSetF.open(inputConfig[DATASET]->getFullPath().c_str(), ifstream::in);
+
+	// load nodes
+	Input input;
+	Matrix<double> cuad(41, 2);
+	input.importCSV((char *) "Cuads.csv", cuad, 1, 0);
+
+	Matrix<double> *theta = new Matrix<double>(1, 41);
+	Matrix<double> *weight = new Matrix<double>(1, 41);
+	for (int k = 0; k < cuad.nR(); k++) {
+		(*theta)(0, k) = cuad(k, 0);
+		(*weight)(0, k) = cuad(k, 1);
+	}
+
+	while (getline(dataSetF, paths[DATASET])) {
+
+		loadInput(paths);
+
+		// Create model
+		Model *model = new Model();
+		ModelFactory *modelFactory = new SICSGeneralModel();
+		model->setModel(modelFactory);
+
+		// Set dataset to model
+		model->getItemModel()->setDataset(pM);
+
+		// Set nodes and weights to model
+		model->getDimensionModel()->getLatentTraitSet()->setTheta(theta);
+		model->getDimensionModel()->getLatentTraitSet()->setWeight(weight);
+
+		// Build parameter set TODO: a model function that loads item and dimension
+		model->getParameterModel()->buildParameterSet(model->getItemModel(),
+				model->getDimensionModel());
+
+		// Initial parameters
+		int items = model->getItemModel()->countItems();
+
+
+		// Create estimation
+		EMEstimation *em = new EMEstimation();
+		em->setModel(model);
+
+		report.startTime();
+		em->estimate();
+		report.endTime();
+
+		report.setModel(model);
+		report.setEmEstimation(em);
+		report.setReportName(paths[DATASET]);
+		report.reportProcess();
+
+		delete modelFactory;
+		//delete em;
+		//delete model;
+
+		delete pM;
+		delete initialValues;
+		delete convergence;
+		delete pob;
+
+	}
+
+	report.reportJSON();
+
+	dataSetF.close();
+;
+}
+
 EMTest::~EMTest() {
 
 }

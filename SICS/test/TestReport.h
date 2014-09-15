@@ -42,6 +42,7 @@ public:
 	// Methods
 	void report (Matrix<double> *,  Matrix<double> *);
 	void addJsonResult (Matrix<double> *,  Matrix<double> *);
+	void reportProcess ();
 	void reportJSON ();
 	Matrix<double> * reportDif (Matrix<double> *,  ParameterModel *);
 	Matrix<double> * reportMatrixDif (Matrix<double> *,  Matrix<double> *);
