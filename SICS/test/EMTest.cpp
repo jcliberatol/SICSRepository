@@ -226,19 +226,22 @@ void EMTest::runTest() {
 	//delete weight;
 }
 
-void EMTest::runProcessor () {
+void EMTest::runProcessor() {
 
 	string reportFilename = "processReport.json";
 	TestReport report(reportFilename);
 
 	// Path file streams
 	ifstream dataSetF;
+	ifstream initialValuesF;
 
 	map<InTestFiletype, string> paths;
 
 	loadConfiguration();
 
 	dataSetF.open(inputConfig[DATASET]->getFullPath().c_str(), ifstream::in);
+	initialValuesF.open(inputConfig[INITIAL_VALUE]->getFullPath().c_str(),
+			ifstream::in);
 
 	// load nodes
 	Input input;
@@ -253,6 +256,7 @@ void EMTest::runProcessor () {
 	}
 
 	while (getline(dataSetF, paths[DATASET])) {
+		getline(initialValuesF, paths[INITIAL_VALUE]);
 
 		loadInput(paths);
 
@@ -274,7 +278,16 @@ void EMTest::runProcessor () {
 
 		// Initial parameters
 		int items = model->getItemModel()->countItems();
+		for (int i = 0; i < items; i++) {
+			(*model->getParameterModel()->getParameterSet()[a])(0, i) =
+					(*initialValues)(0, i);
+			(*model->getParameterModel()->getParameterSet()[d])(0, i) =
+					(*initialValues)(1, i);
+			(*model->getParameterModel()->getParameterSet()[c])(0, i) =
+					(*initialValues)(2, i);
+		}
 
+		cout << *initialValues << endl;
 
 		// Create estimation
 		EMEstimation *em = new EMEstimation();
@@ -295,15 +308,13 @@ void EMTest::runProcessor () {
 
 		delete pM;
 		delete initialValues;
-		delete convergence;
-		delete pob;
 
 	}
 
 	report.reportJSON();
 
 	dataSetF.close();
-;
+	initialValuesF.close();
 }
 
 EMTest::~EMTest() {
