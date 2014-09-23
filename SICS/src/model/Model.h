@@ -12,7 +12,13 @@
 #include <model/item/ItemModel.h>
 #include <model/dimension/DimensionModel.h>
 #include <model/ModelFactory.h>
-
+/**
+ * Model class that holds the structures for the IRT models
+ * can vary across parameters, items and dimensions
+ * includes suport for dichotomic and polytomic models
+ * multidimensional and singledimensional models
+ * future suport for multiscale and longitudinal models can be implemented.
+ * */
 class Model {
 	ParameterModel *parameterModel;
 	ItemModel *itemModel;

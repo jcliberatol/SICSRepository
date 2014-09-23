@@ -14,6 +14,14 @@
 #include <type/PatternMatrix.h>
 //#include <optimizer/BFGSOptimizer.h>
 
+/**
+ *Classical estimation through the EM algorithm, generic for the models however must be called with specific
+ *model object, the optimization algorithm can be any from the optimizers class.
+ *EM is a iterative Estimation Maximization algorithm, please check the literature on how it works.
+ *EM estimation requires a quadrature for the implementation of the integrals in the expectation step
+ *this quadratures can be obtained from R, or using the supplied ones from the SICS binary quadratures
+ *ranging from 1 quadrature node to 101 quadrature nodes.
+ */
 class EMEstimation : public ClassicalEstimation{
 public:
 

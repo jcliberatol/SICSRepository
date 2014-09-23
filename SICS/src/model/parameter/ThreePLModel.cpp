@@ -119,14 +119,15 @@ void ThreePLModel::itemHessian(double* args, double* hess, int nargs, int i, dou
 		thess[h] = hess[i*It+h];
 	}
 }
-void ThreePLModel::itemgradient(double* args, double* grad, int nargs, int i, double* tgrad){
-    /*
+/**
      * In the item gradient and hessians these procedures take an already calculated hessian
      * and gradient and just access the item that is needed in the optimization step
      * args will then be the ith args for the item
      * pars is going to be the full array of gradients and npars is going to be used to take the ith element
      * the gradient will then be copied to g
      */
+void ThreePLModel::itemgradient(double* args, double* grad, int nargs, int i, double* tgrad){
+
 	//The first element of tgrad is the number of items in total
 	int It = tgrad[0];
 	//fill the gradient for the item

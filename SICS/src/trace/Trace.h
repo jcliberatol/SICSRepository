@@ -14,6 +14,12 @@
 
 using namespace std;
 
+/**
+ * Trace class for constructing execution and error logs onto files.
+ * Create a trace with a file to trace to that file
+ * when logging errors onto a trace the error logs onto the file asociated
+ * trace object can take ostreams, so any output class of cpp can output to the trace
+ * */
 class Trace {
 	const char * filename;
 

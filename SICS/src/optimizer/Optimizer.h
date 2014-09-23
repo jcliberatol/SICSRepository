@@ -12,6 +12,15 @@
 #include <optimizer/FisherScoringOptimizer.h>
 #include <optimizer/BFGSOptimizer.h>
 
+/**
+ * Wrapper fot the other optimizers, take general functions for the function to optimize, the vector gradient function and the matrix hessian function
+ * The parameters are :
+	 * double * args (Arguments over which the function optimizes)
+	 * double * pars (Arguments in whose the function depends but are not optimized)
+	 * int nargs Number of arguments
+	 * int npars Number of parameters
+	 * double * return (Return of the function is put in this array.)
+ * */
 class Optimizer {
 public:
 	void searchOptimal(double (*functionPtr)(double*,double*,int,int),

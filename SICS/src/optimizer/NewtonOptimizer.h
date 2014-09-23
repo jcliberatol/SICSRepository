@@ -15,7 +15,10 @@
 
 //TODO OPTIMIZE NEWTONS USE OF NEWTON SIMPLE METHOD, PASS GRADIENT FOR INDEPENDANT POINTS
 //
-/*
+/**
+ * Newton optimizer for generic SICS function, uses the gradient and the hessian matrix
+ * for multivariable optimization.
+ * In item optimization, the newton method can be parallelized by breaking it into multiple newton methods
  * Returns :
  *  0 Success
  *  1 Approximate result, had to use spectral decomposition for inverse

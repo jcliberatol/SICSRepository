@@ -18,7 +18,10 @@
 #include <type/PatternMatrix.h>
 #include <type/Constant.h>
 #include <cmath>
-
+/**
+ * Model for the 3pl model, uses parameters a d c.
+ * unidimensional
+ * */
 class ThreePLModel: public ParameterModel {
 public:
 

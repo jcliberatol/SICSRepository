@@ -12,6 +12,10 @@
 #include <optimizer/Optimizer.h>
 #include <model/parameter/ThreePLModel.h>
 
+
+/**
+ * Parent estimation interface for all estimation methods.
+ * */
 class Estimation {
 protected:
 	Model *model;

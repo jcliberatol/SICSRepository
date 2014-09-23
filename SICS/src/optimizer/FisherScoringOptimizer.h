@@ -8,6 +8,8 @@
 #ifndef FISHERSCORINGOPTIMIZER_H_
 #define FISHERSCORINGOPTIMIZER_H_
 
+
+/**Skeleton for implementing the Fisher Optimizer*/
 class FisherScoringOptimizer{
 public:
 

@@ -22,7 +22,9 @@
 
 using namespace std;
 
-
+/**
+ * Class that is in charge of taking OS files, streams and other sources for inputting data into the software suite
+ * */
 class Input {
 
 private:
@@ -34,10 +36,10 @@ private:
 public:
 	Input();
 	virtual ~Input();
-	bool importCSV ( char*, PatternMatrix&, unsigned int, unsigned int );
-	bool importCSV ( char*, Matrix<double>&, unsigned int , unsigned int);
-	char getDel() const;
-	void setDel(char);
+	bool importCSV ( char*, PatternMatrix&, unsigned int, unsigned int );/**Imports binary matrices from a csv*/
+	bool importCSV ( char*, Matrix<double>&, unsigned int , unsigned int);/**Imports generic type matrices from a csv*/
+	char getDel() const;/**Gets the delimitier used for inputting*/
+	void setDel(char);/**Sets the delimitier for inputting text matrices*/
 
 };
 

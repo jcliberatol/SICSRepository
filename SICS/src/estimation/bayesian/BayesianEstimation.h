@@ -8,7 +8,9 @@
 #ifndef BAYESIANESTIMATION_H_
 #define BAYESIANESTIMATION_H_
 #include <estimation/Estimation.h>
-
+/**
+ * Estimation interface for bayesian methods, currently not implemented
+ * */
 class BayesianEstimation : public Estimation{
 public:
 	// Constructor

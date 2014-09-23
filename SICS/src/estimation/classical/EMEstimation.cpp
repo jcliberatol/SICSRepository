@@ -33,8 +33,8 @@ EMEstimation::~EMEstimation() {
 		delete optim;
 	}
 }
-/*
- * Model is set.
+/**
+ * Sets the model to be estimated, currently only supports 3PL model
  */
 void EMEstimation::setModel(Model* Model) {
 	int q;
@@ -47,15 +47,22 @@ void EMEstimation::setModel(Model* Model) {
 	r = new Matrix<double>(q, It);
 
 }
-/*
- * Sets or selects the initial values
+/**
+ * Sets the initial values for the estimation, use this for inputting a matrix as initial values
  */
-//Sets
 void EMEstimation::setInitialValues(
-		map<Parameter, Matrix<double>*> parameterSet) {
+	map<Parameter, Matrix<double>*> parameterSet) {
 	model->getParameterModel()->setParameterSet(parameterSet);
 }
-//Selects
+/**
+ * Sets the initial values according to a method of calculating the values
+ * Possible methods :
+	 * ANDRADE,
+	 * OSPINA,
+	 * RANDOM,
+	 *
+	 * The default method is OSPINA , this is the fastest method according to the SICS calculations
+ */
 void EMEstimation::setInitialValues(string method) {
 	/*TODO
 	 * Possible methods
@@ -67,6 +74,13 @@ void EMEstimation::setInitialValues(string method) {
 	 */
 }
 
+/**
+ * Step E of the EM method, this step takes the actual
+ * estimation of the parameters, and produces a f and a r
+ * matrices used in the maximization step
+ *
+ * TODO : PARALLELIZABLE FOR
+ */
 void EMEstimation::stepE() {
 	/*
 	 * What we need
@@ -110,6 +124,8 @@ void EMEstimation::stepE() {
 	model->successProbability();
 	//cout<<(*pm->probabilityMatrix)<<endl<<"pm"<<endl;
 
+
+	//TODO CAREFULLY PARALLELIZE FOR
 	for (data->resetIterator(); !data->checkEnd(); data->iterate()) {
 		//Initialize faux in 1 to later calculate the productory
 		for (int k = 0; k < q; k++) {
@@ -158,9 +174,13 @@ void EMEstimation::stepE() {
 	//cout<<(*r)<<endl;
 } //end E step
 
+/**
+ * Executes the maximization step using the inputted or default optimizer
+ * currently only supporting BFGS and newton algorithms
+ * TODO : Relax Convergence criterias
+ * */
 void EMEstimation::stepM() {
 	/*
-	 * TODO Step M for EML3M
 	 */
 	//Step M implementation using the BFGS Algorithm
 	/*
@@ -363,6 +383,14 @@ void EMEstimation::stepM() {
 
 }
 
+/**
+ * Main loop of the EM estimation
+ * orchestrates the parameters for the estimation, and holds the estimation
+ * for the iterations.
+ *
+ * TODO : read maxiterations as a input parameter , idea : calculate the max iterations depending on the items
+ * TODO : Output last estimation onto the json for recovery in the program.
+ */
 void EMEstimation::estimate() {
 	/*
 	 * TODO Estimate
@@ -411,22 +439,22 @@ void EMEstimation::estimate() {
 			<< *model->getParameterModel()->getParameterSet()[c]
 			<<"______________________________________________________________"<<endl;
 }
-//Check if all the conditions are met for running the model, can report an error to a logger
+/**Check if all the conditions are met for running the model, can report an error to a logger*/
 void EMEstimation::checkRunningConditions() {
 
 }
-//Sets the optimization algorithm
+/**Sets the optimization algorithm*/
 void EMEstimation::setOptimizationAlgorithm(string algorithm) {
 
 }
-//Sets the reporter for the trace
+/**Sets the reporter for the trace*/
 void EMEstimation::setTrace(string filename) {
 
 }
 void EMEstimation::setTrace(Trace trace) {
 
 }
-
+/**Returns the iterations that took the estimation to obtain an answer*/
 int EMEstimation::getIterations() const {
 	return (iterations);
 }

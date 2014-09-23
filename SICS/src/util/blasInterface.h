@@ -13,7 +13,7 @@
 #include <vector>
 
 
-/*
+/**
  * Functions in this file
  * matrixMultiply : doubles
  * matrixInverse : doubles
@@ -30,7 +30,7 @@ inline void arrayPrint(long double * t, int m){
 	}cout<<endl;
 }
 
-//Double general matrix multiplication C = A.B
+/**Double general matrix multiplication C = A.B*/
 inline int matrixMultiply(Matrix<double> &A , Matrix<double> &B , Matrix<double> &C){
 	//Operation C = A.B
 	//Determine Sizes
@@ -64,7 +64,9 @@ inline int matrixMultiply(Matrix<double> &A , Matrix<double> &B , Matrix<double>
 	return(0);
 }
 
-
+/**
+ * Performs spectral decomposition to approximate a matrix inverse
+ * */
 inline int ApproximateMatrixInverse(Matrix<double> &M){
 	//Backup M
 	Matrix<double> cM(M);
@@ -122,7 +124,6 @@ inline int ApproximateMatrixInverse(Matrix<double> &M){
 	//cout<<"Eigenvalues"<<endl;//TODO CHANGE TO LOGGER
 	//cout<<"N : "<<n<<"  "<<"W : "<<endl<<evals<<endl<<evecs<<endl;//TODO CHANGE TO LOGGER
 
-	//Desde aqui empezo jose
 	vector <double> eigenValV;
 	Matrix<double> eigenVectV (evecs.nR(),evecs.nC());
 	for (int i=0; i<evals.nC(); i++ ){
@@ -151,8 +152,6 @@ inline int ApproximateMatrixInverse(Matrix<double> &M){
 					eigenvectors(i,j) = eigenVectV(i,j);
 				}
 	}
-
-	// Desde aqui son las dudas
 	eigenvectors.transpose();
 	//cout << "eigenvectors\n" << eigenvectors;
 	//cout << "identity\n" << identity;

@@ -11,7 +11,14 @@
 #include <cmath>
 #include <stdlib.h>
 #include <iostream>
-
+/**
+ * Optimizer, takes a function to a pointer that specifies
+ * the function to minimize, and the second parameter specifies a function pointer
+ * to the gradient of the function, these pointers must be carefully crafted
+ * to fit the arguments of the function
+ * use a wrapper to call the functions if your function does not follow the form
+ * of the input parameters
+ * */
 int static bfgs(double (*&fntomin)(double*, double*, int, int),
 		void (*&gradient)(double*, double*, int, int, double*), double * args,
 		double * pars, int nvars, int npars, int maxiter) {

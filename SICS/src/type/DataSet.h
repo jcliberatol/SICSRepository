@@ -8,6 +8,11 @@
 #ifndef DATASET_H_
 #define DATASET_H_
 
+
+/**
+ * Skeleton class for the datasets
+ * a dataset can contain not only the raw matrices but information about the dataset
+ * */
 class DataSet {
 private:
 public:

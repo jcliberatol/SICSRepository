@@ -11,7 +11,11 @@
 #include <string>
 
 using namespace std;
-
+/**
+ * Defines constants used in the SICS library
+ * import this class when using a constant
+ * TODO : Config file modification for constants
+ */
 class Constant {
 public:
 	static double NORM_CONST;

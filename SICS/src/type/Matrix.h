@@ -16,9 +16,24 @@
 
 using namespace std;
 
+
+/**
+ * Supports the Matrix Structures, with indexing on any type,
+ *  has special operations for general matrix use, is the class used by all the BLAS interface methods
+ * , please use this class in the package whenever posible.
+ * the class is a templated class supporting any type for components of the matrix, the support of this class is
+ * made for two dimension matrices and one dimension vectors, overloaded operators are the parenthesis for one or two
+ * dimensional indexing, and the output operator, the class also supports transposed and symmetric matrices
+ * and when declaring matrices they can be declared either empty, reseted to a value, as an identity, or as a
+ * random matrix. Some very fast methods are implemented for specific matrix sizes. Use this with care.
+ */
 template<typename T>
 class Matrix;
 
+/**
+ * Overloads the << operator for printing two dimensional matrices, use for debugging or outputting to files
+ * returns an ostream object
+ */
 template<typename T>
 ostream& operator<<(ostream &, Matrix<T> &);
 
@@ -27,9 +42,6 @@ class Matrix {
 private:
 	int nCol;
 	int nRow;
-
-
-
 	T m(char);
 	T get3x3determinant ();
 public:
@@ -38,22 +50,22 @@ public:
 	T *memory;
 	int ld;
 	static char del;
-	Matrix(); //Empty object
-	Matrix(int, int); //Two dimensional Matrix Constructor allocates memory
-	Matrix(Matrix<T>&); //Copy constructor
-	Matrix(char I, int size); //Create special kinds of matrices (dense identity)
-	void reset();
-	void transpose ();
-	void copy(Matrix<T>&);
-	T getDeterminant ();
-	int nR(); // Returns number of rows
-	int nC(); //Returns number of columns
-	T sum(); // Returns the sum of all objects
-	T & operator()(const int nCol, const int nRow); //Accessing operator for a element
-	T & operator()(const int element); //Accessing operator for a element
-	friend ostream& operator<<<T>(ostream &, Matrix<T> &); //Output operator
-	bool isSymmetric() const;
-	void setSymmetric(bool symmetric);
+	Matrix(); /**Empty object*/
+	Matrix(int, int); /**Two dimensional Matrix Constructor allocates memory*/
+	Matrix(Matrix<T>&); /**Copy constructor*/
+	Matrix(char I, int size); /**Create special kinds of matrices (dense identity)*/
+	void reset();/**Reset method, puts all entries in zeros*/
+	void transpose ();/**Transposes the matrix, notice it does not perform memory transpose, only index transpose*/
+	void copy(Matrix<T>&);/**Copy constructor*/
+	T getDeterminant ();/**Outputs the determinant of the matrix*/
+	int nR(); /** Returns number of rows */
+	int nC(); /** Returns number of columns */
+	T sum(); /** Returns the sum of all objects */
+	T & operator()(const int nCol, const int nRow); /** Accessing operator for a element */
+	T & operator()(const int element); /**Accessing operator for a element */
+	friend ostream& operator<<<T>(ostream &, Matrix<T> &); /** Output operator */
+	bool isSymmetric() const; /** Symmetry flag for optimizations */
+	void setSymmetric(bool symmetric); /** Set to true the symmetry flag */
 	virtual ~Matrix();
 };
 

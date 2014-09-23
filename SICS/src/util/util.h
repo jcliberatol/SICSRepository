@@ -8,7 +8,7 @@
 #ifndef UTIL_H_
 #define UTIL_H_
 
-/*
+/**
  * Functions part one
  * Includes the next functions
  * StdDev_bin  : Calculates the standard deviation for a binary vector.
