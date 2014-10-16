@@ -1,0 +1,52 @@
+.TH "src/type/Matrix.h" 3 "Tue Sep 23 2014" "Version 1.00" "SICS IRT" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+src/type/Matrix.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <iostream>\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <cstring>\fP
+.br
+\fC#include <algorithm>\fP
+.br
+\fC#include <cstdlib>\fP
+.br
+\fC#include <climits>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBMatrix< T >\fP"
+.br
+.RI "\fISupports the \fBMatrix\fP Structures, with indexing on any type, has special operations for general matrix use, is the class used by all the BLAS interface methods , please use this class in the package whenever posible\&. \fP"
+.ti -1c
+.RI "class \fBMatrix< T >\fP"
+.br
+.RI "\fISupports the \fBMatrix\fP Structures, with indexing on any type, has special operations for general matrix use, is the class used by all the BLAS interface methods , please use this class in the package whenever posible\&. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename T > ostream & \fBoperator<<\fP (ostream &, \fBMatrix\fP< T > &)"
+.br
+.RI "\fIOverloads the << operator for printing two dimensional matrices, use for debugging or outputting to files returns an ostream object\&. \fP"
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "template<typename T > ostream & operator<< (ostream & out, \fBMatrix\fP< T > & M)"
+
+.PP
+Overloads the << operator for printing two dimensional matrices, use for debugging or outputting to files returns an ostream object\&. 
+.PP
+Definition at line 225 of file Matrix\&.h\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for SICS IRT from the source code\&.

@@ -1,0 +1,178 @@
+\hypertarget{classLatentTraitSet}{}\section{Latent\+Trait\+Set Class Reference}
+\label{classLatentTraitSet}\index{Latent\+Trait\+Set@{Latent\+Trait\+Set}}
+
+
+{\ttfamily \#include $<$Latent\+Trait\+Set.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classLatentTraitSet_ae11a4a1e289c42f54179ee47a4fd2ab2}{Latent\+Trait\+Set} ()
+\item 
+\hyperlink{singletonMatrix}{Matrix}$<$ double $>$ $\ast$ \hyperlink{classLatentTraitSet_aed95a0c5c87256960ffb528ca491f2c0}{get\+Theta} ()
+\item 
+void \hyperlink{classLatentTraitSet_af8133cfb7853d19f0490079ebc146b6c}{set\+Theta} (\hyperlink{singletonMatrix}{Matrix}$<$ double $>$ $\ast$\hyperlink{classLatentTraitSet_a8e5ce0fbc5b17577bcd06b58d3c5b079}{theta})
+\item 
+\hyperlink{singletonMatrix}{Matrix}$<$ double $>$ $\ast$ \hyperlink{classLatentTraitSet_a1f48623a0834d134df2ddea3892a5b11}{get\+Weight} ()
+\item 
+void \hyperlink{classLatentTraitSet_a8a3c362f857d4094f7e2da4f47a9499b}{set\+Weight} (\hyperlink{singletonMatrix}{Matrix}$<$ double $>$ $\ast$\hyperlink{classLatentTraitSet_a8db0053af1838ab0a4e25d5c6abc4384}{weight})
+\item 
+virtual \hyperlink{classLatentTraitSet_ab502c9823e8c7ed995b0d87d1af94aee}{$\sim$\+Latent\+Trait\+Set} ()
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{singletonMatrix}{Matrix}$<$ double $>$ $\ast$ \hyperlink{classLatentTraitSet_a8e5ce0fbc5b17577bcd06b58d3c5b079}{theta}
+\item 
+\hyperlink{singletonMatrix}{Matrix}$<$ double $>$ $\ast$ \hyperlink{classLatentTraitSet_a8db0053af1838ab0a4e25d5c6abc4384}{weight}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 13 of file Latent\+Trait\+Set.\+h.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classLatentTraitSet_ae11a4a1e289c42f54179ee47a4fd2ab2}{}\index{Latent\+Trait\+Set@{Latent\+Trait\+Set}!Latent\+Trait\+Set@{Latent\+Trait\+Set}}
+\index{Latent\+Trait\+Set@{Latent\+Trait\+Set}!Latent\+Trait\+Set@{Latent\+Trait\+Set}}
+\subsubsection[{Latent\+Trait\+Set}]{\setlength{\rightskip}{0pt plus 5cm}Latent\+Trait\+Set\+::\+Latent\+Trait\+Set (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classLatentTraitSet_ae11a4a1e289c42f54179ee47a4fd2ab2}
+
+
+Definition at line 10 of file Latent\+Trait\+Set.\+cpp.
+
+
+
+References theta, and weight.
+
+\hypertarget{classLatentTraitSet_ab502c9823e8c7ed995b0d87d1af94aee}{}\index{Latent\+Trait\+Set@{Latent\+Trait\+Set}!````~Latent\+Trait\+Set@{$\sim$\+Latent\+Trait\+Set}}
+\index{````~Latent\+Trait\+Set@{$\sim$\+Latent\+Trait\+Set}!Latent\+Trait\+Set@{Latent\+Trait\+Set}}
+\subsubsection[{$\sim$\+Latent\+Trait\+Set}]{\setlength{\rightskip}{0pt plus 5cm}Latent\+Trait\+Set\+::$\sim$\+Latent\+Trait\+Set (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\label{classLatentTraitSet_ab502c9823e8c7ed995b0d87d1af94aee}
+
+
+Definition at line 31 of file Latent\+Trait\+Set.\+cpp.
+
+
+
+References theta, and weight.
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classLatentTraitSet_aed95a0c5c87256960ffb528ca491f2c0}{}\index{Latent\+Trait\+Set@{Latent\+Trait\+Set}!get\+Theta@{get\+Theta}}
+\index{get\+Theta@{get\+Theta}!Latent\+Trait\+Set@{Latent\+Trait\+Set}}
+\subsubsection[{get\+Theta}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Matrix}$<$ double $>$ $\ast$ Latent\+Trait\+Set\+::get\+Theta (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classLatentTraitSet_aed95a0c5c87256960ffb528ca491f2c0}
+
+
+Definition at line 15 of file Latent\+Trait\+Set.\+cpp.
+
+
+
+References theta.
+
+
+
+Referenced by Three\+P\+L\+Model\+::build\+Parameter\+Set(), Unidimensional\+Model\+::get\+Dim\+Vector(), E\+M\+Estimation\+::set\+Model(), E\+M\+Estimation\+::step\+E(), E\+M\+Estimation\+::step\+M(), and Three\+P\+L\+Model\+::success\+Probability().
+
+\hypertarget{classLatentTraitSet_a1f48623a0834d134df2ddea3892a5b11}{}\index{Latent\+Trait\+Set@{Latent\+Trait\+Set}!get\+Weight@{get\+Weight}}
+\index{get\+Weight@{get\+Weight}!Latent\+Trait\+Set@{Latent\+Trait\+Set}}
+\subsubsection[{get\+Weight}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Matrix}$<$ double $>$ $\ast$ Latent\+Trait\+Set\+::get\+Weight (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classLatentTraitSet_a1f48623a0834d134df2ddea3892a5b11}
+
+
+Definition at line 23 of file Latent\+Trait\+Set.\+cpp.
+
+
+
+References weight.
+
+
+
+Referenced by E\+M\+Estimation\+::step\+E().
+
+\hypertarget{classLatentTraitSet_af8133cfb7853d19f0490079ebc146b6c}{}\index{Latent\+Trait\+Set@{Latent\+Trait\+Set}!set\+Theta@{set\+Theta}}
+\index{set\+Theta@{set\+Theta}!Latent\+Trait\+Set@{Latent\+Trait\+Set}}
+\subsubsection[{set\+Theta}]{\setlength{\rightskip}{0pt plus 5cm}void Latent\+Trait\+Set\+::set\+Theta (
+\begin{DoxyParamCaption}
+\item[{{\bf Matrix}$<$ double $>$ $\ast$}]{theta}
+\end{DoxyParamCaption}
+)}\label{classLatentTraitSet_af8133cfb7853d19f0490079ebc146b6c}
+
+
+Definition at line 19 of file Latent\+Trait\+Set.\+cpp.
+
+
+
+References theta.
+
+
+
+Referenced by one\+Run().
+
+\hypertarget{classLatentTraitSet_a8a3c362f857d4094f7e2da4f47a9499b}{}\index{Latent\+Trait\+Set@{Latent\+Trait\+Set}!set\+Weight@{set\+Weight}}
+\index{set\+Weight@{set\+Weight}!Latent\+Trait\+Set@{Latent\+Trait\+Set}}
+\subsubsection[{set\+Weight}]{\setlength{\rightskip}{0pt plus 5cm}void Latent\+Trait\+Set\+::set\+Weight (
+\begin{DoxyParamCaption}
+\item[{{\bf Matrix}$<$ double $>$ $\ast$}]{weight}
+\end{DoxyParamCaption}
+)}\label{classLatentTraitSet_a8a3c362f857d4094f7e2da4f47a9499b}
+
+
+Definition at line 27 of file Latent\+Trait\+Set.\+cpp.
+
+
+
+References weight.
+
+
+
+Referenced by one\+Run().
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classLatentTraitSet_a8e5ce0fbc5b17577bcd06b58d3c5b079}{}\index{Latent\+Trait\+Set@{Latent\+Trait\+Set}!theta@{theta}}
+\index{theta@{theta}!Latent\+Trait\+Set@{Latent\+Trait\+Set}}
+\subsubsection[{theta}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Matrix}$<$double$>$$\ast$ Latent\+Trait\+Set\+::theta\hspace{0.3cm}{\ttfamily [private]}}\label{classLatentTraitSet_a8e5ce0fbc5b17577bcd06b58d3c5b079}
+
+
+Definition at line 14 of file Latent\+Trait\+Set.\+h.
+
+
+
+Referenced by get\+Theta(), Latent\+Trait\+Set(), set\+Theta(), and $\sim$\+Latent\+Trait\+Set().
+
+\hypertarget{classLatentTraitSet_a8db0053af1838ab0a4e25d5c6abc4384}{}\index{Latent\+Trait\+Set@{Latent\+Trait\+Set}!weight@{weight}}
+\index{weight@{weight}!Latent\+Trait\+Set@{Latent\+Trait\+Set}}
+\subsubsection[{weight}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Matrix}$<$double$>$$\ast$ Latent\+Trait\+Set\+::weight\hspace{0.3cm}{\ttfamily [private]}}\label{classLatentTraitSet_a8db0053af1838ab0a4e25d5c6abc4384}
+
+
+Definition at line 15 of file Latent\+Trait\+Set.\+h.
+
+
+
+Referenced by get\+Weight(), Latent\+Trait\+Set(), set\+Weight(), and $\sim$\+Latent\+Trait\+Set().
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/type/\hyperlink{LatentTraitSet_8h}{Latent\+Trait\+Set.\+h}\item 
+src/type/\hyperlink{LatentTraitSet_8cpp}{Latent\+Trait\+Set.\+cpp}\end{DoxyCompactItemize}

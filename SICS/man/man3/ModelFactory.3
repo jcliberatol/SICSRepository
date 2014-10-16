@@ -1,0 +1,68 @@
+.TH "ModelFactory" 3 "Tue Sep 23 2014" "Version 1.00" "SICS IRT" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+ModelFactory \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <ModelFactory\&.h>\fP
+.PP
+Inherited by \fBSICSGeneralModel\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBModelFactory\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBParameterModel\fP * \fBcreateParameterModel\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBItemModel\fP * \fBcreateItemModel\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBDimensionModel\fP * \fBcreateDimensionModel\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fB~ModelFactory\fP ()"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 15 of file ModelFactory\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "ModelFactory::ModelFactory ()"
+
+.PP
+Definition at line 10 of file ModelFactory\&.cpp\&.
+.SS "ModelFactory::~ModelFactory ()\fC [virtual]\fP"
+
+.PP
+Definition at line 15 of file ModelFactory\&.cpp\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "virtual \fBDimensionModel\fP* ModelFactory::createDimensionModel ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBSICSGeneralModel\fP\&.
+.PP
+Referenced by Model::setModel()\&.
+.SS "virtual \fBItemModel\fP* ModelFactory::createItemModel ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBSICSGeneralModel\fP\&.
+.PP
+Referenced by Model::setModel()\&.
+.SS "virtual \fBParameterModel\fP* ModelFactory::createParameterModel ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBSICSGeneralModel\fP\&.
+.PP
+Referenced by Model::setModel()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for SICS IRT from the source code\&.

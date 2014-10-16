@@ -1,0 +1,158 @@
+.TH "src/util/NCM.h" 3 "Tue Sep 23 2014" "Version 1.00" "SICS IRT" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+src/util/NCM.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <type/Matrix\&.h>\fP
+.br
+\fC#include <openblas/cblas\&.h>\fP
+.br
+\fC#include <openblas/lapacke/lapacke\&.h>\fP
+.br
+\fC#include <iostream>\fP
+.br
+\fC#include <cstdio>\fP
+.br
+\fC#include <cmath>\fP
+.br
+\fC#include <ctime>\fP
+.br
+\fC#include <cstdlib>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBmatrix\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBPERTURBATION\fP   1\&.0e-9"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBNCM\fP (\fBMatrix\fP< double > *m)"
+.br
+.ti -1c
+.RI "void \fBCorrelation_Newton\fP (struct \fBmatrix\fP *G, struct \fBmatrix\fP *X, double *y)"
+.br
+.ti -1c
+.RI "void \fBpre_cg\fP (double *\fBb\fP, double tol, int maxit, double *\fBc\fP, struct \fBmatrix\fP *Omega12, struct \fBmatrix\fP *P, double *p, int *flag, double *relres, int *iterk)"
+.br
+.ti -1c
+.RI "void \fBprecond_matrix\fP (struct \fBmatrix\fP *Omega12, struct \fBmatrix\fP *P, double *\fBc\fP)"
+.br
+.ti -1c
+.RI "void \fBgradient\fP (double *y, double *lambda, struct \fBmatrix\fP *P, double *b0, double *f, double *Fy)"
+.br
+.ti -1c
+.RI "void \fBomega_mat\fP (double *lambda, int n, struct \fBmatrix\fP *Omega12)"
+.br
+.ti -1c
+.RI "void \fBJacobian_matrix\fP (double *x, struct \fBmatrix\fP *Omega12, struct \fBmatrix\fP *P, struct \fBmatrix\fP *Ax)"
+.br
+.ti -1c
+.RI "void \fBprintMatrix\fP (struct \fBmatrix\fP *M)"
+.br
+.ti -1c
+.RI "double \fBmax\fP (double \fBa\fP, double \fBb\fP)"
+.br
+.ti -1c
+.RI "double \fBnorm\fP (double *\fBa\fP, int n)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define PERTURBATION   1\&.0e-9"
+
+.PP
+Definition at line 60 of file NCM\&.h\&.
+.PP
+Referenced by Jacobian_matrix()\&.
+.SH "Function Documentation"
+.PP 
+.SS "void Correlation_Newton (struct \fBmatrix\fP * G, struct \fBmatrix\fP * X, double * y)"
+
+.PP
+Definition at line 264 of file NCM\&.h\&.
+.PP
+References a, b, c, matrix::columns, d, matrix::entries, gradient(), norm(), omega_mat(), pre_cg(), precond_matrix(), and matrix::rows\&.
+.PP
+Referenced by NCM()\&.
+.SS "void gradient (double * y, double * lambda, struct \fBmatrix\fP * P, double * b0, double * f, double * Fy)"
+
+.PP
+Definition at line 692 of file NCM\&.h\&.
+.PP
+References matrix::columns, matrix::entries, max(), and matrix::rows\&.
+.PP
+Referenced by Correlation_Newton(), and rosenbrockTest()\&.
+.SS "void Jacobian_matrix (double * x, struct \fBmatrix\fP * Omega12, struct \fBmatrix\fP * P, struct \fBmatrix\fP * Ax)"
+
+.PP
+Definition at line 747 of file NCM\&.h\&.
+.PP
+References matrix::columns, matrix::entries, PERTURBATION, and matrix::rows\&.
+.PP
+Referenced by pre_cg()\&.
+.SS "double max (double a, double b)\fC [inline]\fP"
+
+.PP
+Definition at line 156 of file NCM\&.h\&.
+.PP
+Referenced by gradient()\&.
+.SS "void NCM (\fBMatrix\fP< double > * m)"
+
+.PP
+Definition at line 134 of file NCM\&.h\&.
+.PP
+References matrix::columns, Correlation_Newton(), matrix::entries, Matrix< T >::nC(), Matrix< T >::nR(), and matrix::rows\&.
+.SS "double norm (double * a, int n)\fC [inline]\fP"
+
+.PP
+Definition at line 157 of file NCM\&.h\&.
+.PP
+Referenced by Correlation_Newton(), and pre_cg()\&.
+.SS "void omega_mat (double * lambda, int n, struct \fBmatrix\fP * Omega12)"
+
+.PP
+Definition at line 716 of file NCM\&.h\&.
+.PP
+References matrix::columns, matrix::entries, and matrix::rows\&.
+.PP
+Referenced by Correlation_Newton()\&.
+.SS "void pre_cg (double * b, double tol, int maxit, double * c, struct \fBmatrix\fP * Omega12, struct \fBmatrix\fP * P, double * p, int * flag, double * relres, int * iterk)"
+
+.PP
+Definition at line 175 of file NCM\&.h\&.
+.PP
+References matrix::columns, d, matrix::entries, Jacobian_matrix(), norm(), and matrix::rows\&.
+.PP
+Referenced by Correlation_Newton()\&.
+.SS "void precond_matrix (struct \fBmatrix\fP * Omega12, struct \fBmatrix\fP * P, double * c)"
+
+.PP
+Definition at line 602 of file NCM\&.h\&.
+.PP
+References matrix::columns, matrix::entries, and matrix::rows\&.
+.PP
+Referenced by Correlation_Newton()\&.
+.SS "void printMatrix (struct \fBmatrix\fP * M)"
+
+.PP
+Definition at line 165 of file NCM\&.h\&.
+.PP
+References matrix::columns, matrix::entries, and matrix::rows\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for SICS IRT from the source code\&.

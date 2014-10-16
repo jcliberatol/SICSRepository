@@ -1,0 +1,306 @@
+.TH "Matrix< T >" 3 "Tue Sep 23 2014" "Version 1.00" "SICS IRT" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Matrix< T > \- Supports the \fBMatrix\fP Structures, with indexing on any type, has special operations for general matrix use, is the class used by all the BLAS interface methods , please use this class in the package whenever posible\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <Matrix\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMatrix\fP ()"
+.br
+.ti -1c
+.RI "\fBMatrix\fP (int, int)"
+.br
+.RI "\fIEmpty object\&. \fP"
+.ti -1c
+.RI "\fBMatrix\fP (\fBMatrix\fP< T > &)"
+.br
+.RI "\fITwo dimensional \fBMatrix\fP Constructor allocates memory\&. \fP"
+.ti -1c
+.RI "\fBMatrix\fP (char I, int size)"
+.br
+.RI "\fICopy constructor\&. \fP"
+.ti -1c
+.RI "void \fBreset\fP ()"
+.br
+.RI "\fICreate special kinds of matrices (dense identity) \fP"
+.ti -1c
+.RI "void \fBtranspose\fP ()"
+.br
+.RI "\fIReset method, puts all entries in zeros\&. \fP"
+.ti -1c
+.RI "void \fBcopy\fP (\fBMatrix\fP< T > &)"
+.br
+.RI "\fITransposes the matrix, notice it does not perform memory transpose, only index transpose\&. \fP"
+.ti -1c
+.RI "T \fBgetDeterminant\fP ()"
+.br
+.RI "\fICopy constructor\&. \fP"
+.ti -1c
+.RI "int \fBnR\fP ()"
+.br
+.RI "\fIOutputs the determinant of the matrix\&. \fP"
+.ti -1c
+.RI "int \fBnC\fP ()"
+.br
+.RI "\fIReturns number of rows\&. \fP"
+.ti -1c
+.RI "T \fBsum\fP ()"
+.br
+.RI "\fIReturns number of columns\&. \fP"
+.ti -1c
+.RI "T & \fBoperator()\fP (const int \fBnCol\fP, const int \fBnRow\fP)"
+.br
+.RI "\fIReturns the sum of all objects\&. \fP"
+.ti -1c
+.RI "T & \fBoperator()\fP (const int element)"
+.br
+.RI "\fIAccessing operator for a element\&. \fP"
+.ti -1c
+.RI "bool \fBisSymmetric\fP () const "
+.br
+.RI "\fI\fBOutput\fP operator\&. \fP"
+.ti -1c
+.RI "void \fBsetSymmetric\fP (bool \fBsymmetric\fP)"
+.br
+.RI "\fISymmetry flag for optimizations\&. \fP"
+.ti -1c
+.RI "virtual \fB~Matrix\fP ()"
+.br
+.RI "\fISet to true the symmetry flag\&. \fP"
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fBtransposed\fP"
+.br
+.ti -1c
+.RI "bool \fBsymmetric\fP"
+.br
+.ti -1c
+.RI "T * \fBmemory\fP"
+.br
+.ti -1c
+.RI "int \fBld\fP"
+.br
+.in -1c
+.SS "Static Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "static char \fBdel\fP = ' '"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "T \fBm\fP (char)"
+.br
+.ti -1c
+.RI "T \fBget3x3determinant\fP ()"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "int \fBnCol\fP"
+.br
+.ti -1c
+.RI "int \fBnRow\fP"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "ostream & \fBoperator\fP (ostream &, \fBMatrix\fP< T > &)"
+.br
+.RI "\fIAccessing operator for a element\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<class T>class Matrix< T >"
+Supports the \fBMatrix\fP Structures, with indexing on any type, has special operations for general matrix use, is the class used by all the BLAS interface methods , please use this class in the package whenever posible\&. 
+
+the class is a templated class supporting any type for components of the matrix, the support of this class is made for two dimension matrices and one dimension vectors, overloaded operators are the parenthesis for one or two dimensional indexing, and the output operator, the class also supports transposed and symmetric matrices and when declaring matrices they can be declared either empty, reseted to a value, as an identity, or as a random matrix\&. Some very fast methods are implemented for specific matrix sizes\&. Use this with care\&. 
+.PP
+Definition at line 31 of file Matrix\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<class T > \fBMatrix\fP< T >::\fBMatrix\fP ()"
+
+.PP
+Definition at line 102 of file Matrix\&.h\&.
+.SS "template<class T > \fBMatrix\fP< T >::\fBMatrix\fP (int r, int c)"
+
+.PP
+Empty object\&. 
+.PP
+Definition at line 118 of file Matrix\&.h\&.
+.PP
+References c\&.
+.SS "template<class T> \fBMatrix\fP< T >::\fBMatrix\fP (\fBMatrix\fP< T > & a)"
+
+.PP
+Two dimensional \fBMatrix\fP Constructor allocates memory\&. 
+.PP
+Definition at line 112 of file Matrix\&.h\&.
+.SS "template<class T> \fBMatrix\fP< T >::\fBMatrix\fP (char I, int size)"
+
+.PP
+Copy constructor\&. 
+.PP
+Definition at line 128 of file Matrix\&.h\&.
+.PP
+References c\&.
+.SS "template<class T > \fBMatrix\fP< T >::~\fBMatrix\fP ()\fC [virtual]\fP"
+
+.PP
+Set to true the symmetry flag\&. 
+.PP
+Definition at line 175 of file Matrix\&.h\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "template<class T> void \fBMatrix\fP< T >::copy (\fBMatrix\fP< T > & a)"
+
+.PP
+Transposes the matrix, notice it does not perform memory transpose, only index transpose\&. 
+.PP
+Definition at line 193 of file Matrix\&.h\&.
+.PP
+References Matrix< T >::memory, Matrix< T >::nC(), Matrix< T >::nR(), Matrix< T >::symmetric, and Matrix< T >::transposed\&.
+.PP
+Referenced by ApproximateMatrixInverse()\&.
+.SS "template<class T > T \fBMatrix\fP< T >::get3x3determinant ()\fC [private]\fP"
+
+.PP
+Definition at line 215 of file Matrix\&.h\&.
+.SS "template<class T > T \fBMatrix\fP< T >::getDeterminant ()"
+
+.PP
+Copy constructor\&. 
+.PP
+Definition at line 204 of file Matrix\&.h\&.
+.SS "template<class T > bool \fBMatrix\fP< T >::isSymmetric () const\fC [inline]\fP"
+
+.PP
+\fBOutput\fP operator\&. 
+.PP
+Definition at line 165 of file Matrix\&.h\&.
+.SS "template<class T > T \fBMatrix\fP< T >::m (char c)\fC [private]\fP"
+
+.PP
+Definition at line 76 of file Matrix\&.h\&.
+.SS "template<class T > int \fBMatrix\fP< T >::nC ()"
+
+.PP
+Returns number of rows\&. 
+.PP
+Definition at line 97 of file Matrix\&.h\&.
+.PP
+Referenced by ApproximateMatrixInverse(), ThreePLModel::buildParameterSet(), Matrix< T >::copy(), UnidimensionalModel::getDimVector(), matrixMultiply(), NCM(), EMEstimation::setModel(), EMEstimation::stepE(), EMEstimation::stepM(), and ThreePLModel::successProbability()\&.
+.SS "template<class T > int \fBMatrix\fP< T >::nR ()"
+
+.PP
+Outputs the determinant of the matrix\&. 
+.PP
+Definition at line 92 of file Matrix\&.h\&.
+.PP
+Referenced by ApproximateMatrixInverse(), Matrix< T >::copy(), matrixMultiply(), NCM(), and oneRun()\&.
+.SS "template<class T > T & \fBMatrix\fP< T >::\fBoperator\fP() (const int nCol, const int nRow)"
+
+.PP
+Returns the sum of all objects\&. 
+.PP
+Definition at line 150 of file Matrix\&.h\&.
+.SS "template<class T > T & \fBMatrix\fP< T >::\fBoperator\fP() (const int element)"
+
+.PP
+Accessing operator for a element\&. 
+.PP
+Definition at line 160 of file Matrix\&.h\&.
+.SS "template<class T > void \fBMatrix\fP< T >::reset ()"
+
+.PP
+Create special kinds of matrices (dense identity) 
+.PP
+Definition at line 182 of file Matrix\&.h\&.
+.PP
+Referenced by ApproximateMatrixInverse(), and EMEstimation::stepE()\&.
+.SS "template<class T > void \fBMatrix\fP< T >::setSymmetric (bool symmetric)\fC [inline]\fP"
+
+.PP
+Symmetry flag for optimizations\&. 
+.PP
+Definition at line 170 of file Matrix\&.h\&.
+.SS "template<class T > T \fBMatrix\fP< T >::sum ()"
+
+.PP
+Returns number of columns\&. 
+.PP
+Definition at line 81 of file Matrix\&.h\&.
+.SS "template<class T > void \fBMatrix\fP< T >::transpose ()"
+
+.PP
+Reset method, puts all entries in zeros\&. 
+.PP
+Definition at line 187 of file Matrix\&.h\&.
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "template<class T> ostream& operator (ostream &, \fBMatrix\fP< T > &)\fC [friend]\fP"
+
+.PP
+Accessing operator for a element\&. 
+.SH "Member Data Documentation"
+.PP 
+.SS "template<class T> char \fBMatrix\fP< T >::del = ' '\fC [static]\fP"
+
+.PP
+Definition at line 52 of file Matrix\&.h\&.
+.SS "template<class T> int \fBMatrix\fP< T >::ld"
+
+.PP
+Definition at line 51 of file Matrix\&.h\&.
+.PP
+Referenced by matrixMultiply()\&.
+.SS "template<class T> T* \fBMatrix\fP< T >::memory"
+
+.PP
+Definition at line 50 of file Matrix\&.h\&.
+.PP
+Referenced by ApproximateMatrixInverse(), Matrix< T >::copy(), and matrixMultiply()\&.
+.SS "template<class T> int \fBMatrix\fP< T >::nCol\fC [private]\fP"
+
+.PP
+Definition at line 43 of file Matrix\&.h\&.
+.SS "template<class T> int \fBMatrix\fP< T >::nRow\fC [private]\fP"
+
+.PP
+Definition at line 44 of file Matrix\&.h\&.
+.SS "template<class T> bool \fBMatrix\fP< T >::symmetric"
+
+.PP
+Definition at line 49 of file Matrix\&.h\&.
+.PP
+Referenced by Matrix< T >::copy()\&.
+.SS "template<class T> bool \fBMatrix\fP< T >::transposed"
+
+.PP
+Definition at line 48 of file Matrix\&.h\&.
+.PP
+Referenced by Matrix< T >::copy(), and matrixMultiply()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for SICS IRT from the source code\&.

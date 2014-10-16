@@ -122,32 +122,13 @@ void oneRun(){
 		cout << "Loaded input matrix" << endl;
 		It = model->getItemModel()->countItems();
 
-		// Initial Parameters
-		for (int i = 0; i < It; i++) {
-			(*model->getParameterModel()->getParameterSet()[a])(0, i) = 0.851;
-			(*model->getParameterModel()->getParameterSet()[d])(0, i) = 0.272;
-			(*model->getParameterModel()->getParameterSet()[c])(0, i) = 0.15;
-		}
-
-		(*model->getParameterModel()->getParameterSet()[a])(0, 0) = 0.6609297;
-		(*model->getParameterModel()->getParameterSet()[a])(0, 1) = 0.8741322;
-		(*model->getParameterModel()->getParameterSet()[a])(0, 2) = 0.7340038;
-		(*model->getParameterModel()->getParameterSet()[a])(0, 3) = 0.5422908;
-		(*model->getParameterModel()->getParameterSet()[a])(0, 4) = 0.9116418;
-		(*model->getParameterModel()->getParameterSet()[a])(0, 5) = 0.71059;
-		(*model->getParameterModel()->getParameterSet()[d])(0, 0) = 1.612291;
-		(*model->getParameterModel()->getParameterSet()[d])(0, 1) = 0.4928179;
-		(*model->getParameterModel()->getParameterSet()[d])(0, 2) = 0.6055251;
-		(*model->getParameterModel()->getParameterSet()[d])(0, 3) = -1.294814;
-		(*model->getParameterModel()->getParameterSet()[d])(0, 4) = 0.1676967;
-		(*model->getParameterModel()->getParameterSet()[d])(0, 5) = 1.445592;
-
 		cout << "Initial Pars setted" << endl;
 
 		// Create estimation
 		EMEstimation *em = new EMEstimation();
 		em->setModel(model);
 		cout << "Model setted" << endl;
+		em->setInitialValues("Andradinho");
 		// run estimation
 		em->estimate();
 
@@ -159,7 +140,8 @@ void oneRun(){
 int main(int argc, char *argv[]) {
 
 	cout<<"The show begins";
-	initTests(argv[1]);
+	oneRun();
+	//initTests(argv[1]);
 	//oneRun();
 }
 

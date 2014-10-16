@@ -1,0 +1,106 @@
+.TH "Input" 3 "Tue Sep 23 2014" "Version 1.00" "SICS IRT" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Input \- Class that is in charge of taking OS files, streams and other sources for inputting data into the software suite\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <Input\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBInput\fP ()"
+.br
+.ti -1c
+.RI "virtual \fB~Input\fP ()"
+.br
+.ti -1c
+.RI "bool \fBimportCSV\fP (char *, \fBPatternMatrix\fP &, unsigned int, unsigned int)"
+.br
+.ti -1c
+.RI "bool \fBimportCSV\fP (char *, \fBMatrix\fP< double > &, unsigned int, unsigned int)"
+.br
+.RI "\fIImports binary matrices from a csv\&. \fP"
+.ti -1c
+.RI "char \fBgetDel\fP () const "
+.br
+.RI "\fIImports generic type matrices from a csv\&. \fP"
+.ti -1c
+.RI "void \fBsetDel\fP (char)"
+.br
+.RI "\fIGets the delimitier used for inputting\&. \fP"
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "char \fBdel\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Class that is in charge of taking OS files, streams and other sources for inputting data into the software suite\&. 
+.PP
+Definition at line 28 of file Input\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Input::Input ()"
+
+.PP
+Definition at line 10 of file Input\&.cpp\&.
+.PP
+References del\&.
+.SS "Input::~Input ()\fC [virtual]\fP"
+
+.PP
+Definition at line 15 of file Input\&.cpp\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "char Input::getDel () const"
+
+.PP
+Imports generic type matrices from a csv\&. 
+.PP
+Definition at line 169 of file Input\&.cpp\&.
+.PP
+References del\&.
+.SS "bool Input::importCSV (char * filename, \fBPatternMatrix\fP & M, unsigned int rowIdx, unsigned int colIdx)"
+
+.PP
+Definition at line 85 of file Input\&.cpp\&.
+.PP
+References del, and PatternMatrix::push()\&.
+.PP
+Referenced by oneRun(), and pachotest()\&.
+.SS "bool Input::importCSV (char * filename, \fBMatrix\fP< double > & M, unsigned int rowIdx, unsigned int colIdx)"
+
+.PP
+Imports binary matrices from a csv\&. 
+.PP
+Definition at line 18 of file Input\&.cpp\&.
+.PP
+References del\&.
+.SS "void Input::setDel (char del)"
+
+.PP
+Gets the delimitier used for inputting\&. 
+.PP
+Definition at line 173 of file Input\&.cpp\&.
+.PP
+References del\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "char Input::del\fC [private]\fP"
+
+.PP
+Definition at line 34 of file Input\&.h\&.
+.PP
+Referenced by getDel(), importCSV(), Input(), and setDel()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for SICS IRT from the source code\&.

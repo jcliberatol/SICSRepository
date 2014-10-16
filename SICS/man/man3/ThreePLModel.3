@@ -1,0 +1,194 @@
+.TH "ThreePLModel" 3 "Tue Sep 23 2014" "Version 1.00" "SICS IRT" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+ThreePLModel \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <ThreePLModel\&.h>\fP
+.PP
+Inherits \fBParameterModel\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBThreePLModel\fP ()"
+.br
+.ti -1c
+.RI "void \fBbuildParameterSet\fP (\fBItemModel\fP *, \fBDimensionModel\fP *)"
+.br
+.ti -1c
+.RI "void \fBsuccessProbability\fP (\fBDimensionModel\fP *)"
+.br
+.ti -1c
+.RI "map< \fBParameter\fP, \fBMatrix\fP< double > * > \fBgetParameterSet\fP ()"
+.br
+.ti -1c
+.RI "void \fBsetParameterSet\fP (map< \fBParameter\fP, \fBMatrix\fP< double > * >)"
+.br
+.ti -1c
+.RI "double \fBgetProbability\fP (int, int)"
+.br
+.ti -1c
+.RI "virtual \fB~ThreePLModel\fP ()"
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static double \fBsuccessProbability\fP (double, double, double, double)"
+.br
+.ti -1c
+.RI "static double \fBsuccessProbability_cPrime\fP (double, double, double, double)"
+.br
+.ti -1c
+.RI "static double \fBlogLikelihood\fP (double *, double *, int, int)"
+.br
+.ti -1c
+.RI "static void \fBgradient\fP (double *, double *, int, int, double *)"
+.br
+.ti -1c
+.RI "static void \fBNgradient\fP (double *args, double *pars, int nargs, int npars, double *\fBgradient\fP)"
+.br
+.ti -1c
+.RI "static void \fBHessian\fP (double *args, double *pars, int nargs, int npars, double *Hessian)"
+.br
+.ti -1c
+.RI "static void \fBNHessian\fP (double *args, double *pars, int nargs, int npars, double *\fBHessian\fP)"
+.br
+.ti -1c
+.RI "static void \fBitemHessian\fP (double *args, double *pars, int nargs, int npars, double *\fBHessian\fP)"
+.br
+.ti -1c
+.RI "static void \fBitemgradient\fP (double *, double *, int, int, double *)"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+.SH "Detailed Description"
+.PP 
+Definition at line 22 of file ThreePLModel\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "ThreePLModel::ThreePLModel ()"
+
+.PP
+Definition at line 10 of file ThreePLModel\&.cpp\&.
+.PP
+References a, b, c, d, ParameterModel::parameterSet, and ParameterModel::probabilityMatrix\&.
+.SS "ThreePLModel::~ThreePLModel ()\fC [virtual]\fP"
+
+.PP
+Definition at line 616 of file ThreePLModel\&.cpp\&.
+.PP
+References a, b, c, d, and ParameterModel::parameterSet\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "void ThreePLModel::buildParameterSet (\fBItemModel\fP * itemModel, \fBDimensionModel\fP * dimensionModel)\fC [virtual]\fP"
+
+.PP
+Implements \fBParameterModel\fP\&.
+.PP
+Definition at line 20 of file ThreePLModel\&.cpp\&.
+.PP
+References a, c, ItemModel::countItems(), d, DimensionModel::getLatentTraitSet(), LatentTraitSet::getTheta(), Matrix< T >::nC(), ParameterModel::parameterSet, and ParameterModel::probabilityMatrix\&.
+.SS "map< \fBParameter\fP, \fBMatrix\fP< double > * > ThreePLModel::getParameterSet ()\fC [virtual]\fP"
+
+.PP
+Implements \fBParameterModel\fP\&.
+.PP
+Definition at line 81 of file ThreePLModel\&.cpp\&.
+.PP
+References ParameterModel::parameterSet\&.
+.SS "double ThreePLModel::getProbability (int node, int item)\fC [virtual]\fP"
+
+.PP
+Implements \fBParameterModel\fP\&.
+.PP
+Definition at line 111 of file ThreePLModel\&.cpp\&.
+.PP
+References ParameterModel::probabilityMatrix\&.
+.SS "void ThreePLModel::gradient (double * args, double * pars, int nargs, int npars, double * gradient)\fC [static]\fP"
+
+.PP
+Definition at line 377 of file ThreePLModel\&.cpp\&.
+.PP
+References a, b, c, Constant::NORM_CONST, and successProbability()\&.
+.PP
+Referenced by NHessian(), and EMEstimation::stepM()\&.
+.SS "void ThreePLModel::Hessian (double * args, double * pars, int nargs, int npars, double * Hessian)\fC [static]\fP"
+
+.PP
+Definition at line 138 of file ThreePLModel\&.cpp\&.
+.PP
+References a, b, c, Constant::NORM_CONST, and successProbability()\&.
+.PP
+Referenced by EMEstimation::stepM()\&.
+.SS "void ThreePLModel::itemgradient (double * args, double * grad, int nargs, int i, double * tgrad)\fC [static]\fP"
+
+.PP
+Definition at line 122 of file ThreePLModel\&.cpp\&.
+.PP
+Referenced by EMEstimation::stepM()\&.
+.SS "void ThreePLModel::itemHessian (double * args, double * pars, int nargs, int npars, double * Hessian)\fC [static]\fP"
+
+.PP
+Definition at line 115 of file ThreePLModel\&.cpp\&.
+.PP
+Referenced by EMEstimation::stepM()\&.
+.SS "double ThreePLModel::logLikelihood (double * args, double * pars, int nargs, int npars)\fC [static]\fP"
+
+.PP
+Definition at line 509 of file ThreePLModel\&.cpp\&.
+.PP
+References a, b, c, and successProbability()\&.
+.PP
+Referenced by Ngradient(), and EMEstimation::stepM()\&.
+.SS "void ThreePLModel::Ngradient (double * args, double * pars, int nargs, int npars, double * gradient)\fC [static]\fP"
+
+.PP
+Definition at line 327 of file ThreePLModel\&.cpp\&.
+.PP
+References logLikelihood()\&.
+.SS "void ThreePLModel::NHessian (double * args, double * pars, int nargs, int npars, double * Hessian)\fC [static]\fP"
+
+.PP
+Definition at line 340 of file ThreePLModel\&.cpp\&.
+.PP
+References gradient()\&.
+.SS "void ThreePLModel::setParameterSet (map< \fBParameter\fP, \fBMatrix\fP< double > * > parameterSet)\fC [virtual]\fP"
+
+.PP
+Implements \fBParameterModel\fP\&.
+.PP
+Definition at line 85 of file ThreePLModel\&.cpp\&.
+.PP
+References ParameterModel::parameterSet\&.
+.SS "double ThreePLModel::successProbability (double theta, double a, double d, double c)\fC [static]\fP"
+
+.PP
+Definition at line 90 of file ThreePLModel\&.cpp\&.
+.PP
+References Constant::MAX_EXP, and Constant::NORM_CONST\&.
+.PP
+Referenced by gradient(), Hessian(), logLikelihood(), successProbability(), and successProbability_cPrime()\&.
+.SS "void ThreePLModel::successProbability (\fBDimensionModel\fP * dimensionModel)\fC [virtual]\fP"
+
+.PP
+Implements \fBParameterModel\fP\&.
+.PP
+Definition at line 52 of file ThreePLModel\&.cpp\&.
+.PP
+References a, c, d, DimensionModel::getLatentTraitSet(), LatentTraitSet::getTheta(), Matrix< T >::nC(), ParameterModel::parameterSet, and successProbability()\&.
+.SS "double ThreePLModel::successProbability_cPrime (double theta, double a, double b, double c)\fC [static]\fP"
+
+.PP
+Definition at line 610 of file ThreePLModel\&.cpp\&.
+.PP
+References successProbability()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for SICS IRT from the source code\&.

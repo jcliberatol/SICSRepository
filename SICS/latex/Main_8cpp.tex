@@ -1,0 +1,140 @@
+\hypertarget{Main_8cpp}{}\section{src/main/\+Main.cpp File Reference}
+\label{Main_8cpp}\index{src/main/\+Main.\+cpp@{src/main/\+Main.\+cpp}}
+{\ttfamily \#include \char`\"{}Main.\+h\char`\"{}}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+double \hyperlink{Main_8cpp_af99bd234e9c85ddacb1e4c723821438b}{banana} (double $\ast$args, double $\ast$pars, int nargs, int npars)
+\item 
+void \hyperlink{Main_8cpp_a1b63faa35546b1036d44672e30c95ac8}{banana\+Gradient} (double $\ast$args, double $\ast$pars, int nargs, int npars, double $\ast$\hyperlink{NCM_8h_af15a746b92f8a980c82fa216ce598faf}{gradient})
+\item 
+void \hyperlink{Main_8cpp_ad28b108bb1686262e8db88fa1f6e473b}{rosenbrock\+Test} ()
+\item 
+void \hyperlink{Main_8cpp_ac0b46a7748d663983a97334ea7851455}{pachotest} ()
+\item 
+void \hyperlink{Main_8cpp_a06800f4745a82946a3e8e740f6bbd15f}{init\+Tests} (char $\ast$filename)
+\item 
+void \hyperlink{Main_8cpp_a22339de75a9aeeffd35c9c0cfd7a2848}{one\+Run} ()
+\item 
+int \hyperlink{Main_8cpp_a0ddf1224851353fc92bfbff6f499fa97}{main} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{Main_8cpp_af99bd234e9c85ddacb1e4c723821438b}{}\index{Main.\+cpp@{Main.\+cpp}!banana@{banana}}
+\index{banana@{banana}!Main.\+cpp@{Main.\+cpp}}
+\subsubsection[{banana}]{\setlength{\rightskip}{0pt plus 5cm}double banana (
+\begin{DoxyParamCaption}
+\item[{double $\ast$}]{args, }
+\item[{double $\ast$}]{pars, }
+\item[{int}]{nargs, }
+\item[{int}]{npars}
+\end{DoxyParamCaption}
+)}\label{Main_8cpp_af99bd234e9c85ddacb1e4c723821438b}
+
+
+Definition at line 14 of file Main.\+cpp.
+
+
+
+Referenced by banana\+Gradient(), and rosenbrock\+Test().
+
+\hypertarget{Main_8cpp_a1b63faa35546b1036d44672e30c95ac8}{}\index{Main.\+cpp@{Main.\+cpp}!banana\+Gradient@{banana\+Gradient}}
+\index{banana\+Gradient@{banana\+Gradient}!Main.\+cpp@{Main.\+cpp}}
+\subsubsection[{banana\+Gradient}]{\setlength{\rightskip}{0pt plus 5cm}void banana\+Gradient (
+\begin{DoxyParamCaption}
+\item[{double $\ast$}]{args, }
+\item[{double $\ast$}]{pars, }
+\item[{int}]{nargs, }
+\item[{int}]{npars, }
+\item[{double $\ast$}]{gradient}
+\end{DoxyParamCaption}
+)}\label{Main_8cpp_a1b63faa35546b1036d44672e30c95ac8}
+
+
+Definition at line 21 of file Main.\+cpp.
+
+
+
+References banana().
+
+
+
+Referenced by rosenbrock\+Test().
+
+\hypertarget{Main_8cpp_a06800f4745a82946a3e8e740f6bbd15f}{}\index{Main.\+cpp@{Main.\+cpp}!init\+Tests@{init\+Tests}}
+\index{init\+Tests@{init\+Tests}!Main.\+cpp@{Main.\+cpp}}
+\subsubsection[{init\+Tests}]{\setlength{\rightskip}{0pt plus 5cm}void init\+Tests (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{filename}
+\end{DoxyParamCaption}
+)}\label{Main_8cpp_a06800f4745a82946a3e8e740f6bbd15f}
+
+
+Definition at line 76 of file Main.\+cpp.
+
+
+
+Referenced by main().
+
+\hypertarget{Main_8cpp_a0ddf1224851353fc92bfbff6f499fa97}{}\index{Main.\+cpp@{Main.\+cpp}!main@{main}}
+\index{main@{main}!Main.\+cpp@{Main.\+cpp}}
+\subsubsection[{main}]{\setlength{\rightskip}{0pt plus 5cm}int main (
+\begin{DoxyParamCaption}
+\item[{int}]{argc, }
+\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]}}
+\end{DoxyParamCaption}
+)}\label{Main_8cpp_a0ddf1224851353fc92bfbff6f499fa97}
+
+
+Definition at line 159 of file Main.\+cpp.
+
+
+
+References init\+Tests().
+
+\hypertarget{Main_8cpp_a22339de75a9aeeffd35c9c0cfd7a2848}{}\index{Main.\+cpp@{Main.\+cpp}!one\+Run@{one\+Run}}
+\index{one\+Run@{one\+Run}!Main.\+cpp@{Main.\+cpp}}
+\subsubsection[{one\+Run}]{\setlength{\rightskip}{0pt plus 5cm}void one\+Run (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{Main_8cpp_a22339de75a9aeeffd35c9c0cfd7a2848}
+
+
+Definition at line 84 of file Main.\+cpp.
+
+
+
+References a, Parameter\+Model\+::build\+Parameter\+Set(), c, Item\+Model\+::count\+Items(), d, E\+M\+Estimation\+::estimate(), Model\+::get\+Dimension\+Model(), Model\+::get\+Item\+Model(), Dimension\+Model\+::get\+Latent\+Trait\+Set(), Model\+::get\+Parameter\+Model(), Parameter\+Model\+::get\+Parameter\+Set(), Input\+::import\+C\+S\+V(), Matrix$<$ T $>$\+::n\+R(), Item\+Model\+::set\+Dataset(), Model\+::set\+Model(), E\+M\+Estimation\+::set\+Model(), Latent\+Trait\+Set\+::set\+Theta(), and Latent\+Trait\+Set\+::set\+Weight().
+
+\hypertarget{Main_8cpp_ac0b46a7748d663983a97334ea7851455}{}\index{Main.\+cpp@{Main.\+cpp}!pachotest@{pachotest}}
+\index{pachotest@{pachotest}!Main.\+cpp@{Main.\+cpp}}
+\subsubsection[{pachotest}]{\setlength{\rightskip}{0pt plus 5cm}void pachotest (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{Main_8cpp_ac0b46a7748d663983a97334ea7851455}
+
+
+Definition at line 69 of file Main.\+cpp.
+
+
+
+References Approximate\+Matrix\+Inverse(), and Input\+::import\+C\+S\+V().
+
+\hypertarget{Main_8cpp_ad28b108bb1686262e8db88fa1f6e473b}{}\index{Main.\+cpp@{Main.\+cpp}!rosenbrock\+Test@{rosenbrock\+Test}}
+\index{rosenbrock\+Test@{rosenbrock\+Test}!Main.\+cpp@{Main.\+cpp}}
+\subsubsection[{rosenbrock\+Test}]{\setlength{\rightskip}{0pt plus 5cm}void rosenbrock\+Test (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{Main_8cpp_ad28b108bb1686262e8db88fa1f6e473b}
+
+
+Definition at line 33 of file Main.\+cpp.
+
+
+
+References banana(), banana\+Gradient(), gradient(), and Optimizer\+::search\+Optimal().
+

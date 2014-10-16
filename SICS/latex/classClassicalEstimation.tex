@@ -1,0 +1,116 @@
+\hypertarget{classClassicalEstimation}{}\section{Classical\+Estimation Class Reference}
+\label{classClassicalEstimation}\index{Classical\+Estimation@{Classical\+Estimation}}
+
+
+Classical estimation class all the classical estimation methods must derive from this class this class is an interface.  
+
+
+
+
+{\ttfamily \#include $<$Classical\+Estimation.\+h$>$}
+
+Inheritance diagram for Classical\+Estimation\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classClassicalEstimation}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classClassicalEstimation_a144021420398e280993eab60a219e1d9}{Classical\+Estimation} ()
+\item 
+virtual void \hyperlink{classClassicalEstimation_a182aef8049a48cf1bd09bff642df8c01}{estimate} ()=0
+\item 
+virtual void \hyperlink{classClassicalEstimation_a4add5ad245795b82380af0c34840c603}{set\+Model} (\hyperlink{classModel}{Model} $\ast$)=0
+\begin{DoxyCompactList}\small\item\em \hyperlink{classEstimation}{Estimation} method for the item parameters , after executed, the item parameters must be equal to the best parameters for the item according to the model. \end{DoxyCompactList}\item 
+virtual \hyperlink{classClassicalEstimation_a6d439cbcdb248008c52a0d59746e3502}{$\sim$\+Classical\+Estimation} ()
+\begin{DoxyCompactList}\small\item\em Sets the model for the classical estimation to use. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+Classical estimation class all the classical estimation methods must derive from this class this class is an interface. 
+
+Definition at line 16 of file Classical\+Estimation.\+h.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classClassicalEstimation_a144021420398e280993eab60a219e1d9}{}\index{Classical\+Estimation@{Classical\+Estimation}!Classical\+Estimation@{Classical\+Estimation}}
+\index{Classical\+Estimation@{Classical\+Estimation}!Classical\+Estimation@{Classical\+Estimation}}
+\subsubsection[{Classical\+Estimation}]{\setlength{\rightskip}{0pt plus 5cm}Classical\+Estimation\+::\+Classical\+Estimation (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classClassicalEstimation_a144021420398e280993eab60a219e1d9}
+
+
+Definition at line 10 of file Classical\+Estimation.\+cpp.
+
+\hypertarget{classClassicalEstimation_a6d439cbcdb248008c52a0d59746e3502}{}\index{Classical\+Estimation@{Classical\+Estimation}!````~Classical\+Estimation@{$\sim$\+Classical\+Estimation}}
+\index{````~Classical\+Estimation@{$\sim$\+Classical\+Estimation}!Classical\+Estimation@{Classical\+Estimation}}
+\subsubsection[{$\sim$\+Classical\+Estimation}]{\setlength{\rightskip}{0pt plus 5cm}Classical\+Estimation\+::$\sim$\+Classical\+Estimation (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\label{classClassicalEstimation_a6d439cbcdb248008c52a0d59746e3502}
+
+
+Sets the model for the classical estimation to use. 
+
+
+
+Definition at line 20 of file Classical\+Estimation.\+cpp.
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classClassicalEstimation_a182aef8049a48cf1bd09bff642df8c01}{}\index{Classical\+Estimation@{Classical\+Estimation}!estimate@{estimate}}
+\index{estimate@{estimate}!Classical\+Estimation@{Classical\+Estimation}}
+\subsubsection[{estimate}]{\setlength{\rightskip}{0pt plus 5cm}void Classical\+Estimation\+::estimate (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [pure virtual]}}\label{classClassicalEstimation_a182aef8049a48cf1bd09bff642df8c01}
+
+
+Implements \hyperlink{classEstimation_ab637475bb8ae37f256c94f7b3cdbe848}{Estimation}.
+
+
+
+Implemented in \hyperlink{classEMEstimation_a7391808764fd510d6a0f0351ec699b2d}{E\+M\+Estimation}.
+
+
+
+Definition at line 14 of file Classical\+Estimation.\+cpp.
+
+\hypertarget{classClassicalEstimation_a4add5ad245795b82380af0c34840c603}{}\index{Classical\+Estimation@{Classical\+Estimation}!set\+Model@{set\+Model}}
+\index{set\+Model@{set\+Model}!Classical\+Estimation@{Classical\+Estimation}}
+\subsubsection[{set\+Model}]{\setlength{\rightskip}{0pt plus 5cm}void Classical\+Estimation\+::set\+Model (
+\begin{DoxyParamCaption}
+\item[{{\bf Model} $\ast$}]{model}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [pure virtual]}}\label{classClassicalEstimation_a4add5ad245795b82380af0c34840c603}
+
+
+\hyperlink{classEstimation}{Estimation} method for the item parameters , after executed, the item parameters must be equal to the best parameters for the item according to the model. 
+
+
+
+Implements \hyperlink{classEstimation_a65f0bd4b60e82a2ab374abd687c69caa}{Estimation}.
+
+
+
+Implemented in \hyperlink{classEMEstimation_a6cd3ac7193ff9d5d92bd90b58da26e11}{E\+M\+Estimation}.
+
+
+
+Definition at line 17 of file Classical\+Estimation.\+cpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/estimation/classical/\hyperlink{ClassicalEstimation_8h}{Classical\+Estimation.\+h}\item 
+src/estimation/classical/\hyperlink{ClassicalEstimation_8cpp}{Classical\+Estimation.\+cpp}\end{DoxyCompactItemize}

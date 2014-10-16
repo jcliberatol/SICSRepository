@@ -1,0 +1,75 @@
+.TH "ClassicalEstimation" 3 "Tue Sep 23 2014" "Version 1.00" "SICS IRT" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+ClassicalEstimation \- Classical estimation class all the classical estimation methods must derive from this class this class is an interface\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <ClassicalEstimation\&.h>\fP
+.PP
+Inherits \fBEstimation\fP\&.
+.PP
+Inherited by \fBEMEstimation\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBClassicalEstimation\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBestimate\fP ()=0"
+.br
+.ti -1c
+.RI "virtual void \fBsetModel\fP (\fBModel\fP *)=0"
+.br
+.RI "\fI\fBEstimation\fP method for the item parameters , after executed, the item parameters must be equal to the best parameters for the item according to the model\&. \fP"
+.ti -1c
+.RI "virtual \fB~ClassicalEstimation\fP ()"
+.br
+.RI "\fISets the model for the classical estimation to use\&. \fP"
+.in -1c
+.SS "Additional Inherited Members"
+.SH "Detailed Description"
+.PP 
+Classical estimation class all the classical estimation methods must derive from this class this class is an interface\&. 
+.PP
+Definition at line 16 of file ClassicalEstimation\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "ClassicalEstimation::ClassicalEstimation ()"
+
+.PP
+Definition at line 10 of file ClassicalEstimation\&.cpp\&.
+.SS "ClassicalEstimation::~ClassicalEstimation ()\fC [virtual]\fP"
+
+.PP
+Sets the model for the classical estimation to use\&. 
+.PP
+Definition at line 20 of file ClassicalEstimation\&.cpp\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "void ClassicalEstimation::estimate ()\fC [pure virtual]\fP"
+
+.PP
+Implements \fBEstimation\fP\&.
+.PP
+Implemented in \fBEMEstimation\fP\&.
+.PP
+Definition at line 14 of file ClassicalEstimation\&.cpp\&.
+.SS "void ClassicalEstimation::setModel (\fBModel\fP * model)\fC [pure virtual]\fP"
+
+.PP
+\fBEstimation\fP method for the item parameters , after executed, the item parameters must be equal to the best parameters for the item according to the model\&. 
+.PP
+Implements \fBEstimation\fP\&.
+.PP
+Implemented in \fBEMEstimation\fP\&.
+.PP
+Definition at line 17 of file ClassicalEstimation\&.cpp\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for SICS IRT from the source code\&.

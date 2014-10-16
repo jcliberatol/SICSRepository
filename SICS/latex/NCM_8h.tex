@@ -1,0 +1,259 @@
+\hypertarget{NCM_8h}{}\section{src/util/\+N\+C\+M.h File Reference}
+\label{NCM_8h}\index{src/util/\+N\+C\+M.\+h@{src/util/\+N\+C\+M.\+h}}
+{\ttfamily \#include $<$type/\+Matrix.\+h$>$}\\*
+{\ttfamily \#include $<$openblas/cblas.\+h$>$}\\*
+{\ttfamily \#include $<$openblas/lapacke/lapacke.\+h$>$}\\*
+{\ttfamily \#include $<$iostream$>$}\\*
+{\ttfamily \#include $<$cstdio$>$}\\*
+{\ttfamily \#include $<$cmath$>$}\\*
+{\ttfamily \#include $<$ctime$>$}\\*
+{\ttfamily \#include $<$cstdlib$>$}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structmatrix}{matrix}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{NCM_8h_a71523ef382aff879e55e53af99ae887a}{P\+E\+R\+T\+U\+R\+B\+A\+T\+I\+O\+N}~1.\+0e-\/9
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{NCM_8h_a37b2e3f4ef3249f72dbd88dc0741389b}{N\+C\+M} (\hyperlink{singletonMatrix}{Matrix}$<$ double $>$ $\ast$m)
+\item 
+void \hyperlink{NCM_8h_a5a9542fe74f7205e7b99b4a0b08305bb}{Correlation\+\_\+\+Newton} (struct \hyperlink{structmatrix}{matrix} $\ast$G, struct \hyperlink{structmatrix}{matrix} $\ast$X, double $\ast$y)
+\item 
+void \hyperlink{NCM_8h_a5e4208de1502953c211d696ff84405fd}{pre\+\_\+cg} (double $\ast$\hyperlink{ParameterModel_8h_a04ed5b8f1f3adf7af1d5092fae847e90aa06b03e4cd5c7c464c513a95a7fcf9bf}{b}, double tol, int maxit, double $\ast$\hyperlink{ParameterModel_8h_a04ed5b8f1f3adf7af1d5092fae847e90a776304400122408ea717dde9234fdd2a}{c}, struct \hyperlink{structmatrix}{matrix} $\ast$Omega12, struct \hyperlink{structmatrix}{matrix} $\ast$P, double $\ast$p, int $\ast$flag, double $\ast$relres, int $\ast$iterk)
+\item 
+void \hyperlink{NCM_8h_af2244d5b22391018b7ff49a0f6aea175}{precond\+\_\+matrix} (struct \hyperlink{structmatrix}{matrix} $\ast$Omega12, struct \hyperlink{structmatrix}{matrix} $\ast$P, double $\ast$\hyperlink{ParameterModel_8h_a04ed5b8f1f3adf7af1d5092fae847e90a776304400122408ea717dde9234fdd2a}{c})
+\item 
+void \hyperlink{NCM_8h_af15a746b92f8a980c82fa216ce598faf}{gradient} (double $\ast$y, double $\ast$lambda, struct \hyperlink{structmatrix}{matrix} $\ast$P, double $\ast$b0, double $\ast$f, double $\ast$Fy)
+\item 
+void \hyperlink{NCM_8h_ae98aa85810636fde702f2c4946a9f6aa}{omega\+\_\+mat} (double $\ast$lambda, int n, struct \hyperlink{structmatrix}{matrix} $\ast$Omega12)
+\item 
+void \hyperlink{NCM_8h_ab49e47d565b246d2432712f76e49af38}{Jacobian\+\_\+matrix} (double $\ast$x, struct \hyperlink{structmatrix}{matrix} $\ast$Omega12, struct \hyperlink{structmatrix}{matrix} $\ast$P, struct \hyperlink{structmatrix}{matrix} $\ast$Ax)
+\item 
+void \hyperlink{NCM_8h_ad016d6b9b5bff2dd9d90fca988f61648}{print\+Matrix} (struct \hyperlink{structmatrix}{matrix} $\ast$M)
+\item 
+double \hyperlink{NCM_8h_a452d2724d2f82cc2c17f54b388232200}{max} (double \hyperlink{ParameterModel_8h_a04ed5b8f1f3adf7af1d5092fae847e90aa91fb0824da12f8bb3b74dd78fb13b63}{a}, double \hyperlink{ParameterModel_8h_a04ed5b8f1f3adf7af1d5092fae847e90aa06b03e4cd5c7c464c513a95a7fcf9bf}{b})
+\item 
+double \hyperlink{NCM_8h_aaec27bdb63d09db13a7f094c45583a5e}{norm} (double $\ast$\hyperlink{ParameterModel_8h_a04ed5b8f1f3adf7af1d5092fae847e90aa91fb0824da12f8bb3b74dd78fb13b63}{a}, int n)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\hypertarget{NCM_8h_a71523ef382aff879e55e53af99ae887a}{}\index{N\+C\+M.\+h@{N\+C\+M.\+h}!P\+E\+R\+T\+U\+R\+B\+A\+T\+I\+O\+N@{P\+E\+R\+T\+U\+R\+B\+A\+T\+I\+O\+N}}
+\index{P\+E\+R\+T\+U\+R\+B\+A\+T\+I\+O\+N@{P\+E\+R\+T\+U\+R\+B\+A\+T\+I\+O\+N}!N\+C\+M.\+h@{N\+C\+M.\+h}}
+\subsubsection[{P\+E\+R\+T\+U\+R\+B\+A\+T\+I\+O\+N}]{\setlength{\rightskip}{0pt plus 5cm}\#define P\+E\+R\+T\+U\+R\+B\+A\+T\+I\+O\+N~1.\+0e-\/9}\label{NCM_8h_a71523ef382aff879e55e53af99ae887a}
+
+
+Definition at line 60 of file N\+C\+M.\+h.
+
+
+
+Referenced by Jacobian\+\_\+matrix().
+
+
+
+\subsection{Function Documentation}
+\hypertarget{NCM_8h_a5a9542fe74f7205e7b99b4a0b08305bb}{}\index{N\+C\+M.\+h@{N\+C\+M.\+h}!Correlation\+\_\+\+Newton@{Correlation\+\_\+\+Newton}}
+\index{Correlation\+\_\+\+Newton@{Correlation\+\_\+\+Newton}!N\+C\+M.\+h@{N\+C\+M.\+h}}
+\subsubsection[{Correlation\+\_\+\+Newton}]{\setlength{\rightskip}{0pt plus 5cm}void Correlation\+\_\+\+Newton (
+\begin{DoxyParamCaption}
+\item[{struct {\bf matrix} $\ast$}]{G, }
+\item[{struct {\bf matrix} $\ast$}]{X, }
+\item[{double $\ast$}]{y}
+\end{DoxyParamCaption}
+)}\label{NCM_8h_a5a9542fe74f7205e7b99b4a0b08305bb}
+
+
+Definition at line 264 of file N\+C\+M.\+h.
+
+
+
+References a, b, c, matrix\+::columns, d, matrix\+::entries, gradient(), norm(), omega\+\_\+mat(), pre\+\_\+cg(), precond\+\_\+matrix(), and matrix\+::rows.
+
+
+
+Referenced by N\+C\+M().
+
+\hypertarget{NCM_8h_af15a746b92f8a980c82fa216ce598faf}{}\index{N\+C\+M.\+h@{N\+C\+M.\+h}!gradient@{gradient}}
+\index{gradient@{gradient}!N\+C\+M.\+h@{N\+C\+M.\+h}}
+\subsubsection[{gradient}]{\setlength{\rightskip}{0pt plus 5cm}void gradient (
+\begin{DoxyParamCaption}
+\item[{double $\ast$}]{y, }
+\item[{double $\ast$}]{lambda, }
+\item[{struct {\bf matrix} $\ast$}]{P, }
+\item[{double $\ast$}]{b0, }
+\item[{double $\ast$}]{f, }
+\item[{double $\ast$}]{Fy}
+\end{DoxyParamCaption}
+)}\label{NCM_8h_af15a746b92f8a980c82fa216ce598faf}
+
+
+Definition at line 692 of file N\+C\+M.\+h.
+
+
+
+References matrix\+::columns, matrix\+::entries, max(), and matrix\+::rows.
+
+
+
+Referenced by Correlation\+\_\+\+Newton(), and rosenbrock\+Test().
+
+\hypertarget{NCM_8h_ab49e47d565b246d2432712f76e49af38}{}\index{N\+C\+M.\+h@{N\+C\+M.\+h}!Jacobian\+\_\+matrix@{Jacobian\+\_\+matrix}}
+\index{Jacobian\+\_\+matrix@{Jacobian\+\_\+matrix}!N\+C\+M.\+h@{N\+C\+M.\+h}}
+\subsubsection[{Jacobian\+\_\+matrix}]{\setlength{\rightskip}{0pt plus 5cm}void Jacobian\+\_\+matrix (
+\begin{DoxyParamCaption}
+\item[{double $\ast$}]{x, }
+\item[{struct {\bf matrix} $\ast$}]{Omega12, }
+\item[{struct {\bf matrix} $\ast$}]{P, }
+\item[{struct {\bf matrix} $\ast$}]{Ax}
+\end{DoxyParamCaption}
+)}\label{NCM_8h_ab49e47d565b246d2432712f76e49af38}
+
+
+Definition at line 747 of file N\+C\+M.\+h.
+
+
+
+References matrix\+::columns, matrix\+::entries, P\+E\+R\+T\+U\+R\+B\+A\+T\+I\+O\+N, and matrix\+::rows.
+
+
+
+Referenced by pre\+\_\+cg().
+
+\hypertarget{NCM_8h_a452d2724d2f82cc2c17f54b388232200}{}\index{N\+C\+M.\+h@{N\+C\+M.\+h}!max@{max}}
+\index{max@{max}!N\+C\+M.\+h@{N\+C\+M.\+h}}
+\subsubsection[{max}]{\setlength{\rightskip}{0pt plus 5cm}double max (
+\begin{DoxyParamCaption}
+\item[{double}]{a, }
+\item[{double}]{b}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{NCM_8h_a452d2724d2f82cc2c17f54b388232200}
+
+
+Definition at line 156 of file N\+C\+M.\+h.
+
+
+
+Referenced by gradient().
+
+\hypertarget{NCM_8h_a37b2e3f4ef3249f72dbd88dc0741389b}{}\index{N\+C\+M.\+h@{N\+C\+M.\+h}!N\+C\+M@{N\+C\+M}}
+\index{N\+C\+M@{N\+C\+M}!N\+C\+M.\+h@{N\+C\+M.\+h}}
+\subsubsection[{N\+C\+M}]{\setlength{\rightskip}{0pt plus 5cm}void N\+C\+M (
+\begin{DoxyParamCaption}
+\item[{{\bf Matrix}$<$ double $>$ $\ast$}]{m}
+\end{DoxyParamCaption}
+)}\label{NCM_8h_a37b2e3f4ef3249f72dbd88dc0741389b}
+
+
+Definition at line 134 of file N\+C\+M.\+h.
+
+
+
+References matrix\+::columns, Correlation\+\_\+\+Newton(), matrix\+::entries, Matrix$<$ T $>$\+::n\+C(), Matrix$<$ T $>$\+::n\+R(), and matrix\+::rows.
+
+\hypertarget{NCM_8h_aaec27bdb63d09db13a7f094c45583a5e}{}\index{N\+C\+M.\+h@{N\+C\+M.\+h}!norm@{norm}}
+\index{norm@{norm}!N\+C\+M.\+h@{N\+C\+M.\+h}}
+\subsubsection[{norm}]{\setlength{\rightskip}{0pt plus 5cm}double norm (
+\begin{DoxyParamCaption}
+\item[{double $\ast$}]{a, }
+\item[{int}]{n}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{NCM_8h_aaec27bdb63d09db13a7f094c45583a5e}
+
+
+Definition at line 157 of file N\+C\+M.\+h.
+
+
+
+Referenced by Correlation\+\_\+\+Newton(), and pre\+\_\+cg().
+
+\hypertarget{NCM_8h_ae98aa85810636fde702f2c4946a9f6aa}{}\index{N\+C\+M.\+h@{N\+C\+M.\+h}!omega\+\_\+mat@{omega\+\_\+mat}}
+\index{omega\+\_\+mat@{omega\+\_\+mat}!N\+C\+M.\+h@{N\+C\+M.\+h}}
+\subsubsection[{omega\+\_\+mat}]{\setlength{\rightskip}{0pt plus 5cm}void omega\+\_\+mat (
+\begin{DoxyParamCaption}
+\item[{double $\ast$}]{lambda, }
+\item[{int}]{n, }
+\item[{struct {\bf matrix} $\ast$}]{Omega12}
+\end{DoxyParamCaption}
+)}\label{NCM_8h_ae98aa85810636fde702f2c4946a9f6aa}
+
+
+Definition at line 716 of file N\+C\+M.\+h.
+
+
+
+References matrix\+::columns, matrix\+::entries, and matrix\+::rows.
+
+
+
+Referenced by Correlation\+\_\+\+Newton().
+
+\hypertarget{NCM_8h_a5e4208de1502953c211d696ff84405fd}{}\index{N\+C\+M.\+h@{N\+C\+M.\+h}!pre\+\_\+cg@{pre\+\_\+cg}}
+\index{pre\+\_\+cg@{pre\+\_\+cg}!N\+C\+M.\+h@{N\+C\+M.\+h}}
+\subsubsection[{pre\+\_\+cg}]{\setlength{\rightskip}{0pt plus 5cm}void pre\+\_\+cg (
+\begin{DoxyParamCaption}
+\item[{double $\ast$}]{b, }
+\item[{double}]{tol, }
+\item[{int}]{maxit, }
+\item[{double $\ast$}]{c, }
+\item[{struct {\bf matrix} $\ast$}]{Omega12, }
+\item[{struct {\bf matrix} $\ast$}]{P, }
+\item[{double $\ast$}]{p, }
+\item[{int $\ast$}]{flag, }
+\item[{double $\ast$}]{relres, }
+\item[{int $\ast$}]{iterk}
+\end{DoxyParamCaption}
+)}\label{NCM_8h_a5e4208de1502953c211d696ff84405fd}
+
+
+Definition at line 175 of file N\+C\+M.\+h.
+
+
+
+References matrix\+::columns, d, matrix\+::entries, Jacobian\+\_\+matrix(), norm(), and matrix\+::rows.
+
+
+
+Referenced by Correlation\+\_\+\+Newton().
+
+\hypertarget{NCM_8h_af2244d5b22391018b7ff49a0f6aea175}{}\index{N\+C\+M.\+h@{N\+C\+M.\+h}!precond\+\_\+matrix@{precond\+\_\+matrix}}
+\index{precond\+\_\+matrix@{precond\+\_\+matrix}!N\+C\+M.\+h@{N\+C\+M.\+h}}
+\subsubsection[{precond\+\_\+matrix}]{\setlength{\rightskip}{0pt plus 5cm}void precond\+\_\+matrix (
+\begin{DoxyParamCaption}
+\item[{struct {\bf matrix} $\ast$}]{Omega12, }
+\item[{struct {\bf matrix} $\ast$}]{P, }
+\item[{double $\ast$}]{c}
+\end{DoxyParamCaption}
+)}\label{NCM_8h_af2244d5b22391018b7ff49a0f6aea175}
+
+
+Definition at line 602 of file N\+C\+M.\+h.
+
+
+
+References matrix\+::columns, matrix\+::entries, and matrix\+::rows.
+
+
+
+Referenced by Correlation\+\_\+\+Newton().
+
+\hypertarget{NCM_8h_ad016d6b9b5bff2dd9d90fca988f61648}{}\index{N\+C\+M.\+h@{N\+C\+M.\+h}!print\+Matrix@{print\+Matrix}}
+\index{print\+Matrix@{print\+Matrix}!N\+C\+M.\+h@{N\+C\+M.\+h}}
+\subsubsection[{print\+Matrix}]{\setlength{\rightskip}{0pt plus 5cm}void print\+Matrix (
+\begin{DoxyParamCaption}
+\item[{struct {\bf matrix} $\ast$}]{M}
+\end{DoxyParamCaption}
+)}\label{NCM_8h_ad016d6b9b5bff2dd9d90fca988f61648}
+
+
+Definition at line 165 of file N\+C\+M.\+h.
+
+
+
+References matrix\+::columns, matrix\+::entries, and matrix\+::rows.
+

@@ -1,0 +1,337 @@
+\hypertarget{classPatternMatrix}{}\section{Pattern\+Matrix Class Reference}
+\label{classPatternMatrix}\index{Pattern\+Matrix@{Pattern\+Matrix}}
+
+
+Class for holding binary matrices in the array of patterns of bitsets form.  
+
+
+
+
+{\ttfamily \#include $<$Pattern\+Matrix.\+h$>$}
+
+Inheritance diagram for Pattern\+Matrix\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classPatternMatrix}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classPatternMatrix_aaaf6e5d86e4d5fd0bbc907f5c445f1d7}{Pattern\+Matrix} ()
+\item 
+void \hyperlink{classPatternMatrix_a636096859a24b38dd40623e581bcb460}{reset\+Iterator} ()
+\begin{DoxyCompactList}\small\item\em use this when reading in order \end{DoxyCompactList}\item 
+bool \hyperlink{classPatternMatrix_ae005cb9835142294ed5cbad3c9ab6a0f}{check\+End} ()
+\item 
+void \hyperlink{classPatternMatrix_a6b6ba61b62f8bfdba73531d47c64564b}{iterate} ()
+\item 
+void \hyperlink{classPatternMatrix_a45439edd37b28bf95db6834109a6b73b}{values} ()
+\item 
+boost\+::dynamic\+\_\+bitset \hyperlink{classPatternMatrix_a0b425a01da86b03bb6391048249865a6}{get\+Current\+Bit\+Set} ()
+\item 
+long int \hyperlink{classPatternMatrix_ac5daa989c86d2120ea02fcf9453aadce}{get\+Current\+Frequency} ()
+\item 
+void \hyperlink{classPatternMatrix_a5d119f21c186839184ada1bd9ac45014}{push} (boost\+::dynamic\+\_\+bitset$<$$>$)
+\item 
+void \hyperlink{classPatternMatrix_a726e8b1896020d5ae830e5b95ce2bb5e}{push} (boost\+::dynamic\+\_\+bitset$<$$>$, int)
+\begin{DoxyCompactList}\small\item\em Use this to fill the pattern matrix. \end{DoxyCompactList}\item 
+void \hyperlink{classPatternMatrix_a6277b0638d14a5f6e102f4579ad1db67}{flush} ()
+\begin{DoxyCompactList}\small\item\em Use this to fill the pattern matrix many times with a pattern. \end{DoxyCompactList}\item 
+long int \& \hyperlink{classPatternMatrix_a31abaeb56d1657aa8e239de985a1116f}{operator()} (boost\+::dynamic\+\_\+bitset$<$$>$)
+\begin{DoxyCompactList}\small\item\em Use this to clean matrix. \end{DoxyCompactList}\item 
+int \hyperlink{classPatternMatrix_adaa3ade657d4ed832a359be5954d842b}{count\+Items} () const 
+\begin{DoxyCompactList}\small\item\em \hyperlink{classOutput}{Output} operator. \end{DoxyCompactList}\item 
+int \hyperlink{classPatternMatrix_afd88d101ed9a74ed78c94e3eb024e448}{count\+Individuals} () const 
+\item 
+virtual \hyperlink{classPatternMatrix_aab32c312ea578979efcb806a43a2aed3}{$\sim$\+Pattern\+Matrix} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::map$<$ boost\+::dynamic\+\_\+bitset$<$$>$, long int $>$\+::const\+\_\+iterator \hyperlink{classPatternMatrix_a1f6b06290090ad0e891397e71b9a684e}{iterator}
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+map$<$ boost\+::dynamic\+\_\+bitset$<$$>$, long int $>$ \hyperlink{classPatternMatrix_a76f1df5cd70ae108794659aaf5c79ffc}{matrix}
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+std\+::ostream \& \hyperlink{classPatternMatrix_a5afc4c77278cbd8308d593c9e4425a7d}{operator$<$$<$} (std\+::ostream \&, \hyperlink{classPatternMatrix}{Pattern\+Matrix} \&)
+\begin{DoxyCompactList}\small\item\em Use this to access a specific pattern frecuency and modify it. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Class for holding binary matrices in the array of patterns of bitsets form. 
+
+Definition at line 20 of file Pattern\+Matrix.\+h.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classPatternMatrix_aaaf6e5d86e4d5fd0bbc907f5c445f1d7}{}\index{Pattern\+Matrix@{Pattern\+Matrix}!Pattern\+Matrix@{Pattern\+Matrix}}
+\index{Pattern\+Matrix@{Pattern\+Matrix}!Pattern\+Matrix@{Pattern\+Matrix}}
+\subsubsection[{Pattern\+Matrix}]{\setlength{\rightskip}{0pt plus 5cm}Pattern\+Matrix\+::\+Pattern\+Matrix (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classPatternMatrix_aaaf6e5d86e4d5fd0bbc907f5c445f1d7}
+
+
+Definition at line 10 of file Pattern\+Matrix.\+cpp.
+
+\hypertarget{classPatternMatrix_aab32c312ea578979efcb806a43a2aed3}{}\index{Pattern\+Matrix@{Pattern\+Matrix}!````~Pattern\+Matrix@{$\sim$\+Pattern\+Matrix}}
+\index{````~Pattern\+Matrix@{$\sim$\+Pattern\+Matrix}!Pattern\+Matrix@{Pattern\+Matrix}}
+\subsubsection[{$\sim$\+Pattern\+Matrix}]{\setlength{\rightskip}{0pt plus 5cm}Pattern\+Matrix\+::$\sim$\+Pattern\+Matrix (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\label{classPatternMatrix_aab32c312ea578979efcb806a43a2aed3}
+
+
+Definition at line 32 of file Pattern\+Matrix.\+cpp.
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classPatternMatrix_ae005cb9835142294ed5cbad3c9ab6a0f}{}\index{Pattern\+Matrix@{Pattern\+Matrix}!check\+End@{check\+End}}
+\index{check\+End@{check\+End}!Pattern\+Matrix@{Pattern\+Matrix}}
+\subsubsection[{check\+End}]{\setlength{\rightskip}{0pt plus 5cm}bool Pattern\+Matrix\+::check\+End (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classPatternMatrix_ae005cb9835142294ed5cbad3c9ab6a0f}
+
+
+Definition at line 32 of file Pattern\+Matrix.\+h.
+
+
+
+Referenced by E\+M\+Estimation\+::step\+E().
+
+\hypertarget{classPatternMatrix_afd88d101ed9a74ed78c94e3eb024e448}{}\index{Pattern\+Matrix@{Pattern\+Matrix}!count\+Individuals@{count\+Individuals}}
+\index{count\+Individuals@{count\+Individuals}!Pattern\+Matrix@{Pattern\+Matrix}}
+\subsubsection[{count\+Individuals}]{\setlength{\rightskip}{0pt plus 5cm}int Pattern\+Matrix\+::count\+Individuals (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [virtual]}}\label{classPatternMatrix_afd88d101ed9a74ed78c94e3eb024e448}
+
+
+Implements \hyperlink{classDataSet_a0514da0d8d87fc9503458b3c11978e67}{Data\+Set}.
+
+
+
+Definition at line 20 of file Pattern\+Matrix.\+cpp.
+
+\hypertarget{classPatternMatrix_adaa3ade657d4ed832a359be5954d842b}{}\index{Pattern\+Matrix@{Pattern\+Matrix}!count\+Items@{count\+Items}}
+\index{count\+Items@{count\+Items}!Pattern\+Matrix@{Pattern\+Matrix}}
+\subsubsection[{count\+Items}]{\setlength{\rightskip}{0pt plus 5cm}int Pattern\+Matrix\+::count\+Items (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [virtual]}}\label{classPatternMatrix_adaa3ade657d4ed832a359be5954d842b}
+
+
+\hyperlink{classOutput}{Output} operator. 
+
+
+
+Implements \hyperlink{classDataSet_acbd07a4d4acc27332ec4f323e600885a}{Data\+Set}.
+
+
+
+Definition at line 15 of file Pattern\+Matrix.\+cpp.
+
+
+
+Referenced by Dichotomous\+Model\+::count\+Items(), and E\+M\+Estimation\+::step\+E().
+
+\hypertarget{classPatternMatrix_a6277b0638d14a5f6e102f4579ad1db67}{}\index{Pattern\+Matrix@{Pattern\+Matrix}!flush@{flush}}
+\index{flush@{flush}!Pattern\+Matrix@{Pattern\+Matrix}}
+\subsubsection[{flush}]{\setlength{\rightskip}{0pt plus 5cm}void Pattern\+Matrix\+::flush (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classPatternMatrix_a6277b0638d14a5f6e102f4579ad1db67}
+
+
+Use this to fill the pattern matrix many times with a pattern. 
+
+
+
+Definition at line 44 of file Pattern\+Matrix.\+cpp.
+
+\hypertarget{classPatternMatrix_a0b425a01da86b03bb6391048249865a6}{}\index{Pattern\+Matrix@{Pattern\+Matrix}!get\+Current\+Bit\+Set@{get\+Current\+Bit\+Set}}
+\index{get\+Current\+Bit\+Set@{get\+Current\+Bit\+Set}!Pattern\+Matrix@{Pattern\+Matrix}}
+\subsubsection[{get\+Current\+Bit\+Set}]{\setlength{\rightskip}{0pt plus 5cm}boost\+::dynamic\+\_\+bitset Pattern\+Matrix\+::get\+Current\+Bit\+Set (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classPatternMatrix_a0b425a01da86b03bb6391048249865a6}
+
+
+Definition at line 35 of file Pattern\+Matrix.\+h.
+
+
+
+Referenced by E\+M\+Estimation\+::step\+E().
+
+\hypertarget{classPatternMatrix_ac5daa989c86d2120ea02fcf9453aadce}{}\index{Pattern\+Matrix@{Pattern\+Matrix}!get\+Current\+Frequency@{get\+Current\+Frequency}}
+\index{get\+Current\+Frequency@{get\+Current\+Frequency}!Pattern\+Matrix@{Pattern\+Matrix}}
+\subsubsection[{get\+Current\+Frequency}]{\setlength{\rightskip}{0pt plus 5cm}long int Pattern\+Matrix\+::get\+Current\+Frequency (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classPatternMatrix_ac5daa989c86d2120ea02fcf9453aadce}
+
+
+Definition at line 36 of file Pattern\+Matrix.\+h.
+
+
+
+Referenced by E\+M\+Estimation\+::step\+E().
+
+\hypertarget{classPatternMatrix_a6b6ba61b62f8bfdba73531d47c64564b}{}\index{Pattern\+Matrix@{Pattern\+Matrix}!iterate@{iterate}}
+\index{iterate@{iterate}!Pattern\+Matrix@{Pattern\+Matrix}}
+\subsubsection[{iterate}]{\setlength{\rightskip}{0pt plus 5cm}void Pattern\+Matrix\+::iterate (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classPatternMatrix_a6b6ba61b62f8bfdba73531d47c64564b}
+
+
+Definition at line 33 of file Pattern\+Matrix.\+h.
+
+
+
+Referenced by E\+M\+Estimation\+::step\+E().
+
+\hypertarget{classPatternMatrix_a31abaeb56d1657aa8e239de985a1116f}{}\index{Pattern\+Matrix@{Pattern\+Matrix}!operator()@{operator()}}
+\index{operator()@{operator()}!Pattern\+Matrix@{Pattern\+Matrix}}
+\subsubsection[{operator()}]{\setlength{\rightskip}{0pt plus 5cm}long int \& Pattern\+Matrix\+::operator() (
+\begin{DoxyParamCaption}
+\item[{boost\+::dynamic\+\_\+bitset$<$$>$}]{n}
+\end{DoxyParamCaption}
+)}\label{classPatternMatrix_a31abaeb56d1657aa8e239de985a1116f}
+
+
+Use this to clean matrix. 
+
+
+
+Definition at line 48 of file Pattern\+Matrix.\+cpp.
+
+\hypertarget{classPatternMatrix_a5d119f21c186839184ada1bd9ac45014}{}\index{Pattern\+Matrix@{Pattern\+Matrix}!push@{push}}
+\index{push@{push}!Pattern\+Matrix@{Pattern\+Matrix}}
+\subsubsection[{push}]{\setlength{\rightskip}{0pt plus 5cm}void Pattern\+Matrix\+::push (
+\begin{DoxyParamCaption}
+\item[{boost\+::dynamic\+\_\+bitset$<$$>$}]{n}
+\end{DoxyParamCaption}
+)}\label{classPatternMatrix_a5d119f21c186839184ada1bd9ac45014}
+
+
+Definition at line 36 of file Pattern\+Matrix.\+cpp.
+
+
+
+Referenced by Input\+::import\+C\+S\+V().
+
+\hypertarget{classPatternMatrix_a726e8b1896020d5ae830e5b95ce2bb5e}{}\index{Pattern\+Matrix@{Pattern\+Matrix}!push@{push}}
+\index{push@{push}!Pattern\+Matrix@{Pattern\+Matrix}}
+\subsubsection[{push}]{\setlength{\rightskip}{0pt plus 5cm}void Pattern\+Matrix\+::push (
+\begin{DoxyParamCaption}
+\item[{boost\+::dynamic\+\_\+bitset$<$$>$}]{n, }
+\item[{int}]{k}
+\end{DoxyParamCaption}
+)}\label{classPatternMatrix_a726e8b1896020d5ae830e5b95ce2bb5e}
+
+
+Use this to fill the pattern matrix. 
+
+
+
+Definition at line 40 of file Pattern\+Matrix.\+cpp.
+
+\hypertarget{classPatternMatrix_a636096859a24b38dd40623e581bcb460}{}\index{Pattern\+Matrix@{Pattern\+Matrix}!reset\+Iterator@{reset\+Iterator}}
+\index{reset\+Iterator@{reset\+Iterator}!Pattern\+Matrix@{Pattern\+Matrix}}
+\subsubsection[{reset\+Iterator}]{\setlength{\rightskip}{0pt plus 5cm}void Pattern\+Matrix\+::reset\+Iterator (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classPatternMatrix_a636096859a24b38dd40623e581bcb460}
+
+
+use this when reading in order 
+
+
+
+Definition at line 31 of file Pattern\+Matrix.\+h.
+
+
+
+Referenced by E\+M\+Estimation\+::step\+E().
+
+\hypertarget{classPatternMatrix_a45439edd37b28bf95db6834109a6b73b}{}\index{Pattern\+Matrix@{Pattern\+Matrix}!values@{values}}
+\index{values@{values}!Pattern\+Matrix@{Pattern\+Matrix}}
+\subsubsection[{values}]{\setlength{\rightskip}{0pt plus 5cm}void Pattern\+Matrix\+::values (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classPatternMatrix_a45439edd37b28bf95db6834109a6b73b}
+
+
+Definition at line 34 of file Pattern\+Matrix.\+h.
+
+
+
+\subsection{Friends And Related Function Documentation}
+\hypertarget{classPatternMatrix_a5afc4c77278cbd8308d593c9e4425a7d}{}\index{Pattern\+Matrix@{Pattern\+Matrix}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!Pattern\+Matrix@{Pattern\+Matrix}}
+\subsubsection[{operator$<$$<$}]{\setlength{\rightskip}{0pt plus 5cm}std\+::ostream\& operator$<$$<$ (
+\begin{DoxyParamCaption}
+\item[{std\+::ostream \&}]{out, }
+\item[{{\bf Pattern\+Matrix} \&}]{pm}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [friend]}}\label{classPatternMatrix_a5afc4c77278cbd8308d593c9e4425a7d}
+
+
+Use this to access a specific pattern frecuency and modify it. 
+
+
+
+Definition at line 52 of file Pattern\+Matrix.\+cpp.
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classPatternMatrix_a1f6b06290090ad0e891397e71b9a684e}{}\index{Pattern\+Matrix@{Pattern\+Matrix}!iterator@{iterator}}
+\index{iterator@{iterator}!Pattern\+Matrix@{Pattern\+Matrix}}
+\subsubsection[{iterator}]{\setlength{\rightskip}{0pt plus 5cm}std\+::map$<$boost\+::dynamic\+\_\+bitset$<$$>$, long int$>$\+::const\+\_\+iterator Pattern\+Matrix\+::iterator}\label{classPatternMatrix_a1f6b06290090ad0e891397e71b9a684e}
+
+
+Definition at line 30 of file Pattern\+Matrix.\+h.
+
+
+
+Referenced by operator$<$$<$().
+
+\hypertarget{classPatternMatrix_a76f1df5cd70ae108794659aaf5c79ffc}{}\index{Pattern\+Matrix@{Pattern\+Matrix}!matrix@{matrix}}
+\index{matrix@{matrix}!Pattern\+Matrix@{Pattern\+Matrix}}
+\subsubsection[{matrix}]{\setlength{\rightskip}{0pt plus 5cm}map$<$boost\+::dynamic\+\_\+bitset$<$$>$, long int$>$ Pattern\+Matrix\+::matrix\hspace{0.3cm}{\ttfamily [private]}}\label{classPatternMatrix_a76f1df5cd70ae108794659aaf5c79ffc}
+
+
+Definition at line 23 of file Pattern\+Matrix.\+h.
+
+
+
+Referenced by operator$<$$<$().
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/type/\hyperlink{PatternMatrix_8h}{Pattern\+Matrix.\+h}\item 
+src/type/\hyperlink{PatternMatrix_8cpp}{Pattern\+Matrix.\+cpp}\end{DoxyCompactItemize}

@@ -1,0 +1,69 @@
+\hypertarget{classOptimizer}{}\section{Optimizer Class Reference}
+\label{classOptimizer}\index{Optimizer@{Optimizer}}
+
+
+Wrapper fot the other optimizers, take general functions for the function to optimize, the vector gradient function and the matrix hessian function The parameters are \+: double $\ast$ args (Arguments over which the function optimizes) double $\ast$ pars (Arguments in whose the function depends but are not optimized) int nargs Number of arguments int npars Number of parameters double $\ast$ return (Return of the function is put in this array.)  
+
+
+
+
+{\ttfamily \#include $<$Optimizer.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classOptimizer_ab3c54cfddcd5e97c1dae4cc6bd4e4e92}{search\+Optimal} (double($\ast$function\+Ptr)(double $\ast$, double $\ast$, int, int), void($\ast$gradient\+Ptr)(double $\ast$, double $\ast$, int, int, double $\ast$), void($\ast$Hessian\+Ptr)(double $\ast$, double $\ast$, int, int, double $\ast$), double $\ast$args, double $\ast$pars, int nargs, int npars)
+\item 
+\hyperlink{classOptimizer_ab01202385afea2f09afbd73227736a17}{$\sim$\+Optimizer} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Wrapper fot the other optimizers, take general functions for the function to optimize, the vector gradient function and the matrix hessian function The parameters are \+: double $\ast$ args (Arguments over which the function optimizes) double $\ast$ pars (Arguments in whose the function depends but are not optimized) int nargs Number of arguments int npars Number of parameters double $\ast$ return (Return of the function is put in this array.) 
+
+Definition at line 24 of file Optimizer.\+h.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classOptimizer_ab01202385afea2f09afbd73227736a17}{}\index{Optimizer@{Optimizer}!````~Optimizer@{$\sim$\+Optimizer}}
+\index{````~Optimizer@{$\sim$\+Optimizer}!Optimizer@{Optimizer}}
+\subsubsection[{$\sim$\+Optimizer}]{\setlength{\rightskip}{0pt plus 5cm}Optimizer\+::$\sim$\+Optimizer (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classOptimizer_ab01202385afea2f09afbd73227736a17}
+
+
+Definition at line 12 of file Optimizer.\+cpp.
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classOptimizer_ab3c54cfddcd5e97c1dae4cc6bd4e4e92}{}\index{Optimizer@{Optimizer}!search\+Optimal@{search\+Optimal}}
+\index{search\+Optimal@{search\+Optimal}!Optimizer@{Optimizer}}
+\subsubsection[{search\+Optimal}]{\setlength{\rightskip}{0pt plus 5cm}void Optimizer\+::search\+Optimal (
+\begin{DoxyParamCaption}
+\item[{double($\ast$)(double $\ast$, double $\ast$, int, int)}]{function\+Ptr, }
+\item[{void($\ast$)(double $\ast$, double $\ast$, int, int, double $\ast$)}]{gradient\+Ptr, }
+\item[{void($\ast$)(double $\ast$, double $\ast$, int, int, double $\ast$)}]{Hessian\+Ptr, }
+\item[{double $\ast$}]{args, }
+\item[{double $\ast$}]{pars, }
+\item[{int}]{nargs, }
+\item[{int}]{npars}
+\end{DoxyParamCaption}
+)}\label{classOptimizer_ab3c54cfddcd5e97c1dae4cc6bd4e4e92}
+
+
+Definition at line 3 of file Optimizer.\+cpp.
+
+
+
+Referenced by rosenbrock\+Test(), and E\+M\+Estimation\+::step\+M().
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/optimizer/\hyperlink{Optimizer_8h}{Optimizer.\+h}\item 
+src/optimizer/\hyperlink{Optimizer_8cpp}{Optimizer.\+cpp}\end{DoxyCompactItemize}

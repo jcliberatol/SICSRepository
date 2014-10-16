@@ -1,0 +1,285 @@
+\hypertarget{classModel}{}\section{Model Class Reference}
+\label{classModel}\index{Model@{Model}}
+
+
+\hyperlink{classModel}{Model} class that holds the structures for the I\+R\+T models can vary across parameters, items and dimensions includes suport for dichotomic and polytomic models multidimensional and singledimensional models future suport for multiscale and longitudinal models can be implemented.  
+
+
+
+
+{\ttfamily \#include $<$Model.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classModel_ae3b375de5f6df4faf74a95d64748e048}{Model} ()
+\item 
+void \hyperlink{classModel_ae45902b145dcab45eaa0809b67aa0ac8}{set\+Model} (\hyperlink{classModelFactory}{Model\+Factory} $\ast$)
+\item 
+void \hyperlink{classModel_ab6469058eb7c0bf5e14e5d5f2020c0bc}{success\+Probability} ()
+\item 
+void \hyperlink{classModel_a82cf0120ed0dd2fc0d5637ca93d63f48}{build\+Parameter\+Set} ()
+\item 
+\hyperlink{classDimensionModel}{Dimension\+Model} $\ast$ \hyperlink{classModel_a19bf0ae24a594e5140fd4a765f951299}{get\+Dimension\+Model} ()
+\item 
+void \hyperlink{classModel_adb63357558444e8acaefef6f4b5103f7}{set\+Dimension\+Model} (\hyperlink{classDimensionModel}{Dimension\+Model} $\ast$\hyperlink{classModel_aee1e88d3aaf63a2fce339425bbc3be88}{dimension\+Model})
+\item 
+\hyperlink{classItemModel}{Item\+Model} $\ast$ \hyperlink{classModel_a378677890d8c2ef90efa88a4aa08555e}{get\+Item\+Model} ()
+\item 
+void \hyperlink{classModel_a9a207633c4de3b0a84421023a5af4568}{set\+Item\+Model} (\hyperlink{classItemModel}{Item\+Model} $\ast$\hyperlink{classModel_aabd14d0c1c8d0c9f20df59d9ecf05e9f}{item\+Model})
+\item 
+\hyperlink{classParameterModel}{Parameter\+Model} $\ast$ \hyperlink{classModel_a73fa05b38e29e6ec766ec1ddc6af99e4}{get\+Parameter\+Model} ()
+\item 
+void \hyperlink{classModel_a817f599d0318ac1f4752f49eb5f8e909}{set\+Parameter\+Model} (\hyperlink{classParameterModel}{Parameter\+Model} $\ast$\hyperlink{classModel_a169a32617c83dcbbc03512b9eb7f04fb}{parameter\+Model})
+\item 
+virtual \hyperlink{classModel_ad6ebd2062a0b823db841a0b88baac4c0}{$\sim$\+Model} ()
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classParameterModel}{Parameter\+Model} $\ast$ \hyperlink{classModel_a169a32617c83dcbbc03512b9eb7f04fb}{parameter\+Model}
+\item 
+\hyperlink{classItemModel}{Item\+Model} $\ast$ \hyperlink{classModel_aabd14d0c1c8d0c9f20df59d9ecf05e9f}{item\+Model}
+\item 
+\hyperlink{classDimensionModel}{Dimension\+Model} $\ast$ \hyperlink{classModel_aee1e88d3aaf63a2fce339425bbc3be88}{dimension\+Model}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{classModel}{Model} class that holds the structures for the I\+R\+T models can vary across parameters, items and dimensions includes suport for dichotomic and polytomic models multidimensional and singledimensional models future suport for multiscale and longitudinal models can be implemented. 
+
+Definition at line 22 of file Model.\+h.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classModel_ae3b375de5f6df4faf74a95d64748e048}{}\index{Model@{Model}!Model@{Model}}
+\index{Model@{Model}!Model@{Model}}
+\subsubsection[{Model}]{\setlength{\rightskip}{0pt plus 5cm}Model\+::\+Model (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classModel_ae3b375de5f6df4faf74a95d64748e048}
+
+
+Definition at line 10 of file Model.\+cpp.
+
+
+
+References dimension\+Model, item\+Model, and parameter\+Model.
+
+\hypertarget{classModel_ad6ebd2062a0b823db841a0b88baac4c0}{}\index{Model@{Model}!````~Model@{$\sim$\+Model}}
+\index{````~Model@{$\sim$\+Model}!Model@{Model}}
+\subsubsection[{$\sim$\+Model}]{\setlength{\rightskip}{0pt plus 5cm}Model\+::$\sim$\+Model (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\label{classModel_ad6ebd2062a0b823db841a0b88baac4c0}
+
+
+Definition at line 22 of file Model.\+cpp.
+
+
+
+References dimension\+Model, item\+Model, and parameter\+Model.
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classModel_a82cf0120ed0dd2fc0d5637ca93d63f48}{}\index{Model@{Model}!build\+Parameter\+Set@{build\+Parameter\+Set}}
+\index{build\+Parameter\+Set@{build\+Parameter\+Set}!Model@{Model}}
+\subsubsection[{build\+Parameter\+Set}]{\setlength{\rightskip}{0pt plus 5cm}void Model\+::build\+Parameter\+Set (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classModel_a82cf0120ed0dd2fc0d5637ca93d63f48}
+
+
+Definition at line 55 of file Model.\+cpp.
+
+
+
+References Parameter\+Model\+::build\+Parameter\+Set(), dimension\+Model, item\+Model, and parameter\+Model.
+
+\hypertarget{classModel_a19bf0ae24a594e5140fd4a765f951299}{}\index{Model@{Model}!get\+Dimension\+Model@{get\+Dimension\+Model}}
+\index{get\+Dimension\+Model@{get\+Dimension\+Model}!Model@{Model}}
+\subsubsection[{get\+Dimension\+Model}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Dimension\+Model} $\ast$ Model\+::get\+Dimension\+Model (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classModel_a19bf0ae24a594e5140fd4a765f951299}
+
+
+Definition at line 27 of file Model.\+cpp.
+
+
+
+References dimension\+Model.
+
+
+
+Referenced by one\+Run(), E\+M\+Estimation\+::set\+Model(), E\+M\+Estimation\+::step\+E(), and E\+M\+Estimation\+::step\+M().
+
+\hypertarget{classModel_a378677890d8c2ef90efa88a4aa08555e}{}\index{Model@{Model}!get\+Item\+Model@{get\+Item\+Model}}
+\index{get\+Item\+Model@{get\+Item\+Model}!Model@{Model}}
+\subsubsection[{get\+Item\+Model}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Item\+Model} $\ast$ Model\+::get\+Item\+Model (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classModel_a378677890d8c2ef90efa88a4aa08555e}
+
+
+Definition at line 35 of file Model.\+cpp.
+
+
+
+References item\+Model.
+
+
+
+Referenced by E\+M\+Estimation\+::estimate(), one\+Run(), E\+M\+Estimation\+::set\+Model(), E\+M\+Estimation\+::step\+E(), and E\+M\+Estimation\+::step\+M().
+
+\hypertarget{classModel_a73fa05b38e29e6ec766ec1ddc6af99e4}{}\index{Model@{Model}!get\+Parameter\+Model@{get\+Parameter\+Model}}
+\index{get\+Parameter\+Model@{get\+Parameter\+Model}!Model@{Model}}
+\subsubsection[{get\+Parameter\+Model}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Parameter\+Model} $\ast$ Model\+::get\+Parameter\+Model (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classModel_a73fa05b38e29e6ec766ec1ddc6af99e4}
+
+
+Definition at line 43 of file Model.\+cpp.
+
+
+
+References parameter\+Model.
+
+
+
+Referenced by E\+M\+Estimation\+::estimate(), one\+Run(), E\+M\+Estimation\+::set\+Initial\+Values(), E\+M\+Estimation\+::step\+E(), and E\+M\+Estimation\+::step\+M().
+
+\hypertarget{classModel_adb63357558444e8acaefef6f4b5103f7}{}\index{Model@{Model}!set\+Dimension\+Model@{set\+Dimension\+Model}}
+\index{set\+Dimension\+Model@{set\+Dimension\+Model}!Model@{Model}}
+\subsubsection[{set\+Dimension\+Model}]{\setlength{\rightskip}{0pt plus 5cm}void Model\+::set\+Dimension\+Model (
+\begin{DoxyParamCaption}
+\item[{{\bf Dimension\+Model} $\ast$}]{dimension\+Model}
+\end{DoxyParamCaption}
+)}\label{classModel_adb63357558444e8acaefef6f4b5103f7}
+
+
+Definition at line 31 of file Model.\+cpp.
+
+
+
+References dimension\+Model.
+
+\hypertarget{classModel_a9a207633c4de3b0a84421023a5af4568}{}\index{Model@{Model}!set\+Item\+Model@{set\+Item\+Model}}
+\index{set\+Item\+Model@{set\+Item\+Model}!Model@{Model}}
+\subsubsection[{set\+Item\+Model}]{\setlength{\rightskip}{0pt plus 5cm}void Model\+::set\+Item\+Model (
+\begin{DoxyParamCaption}
+\item[{{\bf Item\+Model} $\ast$}]{item\+Model}
+\end{DoxyParamCaption}
+)}\label{classModel_a9a207633c4de3b0a84421023a5af4568}
+
+
+Definition at line 39 of file Model.\+cpp.
+
+
+
+References item\+Model.
+
+\hypertarget{classModel_ae45902b145dcab45eaa0809b67aa0ac8}{}\index{Model@{Model}!set\+Model@{set\+Model}}
+\index{set\+Model@{set\+Model}!Model@{Model}}
+\subsubsection[{set\+Model}]{\setlength{\rightskip}{0pt plus 5cm}void Model\+::set\+Model (
+\begin{DoxyParamCaption}
+\item[{{\bf Model\+Factory} $\ast$}]{model\+Factory}
+\end{DoxyParamCaption}
+)}\label{classModel_ae45902b145dcab45eaa0809b67aa0ac8}
+
+
+Definition at line 16 of file Model.\+cpp.
+
+
+
+References Model\+Factory\+::create\+Dimension\+Model(), Model\+Factory\+::create\+Item\+Model(), Model\+Factory\+::create\+Parameter\+Model(), dimension\+Model, item\+Model, and parameter\+Model.
+
+
+
+Referenced by one\+Run().
+
+\hypertarget{classModel_a817f599d0318ac1f4752f49eb5f8e909}{}\index{Model@{Model}!set\+Parameter\+Model@{set\+Parameter\+Model}}
+\index{set\+Parameter\+Model@{set\+Parameter\+Model}!Model@{Model}}
+\subsubsection[{set\+Parameter\+Model}]{\setlength{\rightskip}{0pt plus 5cm}void Model\+::set\+Parameter\+Model (
+\begin{DoxyParamCaption}
+\item[{{\bf Parameter\+Model} $\ast$}]{parameter\+Model}
+\end{DoxyParamCaption}
+)}\label{classModel_a817f599d0318ac1f4752f49eb5f8e909}
+
+
+Definition at line 47 of file Model.\+cpp.
+
+
+
+References parameter\+Model.
+
+\hypertarget{classModel_ab6469058eb7c0bf5e14e5d5f2020c0bc}{}\index{Model@{Model}!success\+Probability@{success\+Probability}}
+\index{success\+Probability@{success\+Probability}!Model@{Model}}
+\subsubsection[{success\+Probability}]{\setlength{\rightskip}{0pt plus 5cm}void Model\+::success\+Probability (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classModel_ab6469058eb7c0bf5e14e5d5f2020c0bc}
+
+
+Definition at line 51 of file Model.\+cpp.
+
+
+
+References dimension\+Model, parameter\+Model, and Parameter\+Model\+::success\+Probability().
+
+
+
+Referenced by E\+M\+Estimation\+::step\+E().
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classModel_aee1e88d3aaf63a2fce339425bbc3be88}{}\index{Model@{Model}!dimension\+Model@{dimension\+Model}}
+\index{dimension\+Model@{dimension\+Model}!Model@{Model}}
+\subsubsection[{dimension\+Model}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Dimension\+Model}$\ast$ Model\+::dimension\+Model\hspace{0.3cm}{\ttfamily [private]}}\label{classModel_aee1e88d3aaf63a2fce339425bbc3be88}
+
+
+Definition at line 25 of file Model.\+h.
+
+
+
+Referenced by build\+Parameter\+Set(), get\+Dimension\+Model(), Model(), set\+Dimension\+Model(), set\+Model(), success\+Probability(), and $\sim$\+Model().
+
+\hypertarget{classModel_aabd14d0c1c8d0c9f20df59d9ecf05e9f}{}\index{Model@{Model}!item\+Model@{item\+Model}}
+\index{item\+Model@{item\+Model}!Model@{Model}}
+\subsubsection[{item\+Model}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Item\+Model}$\ast$ Model\+::item\+Model\hspace{0.3cm}{\ttfamily [private]}}\label{classModel_aabd14d0c1c8d0c9f20df59d9ecf05e9f}
+
+
+Definition at line 24 of file Model.\+h.
+
+
+
+Referenced by build\+Parameter\+Set(), get\+Item\+Model(), Model(), set\+Item\+Model(), set\+Model(), and $\sim$\+Model().
+
+\hypertarget{classModel_a169a32617c83dcbbc03512b9eb7f04fb}{}\index{Model@{Model}!parameter\+Model@{parameter\+Model}}
+\index{parameter\+Model@{parameter\+Model}!Model@{Model}}
+\subsubsection[{parameter\+Model}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Parameter\+Model}$\ast$ Model\+::parameter\+Model\hspace{0.3cm}{\ttfamily [private]}}\label{classModel_a169a32617c83dcbbc03512b9eb7f04fb}
+
+
+Definition at line 23 of file Model.\+h.
+
+
+
+Referenced by build\+Parameter\+Set(), get\+Parameter\+Model(), Model(), set\+Model(), set\+Parameter\+Model(), success\+Probability(), and $\sim$\+Model().
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/model/\hyperlink{Model_8h}{Model.\+h}\item 
+src/model/\hyperlink{Model_8cpp}{Model.\+cpp}\end{DoxyCompactItemize}

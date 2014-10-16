@@ -1,0 +1,144 @@
+\hypertarget{classTrace}{}\section{Trace Class Reference}
+\label{classTrace}\index{Trace@{Trace}}
+
+
+\hyperlink{classTrace}{Trace} class for constructing execution and error logs onto files.  
+
+
+
+
+{\ttfamily \#include $<$Trace.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classTrace_ae1caa27c33613b7645a212c31d19bc68}{Trace} (const char $\ast$)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \hyperlink{classTrace_aa5e57544d11f722c5dda3ad9a4da6029}{operator()} (\hyperlink{singletonMatrix}{Matrix}$<$ T $>$ \&)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \hyperlink{classTrace_af4414b9f6dc073e3f1244ac588b70480}{operator()} (T)
+\item 
+virtual \hyperlink{classTrace_a39492ecec74969a4905ec5fcf026dc09}{$\sim$\+Trace} ()
+\item 
+const char $\ast$ \hyperlink{classTrace_afd809a7f04af6e63e65c428409606927}{get\+Filename} () const 
+\item 
+void \hyperlink{classTrace_a4d8dff9586721e94d2bee132b0739a31}{set\+Filename} (const char $\ast$\hyperlink{classTrace_a0d9910fe66882cafb9617563b397a7b4}{filename})
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+const char $\ast$ \hyperlink{classTrace_a0d9910fe66882cafb9617563b397a7b4}{filename}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{classTrace}{Trace} class for constructing execution and error logs onto files. 
+
+Create a trace with a file to trace to that file when logging errors onto a trace the error logs onto the file asociated trace object can take ostreams, so any output class of cpp can output to the trace 
+
+Definition at line 23 of file Trace.\+h.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classTrace_ae1caa27c33613b7645a212c31d19bc68}{}\index{Trace@{Trace}!Trace@{Trace}}
+\index{Trace@{Trace}!Trace@{Trace}}
+\subsubsection[{Trace}]{\setlength{\rightskip}{0pt plus 5cm}Trace\+::\+Trace (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{filename}
+\end{DoxyParamCaption}
+)}\label{classTrace_ae1caa27c33613b7645a212c31d19bc68}
+
+
+Definition at line 10 of file Trace.\+cpp.
+
+
+
+References filename.
+
+\hypertarget{classTrace_a39492ecec74969a4905ec5fcf026dc09}{}\index{Trace@{Trace}!````~Trace@{$\sim$\+Trace}}
+\index{````~Trace@{$\sim$\+Trace}!Trace@{Trace}}
+\subsubsection[{$\sim$\+Trace}]{\setlength{\rightskip}{0pt plus 5cm}Trace\+::$\sim$\+Trace (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\label{classTrace_a39492ecec74969a4905ec5fcf026dc09}
+
+
+Definition at line 17 of file Trace.\+cpp.
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classTrace_afd809a7f04af6e63e65c428409606927}{}\index{Trace@{Trace}!get\+Filename@{get\+Filename}}
+\index{get\+Filename@{get\+Filename}!Trace@{Trace}}
+\subsubsection[{get\+Filename}]{\setlength{\rightskip}{0pt plus 5cm}const char $\ast$ Trace\+::get\+Filename (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}\label{classTrace_afd809a7f04af6e63e65c428409606927}
+
+
+Definition at line 21 of file Trace.\+cpp.
+
+
+
+References filename.
+
+\hypertarget{classTrace_aa5e57544d11f722c5dda3ad9a4da6029}{}\index{Trace@{Trace}!operator()@{operator()}}
+\index{operator()@{operator()}!Trace@{Trace}}
+\subsubsection[{operator()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ void Trace\+::operator() (
+\begin{DoxyParamCaption}
+\item[{{\bf Matrix}$<$ T $>$ \&}]{message}
+\end{DoxyParamCaption}
+)}\label{classTrace_aa5e57544d11f722c5dda3ad9a4da6029}
+
+
+Definition at line 41 of file Trace.\+h.
+
+\hypertarget{classTrace_af4414b9f6dc073e3f1244ac588b70480}{}\index{Trace@{Trace}!operator()@{operator()}}
+\index{operator()@{operator()}!Trace@{Trace}}
+\subsubsection[{operator()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ void Trace\+::operator() (
+\begin{DoxyParamCaption}
+\item[{T}]{message}
+\end{DoxyParamCaption}
+)}\label{classTrace_af4414b9f6dc073e3f1244ac588b70480}
+
+
+Definition at line 52 of file Trace.\+h.
+
+\hypertarget{classTrace_a4d8dff9586721e94d2bee132b0739a31}{}\index{Trace@{Trace}!set\+Filename@{set\+Filename}}
+\index{set\+Filename@{set\+Filename}!Trace@{Trace}}
+\subsubsection[{set\+Filename}]{\setlength{\rightskip}{0pt plus 5cm}void Trace\+::set\+Filename (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{filename}
+\end{DoxyParamCaption}
+)}\label{classTrace_a4d8dff9586721e94d2bee132b0739a31}
+
+
+Definition at line 25 of file Trace.\+cpp.
+
+
+
+References filename.
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classTrace_a0d9910fe66882cafb9617563b397a7b4}{}\index{Trace@{Trace}!filename@{filename}}
+\index{filename@{filename}!Trace@{Trace}}
+\subsubsection[{filename}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ Trace\+::filename\hspace{0.3cm}{\ttfamily [private]}}\label{classTrace_a0d9910fe66882cafb9617563b397a7b4}
+
+
+Definition at line 24 of file Trace.\+h.
+
+
+
+Referenced by get\+Filename(), set\+Filename(), and Trace().
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/trace/\hyperlink{Trace_8h}{Trace.\+h}\item 
+src/trace/\hyperlink{Trace_8cpp}{Trace.\+cpp}\end{DoxyCompactItemize}

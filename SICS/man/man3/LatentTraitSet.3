@@ -1,0 +1,111 @@
+.TH "LatentTraitSet" 3 "Tue Sep 23 2014" "Version 1.00" "SICS IRT" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+LatentTraitSet \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <LatentTraitSet\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBLatentTraitSet\fP ()"
+.br
+.ti -1c
+.RI "\fBMatrix\fP< double > * \fBgetTheta\fP ()"
+.br
+.ti -1c
+.RI "void \fBsetTheta\fP (\fBMatrix\fP< double > *\fBtheta\fP)"
+.br
+.ti -1c
+.RI "\fBMatrix\fP< double > * \fBgetWeight\fP ()"
+.br
+.ti -1c
+.RI "void \fBsetWeight\fP (\fBMatrix\fP< double > *\fBweight\fP)"
+.br
+.ti -1c
+.RI "virtual \fB~LatentTraitSet\fP ()"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBMatrix\fP< double > * \fBtheta\fP"
+.br
+.ti -1c
+.RI "\fBMatrix\fP< double > * \fBweight\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 13 of file LatentTraitSet\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "LatentTraitSet::LatentTraitSet ()"
+
+.PP
+Definition at line 10 of file LatentTraitSet\&.cpp\&.
+.PP
+References theta, and weight\&.
+.SS "LatentTraitSet::~LatentTraitSet ()\fC [virtual]\fP"
+
+.PP
+Definition at line 31 of file LatentTraitSet\&.cpp\&.
+.PP
+References theta, and weight\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBMatrix\fP< double > * LatentTraitSet::getTheta ()"
+
+.PP
+Definition at line 15 of file LatentTraitSet\&.cpp\&.
+.PP
+References theta\&.
+.PP
+Referenced by ThreePLModel::buildParameterSet(), UnidimensionalModel::getDimVector(), EMEstimation::setModel(), EMEstimation::stepE(), EMEstimation::stepM(), and ThreePLModel::successProbability()\&.
+.SS "\fBMatrix\fP< double > * LatentTraitSet::getWeight ()"
+
+.PP
+Definition at line 23 of file LatentTraitSet\&.cpp\&.
+.PP
+References weight\&.
+.PP
+Referenced by EMEstimation::stepE()\&.
+.SS "void LatentTraitSet::setTheta (\fBMatrix\fP< double > * theta)"
+
+.PP
+Definition at line 19 of file LatentTraitSet\&.cpp\&.
+.PP
+References theta\&.
+.PP
+Referenced by oneRun()\&.
+.SS "void LatentTraitSet::setWeight (\fBMatrix\fP< double > * weight)"
+
+.PP
+Definition at line 27 of file LatentTraitSet\&.cpp\&.
+.PP
+References weight\&.
+.PP
+Referenced by oneRun()\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBMatrix\fP<double>* LatentTraitSet::theta\fC [private]\fP"
+
+.PP
+Definition at line 14 of file LatentTraitSet\&.h\&.
+.PP
+Referenced by getTheta(), LatentTraitSet(), setTheta(), and ~LatentTraitSet()\&.
+.SS "\fBMatrix\fP<double>* LatentTraitSet::weight\fC [private]\fP"
+
+.PP
+Definition at line 15 of file LatentTraitSet\&.h\&.
+.PP
+Referenced by getWeight(), LatentTraitSet(), setWeight(), and ~LatentTraitSet()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for SICS IRT from the source code\&.

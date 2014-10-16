@@ -13,7 +13,7 @@
 #include <optimizer/BFGSOptimizer.h>
 
 /**
- * Wrapper fot the other optimizers, take general functions for the function to optimize, the vector gradient function and the matrix hessian function
+ * Wrapper for the other optimizers, take general functions for the function to optimize, the vector gradient function and the matrix hessian function
  * The parameters are :
 	 * double * args (Arguments over which the function optimizes)
 	 * double * pars (Arguments in whose the function depends but are not optimized)
@@ -28,15 +28,7 @@ public:
 			void (*HessianPtr)(double*,double*,int,int,double*),
 			double* args, double* pars, int nargs, int npars);
 	~Optimizer();
-	//The optimizers general functions
-	//The parameters are :
-	/*
-	 * double * args (Arguments over which the function optimizes)
-	 * double * pars (Arguments in whose the function depends but are not optimized)
-	 * int nargs Number of arguments
-	 * int npars Number of parameters
-	 * double * return (Return of the function is put in this array.)
-	 */
+
 };
 
 #endif /* OPTIMIZER_H_ */

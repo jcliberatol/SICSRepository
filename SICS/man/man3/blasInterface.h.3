@@ -1,0 +1,71 @@
+.TH "src/util/blasInterface.h" 3 "Tue Sep 23 2014" "Version 1.00" "SICS IRT" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+src/util/blasInterface.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'type/Matrix\&.h'\fP
+.br
+\fC#include <openblas/cblas\&.h>\fP
+.br
+\fC#include <openblas/lapacke/lapacke\&.h>\fP
+.br
+\fC#include <vector>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBarrayPrint\fP (double *t, int m)"
+.br
+.RI "\fIFunctions in this file matrixMultiply : doubles matrixInverse : doubles\&. \fP"
+.ti -1c
+.RI "void \fBarrayPrint\fP (long double *t, int m)"
+.br
+.ti -1c
+.RI "int \fBmatrixMultiply\fP (\fBMatrix\fP< double > &A, \fBMatrix\fP< double > &B, \fBMatrix\fP< double > &C)"
+.br
+.RI "\fIDouble general matrix multiplication C = A\&.B\&. \fP"
+.ti -1c
+.RI "int \fBApproximateMatrixInverse\fP (\fBMatrix\fP< double > &M)"
+.br
+.RI "\fIPerforms spectral decomposition to approximate a matrix inverse\&. \fP"
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "int ApproximateMatrixInverse (\fBMatrix\fP< double > & M)\fC [inline]\fP"
+
+.PP
+Performs spectral decomposition to approximate a matrix inverse\&. 
+.PP
+Definition at line 70 of file blasInterface\&.h\&.
+.PP
+References Matrix< T >::copy(), matrixMultiply(), Matrix< T >::memory, Matrix< T >::nC(), Matrix< T >::nR(), and Matrix< T >::reset()\&.
+.PP
+Referenced by pachotest()\&.
+.SS "void arrayPrint (double * t, int m)\fC [inline]\fP"
+
+.PP
+Functions in this file matrixMultiply : doubles matrixInverse : doubles\&. 
+.PP
+Definition at line 22 of file blasInterface\&.h\&.
+.SS "void arrayPrint (long double * t, int m)\fC [inline]\fP"
+
+.PP
+Definition at line 27 of file blasInterface\&.h\&.
+.SS "int matrixMultiply (\fBMatrix\fP< double > & A, \fBMatrix\fP< double > & B, \fBMatrix\fP< double > & C)\fC [inline]\fP"
+
+.PP
+Double general matrix multiplication C = A\&.B\&. 
+.PP
+Definition at line 34 of file blasInterface\&.h\&.
+.PP
+References Matrix< T >::ld, Matrix< T >::memory, Matrix< T >::nC(), Matrix< T >::nR(), and Matrix< T >::transposed\&.
+.PP
+Referenced by ApproximateMatrixInverse()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for SICS IRT from the source code\&.

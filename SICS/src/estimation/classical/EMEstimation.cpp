@@ -6,6 +6,7 @@
  */
 
 #include "EMEstimation.h"
+#include <util/util.h>
 
 EMEstimation::EMEstimation() {
 	iterations = 100;
@@ -50,8 +51,7 @@ void EMEstimation::setModel(Model* Model) {
 /**
  * Sets the initial values for the estimation, use this for inputting a matrix as initial values
  */
-void EMEstimation::setInitialValues(
-	map<Parameter, Matrix<double>*> parameterSet) {
+void EMEstimation::setInitialValues(map<Parameter, Matrix<double>*> parameterSet) {
 	model->getParameterModel()->setParameterSet(parameterSet);
 }
 /**
@@ -72,6 +72,68 @@ void EMEstimation::setInitialValues(string method) {
 	 *
 	 * The default method is OSPINA
 	 */
+	//Andrade method
+	int items = model->getParameterModel()->getParameterSet()[a]->nC();
+	//sums of the patterns
+	int totalscores = 0 ;
+	int *itemscores = new int [items];
+	memset(itemscores,0,sizeof(int)*items);
+	double *covariances = new double [items];
+	memset(covariances,0,sizeof(double)*items);
+	double variance = 0;
+	PatternMatrix* data = dynamic_cast<PatternMatrix *>(model->getItemModel()->getDataset());
+	double Ni = (double)data->countIndividuals();
+	for (data->resetIterator(); !data->checkEnd(); data->iterate()) {
+		double df = (double)data->getCurrentFrequency();
+		double bs = (double)data->getCurrentBitSet().count();
+		for (int i = 0 ; i < items ; i++){
+			if(data->getCurrentBitSet()[i]){
+				itemscores[i]+=df;
+			}
+		}
+		totalscores += bs*df;
+	}
+	//calculate variances and covariances
+	for (data->resetIterator(); !data->checkEnd(); data->iterate()){
+		double df = (double)data->getCurrentFrequency();
+		double bs = (double)data->getCurrentBitSet().count();
+		for (int i = 0 ; i < items ; i++){
+			if(data->getCurrentBitSet()[i]){
+				covariances[i]+=((1-itemscores[i]/Ni)*(1-bs/items))*df;
+			}
+		}
+		variance+=((bs-((double)totalscores/Ni))*(bs-((double)totalscores/Ni)))*df;
+	}
+	variance /= Ni;
+	for (int i = 0 ; i < items ; i++){
+		covariances[i] /= (Ni-1);
+	}
+	//Now calculate the standard deviations for the sums and the items
+	long double*stddevs = new long double [items];
+	memset(stddevs,0,sizeof(long double)*items);
+	long double*pearson = new long double [items];
+	memset(pearson,0,sizeof(long double)*items);
+	long double*pis = new long double [items];
+	memset(pis,0,sizeof(long double)*items);
+	for (int i = 0 ; i < items ; i++){
+			double avg= totalscores/Ni;
+			stddevs[i]=stdDev_bin(itemscores[i],Ni,avg);
+			pis[i]=itemscores[i]/Ni;
+			pearson[i]=(covariances[i]/(stddevs[i]*std::sqrt(variance)));
+			//fill a sqrt(pCoef * pCoef / (1.0 - pCoef * pCoef));
+			(*model->getParameterModel()->getParameterSet()[a])(0, i)= std::sqrt((pearson[i]*pearson[i])/(1/pearson[i]*pearson[i]));
+			//fill b
+			(*model->getParameterModel()->getParameterSet()[d])(0, i)=normalInverse(pis[i]);
+			//fill c
+			int m = 4;
+			(*model->getParameterModel()->getParameterSet()[c])(0, i)= 1 / (double)m;//TODO CHANGE BY CONSTANT FROM CONST.H FILE
+			cout<<"i : "<<i<<" a "
+					<<(*model->getParameterModel()->getParameterSet()[a])(0, i)<<" b "
+					<<(*model->getParameterModel()->getParameterSet()[d])(0, i)<<" c "
+					<<(*model->getParameterModel()->getParameterSet()[c])(0, i)<<endl;
+	}
+
+
 }
 
 /**
@@ -177,7 +239,6 @@ void EMEstimation::stepE() {
 /**
  * Executes the maximization step using the inputted or default optimizer
  * currently only supporting BFGS and newton algorithms
- * TODO : Relax Convergence criterias
  * */
 void EMEstimation::stepM() {
 	/*

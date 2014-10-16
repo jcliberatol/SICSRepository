@@ -7,6 +7,7 @@
 
 #ifndef UTIL_H_
 #define UTIL_H_
+#include <util/asa111.hpp>
 
 /**
  * Functions part one
@@ -18,9 +19,24 @@
  * PCheck : checks if a number is a probability, if it is one returns a very big probability, if its zero, a very small but not null.
  */
 
+inline long double stdDev_bin( int tsum, int tN){
+	long double avg;
+	long double N = (long double)tN;
+	long double sum = (long double)tsum;
+	avg = sum/N;
+	return (std::sqrt((sum*(1 - avg)*(1 - avg)+(N-sum)*(avg*avg))/N));
+}
 
+inline long double stdDev_bin( int tsum, int tN, double avg){
+	long double N = (long double)tN;
+	long double sum = (long double)tsum;
+	return (sqrt((((1-avg)*(1-avg)*sum)+((-avg)*(-avg)*(N-sum)))/N));
+}
 
-
+inline double normalInverse(double point){
+	int err = 0;
+	return(ppnd(point,&err));
+}
 
 
 
