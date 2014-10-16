@@ -1,0 +1,113 @@
+\hypertarget{asa111_8cpp}{}\section{src/util/asa111.cpp File Reference}
+\label{asa111_8cpp}\index{src/util/asa111.\+cpp@{src/util/asa111.\+cpp}}
+{\ttfamily \#include $<$cstdlib$>$}\\*
+{\ttfamily \#include $<$iostream$>$}\\*
+{\ttfamily \#include $<$iomanip$>$}\\*
+{\ttfamily \#include $<$cmath$>$}\\*
+{\ttfamily \#include $<$ctime$>$}\\*
+{\ttfamily \#include \char`\"{}asa111.\+hpp\char`\"{}}\\*
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{asa111_8cpp_a0909f9743b77b5e83d3e8e1d61989b10}{N\+\_\+\+M\+A\+X}~17
+\item 
+\#define \hyperlink{asa111_8cpp_ac1c7bc76dbfd8378fc96541a6243afd1}{T\+I\+M\+E\+\_\+\+S\+I\+Z\+E}~40
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{asa111_8cpp_a21a1241229463a3dfa135f7a8ed508be}{normal\+\_\+01\+\_\+cdf\+\_\+values} (int $\ast$n\+\_\+data, double $\ast$x, double $\ast$fx)
+\item 
+double \hyperlink{asa111_8cpp_a98674e186b9ab126964f59f085794294}{ppnd} (double p, int $\ast$ifault)
+\item 
+double \hyperlink{asa111_8cpp_a764d529be849adbbb2865d6c886710dc}{r8\+\_\+abs} (double x)
+\item 
+void \hyperlink{asa111_8cpp_a2219d86aef2195ff323e8349d92abe86}{timestamp} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\hypertarget{asa111_8cpp_a0909f9743b77b5e83d3e8e1d61989b10}{}\index{asa111.\+cpp@{asa111.\+cpp}!N\+\_\+\+M\+A\+X@{N\+\_\+\+M\+A\+X}}
+\index{N\+\_\+\+M\+A\+X@{N\+\_\+\+M\+A\+X}!asa111.\+cpp@{asa111.\+cpp}}
+\subsubsection[{N\+\_\+\+M\+A\+X}]{\setlength{\rightskip}{0pt plus 5cm}\#define N\+\_\+\+M\+A\+X~17}\label{asa111_8cpp_a0909f9743b77b5e83d3e8e1d61989b10}
+
+
+Referenced by normal\+\_\+01\+\_\+cdf\+\_\+values().
+
+\hypertarget{asa111_8cpp_ac1c7bc76dbfd8378fc96541a6243afd1}{}\index{asa111.\+cpp@{asa111.\+cpp}!T\+I\+M\+E\+\_\+\+S\+I\+Z\+E@{T\+I\+M\+E\+\_\+\+S\+I\+Z\+E}}
+\index{T\+I\+M\+E\+\_\+\+S\+I\+Z\+E@{T\+I\+M\+E\+\_\+\+S\+I\+Z\+E}!asa111.\+cpp@{asa111.\+cpp}}
+\subsubsection[{T\+I\+M\+E\+\_\+\+S\+I\+Z\+E}]{\setlength{\rightskip}{0pt plus 5cm}\#define T\+I\+M\+E\+\_\+\+S\+I\+Z\+E~40}\label{asa111_8cpp_ac1c7bc76dbfd8378fc96541a6243afd1}
+
+
+Referenced by timestamp().
+
+
+
+\subsection{Function Documentation}
+\hypertarget{asa111_8cpp_a21a1241229463a3dfa135f7a8ed508be}{}\index{asa111.\+cpp@{asa111.\+cpp}!normal\+\_\+01\+\_\+cdf\+\_\+values@{normal\+\_\+01\+\_\+cdf\+\_\+values}}
+\index{normal\+\_\+01\+\_\+cdf\+\_\+values@{normal\+\_\+01\+\_\+cdf\+\_\+values}!asa111.\+cpp@{asa111.\+cpp}}
+\subsubsection[{normal\+\_\+01\+\_\+cdf\+\_\+values}]{\setlength{\rightskip}{0pt plus 5cm}void normal\+\_\+01\+\_\+cdf\+\_\+values (
+\begin{DoxyParamCaption}
+\item[{int $\ast$}]{n\+\_\+data, }
+\item[{double $\ast$}]{x, }
+\item[{double $\ast$}]{fx}
+\end{DoxyParamCaption}
+)}\label{asa111_8cpp_a21a1241229463a3dfa135f7a8ed508be}
+
+
+Definition at line 13 of file asa111.\+cpp.
+
+
+
+References N\+\_\+\+M\+A\+X.
+
+\hypertarget{asa111_8cpp_a98674e186b9ab126964f59f085794294}{}\index{asa111.\+cpp@{asa111.\+cpp}!ppnd@{ppnd}}
+\index{ppnd@{ppnd}!asa111.\+cpp@{asa111.\+cpp}}
+\subsubsection[{ppnd}]{\setlength{\rightskip}{0pt plus 5cm}double ppnd (
+\begin{DoxyParamCaption}
+\item[{double}]{p, }
+\item[{int $\ast$}]{ifault}
+\end{DoxyParamCaption}
+)}\label{asa111_8cpp_a98674e186b9ab126964f59f085794294}
+
+
+Definition at line 132 of file asa111.\+cpp.
+
+
+
+References r8\+\_\+abs().
+
+
+
+Referenced by normal\+Inverse().
+
+\hypertarget{asa111_8cpp_a764d529be849adbbb2865d6c886710dc}{}\index{asa111.\+cpp@{asa111.\+cpp}!r8\+\_\+abs@{r8\+\_\+abs}}
+\index{r8\+\_\+abs@{r8\+\_\+abs}!asa111.\+cpp@{asa111.\+cpp}}
+\subsubsection[{r8\+\_\+abs}]{\setlength{\rightskip}{0pt plus 5cm}double r8\+\_\+abs (
+\begin{DoxyParamCaption}
+\item[{double}]{x}
+\end{DoxyParamCaption}
+)}\label{asa111_8cpp_a764d529be849adbbb2865d6c886710dc}
+
+
+Definition at line 255 of file asa111.\+cpp.
+
+
+
+Referenced by ppnd().
+
+\hypertarget{asa111_8cpp_a2219d86aef2195ff323e8349d92abe86}{}\index{asa111.\+cpp@{asa111.\+cpp}!timestamp@{timestamp}}
+\index{timestamp@{timestamp}!asa111.\+cpp@{asa111.\+cpp}}
+\subsubsection[{timestamp}]{\setlength{\rightskip}{0pt plus 5cm}void timestamp (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}\label{asa111_8cpp_a2219d86aef2195ff323e8349d92abe86}
+
+
+Definition at line 296 of file asa111.\+cpp.
+
+
+
+References T\+I\+M\+E\+\_\+\+S\+I\+Z\+E.
+
