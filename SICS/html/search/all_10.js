@@ -19,6 +19,7 @@ var searchData=
   ['sicsgeneralmodel',['SICSGeneralModel',['../classSICSGeneralModel.html',1,'SICSGeneralModel'],['../classSICSGeneralModel.html#a3d19adad0cd3cf346af4ab4486234f55',1,'SICSGeneralModel::SICSGeneralModel()']]],
   ['sicsgeneralmodel_2ecpp',['SICSGeneralModel.cpp',['../SICSGeneralModel_8cpp.html',1,'']]],
   ['sicsgeneralmodel_2eh',['SICSGeneralModel.h',['../SICSGeneralModel_8h.html',1,'']]],
+  ['stddev_5fbin',['stdDev_bin',['../util_8h.html#a92c4bf8b44e9ce9753076d022dad6a7f',1,'stdDev_bin(int tsum, int tN):&#160;util.h'],['../util_8h.html#ad1901bc5ed354d9bff19583bb65487ff',1,'stdDev_bin(int tsum, int tN, double avg):&#160;util.h']]],
   ['stepe',['stepE',['../classEMEstimation.html#afd00a80808f85581961d4d0ed2ce2a97',1,'EMEstimation']]],
   ['stepm',['stepM',['../classEMEstimation.html#a8884e863f820e4a1a5caf099dca2ce1b',1,'EMEstimation']]],
   ['stepredn',['stepredn',['../classConstant.html#acc69323a1f124d4b8ed7257e0574a9eb',1,'Constant']]],

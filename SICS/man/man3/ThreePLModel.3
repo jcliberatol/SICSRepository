@@ -1,8 +1,9 @@
-.TH "ThreePLModel" 3 "Tue Sep 23 2014" "Version 1.00" "SICS IRT" \" -*- nroff -*-
+.TH "ThreePLModel" 3 "Thu Oct 16 2014" "Version 1.00" "SICS IRT" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-ThreePLModel \- 
+ThreePLModel \- \fBModel\fP for the 3pl model, uses parameters a d c\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -65,11 +66,16 @@ Inherits \fBParameterModel\fP\&.
 .ti -1c
 .RI "static void \fBitemgradient\fP (double *, double *, int, int, double *)"
 .br
+.RI "\fIIn the item gradient and hessians these procedures take an already calculated hessian and gradient and just access the item that is needed in the optimization step args will then be the ith args for the item pars is going to be the full array of gradients and npars is going to be used to take the ith element the gradient will then be copied to g\&. \fP"
 .in -1c
 .SS "Additional Inherited Members"
 .SH "Detailed Description"
 .PP 
-Definition at line 22 of file ThreePLModel\&.h\&.
+\fBModel\fP for the 3pl model, uses parameters a d c\&. 
+
+unidimensional 
+.PP
+Definition at line 25 of file ThreePLModel\&.h\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "ThreePLModel::ThreePLModel ()"
@@ -81,7 +87,7 @@ References a, b, c, d, ParameterModel::parameterSet, and ParameterModel::probabi
 .SS "ThreePLModel::~ThreePLModel ()\fC [virtual]\fP"
 
 .PP
-Definition at line 616 of file ThreePLModel\&.cpp\&.
+Definition at line 617 of file ThreePLModel\&.cpp\&.
 .PP
 References a, b, c, d, and ParameterModel::parameterSet\&.
 .SH "Member Function Documentation"
@@ -113,7 +119,7 @@ References ParameterModel::probabilityMatrix\&.
 .SS "void ThreePLModel::gradient (double * args, double * pars, int nargs, int npars, double * gradient)\fC [static]\fP"
 
 .PP
-Definition at line 377 of file ThreePLModel\&.cpp\&.
+Definition at line 378 of file ThreePLModel\&.cpp\&.
 .PP
 References a, b, c, Constant::NORM_CONST, and successProbability()\&.
 .PP
@@ -121,7 +127,7 @@ Referenced by NHessian(), and EMEstimation::stepM()\&.
 .SS "void ThreePLModel::Hessian (double * args, double * pars, int nargs, int npars, double * Hessian)\fC [static]\fP"
 
 .PP
-Definition at line 138 of file ThreePLModel\&.cpp\&.
+Definition at line 139 of file ThreePLModel\&.cpp\&.
 .PP
 References a, b, c, Constant::NORM_CONST, and successProbability()\&.
 .PP
@@ -129,7 +135,9 @@ Referenced by EMEstimation::stepM()\&.
 .SS "void ThreePLModel::itemgradient (double * args, double * grad, int nargs, int i, double * tgrad)\fC [static]\fP"
 
 .PP
-Definition at line 122 of file ThreePLModel\&.cpp\&.
+In the item gradient and hessians these procedures take an already calculated hessian and gradient and just access the item that is needed in the optimization step args will then be the ith args for the item pars is going to be the full array of gradients and npars is going to be used to take the ith element the gradient will then be copied to g\&. 
+.PP
+Definition at line 129 of file ThreePLModel\&.cpp\&.
 .PP
 Referenced by EMEstimation::stepM()\&.
 .SS "void ThreePLModel::itemHessian (double * args, double * pars, int nargs, int npars, double * Hessian)\fC [static]\fP"
@@ -141,7 +149,7 @@ Referenced by EMEstimation::stepM()\&.
 .SS "double ThreePLModel::logLikelihood (double * args, double * pars, int nargs, int npars)\fC [static]\fP"
 
 .PP
-Definition at line 509 of file ThreePLModel\&.cpp\&.
+Definition at line 510 of file ThreePLModel\&.cpp\&.
 .PP
 References a, b, c, and successProbability()\&.
 .PP
@@ -149,13 +157,13 @@ Referenced by Ngradient(), and EMEstimation::stepM()\&.
 .SS "void ThreePLModel::Ngradient (double * args, double * pars, int nargs, int npars, double * gradient)\fC [static]\fP"
 
 .PP
-Definition at line 327 of file ThreePLModel\&.cpp\&.
+Definition at line 328 of file ThreePLModel\&.cpp\&.
 .PP
 References logLikelihood()\&.
 .SS "void ThreePLModel::NHessian (double * args, double * pars, int nargs, int npars, double * Hessian)\fC [static]\fP"
 
 .PP
-Definition at line 340 of file ThreePLModel\&.cpp\&.
+Definition at line 341 of file ThreePLModel\&.cpp\&.
 .PP
 References gradient()\&.
 .SS "void ThreePLModel::setParameterSet (map< \fBParameter\fP, \fBMatrix\fP< double > * > parameterSet)\fC [virtual]\fP"
@@ -185,7 +193,7 @@ References a, c, d, DimensionModel::getLatentTraitSet(), LatentTraitSet::getThet
 .SS "double ThreePLModel::successProbability_cPrime (double theta, double a, double b, double c)\fC [static]\fP"
 
 .PP
-Definition at line 610 of file ThreePLModel\&.cpp\&.
+Definition at line 611 of file ThreePLModel\&.cpp\&.
 .PP
 References successProbability()\&.
 

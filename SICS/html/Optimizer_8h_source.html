@@ -109,20 +109,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;            <span class="keywordtype">void</span> (*HessianPtr)(<span class="keywordtype">double</span>*,<span class="keywordtype">double</span>*,<span class="keywordtype">int</span>,<span class="keywordtype">int</span>,<span class="keywordtype">double</span>*),</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;            <span class="keywordtype">double</span>* args, <span class="keywordtype">double</span>* pars, <span class="keywordtype">int</span> nargs, <span class="keywordtype">int</span> npars);</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <a class="code" href="classOptimizer.html#ab01202385afea2f09afbd73227736a17">~Optimizer</a>();</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="comment">//The optimizers general functions</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="comment">//The parameters are :</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="comment">/*</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment">     * double * args (Arguments over which the function optimizes)</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment">     * double * pars (Arguments in whose the function depends but are not optimized)</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="comment">     * int nargs Number of arguments</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment">     * int npars Number of parameters</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">     * double * return (Return of the function is put in this array.)</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;};</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* OPTIMIZER_H_ */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;};</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* OPTIMIZER_H_ */</span><span class="preprocessor"></span></div>
 <div class="ttc" id="classOptimizer_html_ab01202385afea2f09afbd73227736a17"><div class="ttname"><a href="classOptimizer.html#ab01202385afea2f09afbd73227736a17">Optimizer::~Optimizer</a></div><div class="ttdeci">~Optimizer()</div><div class="ttdef"><b>Definition:</b> <a href="Optimizer_8cpp_source.html#l00012">Optimizer.cpp:12</a></div></div>
-<div class="ttc" id="classOptimizer_html"><div class="ttname"><a href="classOptimizer.html">Optimizer</a></div><div class="ttdoc">Wrapper fot the other optimizers, take general functions for the function to optimize, the vector gradient function and the matrix hessian function The parameters are : double * args (Arguments over which the function optimizes) double * pars (Arguments in whose the function depends but are not optimized) int nargs Number of arguments int npars Number of parameters double * return (Return of the function is put in this array.) </div><div class="ttdef"><b>Definition:</b> <a href="Optimizer_8h_source.html#l00024">Optimizer.h:24</a></div></div>
+<div class="ttc" id="classOptimizer_html"><div class="ttname"><a href="classOptimizer.html">Optimizer</a></div><div class="ttdoc">Wrapper for the other optimizers, take general functions for the function to optimize, the vector gradient function and the matrix hessian function The parameters are : double * args (Arguments over which the function optimizes) double * pars (Arguments in whose the function depends but are not optimized) int nargs Number of arguments int npars Number of parameters double * return (Return of the function is put in this array.) </div><div class="ttdef"><b>Definition:</b> <a href="Optimizer_8h_source.html#l00024">Optimizer.h:24</a></div></div>
 <div class="ttc" id="BFGSOptimizer_8h_html"><div class="ttname"><a href="BFGSOptimizer_8h.html">BFGSOptimizer.h</a></div></div>
 <div class="ttc" id="classOptimizer_html_ab3c54cfddcd5e97c1dae4cc6bd4e4e92"><div class="ttname"><a href="classOptimizer.html#ab3c54cfddcd5e97c1dae4cc6bd4e4e92">Optimizer::searchOptimal</a></div><div class="ttdeci">void searchOptimal(double(*functionPtr)(double *, double *, int, int), void(*gradientPtr)(double *, double *, int, int, double *), void(*HessianPtr)(double *, double *, int, int, double *), double *args, double *pars, int nargs, int npars)</div><div class="ttdef"><b>Definition:</b> <a href="Optimizer_8cpp_source.html#l00003">Optimizer.cpp:3</a></div></div>
 <div class="ttc" id="NewtonOptimizer_8h_html"><div class="ttname"><a href="NewtonOptimizer_8h.html">NewtonOptimizer.h</a></div></div>
@@ -130,7 +122,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Sep 23 2014 10:13:47 for SICS IRT by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Oct 16 2014 02:25:03 for SICS IRT by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.8
 </small></address>

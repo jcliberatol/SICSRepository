@@ -72,6 +72,25 @@ void EMEstimation::setInitialValues(string method) {
 	 *
 	 * The default method is OSPINA
 	 */
+	if(!method.compare("RANDOM")){
+		std::srand(std::time(0)); // use current time as seed for random generator
+		int items = model->getParameterModel()->getParameterSet()[a]->nC();
+		for (int i = 0 ; i < items ; i++){
+			(*model->getParameterModel()->getParameterSet()[a])(0, i)= randomd()*2;
+			//fill b
+			(*model->getParameterModel()->getParameterSet()[d])(0, i)= randomd()*4-2 ;
+			//fill c
+			int m = 4;
+			(*model->getParameterModel()->getParameterSet()[c])(0, i)= randomd()*(2/(double)m);
+
+			cout<<"i : "<<i<<" a "
+								<<(*model->getParameterModel()->getParameterSet()[a])(0, i)<<" b "
+								<<(*model->getParameterModel()->getParameterSet()[d])(0, i)<<" c "
+								<<(*model->getParameterModel()->getParameterSet()[c])(0, i)<<endl;
+		}
+	}
+
+	if(!method.compare("ANDRADE")){
 	//Andrade method
 	int items = model->getParameterModel()->getParameterSet()[a]->nC();
 	//sums of the patterns
@@ -132,8 +151,7 @@ void EMEstimation::setInitialValues(string method) {
 					<<(*model->getParameterModel()->getParameterSet()[d])(0, i)<<" c "
 					<<(*model->getParameterModel()->getParameterSet()[c])(0, i)<<endl;
 	}
-
-
+	}
 }
 
 /**

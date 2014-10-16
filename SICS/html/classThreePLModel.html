@@ -91,6 +91,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
+<p><a class="el" href="classModel.html" title="Model class that holds the structures for the IRT models can vary across parameters, items and dimensions includes suport for dichotomic and polytomic models multi and single dimensional models future suport for multiscale and longitudinal models can be implemented. ">Model</a> for the 3pl model, uses parameters a d c.  
+ <a href="classThreePLModel.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="ThreePLModel_8h_source.html">ThreePLModel.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for ThreePLModel:</div>
@@ -141,6 +144,7 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a4eb5d27957e207af988cfc87b1adbb27"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThreePLModel.html#a4eb5d27957e207af988cfc87b1adbb27">itemHessian</a> (double *args, double *pars, int nargs, int npars, double *<a class="el" href="classThreePLModel.html#a034561892349c03922d857a67d15f79d">Hessian</a>)</td></tr>
 <tr class="separator:a4eb5d27957e207af988cfc87b1adbb27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e103a8afde4c931b15d451f131ebc6e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classThreePLModel.html#a1e103a8afde4c931b15d451f131ebc6e">itemgradient</a> (double *, double *, int, int, double *)</td></tr>
+<tr class="memdesc:a1e103a8afde4c931b15d451f131ebc6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">In the item gradient and hessians these procedures take an already calculated hessian and gradient and just access the item that is needed in the optimization step args will then be the ith args for the item pars is going to be the full array of gradients and npars is going to be used to take the ith element the gradient will then be copied to g.  <a href="#a1e103a8afde4c931b15d451f131ebc6e">More...</a><br /></td></tr>
 <tr class="separator:a1e103a8afde4c931b15d451f131ebc6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
@@ -153,8 +157,10 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a0b5dafa68a235673a229863aa66ae97d inherit pro_attribs_classParameterModel"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p>Definition at line <a class="el" href="ThreePLModel_8h_source.html#l00022">22</a> of file <a class="el" href="ThreePLModel_8h_source.html">ThreePLModel.h</a>.</p>
+<div class="textblock"><p><a class="el" href="classModel.html" title="Model class that holds the structures for the IRT models can vary across parameters, items and dimensions includes suport for dichotomic and polytomic models multi and single dimensional models future suport for multiscale and longitudinal models can be implemented. ">Model</a> for the 3pl model, uses parameters a d c. </p>
+<p>unidimensional </p>
+
+<p>Definition at line <a class="el" href="ThreePLModel_8h_source.html#l00025">25</a> of file <a class="el" href="ThreePLModel_8h_source.html">ThreePLModel.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a97470c701290327dc55b87a10874156c"></a>
 <div class="memitem">
@@ -196,7 +202,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="ThreePLModel_8cpp_source.html#l00616">616</a> of file <a class="el" href="ThreePLModel_8cpp_source.html">ThreePLModel.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ThreePLModel_8cpp_source.html#l00617">617</a> of file <a class="el" href="ThreePLModel_8cpp_source.html">ThreePLModel.cpp</a>.</p>
 
 <p>References <a class="el" href="ParameterModel_8h_source.html#l00019">a</a>, <a class="el" href="ParameterModel_8h_source.html#l00019">b</a>, <a class="el" href="ParameterModel_8h_source.html#l00019">c</a>, <a class="el" href="ParameterModel_8h_source.html#l00019">d</a>, and <a class="el" href="ParameterModel_8h_source.html#l00024">ParameterModel::parameterSet</a>.</p>
 
@@ -362,11 +368,11 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="ThreePLModel_8cpp_source.html#l00377">377</a> of file <a class="el" href="ThreePLModel_8cpp_source.html">ThreePLModel.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ThreePLModel_8cpp_source.html#l00378">378</a> of file <a class="el" href="ThreePLModel_8cpp_source.html">ThreePLModel.cpp</a>.</p>
 
 <p>References <a class="el" href="ParameterModel_8h_source.html#l00019">a</a>, <a class="el" href="ParameterModel_8h_source.html#l00019">b</a>, <a class="el" href="ParameterModel_8h_source.html#l00019">c</a>, <a class="el" href="Constant_8h_source.html#l00021">Constant::NORM_CONST</a>, and <a class="el" href="ThreePLModel_8cpp_source.html#l00090">successProbability()</a>.</p>
 
-<p>Referenced by <a class="el" href="ThreePLModel_8cpp_source.html#l00340">NHessian()</a>, and <a class="el" href="EMEstimation_8cpp_source.html#l00182">EMEstimation::stepM()</a>.</p>
+<p>Referenced by <a class="el" href="ThreePLModel_8cpp_source.html#l00341">NHessian()</a>, and <a class="el" href="EMEstimation_8cpp_source.html#l00261">EMEstimation::stepM()</a>.</p>
 
 </div>
 </div>
@@ -420,11 +426,11 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="ThreePLModel_8cpp_source.html#l00138">138</a> of file <a class="el" href="ThreePLModel_8cpp_source.html">ThreePLModel.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ThreePLModel_8cpp_source.html#l00139">139</a> of file <a class="el" href="ThreePLModel_8cpp_source.html">ThreePLModel.cpp</a>.</p>
 
 <p>References <a class="el" href="ParameterModel_8h_source.html#l00019">a</a>, <a class="el" href="ParameterModel_8h_source.html#l00019">b</a>, <a class="el" href="ParameterModel_8h_source.html#l00019">c</a>, <a class="el" href="Constant_8h_source.html#l00021">Constant::NORM_CONST</a>, and <a class="el" href="ThreePLModel_8cpp_source.html#l00090">successProbability()</a>.</p>
 
-<p>Referenced by <a class="el" href="EMEstimation_8cpp_source.html#l00182">EMEstimation::stepM()</a>.</p>
+<p>Referenced by <a class="el" href="EMEstimation_8cpp_source.html#l00261">EMEstimation::stepM()</a>.</p>
 
 </div>
 </div>
@@ -478,9 +484,11 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="ThreePLModel_8cpp_source.html#l00122">122</a> of file <a class="el" href="ThreePLModel_8cpp_source.html">ThreePLModel.cpp</a>.</p>
+<p>In the item gradient and hessians these procedures take an already calculated hessian and gradient and just access the item that is needed in the optimization step args will then be the ith args for the item pars is going to be the full array of gradients and npars is going to be used to take the ith element the gradient will then be copied to g. </p>
 
-<p>Referenced by <a class="el" href="EMEstimation_8cpp_source.html#l00182">EMEstimation::stepM()</a>.</p>
+<p>Definition at line <a class="el" href="ThreePLModel_8cpp_source.html#l00129">129</a> of file <a class="el" href="ThreePLModel_8cpp_source.html">ThreePLModel.cpp</a>.</p>
+
+<p>Referenced by <a class="el" href="EMEstimation_8cpp_source.html#l00261">EMEstimation::stepM()</a>.</p>
 
 </div>
 </div>
@@ -536,7 +544,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Definition at line <a class="el" href="ThreePLModel_8cpp_source.html#l00115">115</a> of file <a class="el" href="ThreePLModel_8cpp_source.html">ThreePLModel.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="EMEstimation_8cpp_source.html#l00182">EMEstimation::stepM()</a>.</p>
+<p>Referenced by <a class="el" href="EMEstimation_8cpp_source.html#l00261">EMEstimation::stepM()</a>.</p>
 
 </div>
 </div>
@@ -584,11 +592,11 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="ThreePLModel_8cpp_source.html#l00509">509</a> of file <a class="el" href="ThreePLModel_8cpp_source.html">ThreePLModel.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ThreePLModel_8cpp_source.html#l00510">510</a> of file <a class="el" href="ThreePLModel_8cpp_source.html">ThreePLModel.cpp</a>.</p>
 
 <p>References <a class="el" href="ParameterModel_8h_source.html#l00019">a</a>, <a class="el" href="ParameterModel_8h_source.html#l00019">b</a>, <a class="el" href="ParameterModel_8h_source.html#l00019">c</a>, and <a class="el" href="ThreePLModel_8cpp_source.html#l00090">successProbability()</a>.</p>
 
-<p>Referenced by <a class="el" href="ThreePLModel_8cpp_source.html#l00327">Ngradient()</a>, and <a class="el" href="EMEstimation_8cpp_source.html#l00182">EMEstimation::stepM()</a>.</p>
+<p>Referenced by <a class="el" href="ThreePLModel_8cpp_source.html#l00328">Ngradient()</a>, and <a class="el" href="EMEstimation_8cpp_source.html#l00261">EMEstimation::stepM()</a>.</p>
 
 </div>
 </div>
@@ -642,9 +650,9 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="ThreePLModel_8cpp_source.html#l00327">327</a> of file <a class="el" href="ThreePLModel_8cpp_source.html">ThreePLModel.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ThreePLModel_8cpp_source.html#l00328">328</a> of file <a class="el" href="ThreePLModel_8cpp_source.html">ThreePLModel.cpp</a>.</p>
 
-<p>References <a class="el" href="ThreePLModel_8cpp_source.html#l00509">logLikelihood()</a>.</p>
+<p>References <a class="el" href="ThreePLModel_8cpp_source.html#l00510">logLikelihood()</a>.</p>
 
 </div>
 </div>
@@ -698,9 +706,9 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="ThreePLModel_8cpp_source.html#l00340">340</a> of file <a class="el" href="ThreePLModel_8cpp_source.html">ThreePLModel.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ThreePLModel_8cpp_source.html#l00341">341</a> of file <a class="el" href="ThreePLModel_8cpp_source.html">ThreePLModel.cpp</a>.</p>
 
-<p>References <a class="el" href="ThreePLModel_8cpp_source.html#l00377">gradient()</a>.</p>
+<p>References <a class="el" href="ThreePLModel_8cpp_source.html#l00378">gradient()</a>.</p>
 
 </div>
 </div>
@@ -782,7 +790,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>References <a class="el" href="Constant_8h_source.html#l00022">Constant::MAX_EXP</a>, and <a class="el" href="Constant_8h_source.html#l00021">Constant::NORM_CONST</a>.</p>
 
-<p>Referenced by <a class="el" href="ThreePLModel_8cpp_source.html#l00377">gradient()</a>, <a class="el" href="ThreePLModel_8cpp_source.html#l00138">Hessian()</a>, <a class="el" href="ThreePLModel_8cpp_source.html#l00509">logLikelihood()</a>, <a class="el" href="ThreePLModel_8cpp_source.html#l00052">successProbability()</a>, and <a class="el" href="ThreePLModel_8cpp_source.html#l00610">successProbability_cPrime()</a>.</p>
+<p>Referenced by <a class="el" href="ThreePLModel_8cpp_source.html#l00378">gradient()</a>, <a class="el" href="ThreePLModel_8cpp_source.html#l00139">Hessian()</a>, <a class="el" href="ThreePLModel_8cpp_source.html#l00510">logLikelihood()</a>, <a class="el" href="ThreePLModel_8cpp_source.html#l00052">successProbability()</a>, and <a class="el" href="ThreePLModel_8cpp_source.html#l00611">successProbability_cPrime()</a>.</p>
 
 </div>
 </div>
@@ -860,7 +868,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="ThreePLModel_8cpp_source.html#l00610">610</a> of file <a class="el" href="ThreePLModel_8cpp_source.html">ThreePLModel.cpp</a>.</p>
+<p>Definition at line <a class="el" href="ThreePLModel_8cpp_source.html#l00611">611</a> of file <a class="el" href="ThreePLModel_8cpp_source.html">ThreePLModel.cpp</a>.</p>
 
 <p>References <a class="el" href="ThreePLModel_8cpp_source.html#l00090">successProbability()</a>.</p>
 
@@ -873,7 +881,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Sep 23 2014 10:13:47 for SICS IRT by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Oct 16 2014 02:25:03 for SICS IRT by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.8
 </small></address>

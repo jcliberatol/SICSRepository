@@ -1,4 +1,4 @@
-.TH "EMEstimation" 3 "Tue Sep 23 2014" "Version 1.00" "SICS IRT" \" -*- nroff -*-
+.TH "EMEstimation" 3 "Thu Oct 16 2014" "Version 1.00" "SICS IRT" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -31,7 +31,7 @@ Inherits \fBClassicalEstimation\fP\&.
 .ti -1c
 .RI "void \fBstepM\fP ()"
 .br
-.RI "\fIExecutes the maximization step using the inputted or default optimizer currently only supporting BFGS and newton algorithms TODO : Relax Convergence criterias\&. \fP"
+.RI "\fIExecutes the maximization step using the inputted or default optimizer currently only supporting BFGS and newton algorithms\&. \fP"
 .ti -1c
 .RI "void \fBsetModel\fP (\fBModel\fP *\fBmodel\fP)"
 .br
@@ -102,13 +102,13 @@ Definition at line 25 of file EMEstimation\&.h\&.
 .SS "EMEstimation::EMEstimation ()"
 
 .PP
-Definition at line 10 of file EMEstimation\&.cpp\&.
+Definition at line 11 of file EMEstimation\&.cpp\&.
 .PP
 References convergenceSignal, f, iterations, logger, model, optim, and r\&.
 .SS "EMEstimation::~EMEstimation ()\fC [virtual]\fP"
 
 .PP
-Definition at line 22 of file EMEstimation\&.cpp\&.
+Definition at line 23 of file EMEstimation\&.cpp\&.
 .PP
 References f, logger, optim, and r\&.
 .SH "Member Function Documentation"
@@ -118,7 +118,7 @@ References f, logger, optim, and r\&.
 .PP
 Check if all the conditions are met for running the model, can report an error to a logger\&. 
 .PP
-Definition at line 443 of file EMEstimation\&.cpp\&.
+Definition at line 522 of file EMEstimation\&.cpp\&.
 .SS "void EMEstimation::estimate ()\fC [virtual]\fP"
 
 .PP
@@ -126,7 +126,7 @@ Main loop of the EM estimation orchestrates the parameters for the estimation, a
 .PP
 Implements \fBClassicalEstimation\fP\&.
 .PP
-Definition at line 394 of file EMEstimation\&.cpp\&.
+Definition at line 473 of file EMEstimation\&.cpp\&.
 .PP
 References a, c, convergenceSignal, ItemModel::countItems(), d, Model::getItemModel(), Model::getParameterModel(), ParameterModel::getParameterSet(), iterations, model, stepE(), and stepM()\&.
 .PP
@@ -136,7 +136,7 @@ Referenced by oneRun()\&.
 .PP
 Returns the iterations that took the estimation to obtain an answer\&. 
 .PP
-Definition at line 458 of file EMEstimation\&.cpp\&.
+Definition at line 537 of file EMEstimation\&.cpp\&.
 .PP
 References iterations\&.
 .SS "void EMEstimation::setInitialValues (map< \fBParameter\fP, \fBMatrix\fP< double > * > parameterSet)"
@@ -144,15 +144,19 @@ References iterations\&.
 .PP
 Sets the initial values for the estimation, use this for inputting a matrix as initial values\&. 
 .PP
-Definition at line 53 of file EMEstimation\&.cpp\&.
+Definition at line 54 of file EMEstimation\&.cpp\&.
 .PP
 References Model::getParameterModel(), model, and ParameterModel::setParameterSet()\&.
+.PP
+Referenced by oneRun()\&.
 .SS "void EMEstimation::setInitialValues (string method)"
 
 .PP
 Sets the initial values according to a method of calculating the values Possible methods : ANDRADE, OSPINA, RANDOM,\&. The default method is OSPINA , this is the fastest method according to the SICS calculations 
 .PP
 Definition at line 66 of file EMEstimation\&.cpp\&.
+.PP
+References a, c, PatternMatrix::checkEnd(), PatternMatrix::countIndividuals(), d, PatternMatrix::getCurrentBitSet(), PatternMatrix::getCurrentFrequency(), ItemModel::getDataset(), Model::getItemModel(), Model::getParameterModel(), ParameterModel::getParameterSet(), PatternMatrix::iterate(), model, normalInverse(), randomd(), PatternMatrix::resetIterator(), and stdDev_bin()\&.
 .SS "void EMEstimation::setModel (\fBModel\fP * model)\fC [virtual]\fP"
 
 .PP
@@ -160,7 +164,7 @@ Sets the model to be estimated, currently only supports 3PL model\&.
 .PP
 Implements \fBClassicalEstimation\fP\&.
 .PP
-Definition at line 39 of file EMEstimation\&.cpp\&.
+Definition at line 40 of file EMEstimation\&.cpp\&.
 .PP
 References ItemModel::countItems(), f, Model::getDimensionModel(), Model::getItemModel(), DimensionModel::getLatentTraitSet(), LatentTraitSet::getTheta(), model, Matrix< T >::nC(), and r\&.
 .PP
@@ -170,23 +174,23 @@ Referenced by oneRun()\&.
 .PP
 Sets the optimization algorithm\&. 
 .PP
-Definition at line 447 of file EMEstimation\&.cpp\&.
+Definition at line 526 of file EMEstimation\&.cpp\&.
 .SS "void EMEstimation::setTrace (string filename)"
 
 .PP
 Sets the reporter for the trace\&. 
 .PP
-Definition at line 451 of file EMEstimation\&.cpp\&.
+Definition at line 530 of file EMEstimation\&.cpp\&.
 .SS "void EMEstimation::setTrace (\fBTrace\fP trace)"
 
 .PP
-Definition at line 454 of file EMEstimation\&.cpp\&.
+Definition at line 533 of file EMEstimation\&.cpp\&.
 .SS "void EMEstimation::stepE ()"
 
 .PP
 Step E of the EM method, this step takes the actual estimation of the parameters, and produces a f and a r matrices used in the maximization step\&. TODO : PARALLELIZABLE FOR 
 .PP
-Definition at line 84 of file EMEstimation\&.cpp\&.
+Definition at line 164 of file EMEstimation\&.cpp\&.
 .PP
 References a, c, PatternMatrix::checkEnd(), PatternMatrix::countItems(), d, f, PatternMatrix::getCurrentBitSet(), PatternMatrix::getCurrentFrequency(), ItemModel::getDataset(), Model::getDimensionModel(), Model::getItemModel(), DimensionModel::getLatentTraitSet(), Model::getParameterModel(), ParameterModel::getParameterSet(), ParameterModel::getProbability(), LatentTraitSet::getTheta(), LatentTraitSet::getWeight(), PatternMatrix::iterate(), model, Matrix< T >::nC(), r, Matrix< T >::reset(), PatternMatrix::resetIterator(), and Model::successProbability()\&.
 .PP
@@ -194,9 +198,9 @@ Referenced by estimate()\&.
 .SS "void EMEstimation::stepM ()"
 
 .PP
-Executes the maximization step using the inputted or default optimizer currently only supporting BFGS and newton algorithms TODO : Relax Convergence criterias\&. 
+Executes the maximization step using the inputted or default optimizer currently only supporting BFGS and newton algorithms\&. 
 .PP
-Definition at line 182 of file EMEstimation\&.cpp\&.
+Definition at line 261 of file EMEstimation\&.cpp\&.
 .PP
 References a, c, convergenceSignal, DataSet::countItems(), d, ItemModel::getDataset(), Model::getDimensionModel(), Model::getItemModel(), DimensionModel::getLatentTraitSet(), Model::getParameterModel(), ParameterModel::getParameterSet(), LatentTraitSet::getTheta(), ThreePLModel::gradient(), ThreePLModel::Hessian(), ThreePLModel::itemgradient(), ThreePLModel::itemHessian(), ThreePLModel::logLikelihood(), model, Matrix< T >::nC(), optim, Optimizer::searchOptimal(), and ParameterModel::setParameterSet()\&.
 .PP

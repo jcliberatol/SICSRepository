@@ -13,6 +13,7 @@ var searchData=
   ['polytomousmodel',['PolytomousModel',['../classPolytomousModel.html',1,'PolytomousModel'],['../classPolytomousModel.html#a7eb616216ec5dd988ca59fef6ce79fe6',1,'PolytomousModel::PolytomousModel()']]],
   ['polytomousmodel_2ecpp',['PolytomousModel.cpp',['../PolytomousModel_8cpp.html',1,'']]],
   ['polytomousmodel_2eh',['PolytomousModel.h',['../PolytomousModel_8h.html',1,'']]],
+  ['ppnd',['ppnd',['../asa111_8cpp.html#a98674e186b9ab126964f59f085794294',1,'ppnd(double p, int *ifault):&#160;asa111.cpp'],['../asa111_8hpp.html#a98674e186b9ab126964f59f085794294',1,'ppnd(double p, int *ifault):&#160;asa111.cpp']]],
   ['pre_5fcg',['pre_cg',['../NCM_8h.html#a5e4208de1502953c211d696ff84405fd',1,'NCM.h']]],
   ['precond_5fmatrix',['precond_matrix',['../NCM_8h.html#af2244d5b22391018b7ff49a0f6aea175',1,'NCM.h']]],
   ['printmatrix',['printMatrix',['../NCM_8h.html#ad016d6b9b5bff2dd9d90fca988f61648',1,'NCM.h']]],

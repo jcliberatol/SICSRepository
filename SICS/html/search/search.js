@@ -15,7 +15,7 @@ var indexSectionsWithContent =
   5: "p",
   6: "abcd",
   7: "o",
-  8: "p"
+  8: "npt"
 };
 
 var indexSectionNames =

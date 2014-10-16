@@ -27,7 +27,7 @@ void \hyperlink{classEMEstimation_a7391808764fd510d6a0f0351ec699b2d}{estimate} (
 void \hyperlink{classEMEstimation_afd00a80808f85581961d4d0ed2ce2a97}{step\+E} ()
 \begin{DoxyCompactList}\small\item\em Step E of the E\+M method, this step takes the actual estimation of the parameters, and produces a f and a r matrices used in the maximization step. \end{DoxyCompactList}\item 
 void \hyperlink{classEMEstimation_a8884e863f820e4a1a5caf099dca2ce1b}{step\+M} ()
-\begin{DoxyCompactList}\small\item\em Executes the maximization step using the inputted or default optimizer currently only supporting B\+F\+G\+S and newton algorithms T\+O\+D\+O \+: Relax Convergence criterias. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Executes the maximization step using the inputted or default optimizer currently only supporting B\+F\+G\+S and newton algorithms. \end{DoxyCompactList}\item 
 void \hyperlink{classEMEstimation_a6cd3ac7193ff9d5d92bd90b58da26e11}{set\+Model} (\hyperlink{classModel}{Model} $\ast$\hyperlink{classEMEstimation_ad7a5d7459c7c0632a1aa3917fd7f3ba0}{model})
 \begin{DoxyCompactList}\small\item\em Sets the model to be estimated, currently only supports 3\+P\+L model. \end{DoxyCompactList}\item 
 void \hyperlink{classEMEstimation_a482fdb64918b8e5d68e2f5091bef4b05}{check\+Running\+Conditions} ()
@@ -83,7 +83,7 @@ Definition at line 25 of file E\+M\+Estimation.\+h.
 )}\label{classEMEstimation_a942acb2a0dcbd99dbd2669d6743e0e51}
 
 
-Definition at line 10 of file E\+M\+Estimation.\+cpp.
+Definition at line 11 of file E\+M\+Estimation.\+cpp.
 
 
 
@@ -98,7 +98,7 @@ References convergence\+Signal, f, iterations, logger, model, optim, and r.
 )\hspace{0.3cm}{\ttfamily [virtual]}}\label{classEMEstimation_a218c478d8b1b49c4ea9076ba30852c9d}
 
 
-Definition at line 22 of file E\+M\+Estimation.\+cpp.
+Definition at line 23 of file E\+M\+Estimation.\+cpp.
 
 
 
@@ -120,7 +120,7 @@ Check if all the conditions are met for running the model, can report an error t
 
 
 
-Definition at line 443 of file E\+M\+Estimation.\+cpp.
+Definition at line 522 of file E\+M\+Estimation.\+cpp.
 
 \hypertarget{classEMEstimation_a7391808764fd510d6a0f0351ec699b2d}{}\index{E\+M\+Estimation@{E\+M\+Estimation}!estimate@{estimate}}
 \index{estimate@{estimate}!E\+M\+Estimation@{E\+M\+Estimation}}
@@ -139,7 +139,7 @@ Implements \hyperlink{classClassicalEstimation_a182aef8049a48cf1bd09bff642df8c01
 
 
 
-Definition at line 394 of file E\+M\+Estimation.\+cpp.
+Definition at line 473 of file E\+M\+Estimation.\+cpp.
 
 
 
@@ -162,7 +162,7 @@ Returns the iterations that took the estimation to obtain an answer.
 
 
 
-Definition at line 458 of file E\+M\+Estimation.\+cpp.
+Definition at line 537 of file E\+M\+Estimation.\+cpp.
 
 
 
@@ -181,11 +181,15 @@ Sets the initial values for the estimation, use this for inputting a matrix as i
 
 
 
-Definition at line 53 of file E\+M\+Estimation.\+cpp.
+Definition at line 54 of file E\+M\+Estimation.\+cpp.
 
 
 
 References Model\+::get\+Parameter\+Model(), model, and Parameter\+Model\+::set\+Parameter\+Set().
+
+
+
+Referenced by one\+Run().
 
 \hypertarget{classEMEstimation_a9e6a83bfa5f78ec1531f67538dc12f93}{}\index{E\+M\+Estimation@{E\+M\+Estimation}!set\+Initial\+Values@{set\+Initial\+Values}}
 \index{set\+Initial\+Values@{set\+Initial\+Values}!E\+M\+Estimation@{E\+M\+Estimation}}
@@ -201,6 +205,10 @@ Sets the initial values according to a method of calculating the values Possible
 The default method is O\+S\+P\+I\+N\+A , this is the fastest method according to the S\+I\+C\+S calculations 
 
 Definition at line 66 of file E\+M\+Estimation.\+cpp.
+
+
+
+References a, c, Pattern\+Matrix\+::check\+End(), Pattern\+Matrix\+::count\+Individuals(), d, Pattern\+Matrix\+::get\+Current\+Bit\+Set(), Pattern\+Matrix\+::get\+Current\+Frequency(), Item\+Model\+::get\+Dataset(), Model\+::get\+Item\+Model(), Model\+::get\+Parameter\+Model(), Parameter\+Model\+::get\+Parameter\+Set(), Pattern\+Matrix\+::iterate(), model, normal\+Inverse(), randomd(), Pattern\+Matrix\+::reset\+Iterator(), and std\+Dev\+\_\+bin().
 
 \hypertarget{classEMEstimation_a6cd3ac7193ff9d5d92bd90b58da26e11}{}\index{E\+M\+Estimation@{E\+M\+Estimation}!set\+Model@{set\+Model}}
 \index{set\+Model@{set\+Model}!E\+M\+Estimation@{E\+M\+Estimation}}
@@ -219,7 +227,7 @@ Implements \hyperlink{classClassicalEstimation_a4add5ad245795b82380af0c34840c603
 
 
 
-Definition at line 39 of file E\+M\+Estimation.\+cpp.
+Definition at line 40 of file E\+M\+Estimation.\+cpp.
 
 
 
@@ -242,7 +250,7 @@ Sets the optimization algorithm.
 
 
 
-Definition at line 447 of file E\+M\+Estimation.\+cpp.
+Definition at line 526 of file E\+M\+Estimation.\+cpp.
 
 \hypertarget{classEMEstimation_ae8d8d6a4f2874d0da59ae2f57f21750a}{}\index{E\+M\+Estimation@{E\+M\+Estimation}!set\+Trace@{set\+Trace}}
 \index{set\+Trace@{set\+Trace}!E\+M\+Estimation@{E\+M\+Estimation}}
@@ -257,7 +265,7 @@ Sets the reporter for the trace.
 
 
 
-Definition at line 451 of file E\+M\+Estimation.\+cpp.
+Definition at line 530 of file E\+M\+Estimation.\+cpp.
 
 \hypertarget{classEMEstimation_aadb720a89ed634dff963c4d50970b249}{}\index{E\+M\+Estimation@{E\+M\+Estimation}!set\+Trace@{set\+Trace}}
 \index{set\+Trace@{set\+Trace}!E\+M\+Estimation@{E\+M\+Estimation}}
@@ -268,7 +276,7 @@ Definition at line 451 of file E\+M\+Estimation.\+cpp.
 )}\label{classEMEstimation_aadb720a89ed634dff963c4d50970b249}
 
 
-Definition at line 454 of file E\+M\+Estimation.\+cpp.
+Definition at line 533 of file E\+M\+Estimation.\+cpp.
 
 \hypertarget{classEMEstimation_afd00a80808f85581961d4d0ed2ce2a97}{}\index{E\+M\+Estimation@{E\+M\+Estimation}!step\+E@{step\+E}}
 \index{step\+E@{step\+E}!E\+M\+Estimation@{E\+M\+Estimation}}
@@ -283,7 +291,7 @@ Step E of the E\+M method, this step takes the actual estimation of the paramete
 
 T\+O\+D\+O \+: P\+A\+R\+A\+L\+L\+E\+L\+I\+Z\+A\+B\+L\+E F\+O\+R 
 
-Definition at line 84 of file E\+M\+Estimation.\+cpp.
+Definition at line 164 of file E\+M\+Estimation.\+cpp.
 
 
 
@@ -302,11 +310,11 @@ Referenced by estimate().
 )}\label{classEMEstimation_a8884e863f820e4a1a5caf099dca2ce1b}
 
 
-Executes the maximization step using the inputted or default optimizer currently only supporting B\+F\+G\+S and newton algorithms T\+O\+D\+O \+: Relax Convergence criterias. 
+Executes the maximization step using the inputted or default optimizer currently only supporting B\+F\+G\+S and newton algorithms. 
 
 
 
-Definition at line 182 of file E\+M\+Estimation.\+cpp.
+Definition at line 261 of file E\+M\+Estimation.\+cpp.
 
 
 

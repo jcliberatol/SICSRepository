@@ -2,6 +2,11 @@
 \label{classThreePLModel}\index{Three\+P\+L\+Model@{Three\+P\+L\+Model}}
 
 
+\hyperlink{classModel}{Model} for the 3pl model, uses parameters a d c.  
+
+
+
+
 {\ttfamily \#include $<$Three\+P\+L\+Model.\+h$>$}
 
 Inheritance diagram for Three\+P\+L\+Model\+:\begin{figure}[H]
@@ -47,14 +52,16 @@ static void \hyperlink{classThreePLModel_acc5f243d6863cf431df88b4b1648e52d}{N\+H
 static void \hyperlink{classThreePLModel_a4eb5d27957e207af988cfc87b1adbb27}{item\+Hessian} (double $\ast$args, double $\ast$pars, int nargs, int npars, double $\ast$\hyperlink{classThreePLModel_a034561892349c03922d857a67d15f79d}{Hessian})
 \item 
 static void \hyperlink{classThreePLModel_a1e103a8afde4c931b15d451f131ebc6e}{itemgradient} (double $\ast$, double $\ast$, int, int, double $\ast$)
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em In the item gradient and hessians these procedures take an already calculated hessian and gradient and just access the item that is needed in the optimization step args will then be the ith args for the item pars is going to be the full array of gradients and npars is going to be used to take the ith element the gradient will then be copied to g. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Additional Inherited Members}
 
 
 \subsection{Detailed Description}
+\hyperlink{classModel}{Model} for the 3pl model, uses parameters a d c. 
 
+unidimensional 
 
-Definition at line 22 of file Three\+P\+L\+Model.\+h.
+Definition at line 25 of file Three\+P\+L\+Model.\+h.
 
 
 
@@ -83,7 +90,7 @@ References a, b, c, d, Parameter\+Model\+::parameter\+Set, and Parameter\+Model\
 )\hspace{0.3cm}{\ttfamily [virtual]}}\label{classThreePLModel_a146e9c48084c708708060cf433346f1b}
 
 
-Definition at line 616 of file Three\+P\+L\+Model.\+cpp.
+Definition at line 617 of file Three\+P\+L\+Model.\+cpp.
 
 
 
@@ -164,7 +171,7 @@ References Parameter\+Model\+::probability\+Matrix.
 )\hspace{0.3cm}{\ttfamily [static]}}\label{classThreePLModel_a6b86ab6fe2c11047723864ab95bd29da}
 
 
-Definition at line 377 of file Three\+P\+L\+Model.\+cpp.
+Definition at line 378 of file Three\+P\+L\+Model.\+cpp.
 
 
 
@@ -187,7 +194,7 @@ Referenced by N\+Hessian(), and E\+M\+Estimation\+::step\+M().
 )\hspace{0.3cm}{\ttfamily [static]}}\label{classThreePLModel_a034561892349c03922d857a67d15f79d}
 
 
-Definition at line 138 of file Three\+P\+L\+Model.\+cpp.
+Definition at line 139 of file Three\+P\+L\+Model.\+cpp.
 
 
 
@@ -210,7 +217,11 @@ Referenced by E\+M\+Estimation\+::step\+M().
 )\hspace{0.3cm}{\ttfamily [static]}}\label{classThreePLModel_a1e103a8afde4c931b15d451f131ebc6e}
 
 
-Definition at line 122 of file Three\+P\+L\+Model.\+cpp.
+In the item gradient and hessians these procedures take an already calculated hessian and gradient and just access the item that is needed in the optimization step args will then be the ith args for the item pars is going to be the full array of gradients and npars is going to be used to take the ith element the gradient will then be copied to g. 
+
+
+
+Definition at line 129 of file Three\+P\+L\+Model.\+cpp.
 
 
 
@@ -247,7 +258,7 @@ Referenced by E\+M\+Estimation\+::step\+M().
 )\hspace{0.3cm}{\ttfamily [static]}}\label{classThreePLModel_ae31380f753f4bc118788f9dbc93fe4af}
 
 
-Definition at line 509 of file Three\+P\+L\+Model.\+cpp.
+Definition at line 510 of file Three\+P\+L\+Model.\+cpp.
 
 
 
@@ -270,7 +281,7 @@ Referenced by Ngradient(), and E\+M\+Estimation\+::step\+M().
 )\hspace{0.3cm}{\ttfamily [static]}}\label{classThreePLModel_ae24fa3d2b9bf02b79a010ea760f1bff4}
 
 
-Definition at line 327 of file Three\+P\+L\+Model.\+cpp.
+Definition at line 328 of file Three\+P\+L\+Model.\+cpp.
 
 
 
@@ -289,7 +300,7 @@ References log\+Likelihood().
 )\hspace{0.3cm}{\ttfamily [static]}}\label{classThreePLModel_acc5f243d6863cf431df88b4b1648e52d}
 
 
-Definition at line 340 of file Three\+P\+L\+Model.\+cpp.
+Definition at line 341 of file Three\+P\+L\+Model.\+cpp.
 
 
 
@@ -367,7 +378,7 @@ References a, c, d, Dimension\+Model\+::get\+Latent\+Trait\+Set(), Latent\+Trait
 )\hspace{0.3cm}{\ttfamily [static]}}\label{classThreePLModel_a89d3c2a8f9d077e48db38f78aa8d3526}
 
 
-Definition at line 610 of file Three\+P\+L\+Model.\+cpp.
+Definition at line 611 of file Three\+P\+L\+Model.\+cpp.
 
 
 

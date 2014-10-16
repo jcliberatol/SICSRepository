@@ -209,526 +209,520 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        thess[h] = hess[i*It+h];</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    }</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;}</div>
-<div class="line"><a name="l00122"></a><span class="lineno"><a class="line" href="classThreePLModel.html#a1e103a8afde4c931b15d451f131ebc6e">  122</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classThreePLModel.html#a1e103a8afde4c931b15d451f131ebc6e">ThreePLModel::itemgradient</a>(<span class="keywordtype">double</span>* args, <span class="keywordtype">double</span>* grad, <span class="keywordtype">int</span> nargs, <span class="keywordtype">int</span> i, <span class="keywordtype">double</span>* tgrad){</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    <span class="comment">/*</span></div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="comment">     * In the item gradient and hessians these procedures take an already calculated hessian</span></div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="comment">     * and gradient and just access the item that is needed in the optimization step</span></div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="comment">     * args will then be the ith args for the item</span></div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="comment">     * pars is going to be the full array of gradients and npars is going to be used to take the ith element</span></div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="comment">     * the gradient will then be copied to g</span></div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="comment">//The first element of tgrad is the number of items in total</span></div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keywordtype">int</span> It = tgrad[0];</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <span class="comment">//fill the gradient for the item</span></div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    tgrad[0] = grad[i];</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    tgrad[1] = grad[It+i];</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    tgrad[2] = grad[2*It+i];</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;}</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;</div>
-<div class="line"><a name="l00138"></a><span class="lineno"><a class="line" href="classThreePLModel.html#a034561892349c03922d857a67d15f79d">  138</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classThreePLModel.html#a034561892349c03922d857a67d15f79d">ThreePLModel::Hessian</a>(<span class="keywordtype">double</span>* args, <span class="keywordtype">double</span>* pars, <span class="keywordtype">int</span> nargs, <span class="keywordtype">int</span> npars, <span class="keywordtype">double</span>* hessian){</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    <span class="comment">//Hessian is composed of 3 * 3 matrix for every item so item * 9 memories</span></div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    <span class="comment">/*</span></div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="comment">         * TODO</span></div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="comment">         * What we need</span></div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;<span class="comment">         * items</span></div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;<span class="comment">         * q</span></div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;<span class="comment">         * theta array</span></div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;<span class="comment">         * D</span></div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="comment">         * a, b, c</span></div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="comment">         * f and r</span></div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="comment">         */</span></div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        <span class="keywordtype">int</span> nA = 0;</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        <span class="keywordtype">int</span> nP = 0;</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        <span class="keywordtype">int</span> q, items;</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        <span class="keywordtype">double</span> *theta, *r, *f, *<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa91fb0824da12f8bb3b74dd78fb13b63">a</a>, *<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa06b03e4cd5c7c464c513a95a7fcf9bf">b</a>, *<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90a776304400122408ea717dde9234fdd2a">c</a>;</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        <span class="comment">// Obtain q</span></div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        q = pars[nP ++]; <span class="comment">// q is obtained and npars is augmented</span></div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        <span class="comment">// Obtain I</span></div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        items = pars[nP ++];</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        theta = <span class="keyword">new</span> <span class="keywordtype">double</span>[q];</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        r = <span class="keyword">new</span> <span class="keywordtype">double</span>[q*items];</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;        f = <span class="keyword">new</span> <span class="keywordtype">double</span>[q];</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        a = <span class="keyword">new</span> <span class="keywordtype">double</span>[items];</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        b = <span class="keyword">new</span> <span class="keywordtype">double</span>[items];</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;        c = <span class="keyword">new</span> <span class="keywordtype">double</span>[items];</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        <span class="comment">// Obtain theta</span></div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;q; k++) {</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;            theta[k] = pars[nP ++];</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        }</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        <span class="comment">// Obtain f</span></div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;q; k++) {</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;            f[k] = pars[nP ++];</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        }</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        <span class="comment">// Obtain r</span></div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;q; k++) {</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;items; i++) {</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;                r[k*items+i] = pars[nP ++];</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;            }</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        }</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        <span class="comment">// Obtain a</span></div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;items; i++) {</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;            a[i] = args [nA ++];</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        }</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        <span class="comment">// Obtain b</span></div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;items; i++) {</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;            b[i] = args [nA ++];</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        }</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        <span class="comment">// Obtain c</span></div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;items; i++) {</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;            c[i] = args [nA ++];</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;        }</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        <span class="keywordtype">double</span> D = <a class="code" href="classConstant.html#aaf334273fc82a586936f00df7ec30149">Constant::NORM_CONST</a>;</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        <span class="keywordtype">long</span> <span class="keywordtype">double</span> *h_0; <span class="comment">// Block Matrix of size q*I. Each block-element has size of 1*3</span></div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;        <span class="keywordtype">long</span> <span class="keywordtype">double</span> *h; <span class="comment">// Block vector of size I (i.e. I blocks). Each block-element has size of 1*3</span></div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        <span class="keywordtype">long</span> <span class="keywordtype">double</span> *P_Star, *P;  <span class="comment">// Matrix of size q*I</span></div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;        <span class="keywordtype">long</span> <span class="keywordtype">double</span> *W;           <span class="comment">// Matrix of size q*I</span></div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;        <span class="keywordtype">long</span> <span class="keywordtype">double</span> *factor;      <span class="comment">// Matrix of product (r-fP)W</span></div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;        <span class="keywordtype">long</span> <span class="keywordtype">double</span> *ec;            <span class="comment">// e^c_i</span></div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        <span class="keywordtype">long</span> <span class="keywordtype">double</span> *ecPlus1Inv;    <span class="comment">// 1 / (e^c_i + 1)</span></div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        h = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [3*items];</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;        h_0 = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [q*3*items];</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;        P = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [q*items];</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;        P_Star = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [q*items];</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        factor = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [q*items];</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;        W = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [q*items];</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;        ec = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [items];</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;        ecPlus1Inv = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [items];</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;        <span class="keywordflow">for</span>( <span class="keywordtype">unsigned</span>  <span class="keywordtype">int</span> i = 0; i &lt; items; i++ ) {</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;            ecPlus1Inv[i]=1/(1+exp(c[i]));</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;            ec[i]=exp(c[i]);</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;        }</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;        <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> k = 0; k &lt; q; k++ ) {</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;            <span class="keywordflow">for</span> ( <span class="keywordtype">unsigned</span>  <span class="keywordtype">int</span> i = 0; i &lt; items; i++ ) {</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;                P[k * items + i] = <a class="code" href="classThreePLModel.html#a4ac3badc7d7a17b57be43d24bfb924e3">successProbability</a> ( theta[k], a[i], b[i], c[i] );</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;                <span class="comment">//P_Star[k * items + i] = successProbability ( theta[k], a[i], b[i], 0.0 );</span></div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;                P_Star[k * items + i] = 1/(1+exp(-D*(a[i]*theta[k]+b[i])));</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;                W[k * items + i] = P_Star[k * items + i] * ( 1 - P_Star[k * items + i] ); <span class="comment">// Numerator</span></div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;                W[k * items + i] /= P[k * items + i] * ( 1 - P[k * items + i] );<span class="comment">// Denominator</span></div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;                factor[k * items + i] = ( r[k * items + i] - f[k]*P[k * items + i] ) * W[k * items + i];</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;                <span class="comment">// h_0 / (P_star*Q_star)</span></div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;                h_0[3 * items * k + 3 * i + 0] = D * theta[k] * ecPlus1Inv[i];</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;                h_0[3 * items * k + 3 * i + 1] = D * ecPlus1Inv[i];</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;                h_0[3 * items * k + 3 * i + 2] = ec[i] * (ecPlus1Inv[i]*ecPlus1Inv[i]) / P_Star[k * items + i];</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;            }</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;        }</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;        memset(h,0,<span class="keyword">sizeof</span>(<span class="keywordtype">long</span> <span class="keywordtype">double</span>)*3*items);</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;        <span class="comment">//memset(gradient,0,sizeof(double)*3*items);</span></div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;        <span class="keywordflow">for</span> ( <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> i = 0; i &lt; items; i++ ) {</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;            <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> k = 0; k &lt; q; k++ ) {</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;                h[3 * i + 0] += factor[k * items + i] * h_0[3 * items * k + 3 * i + 0];</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;                h[3 * i + 1] += factor[k * items + i] * h_0[3 * items * k + 3 * i + 1];</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;                h[3 * i + 2] += factor[k * items + i] * h_0[3 * items * k + 3 * i + 2];</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;            }</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        }</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        <span class="comment">//Now we must start calculating the hessian matrix</span></div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;        <span class="keywordtype">long</span> <span class="keywordtype">double</span> *H_0;</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        H_0 = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [q*9*items];</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;        memset(hessian,0,<span class="keyword">sizeof</span>(<span class="keywordtype">double</span>)*3*3*items);</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        memset(H_0,0,<span class="keyword">sizeof</span>(<span class="keywordtype">long</span> <span class="keywordtype">double</span>)*q*3*3*items);</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        <span class="comment">//#define H_0(k,i,m,n) H_0[9 * I * k + 9 * i + 3 * m + n]</span></div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        <span class="comment">//#define H(i,m,n) H[9 * i + 3 * m + n]</span></div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        <span class="comment">//Step 3: Calculate blocks of H_0</span></div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;            <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> k = 0; k &lt; q; k++ ) {</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;                <span class="keywordflow">for</span> ( <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> i = 0; i &lt; items; i++ ) {</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;                    H_0[9 * items * k + 9 * i + 3 * 0 + 0] = (D*D) * (theta[k]*theta[k]) * ecPlus1Inv[i] * (1-2*P_Star[k * items + i] );</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;                    H_0[9 * items * k + 9 * i + 3 * 0 + 1] = H_0[9 * items * k + 9 * i + 3 * 1 + 0] = (D*D) * theta[k] * ecPlus1Inv[i] * (1-2*P_Star[k * items + i] );</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;                    H_0[9 * items * k + 9 * i + 3 * 1 + 1] = (D*D) * ecPlus1Inv[i] * (1-2*P_Star[k * items + i] );</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;                    H_0[9 * items * k + 9 * i + 3 * 0 + 2] = H_0[9 * items * k + 9 * i + 3 * 2 + 0] = - ec[i] * D * theta[k] * (ecPlus1Inv[i]*ecPlus1Inv[i]);</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;                    H_0[9 * items * k + 9 * i + 3 * 1 + 2] = H_0[9 * items * k + 9 * i + 3 * 2 + 1] = - ec[i] * D * (ecPlus1Inv[i]*ecPlus1Inv[i]);</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;                    H_0[9 * items * k + 9 * i + 3 * 2 + 2] = - ( ec[i] * (-1+ec[i]) * (ecPlus1Inv[i]*ecPlus1Inv[i]*ecPlus1Inv[i]) ) / P_Star[k * items + i] ;</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;                }</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;            }</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;            <span class="keywordflow">for</span> ( <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> i = 0; i &lt; items; i++ ) {</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;                <span class="comment">// Fill block i of zeros</span></div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;                <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> m = 0; m &lt; 3; m++ ) {</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;                    <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> n = 0; n &lt; 3; n++ ) {</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;                        hessian[9 * i + 3 * m + n]= 0.0;</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;                    } <span class="comment">// n</span></div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;                } <span class="comment">// m</span></div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;                <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> k = 0; k &lt; q; k++ ) {</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;                    <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> m = 0; m &lt; 3; m++ ) {</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;                        <span class="comment">// Add k-block values to block i</span></div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;                        <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> n = 0; n &lt; 3; n++ ) {</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;                            <span class="comment">//Begins the hessian multiplication</span></div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;                            hessian[9 * i + 3 * m + n] +=</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;                                    (</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;                                    factor[k * items + i]*H_0[9 * items * k + 9 * i + 3 * m + n]</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;                                    - ( r[k * items + i] - 2*P[k * items + i]*r[k * items + i]</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;                                    + f[k]*P[k * items + i]*P[k * items + i] )</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;                                    * (W[k * items + i]*W[k * items + i] )*</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;                                    (h_0[3 * items * k + 3 * i + m] * h_0[3 * items * k + 3 * i + n] )</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;                                    );</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;                        } <span class="comment">// n</span></div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;                    } <span class="comment">// m</span></div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;                } <span class="comment">// k</span></div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    <span class="comment">//Taking the negative</span></div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;                                <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> m = 0; m &lt; 3; m++ ) {</div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;                                    <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> n = 0; n &lt; 3; n++ ) {</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;                                        hessian[9 * i + 3 * m + n]= -hessian[9 * i + 3 * m + n];</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;                                        <span class="comment">// Debugging printingcout&lt;&lt;9 * i + 3 * m + n&lt;&lt;&quot;:&quot;&lt;&lt;hessian[9 * i + 3 * m + n]&lt;&lt;&quot; &quot;;</span></div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;                                    } <span class="comment">// n</span></div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;                                    <span class="comment">// Debugging printingcout&lt;&lt;endl;</span></div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;                                } <span class="comment">// m</span></div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;                                <span class="comment">// Debugging printingcout&lt;&lt;endl;</span></div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;</div>
+<div class="line"><a name="l00129"></a><span class="lineno"><a class="line" href="classThreePLModel.html#a1e103a8afde4c931b15d451f131ebc6e">  129</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classThreePLModel.html#a1e103a8afde4c931b15d451f131ebc6e">ThreePLModel::itemgradient</a>(<span class="keywordtype">double</span>* args, <span class="keywordtype">double</span>* grad, <span class="keywordtype">int</span> nargs, <span class="keywordtype">int</span> i, <span class="keywordtype">double</span>* tgrad){</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="comment">//The first element of tgrad is the number of items in total</span></div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <span class="keywordtype">int</span> It = tgrad[0];</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    <span class="comment">//fill the gradient for the item</span></div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    tgrad[0] = grad[i];</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    tgrad[1] = grad[It+i];</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    tgrad[2] = grad[2*It+i];</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;}</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;</div>
+<div class="line"><a name="l00139"></a><span class="lineno"><a class="line" href="classThreePLModel.html#a034561892349c03922d857a67d15f79d">  139</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classThreePLModel.html#a034561892349c03922d857a67d15f79d">ThreePLModel::Hessian</a>(<span class="keywordtype">double</span>* args, <span class="keywordtype">double</span>* pars, <span class="keywordtype">int</span> nargs, <span class="keywordtype">int</span> npars, <span class="keywordtype">double</span>* hessian){</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;    <span class="comment">//Hessian is composed of 3 * 3 matrix for every item so item * 9 memories</span></div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    <span class="comment">/*</span></div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="comment">         * TODO</span></div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;<span class="comment">         * What we need</span></div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;<span class="comment">         * items</span></div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;<span class="comment">         * q</span></div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;<span class="comment">         * theta array</span></div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="comment">         * D</span></div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="comment">         * a, b, c</span></div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="comment">         * f and r</span></div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="comment">         */</span></div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        <span class="keywordtype">int</span> nA = 0;</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        <span class="keywordtype">int</span> nP = 0;</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        <span class="keywordtype">int</span> q, items;</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        <span class="keywordtype">double</span> *theta, *r, *f, *<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa91fb0824da12f8bb3b74dd78fb13b63">a</a>, *<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa06b03e4cd5c7c464c513a95a7fcf9bf">b</a>, *<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90a776304400122408ea717dde9234fdd2a">c</a>;</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        <span class="comment">// Obtain q</span></div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        q = pars[nP ++]; <span class="comment">// q is obtained and npars is augmented</span></div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        <span class="comment">// Obtain I</span></div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        items = pars[nP ++];</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        theta = <span class="keyword">new</span> <span class="keywordtype">double</span>[q];</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;        r = <span class="keyword">new</span> <span class="keywordtype">double</span>[q*items];</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        f = <span class="keyword">new</span> <span class="keywordtype">double</span>[q];</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        a = <span class="keyword">new</span> <span class="keywordtype">double</span>[items];</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;        b = <span class="keyword">new</span> <span class="keywordtype">double</span>[items];</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        c = <span class="keyword">new</span> <span class="keywordtype">double</span>[items];</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        <span class="comment">// Obtain theta</span></div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;q; k++) {</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;            theta[k] = pars[nP ++];</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        }</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        <span class="comment">// Obtain f</span></div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;q; k++) {</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;            f[k] = pars[nP ++];</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;        }</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        <span class="comment">// Obtain r</span></div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;q; k++) {</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;items; i++) {</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;                r[k*items+i] = pars[nP ++];</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;            }</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;        }</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        <span class="comment">// Obtain a</span></div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;items; i++) {</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;            a[i] = args [nA ++];</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        }</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        <span class="comment">// Obtain b</span></div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;items; i++) {</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;            b[i] = args [nA ++];</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        }</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        <span class="comment">// Obtain c</span></div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;items; i++) {</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;            c[i] = args [nA ++];</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        }</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        <span class="keywordtype">double</span> D = <a class="code" href="classConstant.html#aaf334273fc82a586936f00df7ec30149">Constant::NORM_CONST</a>;</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;        <span class="keywordtype">long</span> <span class="keywordtype">double</span> *h_0; <span class="comment">// Block Matrix of size q*I. Each block-element has size of 1*3</span></div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        <span class="keywordtype">long</span> <span class="keywordtype">double</span> *h; <span class="comment">// Block vector of size I (i.e. I blocks). Each block-element has size of 1*3</span></div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;        <span class="keywordtype">long</span> <span class="keywordtype">double</span> *P_Star, *P;  <span class="comment">// Matrix of size q*I</span></div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;        <span class="keywordtype">long</span> <span class="keywordtype">double</span> *W;           <span class="comment">// Matrix of size q*I</span></div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;        <span class="keywordtype">long</span> <span class="keywordtype">double</span> *factor;      <span class="comment">// Matrix of product (r-fP)W</span></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        <span class="keywordtype">long</span> <span class="keywordtype">double</span> *ec;            <span class="comment">// e^c_i</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;        <span class="keywordtype">long</span> <span class="keywordtype">double</span> *ecPlus1Inv;    <span class="comment">// 1 / (e^c_i + 1)</span></div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;        h = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [3*items];</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;        h_0 = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [q*3*items];</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;        P = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [q*items];</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        P_Star = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [q*items];</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;        factor = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [q*items];</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;        W = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [q*items];</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;        ec = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [items];</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;        ecPlus1Inv = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [items];</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;        <span class="keywordflow">for</span>( <span class="keywordtype">unsigned</span>  <span class="keywordtype">int</span> i = 0; i &lt; items; i++ ) {</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;            ecPlus1Inv[i]=1/(1+exp(c[i]));</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;            ec[i]=exp(c[i]);</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        }</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> k = 0; k &lt; q; k++ ) {</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;            <span class="keywordflow">for</span> ( <span class="keywordtype">unsigned</span>  <span class="keywordtype">int</span> i = 0; i &lt; items; i++ ) {</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;                P[k * items + i] = <a class="code" href="classThreePLModel.html#a4ac3badc7d7a17b57be43d24bfb924e3">successProbability</a> ( theta[k], a[i], b[i], c[i] );</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;                <span class="comment">//P_Star[k * items + i] = successProbability ( theta[k], a[i], b[i], 0.0 );</span></div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;                P_Star[k * items + i] = 1/(1+exp(-D*(a[i]*theta[k]+b[i])));</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;                W[k * items + i] = P_Star[k * items + i] * ( 1 - P_Star[k * items + i] ); <span class="comment">// Numerator</span></div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;                W[k * items + i] /= P[k * items + i] * ( 1 - P[k * items + i] );<span class="comment">// Denominator</span></div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;                factor[k * items + i] = ( r[k * items + i] - f[k]*P[k * items + i] ) * W[k * items + i];</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;                <span class="comment">// h_0 / (P_star*Q_star)</span></div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;                h_0[3 * items * k + 3 * i + 0] = D * theta[k] * ecPlus1Inv[i];</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;                h_0[3 * items * k + 3 * i + 1] = D * ecPlus1Inv[i];</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;                h_0[3 * items * k + 3 * i + 2] = ec[i] * (ecPlus1Inv[i]*ecPlus1Inv[i]) / P_Star[k * items + i];</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;            }</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;        }</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;        memset(h,0,<span class="keyword">sizeof</span>(<span class="keywordtype">long</span> <span class="keywordtype">double</span>)*3*items);</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;        <span class="comment">//memset(gradient,0,sizeof(double)*3*items);</span></div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;        <span class="keywordflow">for</span> ( <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> i = 0; i &lt; items; i++ ) {</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;            <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> k = 0; k &lt; q; k++ ) {</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;                h[3 * i + 0] += factor[k * items + i] * h_0[3 * items * k + 3 * i + 0];</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;                h[3 * i + 1] += factor[k * items + i] * h_0[3 * items * k + 3 * i + 1];</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;                h[3 * i + 2] += factor[k * items + i] * h_0[3 * items * k + 3 * i + 2];</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;            }</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        }</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;        <span class="comment">//Now we must start calculating the hessian matrix</span></div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        <span class="keywordtype">long</span> <span class="keywordtype">double</span> *H_0;</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;        H_0 = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [q*9*items];</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        memset(hessian,0,<span class="keyword">sizeof</span>(<span class="keywordtype">double</span>)*3*3*items);</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        memset(H_0,0,<span class="keyword">sizeof</span>(<span class="keywordtype">long</span> <span class="keywordtype">double</span>)*q*3*3*items);</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        <span class="comment">//#define H_0(k,i,m,n) H_0[9 * I * k + 9 * i + 3 * m + n]</span></div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        <span class="comment">//#define H(i,m,n) H[9 * i + 3 * m + n]</span></div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        <span class="comment">//Step 3: Calculate blocks of H_0</span></div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;            <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> k = 0; k &lt; q; k++ ) {</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;                <span class="keywordflow">for</span> ( <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> i = 0; i &lt; items; i++ ) {</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;                    H_0[9 * items * k + 9 * i + 3 * 0 + 0] = (D*D) * (theta[k]*theta[k]) * ecPlus1Inv[i] * (1-2*P_Star[k * items + i] );</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;                    H_0[9 * items * k + 9 * i + 3 * 0 + 1] = H_0[9 * items * k + 9 * i + 3 * 1 + 0] = (D*D) * theta[k] * ecPlus1Inv[i] * (1-2*P_Star[k * items + i] );</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;                    H_0[9 * items * k + 9 * i + 3 * 1 + 1] = (D*D) * ecPlus1Inv[i] * (1-2*P_Star[k * items + i] );</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;                    H_0[9 * items * k + 9 * i + 3 * 0 + 2] = H_0[9 * items * k + 9 * i + 3 * 2 + 0] = - ec[i] * D * theta[k] * (ecPlus1Inv[i]*ecPlus1Inv[i]);</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;                    H_0[9 * items * k + 9 * i + 3 * 1 + 2] = H_0[9 * items * k + 9 * i + 3 * 2 + 1] = - ec[i] * D * (ecPlus1Inv[i]*ecPlus1Inv[i]);</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;                    H_0[9 * items * k + 9 * i + 3 * 2 + 2] = - ( ec[i] * (-1+ec[i]) * (ecPlus1Inv[i]*ecPlus1Inv[i]*ecPlus1Inv[i]) ) / P_Star[k * items + i] ;</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;                }</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;            }</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;            <span class="keywordflow">for</span> ( <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> i = 0; i &lt; items; i++ ) {</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;                <span class="comment">// Fill block i of zeros</span></div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;                <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> m = 0; m &lt; 3; m++ ) {</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;                    <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> n = 0; n &lt; 3; n++ ) {</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;                        hessian[9 * i + 3 * m + n]= 0.0;</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;                    } <span class="comment">// n</span></div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;                } <span class="comment">// m</span></div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;                <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> k = 0; k &lt; q; k++ ) {</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;                    <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> m = 0; m &lt; 3; m++ ) {</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;                        <span class="comment">// Add k-block values to block i</span></div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;                        <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> n = 0; n &lt; 3; n++ ) {</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;                            <span class="comment">//Begins the hessian multiplication</span></div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;                            hessian[9 * i + 3 * m + n] +=</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;                                    (</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;                                    factor[k * items + i]*H_0[9 * items * k + 9 * i + 3 * m + n]</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;                                    - ( r[k * items + i] - 2*P[k * items + i]*r[k * items + i]</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;                                    + f[k]*P[k * items + i]*P[k * items + i] )</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;                                    * (W[k * items + i]*W[k * items + i] )*</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;                                    (h_0[3 * items * k + 3 * i + m] * h_0[3 * items * k + 3 * i + n] )</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;                                    );</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;                        } <span class="comment">// n</span></div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;                    } <span class="comment">// m</span></div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;                } <span class="comment">// k</span></div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    <span class="comment">//Taking the negative</span></div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;                                <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> m = 0; m &lt; 3; m++ ) {</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;                                    <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> n = 0; n &lt; 3; n++ ) {</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;                                        hessian[9 * i + 3 * m + n]= -hessian[9 * i + 3 * m + n];</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;                                        <span class="comment">// Debugging printingcout&lt;&lt;9 * i + 3 * m + n&lt;&lt;&quot;:&quot;&lt;&lt;hessian[9 * i + 3 * m + n]&lt;&lt;&quot; &quot;;</span></div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;                                    } <span class="comment">// n</span></div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;                                    <span class="comment">// Debugging printingcout&lt;&lt;endl;</span></div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;                                } <span class="comment">// m</span></div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;                                <span class="comment">// Debugging printingcout&lt;&lt;endl;</span></div>
 <div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;            } <span class="comment">// i</span></div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        <span class="keyword">delete</span> [] H_0;</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;        <span class="keyword">delete</span> [] h_0;</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;        <span class="keyword">delete</span> [] P_Star;</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        <span class="keyword">delete</span> [] P;</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        <span class="keyword">delete</span> [] W;</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;        <span class="keyword">delete</span> [] factor;</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;        <span class="keyword">delete</span> [] ec;</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;        <span class="keyword">delete</span> [] ecPlus1Inv;</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        <span class="keyword">delete</span> [] h;</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        <span class="keyword">delete</span> [] theta;</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        <span class="keyword">delete</span> [] r;</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        <span class="keyword">delete</span> [] f;</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        <span class="keyword">delete</span> [] <a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa91fb0824da12f8bb3b74dd78fb13b63">a</a>;</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        <span class="keyword">delete</span> [] <a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa06b03e4cd5c7c464c513a95a7fcf9bf">b</a>;</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;        <span class="keyword">delete</span> [] <a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90a776304400122408ea717dde9234fdd2a">c</a>;</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;}</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;</div>
-<div class="line"><a name="l00327"></a><span class="lineno"><a class="line" href="classThreePLModel.html#ae24fa3d2b9bf02b79a010ea760f1bff4">  327</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classThreePLModel.html#ae24fa3d2b9bf02b79a010ea760f1bff4">ThreePLModel::Ngradient</a>(<span class="keywordtype">double</span>* args, <span class="keywordtype">double</span>* pars, <span class="keywordtype">int</span> nargs, <span class="keywordtype">int</span> npars, <span class="keywordtype">double</span>* <a class="code" href="NCM_8h.html#af15a746b92f8a980c82fa216ce598faf">gradient</a>){</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;    <span class="comment">//  For each of the gradient thingies increase the args and apply richardsons</span></div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;    <span class="keywordtype">double</span> hh = 0.000001;</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;    <span class="comment">//(f(x+h)-f(x))/h</span></div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0 ; i &lt; nargs; i++){</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        args[i]=args[i]+hh;</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;        gradient[i]=<a class="code" href="classThreePLModel.html#ae31380f753f4bc118788f9dbc93fe4af">logLikelihood</a>(args,pars,nargs,npars);</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;        args[i]=args[i]-hh;</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;        gradient[i]-=<a class="code" href="classThreePLModel.html#ae31380f753f4bc118788f9dbc93fe4af">logLikelihood</a>(args,pars,nargs,npars);</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        gradient[i]=gradient[i]/hh;</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;    }</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;}</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;</div>
-<div class="line"><a name="l00340"></a><span class="lineno"><a class="line" href="classThreePLModel.html#acc5f243d6863cf431df88b4b1648e52d">  340</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classThreePLModel.html#acc5f243d6863cf431df88b4b1648e52d">ThreePLModel::NHessian</a>(<span class="keywordtype">double</span>*args, <span class="keywordtype">double</span>* pars, <span class="keywordtype">int</span> nargs, <span class="keywordtype">int</span> npars, <span class="keywordtype">double</span>* hessian){</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;    <span class="comment">//the gradient is composed of items a&#39;s items b&#39;s items c&#39;s take it as such</span></div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;    <span class="keywordtype">double</span> hh = 0.001;</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;    <span class="keywordtype">double</span> gradiente[nargs];</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;    <span class="keywordtype">int</span> items = nargs/3;</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    <a class="code" href="classThreePLModel.html#a6b86ab6fe2c11047723864ab95bd29da">gradient</a>(args,pars,nargs,npars,gradiente);</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;    <span class="comment">//Calculate the hessian for each item order is a&#39;s b&#39;s c&#39;s in args</span></div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; items; ++i) {</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;                <span class="comment">//Extract the gradient at the points (Put at the hessian)</span></div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; 3; ++j) {</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; 3; ++k) {</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;                <span class="comment">//Now for each of these point change the k  parameter for deriving</span></div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;                hessian[i*items+j*3+k] = gradiente[j*items+i];</div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;            }</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;        }</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;    }</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; items; ++i) {</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;                    <span class="comment">//Derivate two times for this item // matrix point</span></div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;                    <span class="comment">//Extract the gradient at the points (Put at the hessian)</span></div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; 3; ++j) {</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;                <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; 3; ++k) {</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;                    memset(gradiente,0,<span class="keyword">sizeof</span>(<span class="keywordtype">double</span>)*items*3);</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;                    <span class="comment">//Change the argument k in the item i</span></div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;                    args[k*items+i]+=hh;</div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;                    <span class="comment">//Calculate le gradient</span></div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;                    <a class="code" href="classThreePLModel.html#a6b86ab6fe2c11047723864ab95bd29da">gradient</a>(args,pars,nargs,npars,gradiente);</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;                    <span class="comment">//Reset the parameter</span></div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;                    args[k*items+i]-=hh;</div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;                    <span class="comment">//This is the gradient at the point</span></div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;                    hessian[i*items+j*3+k]-= gradiente[j*items+i];</div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;                    hessian[i*items+j*3+k]=hessian[i*items+j*3+k]/hh;</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;                }</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;            }</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;        }</div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;</div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;}</div>
-<div class="line"><a name="l00377"></a><span class="lineno"><a class="line" href="classThreePLModel.html#a6b86ab6fe2c11047723864ab95bd29da">  377</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classThreePLModel.html#a6b86ab6fe2c11047723864ab95bd29da">ThreePLModel::gradient</a> (<span class="keywordtype">double</span>* args, <span class="keywordtype">double</span>* pars, <span class="keywordtype">int</span> nargs, <span class="keywordtype">int</span> npars, <span class="keywordtype">double</span>* <a class="code" href="NCM_8h.html#af15a746b92f8a980c82fa216ce598faf">gradient</a>){</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;    <span class="comment">/*</span></div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;<span class="comment">     * What we need</span></div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;<span class="comment">     * items</span></div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;<span class="comment">     * q</span></div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;<span class="comment">     * theta array</span></div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;<span class="comment">     * D</span></div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;<span class="comment">     * a, b, c</span></div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;<span class="comment">     * f and r</span></div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;    <span class="keywordtype">int</span> nA = 0;</div>
-<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;    <span class="keywordtype">int</span> nP = 0;</div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;    <span class="keywordtype">int</span> q, items;</div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;    <span class="keywordtype">double</span> *theta, *r, *f, *<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa91fb0824da12f8bb3b74dd78fb13b63">a</a>, *<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa06b03e4cd5c7c464c513a95a7fcf9bf">b</a>, *<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90a776304400122408ea717dde9234fdd2a">c</a>;</div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;</div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;    <span class="comment">// Obtain q</span></div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;    q = pars[nP ++]; <span class="comment">// q is obtained and npars is augmented</span></div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;    <span class="comment">// Obtain I</span></div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;    items = pars[nP ++];</div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;</div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;    theta = <span class="keyword">new</span> <span class="keywordtype">double</span>[q];</div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;    r = <span class="keyword">new</span> <span class="keywordtype">double</span>[q*items];</div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;    f = <span class="keyword">new</span> <span class="keywordtype">double</span>[q];</div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;    a = <span class="keyword">new</span> <span class="keywordtype">double</span>[items];</div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;    b = <span class="keyword">new</span> <span class="keywordtype">double</span>[items];</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;    c = <span class="keyword">new</span> <span class="keywordtype">double</span>[items];</div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;    <span class="comment">// Obtain theta</span></div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;q; k++) {</div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;        theta[k] = pars[nP ++];</div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;    }</div>
-<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;</div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;    <span class="comment">// Obtain f</span></div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;q; k++) {</div>
-<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;        f[k] = pars[nP ++];</div>
-<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;    }</div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;</div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;    <span class="comment">// Obtain r</span></div>
-<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;q; k++) {</div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;items; i++) {</div>
-<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;            r[k*items+i] = pars[nP ++];</div>
-<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;        }</div>
-<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;    }</div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;</div>
-<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;    <span class="comment">// Obtain a</span></div>
-<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;items; i++) {</div>
-<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;        a[i] = args [nA ++];</div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;    }</div>
-<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;    <span class="comment">// Obtain b</span></div>
-<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;items; i++) {</div>
-<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;        b[i] = args [nA ++];</div>
-<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;    }</div>
-<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;    <span class="comment">// Obtain c</span></div>
-<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;items; i++) {</div>
-<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;        c[i] = args [nA ++];</div>
-<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;    }</div>
-<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;</div>
-<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;    <span class="keywordtype">double</span> D = <a class="code" href="classConstant.html#aaf334273fc82a586936f00df7ec30149">Constant::NORM_CONST</a>;</div>
-<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">double</span> *h_0; <span class="comment">// Block Matrix of size q*I. Each block-element has size of 1*3</span></div>
-<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">double</span> *h; <span class="comment">// Block vector of size I (i.e. I blocks). Each block-element has size of 1*3</span></div>
-<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">double</span> *P_Star, *P;  <span class="comment">// Matrix of size q*I</span></div>
-<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">double</span> *W;           <span class="comment">// Matrix of size q*I</span></div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">double</span> *factor;      <span class="comment">// Matrix of product (r-fP)W</span></div>
-<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">double</span> *ec;            <span class="comment">// e^c_i</span></div>
-<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">double</span> *ecPlus1Inv;    <span class="comment">// 1 / (e^c_i + 1)</span></div>
-<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;</div>
-<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;    h = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [3*items];</div>
-<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;    h_0 = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [q*3*items];</div>
-<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;    P = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [q*items];</div>
-<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;    P_Star = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [q*items];</div>
-<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;    factor = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [q*items];</div>
-<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;    W = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [q*items];</div>
-<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;    ec = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [items];</div>
-<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;    ecPlus1Inv = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [items];</div>
-<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;</div>
-<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;    <span class="keywordflow">for</span>( <span class="keywordtype">unsigned</span>  <span class="keywordtype">int</span> i = 0; i &lt; items; i++ ) {</div>
-<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;        ecPlus1Inv[i]=1/(1+exp(c[i]));</div>
-<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;        ec[i]=exp(c[i]);</div>
-<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;    }</div>
-<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;    <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> k = 0; k &lt; q; k++ ) {</div>
-<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;        <span class="keywordflow">for</span> ( <span class="keywordtype">unsigned</span>  <span class="keywordtype">int</span> i = 0; i &lt; items; i++ ) {</div>
-<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;</div>
-<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;            P[k * items + i] = <a class="code" href="classThreePLModel.html#a4ac3badc7d7a17b57be43d24bfb924e3">successProbability</a> ( theta[k], a[i], b[i], c[i] );</div>
-<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;            <span class="comment">//P_Star[k * items + i] = successProbability ( theta[k], a[i], b[i], 0.0 );</span></div>
-<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;            P_Star[k * items + i] = 1/(1+exp(-D*(a[i]*theta[k]+b[i])));</div>
-<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;</div>
-<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;            W[k * items + i] = P_Star[k * items + i] * ( 1 - P_Star[k * items + i] ); <span class="comment">// Numerator</span></div>
-<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;            W[k * items + i] /= P[k * items + i] * ( 1 - P[k * items + i] );<span class="comment">// Denominator</span></div>
-<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;</div>
-<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;            factor[k * items + i] = ( r[k * items + i] - f[k]*P[k * items + i] ) * W[k * items + i];</div>
-<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;</div>
-<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;            <span class="comment">// h_0 / (P_star*Q_star)</span></div>
-<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;            h_0[3 * items * k + 3 * i + 0] = D * theta[k] * ecPlus1Inv[i];</div>
-<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;            h_0[3 * items * k + 3 * i + 1] = D * ecPlus1Inv[i];</div>
-<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;            h_0[3 * items * k + 3 * i + 2] = ec[i] * (ecPlus1Inv[i]*ecPlus1Inv[i]) / P_Star[k * items + i];</div>
-<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;</div>
-<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;        }</div>
-<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;    }</div>
-<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;    memset(h,0,<span class="keyword">sizeof</span>(<span class="keywordtype">long</span> <span class="keywordtype">double</span>)*3*items);</div>
-<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;    memset(gradient,0,<span class="keyword">sizeof</span>(<span class="keywordtype">double</span>)*3*items);</div>
-<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;    <span class="keywordflow">for</span> ( <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> i = 0; i &lt; items; i++ ) {</div>
-<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;        <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> k = 0; k &lt; q; k++ ) {</div>
-<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;            h[3 * i + 0] += factor[k * items + i] * h_0[3 * items * k + 3 * i + 0];</div>
-<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;            h[3 * i + 1] += factor[k * items + i] * h_0[3 * items * k + 3 * i + 1];</div>
-<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;            h[3 * i + 2] += factor[k * items + i] * h_0[3 * items * k + 3 * i + 2];</div>
-<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;        }</div>
-<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;    }</div>
-<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;</div>
-<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;    <span class="keyword">delete</span> [] h_0;</div>
-<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;    <span class="keyword">delete</span> [] P_Star;</div>
-<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;    <span class="keyword">delete</span> [] P;</div>
-<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;    <span class="keyword">delete</span> [] W;</div>
-<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;    <span class="keyword">delete</span> [] factor;</div>
-<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;    <span class="keyword">delete</span> [] ec;</div>
-<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;    <span class="keyword">delete</span> [] ecPlus1Inv;</div>
-<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;</div>
-<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;    <span class="keyword">delete</span> [] theta;</div>
-<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;    <span class="keyword">delete</span> [] r;</div>
-<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;    <span class="keyword">delete</span> [] f;</div>
-<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;    <span class="keyword">delete</span> [] <a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa91fb0824da12f8bb3b74dd78fb13b63">a</a>;</div>
-<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;    <span class="keyword">delete</span> [] <a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa06b03e4cd5c7c464c513a95a7fcf9bf">b</a>;</div>
-<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;    <span class="keyword">delete</span> [] <a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90a776304400122408ea717dde9234fdd2a">c</a>;</div>
-<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;</div>
-<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;<span class="comment">//return h as the gradient</span></div>
-<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;    <span class="keywordtype">int</span> hc=0;</div>
-<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> n = 0; n &lt; 3; ++n) {</div>
-<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;        <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0 ; i &lt; items ; ++i){</div>
-<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;            gradient[hc++]= -<span class="keyword">static_cast&lt;</span><span class="keywordtype">double</span><span class="keyword">&gt;</span>(h[i*3+n]);</div>
-<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;        }</div>
-<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;    }</div>
-<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;    <span class="keyword">delete</span> [] h;</div>
-<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;}</div>
-<div class="line"><a name="l00509"></a><span class="lineno"><a class="line" href="classThreePLModel.html#ae31380f753f4bc118788f9dbc93fe4af">  509</a></span>&#160;<span class="keywordtype">double</span> <a class="code" href="classThreePLModel.html#ae31380f753f4bc118788f9dbc93fe4af">ThreePLModel::logLikelihood</a> (<span class="keywordtype">double</span>* args, <span class="keywordtype">double</span>* pars, <span class="keywordtype">int</span> nargs,</div>
-<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;        <span class="keywordtype">int</span> npars) {</div>
-<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;</div>
-<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;    <span class="comment">//args</span></div>
-<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;    <span class="comment">/*</span></div>
-<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;<span class="comment">     * a[i]</span></div>
-<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;<span class="comment">     * b[i]</span></div>
-<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;<span class="comment">     * c[i]</span></div>
-<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;</div>
-<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;    <span class="comment">//pars</span></div>
-<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;    <span class="comment">/*</span></div>
-<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;<span class="comment">     * q</span></div>
-<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;<span class="comment">     * I</span></div>
-<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;<span class="comment">     * theta[q]</span></div>
-<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;<span class="comment">     * f[q]</span></div>
-<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;<span class="comment">     * r[q*I]</span></div>
-<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;</div>
-<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;    <span class="keywordtype">int</span> nA = 0;</div>
-<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;    <span class="keywordtype">int</span> nP = 0;</div>
-<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;</div>
-<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;    <span class="keywordtype">int</span> q, It;</div>
-<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;    <span class="keywordtype">double</span> *theta, *r, *f, *<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa91fb0824da12f8bb3b74dd78fb13b63">a</a>, *<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa06b03e4cd5c7c464c513a95a7fcf9bf">b</a>, *<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90a776304400122408ea717dde9234fdd2a">c</a>;</div>
-<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;            } <span class="comment">// i</span></div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        <span class="keyword">delete</span> [] H_0;</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;        <span class="keyword">delete</span> [] h_0;</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        <span class="keyword">delete</span> [] P_Star;</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        <span class="keyword">delete</span> [] P;</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;        <span class="keyword">delete</span> [] W;</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;        <span class="keyword">delete</span> [] factor;</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;        <span class="keyword">delete</span> [] ec;</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        <span class="keyword">delete</span> [] ecPlus1Inv;</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;        <span class="keyword">delete</span> [] h;</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        <span class="keyword">delete</span> [] theta;</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        <span class="keyword">delete</span> [] r;</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        <span class="keyword">delete</span> [] f;</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        <span class="keyword">delete</span> [] <a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa91fb0824da12f8bb3b74dd78fb13b63">a</a>;</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;        <span class="keyword">delete</span> [] <a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa06b03e4cd5c7c464c513a95a7fcf9bf">b</a>;</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        <span class="keyword">delete</span> [] <a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90a776304400122408ea717dde9234fdd2a">c</a>;</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;}</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;</div>
+<div class="line"><a name="l00328"></a><span class="lineno"><a class="line" href="classThreePLModel.html#ae24fa3d2b9bf02b79a010ea760f1bff4">  328</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classThreePLModel.html#ae24fa3d2b9bf02b79a010ea760f1bff4">ThreePLModel::Ngradient</a>(<span class="keywordtype">double</span>* args, <span class="keywordtype">double</span>* pars, <span class="keywordtype">int</span> nargs, <span class="keywordtype">int</span> npars, <span class="keywordtype">double</span>* <a class="code" href="NCM_8h.html#af15a746b92f8a980c82fa216ce598faf">gradient</a>){</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;    <span class="comment">//  For each of the gradient thingies increase the args and apply richardsons</span></div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;    <span class="keywordtype">double</span> hh = 0.000001;</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;    <span class="comment">//(f(x+h)-f(x))/h</span></div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0 ; i &lt; nargs; i++){</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;        args[i]=args[i]+hh;</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;        gradient[i]=<a class="code" href="classThreePLModel.html#ae31380f753f4bc118788f9dbc93fe4af">logLikelihood</a>(args,pars,nargs,npars);</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;        args[i]=args[i]-hh;</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        gradient[i]-=<a class="code" href="classThreePLModel.html#ae31380f753f4bc118788f9dbc93fe4af">logLikelihood</a>(args,pars,nargs,npars);</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;        gradient[i]=gradient[i]/hh;</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;    }</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;}</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;</div>
+<div class="line"><a name="l00341"></a><span class="lineno"><a class="line" href="classThreePLModel.html#acc5f243d6863cf431df88b4b1648e52d">  341</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classThreePLModel.html#acc5f243d6863cf431df88b4b1648e52d">ThreePLModel::NHessian</a>(<span class="keywordtype">double</span>*args, <span class="keywordtype">double</span>* pars, <span class="keywordtype">int</span> nargs, <span class="keywordtype">int</span> npars, <span class="keywordtype">double</span>* hessian){</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;    <span class="comment">//the gradient is composed of items a&#39;s items b&#39;s items c&#39;s take it as such</span></div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;    <span class="keywordtype">double</span> hh = 0.001;</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;    <span class="keywordtype">double</span> gradiente[nargs];</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    <span class="keywordtype">int</span> items = nargs/3;</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;    <a class="code" href="classThreePLModel.html#a6b86ab6fe2c11047723864ab95bd29da">gradient</a>(args,pars,nargs,npars,gradiente);</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;    <span class="comment">//Calculate the hessian for each item order is a&#39;s b&#39;s c&#39;s in args</span></div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; items; ++i) {</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;                <span class="comment">//Extract the gradient at the points (Put at the hessian)</span></div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; 3; ++j) {</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; 3; ++k) {</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;                <span class="comment">//Now for each of these point change the k  parameter for deriving</span></div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;                hessian[i*items+j*3+k] = gradiente[j*items+i];</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;            }</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;        }</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;    }</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; items; ++i) {</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;                    <span class="comment">//Derivate two times for this item // matrix point</span></div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;                    <span class="comment">//Extract the gradient at the points (Put at the hessian)</span></div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; 3; ++j) {</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;                <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; 3; ++k) {</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;                    memset(gradiente,0,<span class="keyword">sizeof</span>(<span class="keywordtype">double</span>)*items*3);</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;                    <span class="comment">//Change the argument k in the item i</span></div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;                    args[k*items+i]+=hh;</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;                    <span class="comment">//Calculate le gradient</span></div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;                    <a class="code" href="classThreePLModel.html#a6b86ab6fe2c11047723864ab95bd29da">gradient</a>(args,pars,nargs,npars,gradiente);</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;                    <span class="comment">//Reset the parameter</span></div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;                    args[k*items+i]-=hh;</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;                    <span class="comment">//This is the gradient at the point</span></div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;                    hessian[i*items+j*3+k]-= gradiente[j*items+i];</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;                    hessian[i*items+j*3+k]=hessian[i*items+j*3+k]/hh;</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;                }</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;            }</div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;        }</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;}</div>
+<div class="line"><a name="l00378"></a><span class="lineno"><a class="line" href="classThreePLModel.html#a6b86ab6fe2c11047723864ab95bd29da">  378</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classThreePLModel.html#a6b86ab6fe2c11047723864ab95bd29da">ThreePLModel::gradient</a> (<span class="keywordtype">double</span>* args, <span class="keywordtype">double</span>* pars, <span class="keywordtype">int</span> nargs, <span class="keywordtype">int</span> npars, <span class="keywordtype">double</span>* <a class="code" href="NCM_8h.html#af15a746b92f8a980c82fa216ce598faf">gradient</a>){</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;    <span class="comment">/*</span></div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;<span class="comment">     * What we need</span></div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;<span class="comment">     * items</span></div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;<span class="comment">     * q</span></div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;<span class="comment">     * theta array</span></div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;<span class="comment">     * D</span></div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;<span class="comment">     * a, b, c</span></div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;<span class="comment">     * f and r</span></div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;    <span class="keywordtype">int</span> nA = 0;</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;    <span class="keywordtype">int</span> nP = 0;</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;    <span class="keywordtype">int</span> q, items;</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;    <span class="keywordtype">double</span> *theta, *r, *f, *<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa91fb0824da12f8bb3b74dd78fb13b63">a</a>, *<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa06b03e4cd5c7c464c513a95a7fcf9bf">b</a>, *<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90a776304400122408ea717dde9234fdd2a">c</a>;</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;</div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;    <span class="comment">// Obtain q</span></div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;    q = pars[nP ++]; <span class="comment">// q is obtained and npars is augmented</span></div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;    <span class="comment">// Obtain I</span></div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;    items = pars[nP ++];</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;    theta = <span class="keyword">new</span> <span class="keywordtype">double</span>[q];</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;    r = <span class="keyword">new</span> <span class="keywordtype">double</span>[q*items];</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;    f = <span class="keyword">new</span> <span class="keywordtype">double</span>[q];</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;    a = <span class="keyword">new</span> <span class="keywordtype">double</span>[items];</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;    b = <span class="keyword">new</span> <span class="keywordtype">double</span>[items];</div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;    c = <span class="keyword">new</span> <span class="keywordtype">double</span>[items];</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;    <span class="comment">// Obtain theta</span></div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;q; k++) {</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;        theta[k] = pars[nP ++];</div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;    }</div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;    <span class="comment">// Obtain f</span></div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;q; k++) {</div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;        f[k] = pars[nP ++];</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;    }</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;    <span class="comment">// Obtain r</span></div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;q; k++) {</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;items; i++) {</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;            r[k*items+i] = pars[nP ++];</div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;        }</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;    }</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;</div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;    <span class="comment">// Obtain a</span></div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;items; i++) {</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;        a[i] = args [nA ++];</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;    }</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;    <span class="comment">// Obtain b</span></div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;items; i++) {</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;        b[i] = args [nA ++];</div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;    }</div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;    <span class="comment">// Obtain c</span></div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;items; i++) {</div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;        c[i] = args [nA ++];</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;    }</div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;</div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;    <span class="keywordtype">double</span> D = <a class="code" href="classConstant.html#aaf334273fc82a586936f00df7ec30149">Constant::NORM_CONST</a>;</div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">double</span> *h_0; <span class="comment">// Block Matrix of size q*I. Each block-element has size of 1*3</span></div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">double</span> *h; <span class="comment">// Block vector of size I (i.e. I blocks). Each block-element has size of 1*3</span></div>
+<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">double</span> *P_Star, *P;  <span class="comment">// Matrix of size q*I</span></div>
+<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">double</span> *W;           <span class="comment">// Matrix of size q*I</span></div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">double</span> *factor;      <span class="comment">// Matrix of product (r-fP)W</span></div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">double</span> *ec;            <span class="comment">// e^c_i</span></div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">double</span> *ecPlus1Inv;    <span class="comment">// 1 / (e^c_i + 1)</span></div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;</div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;    h = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [3*items];</div>
+<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;    h_0 = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [q*3*items];</div>
+<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;    P = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [q*items];</div>
+<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;    P_Star = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [q*items];</div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;    factor = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [q*items];</div>
+<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;    W = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [q*items];</div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;    ec = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [items];</div>
+<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;    ecPlus1Inv = <span class="keyword">new</span> <span class="keywordtype">long</span> <span class="keywordtype">double</span> [items];</div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;</div>
+<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;    <span class="keywordflow">for</span>( <span class="keywordtype">unsigned</span>  <span class="keywordtype">int</span> i = 0; i &lt; items; i++ ) {</div>
+<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;        ecPlus1Inv[i]=1/(1+exp(c[i]));</div>
+<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;        ec[i]=exp(c[i]);</div>
+<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;    }</div>
+<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;    <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> k = 0; k &lt; q; k++ ) {</div>
+<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;        <span class="keywordflow">for</span> ( <span class="keywordtype">unsigned</span>  <span class="keywordtype">int</span> i = 0; i &lt; items; i++ ) {</div>
+<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;</div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;            P[k * items + i] = <a class="code" href="classThreePLModel.html#a4ac3badc7d7a17b57be43d24bfb924e3">successProbability</a> ( theta[k], a[i], b[i], c[i] );</div>
+<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;            <span class="comment">//P_Star[k * items + i] = successProbability ( theta[k], a[i], b[i], 0.0 );</span></div>
+<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;            P_Star[k * items + i] = 1/(1+exp(-D*(a[i]*theta[k]+b[i])));</div>
+<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;</div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;            W[k * items + i] = P_Star[k * items + i] * ( 1 - P_Star[k * items + i] ); <span class="comment">// Numerator</span></div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;            W[k * items + i] /= P[k * items + i] * ( 1 - P[k * items + i] );<span class="comment">// Denominator</span></div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;</div>
+<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;            factor[k * items + i] = ( r[k * items + i] - f[k]*P[k * items + i] ) * W[k * items + i];</div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;</div>
+<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;            <span class="comment">// h_0 / (P_star*Q_star)</span></div>
+<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;            h_0[3 * items * k + 3 * i + 0] = D * theta[k] * ecPlus1Inv[i];</div>
+<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;            h_0[3 * items * k + 3 * i + 1] = D * ecPlus1Inv[i];</div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;            h_0[3 * items * k + 3 * i + 2] = ec[i] * (ecPlus1Inv[i]*ecPlus1Inv[i]) / P_Star[k * items + i];</div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;</div>
+<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;        }</div>
+<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;    }</div>
+<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;    memset(h,0,<span class="keyword">sizeof</span>(<span class="keywordtype">long</span> <span class="keywordtype">double</span>)*3*items);</div>
+<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;    memset(gradient,0,<span class="keyword">sizeof</span>(<span class="keywordtype">double</span>)*3*items);</div>
+<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;    <span class="keywordflow">for</span> ( <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> i = 0; i &lt; items; i++ ) {</div>
+<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;        <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> k = 0; k &lt; q; k++ ) {</div>
+<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;            h[3 * i + 0] += factor[k * items + i] * h_0[3 * items * k + 3 * i + 0];</div>
+<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;            h[3 * i + 1] += factor[k * items + i] * h_0[3 * items * k + 3 * i + 1];</div>
+<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;            h[3 * i + 2] += factor[k * items + i] * h_0[3 * items * k + 3 * i + 2];</div>
+<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;        }</div>
+<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;    }</div>
+<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;</div>
+<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;    <span class="keyword">delete</span> [] h_0;</div>
+<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;    <span class="keyword">delete</span> [] P_Star;</div>
+<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;    <span class="keyword">delete</span> [] P;</div>
+<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;    <span class="keyword">delete</span> [] W;</div>
+<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;    <span class="keyword">delete</span> [] factor;</div>
+<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;    <span class="keyword">delete</span> [] ec;</div>
+<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;    <span class="keyword">delete</span> [] ecPlus1Inv;</div>
+<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;</div>
+<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;    <span class="keyword">delete</span> [] theta;</div>
+<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;    <span class="keyword">delete</span> [] r;</div>
+<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;    <span class="keyword">delete</span> [] f;</div>
+<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;    <span class="keyword">delete</span> [] <a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa91fb0824da12f8bb3b74dd78fb13b63">a</a>;</div>
+<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;    <span class="keyword">delete</span> [] <a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa06b03e4cd5c7c464c513a95a7fcf9bf">b</a>;</div>
+<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;    <span class="keyword">delete</span> [] <a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90a776304400122408ea717dde9234fdd2a">c</a>;</div>
+<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;</div>
+<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;<span class="comment">//return h as the gradient</span></div>
+<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;    <span class="keywordtype">int</span> hc=0;</div>
+<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> n = 0; n &lt; 3; ++n) {</div>
+<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;        <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0 ; i &lt; items ; ++i){</div>
+<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;            gradient[hc++]= -<span class="keyword">static_cast&lt;</span><span class="keywordtype">double</span><span class="keyword">&gt;</span>(h[i*3+n]);</div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;        }</div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;    }</div>
+<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;    <span class="keyword">delete</span> [] h;</div>
+<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;}</div>
+<div class="line"><a name="l00510"></a><span class="lineno"><a class="line" href="classThreePLModel.html#ae31380f753f4bc118788f9dbc93fe4af">  510</a></span>&#160;<span class="keywordtype">double</span> <a class="code" href="classThreePLModel.html#ae31380f753f4bc118788f9dbc93fe4af">ThreePLModel::logLikelihood</a> (<span class="keywordtype">double</span>* args, <span class="keywordtype">double</span>* pars, <span class="keywordtype">int</span> nargs,</div>
+<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;        <span class="keywordtype">int</span> npars) {</div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;</div>
+<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;    <span class="comment">//args</span></div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;    <span class="comment">/*</span></div>
+<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;<span class="comment">     * a[i]</span></div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;<span class="comment">     * b[i]</span></div>
+<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;<span class="comment">     * c[i]</span></div>
+<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;</div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;    <span class="comment">//pars</span></div>
+<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;    <span class="comment">/*</span></div>
+<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;<span class="comment">     * q</span></div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;<span class="comment">     * I</span></div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;<span class="comment">     * theta[q]</span></div>
+<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;<span class="comment">     * f[q]</span></div>
+<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;<span class="comment">     * r[q*I]</span></div>
+<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;</div>
+<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;    <span class="keywordtype">int</span> nA = 0;</div>
+<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;    <span class="keywordtype">int</span> nP = 0;</div>
+<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;</div>
+<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;    <span class="keywordtype">int</span> q, It;</div>
+<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;    <span class="keywordtype">double</span> *theta, *r, *f, *<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa91fb0824da12f8bb3b74dd78fb13b63">a</a>, *<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa06b03e4cd5c7c464c513a95a7fcf9bf">b</a>, *<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90a776304400122408ea717dde9234fdd2a">c</a>;</div>
 <div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;</div>
-<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;    <span class="comment">// Obtain q</span></div>
-<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;    q = pars[nP ++]; <span class="comment">// q is obtained and npars is augmented</span></div>
-<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;</div>
-<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;    <span class="comment">// Obtain I</span></div>
-<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;    It = pars[nP ++];</div>
-<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160;</div>
-<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160;    theta = <span class="keyword">new</span> <span class="keywordtype">double</span>[q];</div>
-<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&#160;    r = <span class="keyword">new</span> <span class="keywordtype">double</span>[q*It];</div>
-<div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160;    f = <span class="keyword">new</span> <span class="keywordtype">double</span>[q];</div>
-<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;    a = <span class="keyword">new</span> <span class="keywordtype">double</span>[It];</div>
-<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;    b = <span class="keyword">new</span> <span class="keywordtype">double</span>[It];</div>
-<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;    c = <span class="keyword">new</span> <span class="keywordtype">double</span>[It];</div>
-<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;</div>
+<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;</div>
+<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;    <span class="comment">// Obtain q</span></div>
+<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;    q = pars[nP ++]; <span class="comment">// q is obtained and npars is augmented</span></div>
+<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;</div>
+<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;    <span class="comment">// Obtain I</span></div>
+<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160;    It = pars[nP ++];</div>
+<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160;</div>
+<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&#160;    theta = <span class="keyword">new</span> <span class="keywordtype">double</span>[q];</div>
+<div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160;    r = <span class="keyword">new</span> <span class="keywordtype">double</span>[q*It];</div>
+<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;    f = <span class="keyword">new</span> <span class="keywordtype">double</span>[q];</div>
+<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;    a = <span class="keyword">new</span> <span class="keywordtype">double</span>[It];</div>
+<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;    b = <span class="keyword">new</span> <span class="keywordtype">double</span>[It];</div>
+<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;    c = <span class="keyword">new</span> <span class="keywordtype">double</span>[It];</div>
 <div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;</div>
-<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160;    <span class="comment">// Obtain theta</span></div>
-<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;q; k++) {</div>
-<div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;        theta[k] = pars[nP ++];</div>
-<div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;    }</div>
-<div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160;</div>
-<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;    <span class="comment">// Obtain f</span></div>
-<div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;q; k++) {</div>
-<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;        f[k] = pars[nP ++];</div>
-<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;    }</div>
-<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160;</div>
-<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;    <span class="comment">// Obtain r</span></div>
-<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;q; k++) {</div>
-<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;It; i++) {</div>
-<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160;            r[k*It+i] = pars[nP ++];</div>
-<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;        }</div>
-<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;    }</div>
-<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160;</div>
-<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;    <span class="comment">// Obtain a</span></div>
-<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;It; i++) {</div>
-<div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160;        a[i] = args [nA ++];</div>
-<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;    }</div>
-<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;</div>
-<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;    <span class="comment">// Obtain b</span></div>
-<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;It; i++) {</div>
-<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;        b[i] = args [nA ++];</div>
-<div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160;    }</div>
-<div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;</div>
-<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;    <span class="comment">// Obtain c</span></div>
-<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;It; i++) {</div>
-<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;        c[i] = args [nA ++];</div>
-<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;        <span class="comment">//cout&lt;&lt;&quot; &quot;&lt;&lt;c[i];</span></div>
-<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;    }<span class="comment">//cout&lt;&lt;endl;</span></div>
-<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160;</div>
-<div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">double</span> tp , tq;</div>
-<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">double</span> sum = 0;</div>
-<div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160;</div>
-<div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; q; ++k) {</div>
-<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> i = 0; i &lt; It; ++i) {</div>
-<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;            tp = (<a class="code" href="classThreePLModel.html#a4ac3badc7d7a17b57be43d24bfb924e3">ThreePLModel::successProbability</a> ( theta[k], a[i], b[i], c[i]));</div>
-<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;            <span class="keywordflow">if</span> (tp==0)tp=1e-08;</div>
-<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;            tq = 1-tp;</div>
-<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;            <span class="keywordflow">if</span> (tq==0)tq=1e-08;</div>
-<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;            <span class="comment">//suma = suma + (rki*logg(pki)+(fki-rki)*logg(qki))</span></div>
-<div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;            sum+=(r[k * It + i]*log(tp))+(f[k]-r[k * It + i])*log(tq);</div>
-<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;        }</div>
-<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;    }</div>
-<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;</div>
+<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160;</div>
+<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;    <span class="comment">// Obtain theta</span></div>
+<div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;q; k++) {</div>
+<div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;        theta[k] = pars[nP ++];</div>
+<div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160;    }</div>
+<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;</div>
+<div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160;    <span class="comment">// Obtain f</span></div>
+<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;q; k++) {</div>
+<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;        f[k] = pars[nP ++];</div>
+<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160;    }</div>
+<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;</div>
+<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;    <span class="comment">// Obtain r</span></div>
+<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;q; k++) {</div>
+<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;It; i++) {</div>
+<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;            r[k*It+i] = pars[nP ++];</div>
+<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;        }</div>
+<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160;    }</div>
+<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;</div>
+<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;    <span class="comment">// Obtain a</span></div>
+<div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;It; i++) {</div>
+<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;        a[i] = args [nA ++];</div>
+<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;    }</div>
+<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;</div>
+<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;    <span class="comment">// Obtain b</span></div>
+<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;It; i++) {</div>
+<div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160;        b[i] = args [nA ++];</div>
+<div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;    }</div>
+<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;</div>
+<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;    <span class="comment">// Obtain c</span></div>
+<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;It; i++) {</div>
+<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;        c[i] = args [nA ++];</div>
+<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;        <span class="comment">//cout&lt;&lt;&quot; &quot;&lt;&lt;c[i];</span></div>
+<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160;    }<span class="comment">//cout&lt;&lt;endl;</span></div>
+<div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160;</div>
+<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">double</span> tp , tq;</div>
+<div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">double</span> sum = 0;</div>
+<div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160;</div>
+<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; q; ++k) {</div>
+<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> i = 0; i &lt; It; ++i) {</div>
+<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;            tp = (<a class="code" href="classThreePLModel.html#a4ac3badc7d7a17b57be43d24bfb924e3">ThreePLModel::successProbability</a> ( theta[k], a[i], b[i], c[i]));</div>
+<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;            <span class="keywordflow">if</span> (tp==0)tp=1e-08;</div>
+<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;            tq = 1-tp;</div>
+<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;            <span class="keywordflow">if</span> (tq==0)tq=1e-08;</div>
+<div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;            <span class="comment">//suma = suma + (rki*logg(pki)+(fki-rki)*logg(qki))</span></div>
+<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;            sum+=(r[k * It + i]*log(tp))+(f[k]-r[k * It + i])*log(tq);</div>
+<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;        }</div>
+<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;    }</div>
 <div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;</div>
-<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;    <span class="comment">//antiLogit(c, I);</span></div>
-<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;    <span class="keyword">delete</span>[] theta;</div>
-<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;    <span class="keyword">delete</span>[] f;</div>
-<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;    <span class="keyword">delete</span>[] r;</div>
-<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&#160;    <span class="keyword">delete</span>[] <a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa91fb0824da12f8bb3b74dd78fb13b63">a</a>;</div>
-<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160;    <span class="keyword">delete</span>[] <a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa06b03e4cd5c7c464c513a95a7fcf9bf">b</a>;</div>
-<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160;    <span class="keyword">delete</span>[] <a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90a776304400122408ea717dde9234fdd2a">c</a>;</div>
-<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;</div>
-<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;    <span class="keywordflow">return</span> (-sum);</div>
-<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160;</div>
+<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;</div>
+<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;    <span class="comment">//antiLogit(c, I);</span></div>
+<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;    <span class="keyword">delete</span>[] theta;</div>
+<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;    <span class="keyword">delete</span>[] f;</div>
+<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&#160;    <span class="keyword">delete</span>[] r;</div>
+<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160;    <span class="keyword">delete</span>[] <a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa91fb0824da12f8bb3b74dd78fb13b63">a</a>;</div>
+<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160;    <span class="keyword">delete</span>[] <a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa06b03e4cd5c7c464c513a95a7fcf9bf">b</a>;</div>
+<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;    <span class="keyword">delete</span>[] <a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90a776304400122408ea717dde9234fdd2a">c</a>;</div>
+<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;</div>
+<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160;    <span class="keywordflow">return</span> (-sum);</div>
 <div class="line"><a name="l00607"></a><span class="lineno">  607</span>&#160;</div>
-<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160;}</div>
-<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160;</div>
-<div class="line"><a name="l00610"></a><span class="lineno"><a class="line" href="classThreePLModel.html#a89d3c2a8f9d077e48db38f78aa8d3526">  610</a></span>&#160;<span class="keywordtype">double</span> <a class="code" href="classThreePLModel.html#a89d3c2a8f9d077e48db38f78aa8d3526">ThreePLModel::successProbability_cPrime</a>(<span class="keywordtype">double</span> theta, <span class="keywordtype">double</span> <a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa91fb0824da12f8bb3b74dd78fb13b63">a</a>, <span class="keywordtype">double</span> <a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa06b03e4cd5c7c464c513a95a7fcf9bf">b</a>,</div>
-<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&#160;        <span class="keywordtype">double</span> <a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90a776304400122408ea717dde9234fdd2a">c</a>) {</div>
-<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">double</span> cPrime = exp(c)/(1+exp(c));</div>
-<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160;    <span class="keywordflow">return</span> (<a class="code" href="classThreePLModel.html#a4ac3badc7d7a17b57be43d24bfb924e3">successProbability</a> ( theta, a, b, cPrime ));</div>
-<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;}</div>
-<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160;</div>
-<div class="line"><a name="l00616"></a><span class="lineno"><a class="line" href="classThreePLModel.html#a146e9c48084c708708060cf433346f1b">  616</a></span>&#160;<a class="code" href="classThreePLModel.html#a146e9c48084c708708060cf433346f1b">ThreePLModel::~ThreePLModel</a>() {</div>
-<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160;</div>
-<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="classParameterModel.html#a0b5dafa68a235673a229863aa66ae97d">parameterSet</a>[<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa91fb0824da12f8bb3b74dd78fb13b63">a</a>] != NULL) {</div>
-<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160;        <span class="keyword">delete</span> <a class="code" href="classParameterModel.html#a0b5dafa68a235673a229863aa66ae97d">parameterSet</a>[<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa91fb0824da12f8bb3b74dd78fb13b63">a</a>];</div>
-<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160;    }</div>
-<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="classParameterModel.html#a0b5dafa68a235673a229863aa66ae97d">parameterSet</a>[<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa06b03e4cd5c7c464c513a95a7fcf9bf">b</a>] != NULL) {</div>
-<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160;        <span class="keyword">delete</span> <a class="code" href="classParameterModel.html#a0b5dafa68a235673a229863aa66ae97d">parameterSet</a>[<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa06b03e4cd5c7c464c513a95a7fcf9bf">b</a>];</div>
-<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160;    }</div>
-<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="classParameterModel.html#a0b5dafa68a235673a229863aa66ae97d">parameterSet</a>[<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90a776304400122408ea717dde9234fdd2a">c</a>] != NULL) {</div>
-<div class="line"><a name="l00625"></a><span class="lineno">  625</span>&#160;        <span class="keyword">delete</span> <a class="code" href="classParameterModel.html#a0b5dafa68a235673a229863aa66ae97d">parameterSet</a>[<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90a776304400122408ea717dde9234fdd2a">c</a>];</div>
-<div class="line"><a name="l00626"></a><span class="lineno">  626</span>&#160;    }</div>
-<div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="classParameterModel.html#a0b5dafa68a235673a229863aa66ae97d">parameterSet</a>[<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90ae8f0ad1953249e38043d318b8f4400d0">d</a>] != NULL) {</div>
-<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;        <span class="keyword">delete</span> <a class="code" href="classParameterModel.html#a0b5dafa68a235673a229863aa66ae97d">parameterSet</a>[<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90ae8f0ad1953249e38043d318b8f4400d0">d</a>];</div>
-<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;    }</div>
-<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;</div>
-<div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160;}</div>
-<div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;</div>
+<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160;</div>
+<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160;}</div>
+<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160;</div>
+<div class="line"><a name="l00611"></a><span class="lineno"><a class="line" href="classThreePLModel.html#a89d3c2a8f9d077e48db38f78aa8d3526">  611</a></span>&#160;<span class="keywordtype">double</span> <a class="code" href="classThreePLModel.html#a89d3c2a8f9d077e48db38f78aa8d3526">ThreePLModel::successProbability_cPrime</a>(<span class="keywordtype">double</span> theta, <span class="keywordtype">double</span> <a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa91fb0824da12f8bb3b74dd78fb13b63">a</a>, <span class="keywordtype">double</span> <a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa06b03e4cd5c7c464c513a95a7fcf9bf">b</a>,</div>
+<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&#160;        <span class="keywordtype">double</span> <a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90a776304400122408ea717dde9234fdd2a">c</a>) {</div>
+<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">double</span> cPrime = exp(c)/(1+exp(c));</div>
+<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;    <span class="keywordflow">return</span> (<a class="code" href="classThreePLModel.html#a4ac3badc7d7a17b57be43d24bfb924e3">successProbability</a> ( theta, a, b, cPrime ));</div>
+<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160;}</div>
+<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;</div>
+<div class="line"><a name="l00617"></a><span class="lineno"><a class="line" href="classThreePLModel.html#a146e9c48084c708708060cf433346f1b">  617</a></span>&#160;<a class="code" href="classThreePLModel.html#a146e9c48084c708708060cf433346f1b">ThreePLModel::~ThreePLModel</a>() {</div>
+<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;</div>
+<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="classParameterModel.html#a0b5dafa68a235673a229863aa66ae97d">parameterSet</a>[<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa91fb0824da12f8bb3b74dd78fb13b63">a</a>] != NULL) {</div>
+<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160;        <span class="keyword">delete</span> <a class="code" href="classParameterModel.html#a0b5dafa68a235673a229863aa66ae97d">parameterSet</a>[<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa91fb0824da12f8bb3b74dd78fb13b63">a</a>];</div>
+<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160;    }</div>
+<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="classParameterModel.html#a0b5dafa68a235673a229863aa66ae97d">parameterSet</a>[<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa06b03e4cd5c7c464c513a95a7fcf9bf">b</a>] != NULL) {</div>
+<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160;        <span class="keyword">delete</span> <a class="code" href="classParameterModel.html#a0b5dafa68a235673a229863aa66ae97d">parameterSet</a>[<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa06b03e4cd5c7c464c513a95a7fcf9bf">b</a>];</div>
+<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160;    }</div>
+<div class="line"><a name="l00625"></a><span class="lineno">  625</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="classParameterModel.html#a0b5dafa68a235673a229863aa66ae97d">parameterSet</a>[<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90a776304400122408ea717dde9234fdd2a">c</a>] != NULL) {</div>
+<div class="line"><a name="l00626"></a><span class="lineno">  626</span>&#160;        <span class="keyword">delete</span> <a class="code" href="classParameterModel.html#a0b5dafa68a235673a229863aa66ae97d">parameterSet</a>[<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90a776304400122408ea717dde9234fdd2a">c</a>];</div>
+<div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160;    }</div>
+<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="classParameterModel.html#a0b5dafa68a235673a229863aa66ae97d">parameterSet</a>[<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90ae8f0ad1953249e38043d318b8f4400d0">d</a>] != NULL) {</div>
+<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;        <span class="keyword">delete</span> <a class="code" href="classParameterModel.html#a0b5dafa68a235673a229863aa66ae97d">parameterSet</a>[<a class="code" href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90ae8f0ad1953249e38043d318b8f4400d0">d</a>];</div>
+<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;    }</div>
+<div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160;</div>
+<div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;}</div>
+<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160;</div>
 <div class="ttc" id="classConstant_html_aaf334273fc82a586936f00df7ec30149"><div class="ttname"><a href="classConstant.html#aaf334273fc82a586936f00df7ec30149">Constant::NORM_CONST</a></div><div class="ttdeci">static double NORM_CONST</div><div class="ttdef"><b>Definition:</b> <a href="Constant_8h_source.html#l00021">Constant.h:21</a></div></div>
 <div class="ttc" id="classParameterModel_html_a0b5dafa68a235673a229863aa66ae97d"><div class="ttname"><a href="classParameterModel.html#a0b5dafa68a235673a229863aa66ae97d">ParameterModel::parameterSet</a></div><div class="ttdeci">map&lt; Parameter, Matrix&lt; double &gt; * &gt; parameterSet</div><div class="ttdef"><b>Definition:</b> <a href="ParameterModel_8h_source.html#l00024">ParameterModel.h:24</a></div></div>
 <div class="ttc" id="classDimensionModel_html"><div class="ttname"><a href="classDimensionModel.html">DimensionModel</a></div><div class="ttdef"><b>Definition:</b> <a href="DimensionModel_8h_source.html#l00016">DimensionModel.h:16</a></div></div>
 <div class="ttc" id="classPolytomousModel_html"><div class="ttname"><a href="classPolytomousModel.html">PolytomousModel</a></div><div class="ttdef"><b>Definition:</b> <a href="PolytomousModel_8h_source.html#l00013">PolytomousModel.h:13</a></div></div>
-<div class="ttc" id="classThreePLModel_html_a6b86ab6fe2c11047723864ab95bd29da"><div class="ttname"><a href="classThreePLModel.html#a6b86ab6fe2c11047723864ab95bd29da">ThreePLModel::gradient</a></div><div class="ttdeci">static void gradient(double *, double *, int, int, double *)</div><div class="ttdef"><b>Definition:</b> <a href="ThreePLModel_8cpp_source.html#l00377">ThreePLModel.cpp:377</a></div></div>
-<div class="ttc" id="classThreePLModel_html_acc5f243d6863cf431df88b4b1648e52d"><div class="ttname"><a href="classThreePLModel.html#acc5f243d6863cf431df88b4b1648e52d">ThreePLModel::NHessian</a></div><div class="ttdeci">static void NHessian(double *args, double *pars, int nargs, int npars, double *Hessian)</div><div class="ttdef"><b>Definition:</b> <a href="ThreePLModel_8cpp_source.html#l00340">ThreePLModel.cpp:340</a></div></div>
+<div class="ttc" id="classThreePLModel_html_a6b86ab6fe2c11047723864ab95bd29da"><div class="ttname"><a href="classThreePLModel.html#a6b86ab6fe2c11047723864ab95bd29da">ThreePLModel::gradient</a></div><div class="ttdeci">static void gradient(double *, double *, int, int, double *)</div><div class="ttdef"><b>Definition:</b> <a href="ThreePLModel_8cpp_source.html#l00378">ThreePLModel.cpp:378</a></div></div>
+<div class="ttc" id="classThreePLModel_html_acc5f243d6863cf431df88b4b1648e52d"><div class="ttname"><a href="classThreePLModel.html#acc5f243d6863cf431df88b4b1648e52d">ThreePLModel::NHessian</a></div><div class="ttdeci">static void NHessian(double *args, double *pars, int nargs, int npars, double *Hessian)</div><div class="ttdef"><b>Definition:</b> <a href="ThreePLModel_8cpp_source.html#l00341">ThreePLModel.cpp:341</a></div></div>
 <div class="ttc" id="classMultidimensionalModel_html"><div class="ttname"><a href="classMultidimensionalModel.html">MultidimensionalModel</a></div><div class="ttdef"><b>Definition:</b> <a href="MultidimensionalModel_8h_source.html#l00017">MultidimensionalModel.h:17</a></div></div>
 <div class="ttc" id="ParameterModel_8h_html_a04ed5b8f1f3adf7af1d5092fae847e90ae8f0ad1953249e38043d318b8f4400d0"><div class="ttname"><a href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90ae8f0ad1953249e38043d318b8f4400d0">d</a></div><div class="ttdef"><b>Definition:</b> <a href="ParameterModel_8h_source.html#l00019">ParameterModel.h:19</a></div></div>
-<div class="ttc" id="classThreePLModel_html_a1e103a8afde4c931b15d451f131ebc6e"><div class="ttname"><a href="classThreePLModel.html#a1e103a8afde4c931b15d451f131ebc6e">ThreePLModel::itemgradient</a></div><div class="ttdeci">static void itemgradient(double *, double *, int, int, double *)</div><div class="ttdef"><b>Definition:</b> <a href="ThreePLModel_8cpp_source.html#l00122">ThreePLModel.cpp:122</a></div></div>
+<div class="ttc" id="classThreePLModel_html_a1e103a8afde4c931b15d451f131ebc6e"><div class="ttname"><a href="classThreePLModel.html#a1e103a8afde4c931b15d451f131ebc6e">ThreePLModel::itemgradient</a></div><div class="ttdeci">static void itemgradient(double *, double *, int, int, double *)</div><div class="ttdoc">In the item gradient and hessians these procedures take an already calculated hessian and gradient an...</div><div class="ttdef"><b>Definition:</b> <a href="ThreePLModel_8cpp_source.html#l00129">ThreePLModel.cpp:129</a></div></div>
 <div class="ttc" id="classThreePLModel_html_ae87fb19a09c536da3fb9cbbfc443bc8e"><div class="ttname"><a href="classThreePLModel.html#ae87fb19a09c536da3fb9cbbfc443bc8e">ThreePLModel::getParameterSet</a></div><div class="ttdeci">map&lt; Parameter, Matrix&lt; double &gt; * &gt; getParameterSet()</div><div class="ttdef"><b>Definition:</b> <a href="ThreePLModel_8cpp_source.html#l00081">ThreePLModel.cpp:81</a></div></div>
 <div class="ttc" id="ThreePLModel_8h_html"><div class="ttname"><a href="ThreePLModel_8h.html">ThreePLModel.h</a></div></div>
 <div class="ttc" id="classConstant_html_ae5c89860fb1308141f626ba360825f88"><div class="ttname"><a href="classConstant.html#ae5c89860fb1308141f626ba360825f88">Constant::MAX_EXP</a></div><div class="ttdeci">static double MAX_EXP</div><div class="ttdef"><b>Definition:</b> <a href="Constant_8h_source.html#l00022">Constant.h:22</a></div></div>
@@ -738,30 +732,30 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="ttc" id="classDimensionModel_html_a37d2d9ab998a4e65628571e6144311f6"><div class="ttname"><a href="classDimensionModel.html#a37d2d9ab998a4e65628571e6144311f6">DimensionModel::getLatentTraitSet</a></div><div class="ttdeci">virtual LatentTraitSet * getLatentTraitSet() const =0</div></div>
 <div class="ttc" id="classItemModel_html_a7a93c60e346f4d80f265a4c9e083181d"><div class="ttname"><a href="classItemModel.html#a7a93c60e346f4d80f265a4c9e083181d">ItemModel::countItems</a></div><div class="ttdeci">virtual int countItems()=0</div></div>
 <div class="ttc" id="classItemModel_html"><div class="ttname"><a href="classItemModel.html">ItemModel</a></div><div class="ttdef"><b>Definition:</b> <a href="ItemModel_8h_source.html#l00013">ItemModel.h:13</a></div></div>
-<div class="ttc" id="classThreePLModel_html_a034561892349c03922d857a67d15f79d"><div class="ttname"><a href="classThreePLModel.html#a034561892349c03922d857a67d15f79d">ThreePLModel::Hessian</a></div><div class="ttdeci">static void Hessian(double *args, double *pars, int nargs, int npars, double *Hessian)</div><div class="ttdef"><b>Definition:</b> <a href="ThreePLModel_8cpp_source.html#l00138">ThreePLModel.cpp:138</a></div></div>
+<div class="ttc" id="classThreePLModel_html_a034561892349c03922d857a67d15f79d"><div class="ttname"><a href="classThreePLModel.html#a034561892349c03922d857a67d15f79d">ThreePLModel::Hessian</a></div><div class="ttdeci">static void Hessian(double *args, double *pars, int nargs, int npars, double *Hessian)</div><div class="ttdef"><b>Definition:</b> <a href="ThreePLModel_8cpp_source.html#l00139">ThreePLModel.cpp:139</a></div></div>
 <div class="ttc" id="classThreePLModel_html_a7242d2bf961e6bf167cc7ca89cf36a67"><div class="ttname"><a href="classThreePLModel.html#a7242d2bf961e6bf167cc7ca89cf36a67">ThreePLModel::buildParameterSet</a></div><div class="ttdeci">void buildParameterSet(ItemModel *, DimensionModel *)</div><div class="ttdef"><b>Definition:</b> <a href="ThreePLModel_8cpp_source.html#l00020">ThreePLModel.cpp:20</a></div></div>
 <div class="ttc" id="singletonMatrix_html_abe6a17af941c66a1cceade934996c696"><div class="ttname"><a href="singletonMatrix.html#abe6a17af941c66a1cceade934996c696">Matrix::nC</a></div><div class="ttdeci">int nC()</div><div class="ttdoc">Returns number of rows. </div><div class="ttdef"><b>Definition:</b> <a href="Matrix_8h_source.html#l00097">Matrix.h:97</a></div></div>
 <div class="ttc" id="singletonMatrix_html"><div class="ttname"><a href="singletonMatrix.html">Matrix&lt; double &gt;</a></div></div>
-<div class="ttc" id="classThreePLModel_html_a146e9c48084c708708060cf433346f1b"><div class="ttname"><a href="classThreePLModel.html#a146e9c48084c708708060cf433346f1b">ThreePLModel::~ThreePLModel</a></div><div class="ttdeci">virtual ~ThreePLModel()</div><div class="ttdef"><b>Definition:</b> <a href="ThreePLModel_8cpp_source.html#l00616">ThreePLModel.cpp:616</a></div></div>
+<div class="ttc" id="classThreePLModel_html_a146e9c48084c708708060cf433346f1b"><div class="ttname"><a href="classThreePLModel.html#a146e9c48084c708708060cf433346f1b">ThreePLModel::~ThreePLModel</a></div><div class="ttdeci">virtual ~ThreePLModel()</div><div class="ttdef"><b>Definition:</b> <a href="ThreePLModel_8cpp_source.html#l00617">ThreePLModel.cpp:617</a></div></div>
 <div class="ttc" id="classThreePLModel_html_a4eb5d27957e207af988cfc87b1adbb27"><div class="ttname"><a href="classThreePLModel.html#a4eb5d27957e207af988cfc87b1adbb27">ThreePLModel::itemHessian</a></div><div class="ttdeci">static void itemHessian(double *args, double *pars, int nargs, int npars, double *Hessian)</div><div class="ttdef"><b>Definition:</b> <a href="ThreePLModel_8cpp_source.html#l00115">ThreePLModel.cpp:115</a></div></div>
 <div class="ttc" id="classUnidimensionalModel_html"><div class="ttname"><a href="classUnidimensionalModel.html">UnidimensionalModel</a></div><div class="ttdef"><b>Definition:</b> <a href="UnidimensionalModel_8h_source.html#l00013">UnidimensionalModel.h:13</a></div></div>
-<div class="ttc" id="classThreePLModel_html_ae24fa3d2b9bf02b79a010ea760f1bff4"><div class="ttname"><a href="classThreePLModel.html#ae24fa3d2b9bf02b79a010ea760f1bff4">ThreePLModel::Ngradient</a></div><div class="ttdeci">static void Ngradient(double *args, double *pars, int nargs, int npars, double *gradient)</div><div class="ttdef"><b>Definition:</b> <a href="ThreePLModel_8cpp_source.html#l00327">ThreePLModel.cpp:327</a></div></div>
+<div class="ttc" id="classThreePLModel_html_ae24fa3d2b9bf02b79a010ea760f1bff4"><div class="ttname"><a href="classThreePLModel.html#ae24fa3d2b9bf02b79a010ea760f1bff4">ThreePLModel::Ngradient</a></div><div class="ttdeci">static void Ngradient(double *args, double *pars, int nargs, int npars, double *gradient)</div><div class="ttdef"><b>Definition:</b> <a href="ThreePLModel_8cpp_source.html#l00328">ThreePLModel.cpp:328</a></div></div>
 <div class="ttc" id="ParameterModel_8h_html_a04ed5b8f1f3adf7af1d5092fae847e90"><div class="ttname"><a href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90">Parameter</a></div><div class="ttdeci">Parameter</div><div class="ttdef"><b>Definition:</b> <a href="ParameterModel_8h_source.html#l00019">ParameterModel.h:19</a></div></div>
 <div class="ttc" id="classLatentTraitSet_html_aed95a0c5c87256960ffb528ca491f2c0"><div class="ttname"><a href="classLatentTraitSet.html#aed95a0c5c87256960ffb528ca491f2c0">LatentTraitSet::getTheta</a></div><div class="ttdeci">Matrix&lt; double &gt; * getTheta()</div><div class="ttdef"><b>Definition:</b> <a href="LatentTraitSet_8cpp_source.html#l00015">LatentTraitSet.cpp:15</a></div></div>
-<div class="ttc" id="classThreePLModel_html_ae31380f753f4bc118788f9dbc93fe4af"><div class="ttname"><a href="classThreePLModel.html#ae31380f753f4bc118788f9dbc93fe4af">ThreePLModel::logLikelihood</a></div><div class="ttdeci">static double logLikelihood(double *, double *, int, int)</div><div class="ttdef"><b>Definition:</b> <a href="ThreePLModel_8cpp_source.html#l00509">ThreePLModel.cpp:509</a></div></div>
+<div class="ttc" id="classThreePLModel_html_ae31380f753f4bc118788f9dbc93fe4af"><div class="ttname"><a href="classThreePLModel.html#ae31380f753f4bc118788f9dbc93fe4af">ThreePLModel::logLikelihood</a></div><div class="ttdeci">static double logLikelihood(double *, double *, int, int)</div><div class="ttdef"><b>Definition:</b> <a href="ThreePLModel_8cpp_source.html#l00510">ThreePLModel.cpp:510</a></div></div>
 <div class="ttc" id="classThreePLModel_html_a97470c701290327dc55b87a10874156c"><div class="ttname"><a href="classThreePLModel.html#a97470c701290327dc55b87a10874156c">ThreePLModel::ThreePLModel</a></div><div class="ttdeci">ThreePLModel()</div><div class="ttdef"><b>Definition:</b> <a href="ThreePLModel_8cpp_source.html#l00010">ThreePLModel.cpp:10</a></div></div>
 <div class="ttc" id="ParameterModel_8h_html_a04ed5b8f1f3adf7af1d5092fae847e90a776304400122408ea717dde9234fdd2a"><div class="ttname"><a href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90a776304400122408ea717dde9234fdd2a">c</a></div><div class="ttdef"><b>Definition:</b> <a href="ParameterModel_8h_source.html#l00019">ParameterModel.h:19</a></div></div>
 <div class="ttc" id="classMultiUniDimModel_html"><div class="ttname"><a href="classMultiUniDimModel.html">MultiUniDimModel</a></div><div class="ttdef"><b>Definition:</b> <a href="MultiUniDimModel_8h_source.html#l00013">MultiUniDimModel.h:13</a></div></div>
 <div class="ttc" id="NCM_8h_html_af15a746b92f8a980c82fa216ce598faf"><div class="ttname"><a href="NCM_8h.html#af15a746b92f8a980c82fa216ce598faf">gradient</a></div><div class="ttdeci">void gradient(double *y, double *lambda, struct matrix *P, double *b0, double *f, double *Fy)</div><div class="ttdef"><b>Definition:</b> <a href="NCM_8h_source.html#l00692">NCM.h:692</a></div></div>
 <div class="ttc" id="classParameterModel_html_a4be41bcd6697769578a729e2279014eb"><div class="ttname"><a href="classParameterModel.html#a4be41bcd6697769578a729e2279014eb">ParameterModel::probabilityMatrix</a></div><div class="ttdeci">Matrix&lt; double &gt; * probabilityMatrix</div><div class="ttdef"><b>Definition:</b> <a href="ParameterModel_8h_source.html#l00026">ParameterModel.h:26</a></div></div>
-<div class="ttc" id="classThreePLModel_html_a89d3c2a8f9d077e48db38f78aa8d3526"><div class="ttname"><a href="classThreePLModel.html#a89d3c2a8f9d077e48db38f78aa8d3526">ThreePLModel::successProbability_cPrime</a></div><div class="ttdeci">static double successProbability_cPrime(double, double, double, double)</div><div class="ttdef"><b>Definition:</b> <a href="ThreePLModel_8cpp_source.html#l00610">ThreePLModel.cpp:610</a></div></div>
+<div class="ttc" id="classThreePLModel_html_a89d3c2a8f9d077e48db38f78aa8d3526"><div class="ttname"><a href="classThreePLModel.html#a89d3c2a8f9d077e48db38f78aa8d3526">ThreePLModel::successProbability_cPrime</a></div><div class="ttdeci">static double successProbability_cPrime(double, double, double, double)</div><div class="ttdef"><b>Definition:</b> <a href="ThreePLModel_8cpp_source.html#l00611">ThreePLModel.cpp:611</a></div></div>
 <div class="ttc" id="classThreePLModel_html_aa049135b26ea1a9f81f23dfac6195696"><div class="ttname"><a href="classThreePLModel.html#aa049135b26ea1a9f81f23dfac6195696">ThreePLModel::setParameterSet</a></div><div class="ttdeci">void setParameterSet(map&lt; Parameter, Matrix&lt; double &gt; * &gt;)</div><div class="ttdef"><b>Definition:</b> <a href="ThreePLModel_8cpp_source.html#l00085">ThreePLModel.cpp:85</a></div></div>
 <div class="ttc" id="ParameterModel_8h_html_a04ed5b8f1f3adf7af1d5092fae847e90aa06b03e4cd5c7c464c513a95a7fcf9bf"><div class="ttname"><a href="ParameterModel_8h.html#a04ed5b8f1f3adf7af1d5092fae847e90aa06b03e4cd5c7c464c513a95a7fcf9bf">b</a></div><div class="ttdef"><b>Definition:</b> <a href="ParameterModel_8h_source.html#l00019">ParameterModel.h:19</a></div></div>
 <div class="ttc" id="classDichotomousModel_html"><div class="ttname"><a href="classDichotomousModel.html">DichotomousModel</a></div><div class="ttdef"><b>Definition:</b> <a href="DichotomousModel_8h_source.html#l00014">DichotomousModel.h:14</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Sep 23 2014 10:13:47 for SICS IRT by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Oct 16 2014 02:25:03 for SICS IRT by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.8
 </small></address>

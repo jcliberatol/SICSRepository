@@ -1,6 +1,8 @@
 var searchData=
 [
   ['r',['r',['../classEMEstimation.html#a426db380391c487206521631156d7eb6',1,'EMEstimation']]],
+  ['r8_5fabs',['r8_abs',['../asa111_8cpp.html#a764d529be849adbbb2865d6c886710dc',1,'r8_abs(double x):&#160;asa111.cpp'],['../asa111_8hpp.html#a764d529be849adbbb2865d6c886710dc',1,'r8_abs(double x):&#160;asa111.cpp']]],
+  ['randomd',['randomd',['../util_8h.html#ad72ab76eb01a5daa7b359f28817520f9',1,'util.h']]],
   ['raschmodel',['RaschModel',['../classRaschModel.html',1,'RaschModel'],['../classRaschModel.html#ab4efbe6df1d5dad527d4ff7ac7637033',1,'RaschModel::RaschModel()']]],
   ['raschmodel_2ecpp',['RaschModel.cpp',['../RaschModel_8cpp.html',1,'']]],
   ['raschmodel_2eh',['RaschModel.h',['../RaschModel_8h.html',1,'']]],

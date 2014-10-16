@@ -1,2 +1,84 @@
 \hypertarget{util_8h}{}\section{src/util/util.h File Reference}
 \label{util_8h}\index{src/util/util.\+h@{src/util/util.\+h}}
+{\ttfamily \#include $<$util/asa111.\+hpp$>$}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+double \hyperlink{util_8h_ad72ab76eb01a5daa7b359f28817520f9}{randomd} ()
+\begin{DoxyCompactList}\small\item\em Functions part one Includes the next functions Std\+Dev\+\_\+bin \+: Calculates the standard deviation for a binary vector. \end{DoxyCompactList}\item 
+long double \hyperlink{util_8h_a92c4bf8b44e9ce9753076d022dad6a7f}{std\+Dev\+\_\+bin} (int tsum, int t\+N)
+\item 
+long double \hyperlink{util_8h_ad1901bc5ed354d9bff19583bb65487ff}{std\+Dev\+\_\+bin} (int tsum, int t\+N, double avg)
+\item 
+double \hyperlink{util_8h_a9c48e0fd22b6546d8aae7692fa02d1d7}{normal\+Inverse} (double point)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{util_8h_a9c48e0fd22b6546d8aae7692fa02d1d7}{}\index{util.\+h@{util.\+h}!normal\+Inverse@{normal\+Inverse}}
+\index{normal\+Inverse@{normal\+Inverse}!util.\+h@{util.\+h}}
+\subsubsection[{normal\+Inverse}]{\setlength{\rightskip}{0pt plus 5cm}double normal\+Inverse (
+\begin{DoxyParamCaption}
+\item[{double}]{point}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{util_8h_a9c48e0fd22b6546d8aae7692fa02d1d7}
+
+
+Definition at line 42 of file util.\+h.
+
+
+
+References ppnd().
+
+
+
+Referenced by E\+M\+Estimation\+::set\+Initial\+Values().
+
+\hypertarget{util_8h_ad72ab76eb01a5daa7b359f28817520f9}{}\index{util.\+h@{util.\+h}!randomd@{randomd}}
+\index{randomd@{randomd}!util.\+h@{util.\+h}}
+\subsubsection[{randomd}]{\setlength{\rightskip}{0pt plus 5cm}double randomd (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{util_8h_ad72ab76eb01a5daa7b359f28817520f9}
+
+
+Functions part one Includes the next functions Std\+Dev\+\_\+bin \+: Calculates the standard deviation for a binary vector. 
+
+Determinant3\+\_\+3 \+: Calculates the determinant of a 3 by 3 , 2d matrix. log\+Transform \+: Transforms from the 0 to 1 scale to the real scale (read logit) Exp\+Transform \+: Transforms from the real scale to the 0 , 1 scale (read antilogit) P\+Check \+: checks if a number is a probability, if it is one returns a very big probability, if its zero, a very small but not null. 
+
+Definition at line 22 of file util.\+h.
+
+
+
+Referenced by E\+M\+Estimation\+::set\+Initial\+Values().
+
+\hypertarget{util_8h_a92c4bf8b44e9ce9753076d022dad6a7f}{}\index{util.\+h@{util.\+h}!std\+Dev\+\_\+bin@{std\+Dev\+\_\+bin}}
+\index{std\+Dev\+\_\+bin@{std\+Dev\+\_\+bin}!util.\+h@{util.\+h}}
+\subsubsection[{std\+Dev\+\_\+bin}]{\setlength{\rightskip}{0pt plus 5cm}long double std\+Dev\+\_\+bin (
+\begin{DoxyParamCaption}
+\item[{int}]{tsum, }
+\item[{int}]{t\+N}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{util_8h_a92c4bf8b44e9ce9753076d022dad6a7f}
+
+
+Definition at line 28 of file util.\+h.
+
+
+
+Referenced by E\+M\+Estimation\+::set\+Initial\+Values().
+
+\hypertarget{util_8h_ad1901bc5ed354d9bff19583bb65487ff}{}\index{util.\+h@{util.\+h}!std\+Dev\+\_\+bin@{std\+Dev\+\_\+bin}}
+\index{std\+Dev\+\_\+bin@{std\+Dev\+\_\+bin}!util.\+h@{util.\+h}}
+\subsubsection[{std\+Dev\+\_\+bin}]{\setlength{\rightskip}{0pt plus 5cm}long double std\+Dev\+\_\+bin (
+\begin{DoxyParamCaption}
+\item[{int}]{tsum, }
+\item[{int}]{t\+N, }
+\item[{double}]{avg}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{util_8h_ad1901bc5ed354d9bff19583bb65487ff}
+
+
+Definition at line 36 of file util.\+h.
+

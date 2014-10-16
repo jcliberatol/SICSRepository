@@ -19,6 +19,12 @@
  * PCheck : checks if a number is a probability, if it is one returns a very big probability, if its zero, a very small but not null.
  */
 
+inline double randomd(){
+
+	int random_variable = std::rand();
+	return ((double)((double)random_variable/(double)RAND_MAX));
+}
+
 inline long double stdDev_bin( int tsum, int tN){
 	long double avg;
 	long double N = (long double)tN;

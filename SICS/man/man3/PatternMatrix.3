@@ -1,4 +1,4 @@
-.TH "PatternMatrix" 3 "Tue Sep 23 2014" "Version 1.00" "SICS IRT" \" -*- nroff -*-
+.TH "PatternMatrix" 3 "Thu Oct 16 2014" "Version 1.00" "SICS IRT" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -106,13 +106,15 @@ Definition at line 32 of file PatternMatrix\&.cpp\&.
 .PP
 Definition at line 32 of file PatternMatrix\&.h\&.
 .PP
-Referenced by EMEstimation::stepE()\&.
+Referenced by EMEstimation::setInitialValues(), and EMEstimation::stepE()\&.
 .SS "int PatternMatrix::countIndividuals () const\fC [virtual]\fP"
 
 .PP
 Implements \fBDataSet\fP\&.
 .PP
 Definition at line 20 of file PatternMatrix\&.cpp\&.
+.PP
+Referenced by EMEstimation::setInitialValues()\&.
 .SS "int PatternMatrix::countItems () const\fC [virtual]\fP"
 
 .PP
@@ -134,19 +136,19 @@ Definition at line 44 of file PatternMatrix\&.cpp\&.
 .PP
 Definition at line 35 of file PatternMatrix\&.h\&.
 .PP
-Referenced by EMEstimation::stepE()\&.
+Referenced by EMEstimation::setInitialValues(), and EMEstimation::stepE()\&.
 .SS "long int PatternMatrix::getCurrentFrequency ()\fC [inline]\fP"
 
 .PP
 Definition at line 36 of file PatternMatrix\&.h\&.
 .PP
-Referenced by EMEstimation::stepE()\&.
+Referenced by EMEstimation::setInitialValues(), and EMEstimation::stepE()\&.
 .SS "void PatternMatrix::iterate ()\fC [inline]\fP"
 
 .PP
 Definition at line 33 of file PatternMatrix\&.h\&.
 .PP
-Referenced by EMEstimation::stepE()\&.
+Referenced by EMEstimation::setInitialValues(), and EMEstimation::stepE()\&.
 .SS "long int & PatternMatrix::operator() (boost::dynamic_bitset<> n)"
 
 .PP
@@ -172,7 +174,7 @@ use this when reading in order
 .PP
 Definition at line 31 of file PatternMatrix\&.h\&.
 .PP
-Referenced by EMEstimation::stepE()\&.
+Referenced by EMEstimation::setInitialValues(), and EMEstimation::stepE()\&.
 .SS "void PatternMatrix::values ()\fC [inline]\fP"
 
 .PP

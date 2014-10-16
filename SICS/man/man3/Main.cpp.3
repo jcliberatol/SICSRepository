@@ -1,4 +1,4 @@
-.TH "src/main/Main.cpp" 3 "Tue Sep 23 2014" "Version 1.00" "SICS IRT" \" -*- nroff -*-
+.TH "src/main/Main.cpp" 3 "Thu Oct 16 2014" "Version 1.00" "SICS IRT" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -54,20 +54,20 @@ Referenced by rosenbrockTest()\&.
 
 .PP
 Definition at line 76 of file Main\&.cpp\&.
-.PP
-Referenced by main()\&.
 .SS "int main (int argc, char * argv[])"
 
 .PP
-Definition at line 159 of file Main\&.cpp\&.
+Definition at line 140 of file Main\&.cpp\&.
 .PP
-References initTests()\&.
+References oneRun()\&.
 .SS "void oneRun ()"
 
 .PP
 Definition at line 84 of file Main\&.cpp\&.
 .PP
-References a, ParameterModel::buildParameterSet(), c, ItemModel::countItems(), d, EMEstimation::estimate(), Model::getDimensionModel(), Model::getItemModel(), DimensionModel::getLatentTraitSet(), Model::getParameterModel(), ParameterModel::getParameterSet(), Input::importCSV(), Matrix< T >::nR(), ItemModel::setDataset(), Model::setModel(), EMEstimation::setModel(), LatentTraitSet::setTheta(), and LatentTraitSet::setWeight()\&.
+References ParameterModel::buildParameterSet(), ItemModel::countItems(), EMEstimation::estimate(), Model::getDimensionModel(), Model::getItemModel(), DimensionModel::getLatentTraitSet(), Model::getParameterModel(), Input::importCSV(), Matrix< T >::nR(), ItemModel::setDataset(), EMEstimation::setInitialValues(), Model::setModel(), EMEstimation::setModel(), LatentTraitSet::setTheta(), and LatentTraitSet::setWeight()\&.
+.PP
+Referenced by main()\&.
 .SS "void pachotest ()"
 
 .PP

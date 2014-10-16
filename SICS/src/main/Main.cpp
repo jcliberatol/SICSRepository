@@ -128,7 +128,7 @@ void oneRun(){
 		EMEstimation *em = new EMEstimation();
 		em->setModel(model);
 		cout << "Model setted" << endl;
-		em->setInitialValues("Andradinho");
+		em->setInitialValues("RANDOM");
 		// run estimation
 		em->estimate();
 
