@@ -22,7 +22,6 @@ public:
 
 	// Getters and Setters
 	DataSet* getDataset();
-	void setDataset( DataSet* dataset);
 
 	// Destructor
 	virtual ~DichotomousModel();

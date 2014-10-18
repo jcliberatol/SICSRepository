@@ -17,6 +17,7 @@ EMEstimation::EMEstimation() {
 	optim = NULL;
 	convergenceSignal = false;
 	optim = new Optimizer();
+	quadNodes = NULL;
 
 }
 
@@ -41,7 +42,7 @@ void EMEstimation::setModel(Model* Model) {
 	int q;
 	int It;
 	this->model = Model;
-	q = model->getDimensionModel()->getLatentTraitSet()->getTheta()->nC();
+	q = quadNodes->size();
 	It = model->getItemModel()->countItems();
 
 	f = new Matrix<double>(1, q);
@@ -112,6 +113,7 @@ void EMEstimation::setInitialValues(string method) {
 		}
 		totalscores += bs*df;
 	}
+	cout<<"Score total : "<<totalscores<<endl;
 	//calculate variances and covariances
 	for (data->resetIterator(); !data->checkEnd(); data->iterate()){
 		double df = (double)data->getCurrentFrequency();
@@ -126,6 +128,7 @@ void EMEstimation::setInitialValues(string method) {
 	variance /= Ni;
 	for (int i = 0 ; i < items ; i++){
 		covariances[i] /= (Ni-1);
+		cout<<"cov : "<<i<<" "<<covariances[i]<<endl;
 	}
 	//Now calculate the standard deviations for the sums and the items
 	long double*stddevs = new long double [items];
@@ -173,21 +176,18 @@ void EMEstimation::stepE() {
 	 * parameter set
 	 */
 	//Dataset by patterns
-	PatternMatrix* data =
-			dynamic_cast<PatternMatrix *>(model->getItemModel()->getDataset());
+	PatternMatrix* data = dynamic_cast<PatternMatrix *>(model->getItemModel()->getDataset());
 	//Pattern iterator is data->iterator
 	//Item number
 	const double items = data->countItems();
 	//Success probability matrix is obtained via pm->getProbability(int,int)
 	ParameterModel* pm = model->getParameterModel();
 	//Thetas
-	Matrix<double>* thetas =
-			model->getDimensionModel()->getLatentTraitSet()->getTheta();
+	Matrix<double>* thetas = quadNodes->getTheta();
 	//Amount of nodes
-	const int q = thetas->nC();
+	const int q = quadNodes->size();
 	//Weights
-	Matrix<double>* weights =
-			model->getDimensionModel()->getLatentTraitSet()->getWeight();
+	Matrix<double>* weights =quadNodes->getWeight();
 	//A Matrix
 	Matrix<double>* A = model->getParameterModel()->getParameterSet()[a];
 	//B Matrix
@@ -200,10 +200,8 @@ void EMEstimation::stepE() {
 	//Restart f and r to zero
 	f->reset();
 	r->reset();
-	//cout<<(* data)<<endl;
-	model->successProbability();
-	//cout<<(*pm->probabilityMatrix)<<endl<<"pm"<<endl;
-
+	//Calculates the success probability for all the nodes.
+	model->successProbability(quadNodes);
 
 	//TODO CAREFULLY PARALLELIZE FOR
 	for (data->resetIterator(); !data->checkEnd(); data->iterate()) {
@@ -217,31 +215,26 @@ void EMEstimation::stepE() {
 			//Calculate the p (iterate over the items in the productory)
 			for (unsigned int i = 0; i < items; i++) {
 				double prob = pm->getProbability(k, i);
-				//cout<<data->getCurrentBitSet()[items-i-1];
 				if (!data->getCurrentBitSet()[items - i - 1]) {
 					prob = 1 - prob;
 				}
 				faux[k] = faux[k] * prob;
-			}		//cout<<endl;
+			}
 			//At this point the productory is calculated and faux[k] is equivalent to p(u_j,theta_k)
 			//Now multiply by the weight
 			faux[k] = faux[k] * (*weights)(0, k);
 		}
-		//cout<<(*weights);
 		//compute the total of the p*a' (denominator of the g*)
 		sum = 0.0;
 		for (int k = 0; k < q; k++) {
 			sum += faux[k];
-			//cout<<faux[k]<<" ";
-		}		//cout<<"Da sum ist : "<<sum<<endl;
+		}
 		for (int k = 0; k < q; k++) {
 			faux[k] = faux[k] / sum;	//This is g*_j_k
-			//if(k==0)cout<<faux[k]<<"faux after div"<<endl;
 			//Multiply the f to the frequency of the pattern
 			faux[k] = ((long double) data->getCurrentFrequency()) * faux[k];
-			//if(k==0)cout<<faux[k]<<"faux after freq"<<endl;
+
 			(*f)(0, k) += faux[k];
-			//if(k==0)cout<<(*f)(0,k)<<"The f "<<((long double) data->getCurrentFrequency())<<endl;
 			//Now selectively add the faux to the r
 			for (unsigned int i = 0; i < items; i++) {
 				if (data->getCurrentBitSet()[items - i - 1]) {
@@ -251,7 +244,6 @@ void EMEstimation::stepE() {
 		} // for
 
 	}
-	//cout<<(*r)<<endl;
 } //end E step
 
 /**
@@ -280,7 +272,7 @@ void EMEstimation::stepM() {
 	hptr = NULL;
 	//cout<<"Address : "<<&gptr<<" "<<&hptr<<endl;
 	int It = model->getItemModel()->getDataset()->countItems();
-	int q = model->getDimensionModel()->getLatentTraitSet()->getTheta()->nC();
+	int q = quadNodes->size();
 	double args[3 * It];
 	double pars[2 + 2 * q + q * It];
 	int nargs = 3 * It;
@@ -326,8 +318,7 @@ void EMEstimation::stepM() {
 	// Obtain theta
 	//Thetas
 
-	Matrix<double>* thetas =
-			model->getDimensionModel()->getLatentTraitSet()->getTheta();
+	Matrix<double>* thetas =quadNodes->getTheta();
 	for (int k = 0; k < q; k++) {
 		pars[nP] = (*thetas)(0, k);	//TODO correct indexing on this and nearby matrices
 		nP++;
@@ -449,9 +440,6 @@ void EMEstimation::stepM() {
 	if (meanDelta < 0.0001 and maxDelta < 0.001) {
 		convergenceSignal = true;
 	}
-	//cout << "Max Delta : " << maxDelta << endl;
-	//cout << "Mean Delta : " << meanDelta << endl;
-	//cout << "MATS : " << endl << (*A) << (*B) << (*C) << endl;
 	//And set the parameter sets
 	map<Parameter, Matrix<double> *> parSet;
 	parSet[a] = A;
@@ -475,12 +463,10 @@ void EMEstimation::estimate() {
 	 * TODO Estimate
 	 */
 	//Transform B and C
-	//cout << "Item impression" << endl;
 	for (int i = 0; i < model->getItemModel()->countItems(); ++i) {
 		double qa = (*model->getParameterModel()->getParameterSet()[a])(0, i);
 		double qb = (*model->getParameterModel()->getParameterSet()[d])(0, i);
 		double qc = (*model->getParameterModel()->getParameterSet()[c])(0, i);
-		//(*model->getParameterModel()->getParameterSet()[d])(0,i)= -qb*qa;
 		(*model->getParameterModel()->getParameterSet()[c])(0, i) = log(
 				qc / (1 - qc));
 	}
@@ -488,10 +474,6 @@ void EMEstimation::estimate() {
 	while (!convergenceSignal) {
 		cout << "Iteration " << iterations << endl;
 		stepE();
-		//cout<<"____________________________________________________________________________"<<endl;
-		//cout<<*model->getParameterModel()->getParameterSet()[a]
-		//    <<*model->getParameterModel()->getParameterSet()[d]
-		//    <<*model->getParameterModel()->getParameterSet()[c];
 		stepM();
 		iterations++;
 		if (iterations > 200) {
@@ -536,4 +518,12 @@ void EMEstimation::setTrace(Trace trace) {
 /**Returns the iterations that took the estimation to obtain an answer*/
 int EMEstimation::getIterations() const {
 	return (iterations);
+}
+
+QuadratureNodes* EMEstimation::getQuadratureNodes() const {
+	return (quadNodes);
+}
+
+void EMEstimation::setQuadratureNodes(QuadratureNodes* nodes) {
+	this->quadNodes = nodes;
 }

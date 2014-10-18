@@ -12,6 +12,7 @@
 #include <model/item/ItemModel.h>
 #include <model/dimension/DimensionModel.h>
 #include <model/ModelFactory.h>
+#include <type/QuadratureNodes.h>
 /**
  * Model class that holds the structures for the IRT models
  * can vary across parameters, items and dimensions
@@ -30,7 +31,7 @@ public:
 
 	// Methods
 	void setModel ( ModelFactory * );
-	void successProbability ();
+	void successProbability (QuadratureNodes *);
 	void buildParameterSet ();
 
 	// Getters and Setters

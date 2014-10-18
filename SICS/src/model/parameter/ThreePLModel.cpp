@@ -14,9 +14,14 @@ ThreePLModel::ThreePLModel() {
 	parameterSet[c] = NULL;
 	parameterSet[d] = NULL;
 	probabilityMatrix=NULL;
+	nodes = 0;
 
 }
 
+void ThreePLModel::setEstimationNodes(QuadratureNodes* n) {
+	this->nodes = n;
+}
+//Nodes must be brought as a parameter of the dimension model
 void ThreePLModel::buildParameterSet(ItemModel* itemModel,
 		DimensionModel* dimensionModel) {
 
@@ -25,8 +30,6 @@ void ThreePLModel::buildParameterSet(ItemModel* itemModel,
 		if (typeid(*dimensionModel) == typeid(UnidimensionalModel)) {
 
 			int items = itemModel->countItems();
-			int q = dimensionModel->getLatentTraitSet()->getTheta()->nC();
-			probabilityMatrix = new Matrix<double>(q,items);
 			parameterSet[a] = new Matrix<double>(1, items);
 			parameterSet[d] = new Matrix<double>(1, items);
 			parameterSet[c] = new Matrix<double>(1, items);
@@ -49,22 +52,27 @@ void ThreePLModel::buildParameterSet(ItemModel* itemModel,
 
 }
 
-void ThreePLModel::successProbability(DimensionModel *dimensionModel) {
+void ThreePLModel::successProbability(DimensionModel *dimensionModel, QuadratureNodes * quadNodes) {
 
 	int q = 0;
 	double a_d, d_d, c_d, theta_d; // d stands from "double"
 
 	if ( dimensionModel != NULL ) {
-		q = dimensionModel->getLatentTraitSet()->getTheta()->nC();
+		q = quadNodes->size();
 	}
+
+
+
 	if(typeid(*dimensionModel)==typeid(UnidimensionalModel)) {
-
 		int It = parameterSet[a]->nC();
-
+		if(probabilityMatrix == NULL){
+				//Creates the matrix if it is not already created
+				probabilityMatrix = new Matrix<double>(q,It);
+			}
 		for (int k = 0; k < q; k++) {
 			for ( int i = 0; i < It; i++ ){
 				// 3PL Success Probability Function
-				theta_d = (*dimensionModel->getLatentTraitSet()->getTheta())(0,k);
+				theta_d = (*quadNodes->getTheta())(0,k);
 				a_d = (*parameterSet[a])(0,i);
 				d_d = (*parameterSet[d])(0,i);
 				c_d = (*parameterSet[c])(0,i);
@@ -155,7 +163,8 @@ void ThreePLModel::Hessian(double* args, double* pars, int nargs, int npars, dou
 		double *theta, *r, *f, *a, *b, *c;
 
 		// Obtain q
-		q = pars[nP ++]; // q is obtained and npars is augmented
+		q = pars[nP ++];
+		// q is obtained and npars is aumented
 		// Obtain I
 		items = pars[nP ++];
 

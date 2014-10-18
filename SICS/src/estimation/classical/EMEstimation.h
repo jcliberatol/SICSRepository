@@ -12,6 +12,7 @@
 #include <trace/Trace.h>
 #include <type/Matrix.h>
 #include <type/PatternMatrix.h>
+#include <type/QuadratureNodes.h>
 //#include <optimizer/BFGSOptimizer.h>
 
 /**
@@ -57,6 +58,8 @@ public:
 	void setInitialValues(map<Parameter, Matrix<double>* > parameterSet);
 	void setInitialValues(string method);
 	int getIterations() const;
+	QuadratureNodes* getQuadratureNodes() const;
+	void setQuadratureNodes(QuadratureNodes* latentTraitSet);
 
 private:
 	//F and R Matrices, remember to set to zero and open memory in process
@@ -72,6 +75,8 @@ private:
 	bool convergenceSignal;
 	//Number of iterations
 	int iterations;
+	//Sets used for the estimation
+	QuadratureNodes *quadNodes;
 };
 
 #endif /* EM_H_ */

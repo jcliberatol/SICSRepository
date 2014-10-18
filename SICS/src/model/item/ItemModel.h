@@ -20,7 +20,7 @@ public:
 
 	// Getters and Setters
 	virtual DataSet* getDataset()  = 0;
-	virtual void setDataset(DataSet* dataset) = 0;
+	virtual void setDataset(DataSet* dataset); // Dataset must be set before deciding on dimensionality of the model
 
 	// Destructor
 	virtual ~ItemModel();

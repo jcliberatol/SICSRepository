@@ -48,8 +48,8 @@ void Model::setParameterModel(ParameterModel* parameterModel) {
 	this->parameterModel = parameterModel;
 }
 
-void Model::successProbability() {
-	parameterModel->successProbability(dimensionModel);
+void Model::successProbability(QuadratureNodes* q) {
+	parameterModel->successProbability(dimensionModel, q);
 }
 
 void Model::buildParameterSet() {

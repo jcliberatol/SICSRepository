@@ -13,6 +13,7 @@
 #include <model/item/ItemModel.h>
 #include <model/dimension/DimensionModel.h>
 #include <type/DataSet.h>
+#include <type/QuadratureNodes.h>
 
 using namespace std;
 
@@ -25,8 +26,8 @@ protected:
 public:
 	Matrix<double> * probabilityMatrix;
 	// Methods
-	virtual void buildParameterSet ( ItemModel *, DimensionModel * ) = 0;
-	virtual void successProbability (DimensionModel *) = 0;
+	virtual void buildParameterSet ( ItemModel *, DimensionModel *) = 0;
+	virtual void successProbability (DimensionModel *, QuadratureNodes *) = 0;
 
 
 	// Getters and Setters

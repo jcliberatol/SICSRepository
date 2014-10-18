@@ -18,11 +18,15 @@
 #include <type/PatternMatrix.h>
 #include <type/Constant.h>
 #include <cmath>
+#include <type/QuadratureNodes.h>
 /**
  * Model for the 3pl model, uses parameters a d c.
  * unidimensional
  * */
 class ThreePLModel: public ParameterModel {
+
+private:
+	QuadratureNodes* nodes;
 public:
 
 	static double successProbability(double, double, double, double);
@@ -31,8 +35,9 @@ public:
 	ThreePLModel();
 
 	// Methods
+	void setEstimationNodes(QuadratureNodes * );
 	void buildParameterSet(ItemModel *, DimensionModel *);
-	void successProbability(DimensionModel *);
+	void successProbability(DimensionModel *, QuadratureNodes *);
 	static double logLikelihood(double*, double*, int, int);
 	static void gradient(double*,double*,int,int,double*);
 	static void Ngradient(double* args, double* pars, int nargs, int npars, double* gradient);

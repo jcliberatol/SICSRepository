@@ -15,7 +15,7 @@ using namespace std;
 
 class DimensionModel {
 protected:
-	LatentTraitSet *latentTraitSet;
+	LatentTraitSet *latentTraitSet;//Latent traits in use for the estimation , must be moved to estimation procedures
 public:
 	// Methods
 	virtual int getNumDimensions () = 0;
@@ -23,7 +23,7 @@ public:
 
 	// Getters and Setters
 	virtual LatentTraitSet* getLatentTraitSet() const = 0;
-	virtual void setLatentTraitSet(LatentTraitSet* latentTraitSet) = 0;
+	virtual void setLatentTraitSet(LatentTraitSet* latentTraitSet) = 0;//Only settable by estimation methods
 
 	// Destructor
 	virtual ~DimensionModel();

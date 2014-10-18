@@ -10,6 +10,10 @@
 
 #include <type/Matrix.h>
 
+/*
+ * Notice this class models the fictious latent trait sets used to estimate the item parameters
+ * and not the actual individual latent trait sets
+ */
 class LatentTraitSet {
 	Matrix<double> *theta;
 	Matrix<double> *weight;

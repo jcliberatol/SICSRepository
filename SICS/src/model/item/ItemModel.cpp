@@ -10,5 +10,10 @@
 
 ItemModel::~ItemModel() {
 	// TODO Auto-generated destructor stub
+
 }
 
+
+void ItemModel::setDataset(DataSet* dataset) {
+	this->dataSet = dataset;
+}

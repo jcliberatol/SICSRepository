@@ -19,10 +19,11 @@ int DichotomousModel::countCategories() {
 DataSet* DichotomousModel::getDataset() {
 	return (dataSet);
 }
-
+/*
 void DichotomousModel::setDataset(DataSet* dataset) {
 	this->dataSet = dataset;
 }
+*/
 
 int DichotomousModel::countItems() {
 	PatternMatrix * pM = dynamic_cast<PatternMatrix *>(this->dataSet);

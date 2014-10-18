@@ -29,10 +29,12 @@ void LatentTraitSet::setWeight(Matrix<double>* weight) {
 }
 
 LatentTraitSet::~LatentTraitSet() {
-	if (theta != NULL) {
+	if (theta) {
 		delete theta;
+		theta = 0;
 	}
-	if (weight != NULL) {
+	if (weight) {
 		delete weight;
+		weight = 0;
 	}
 }
