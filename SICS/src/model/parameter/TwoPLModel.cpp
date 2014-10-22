@@ -9,32 +9,38 @@
 #include <model/parameter/TwoPLModel.h>
 
 TwoPLModel::TwoPLModel() {
-	// TODO Auto-generated constructor stub
+	
+	parameterSet[a] = NULL; 
+ 	parameterSet[b] = NULL; 
+ 	parameterSet[c] = NULL; 
+ 	parameterSet[d] = NULL; 
+ 	probabilityMatrix=NULL; 
+ 	nodes = 0; 
 
 }
 
 void TwoPLModel::buildParameterSet(ItemModel* itemModel,
-		DimensionModel* dimensionModel) {
-			if (typeid(*itemModel) == typeid(DichotomousModel)) {
-				if (typeid(*dimensionModel) == typeid(UnidimensionalModel)) {
-					int items = itemModel->countItems();
-					parameterSet[a] = new Matrix<double>(1, items);
-					parameterSet[b] = new Matrix<double>(1, items);
-					parameterSet[d] = new Matrix<double>(1, items);
-				}
-				
-				else if (typeid(*dimensionModel) == typeid(MultidimensionalModel)) {
-					// TODO: Dichotomous Multidimensional
-				}
-				
-				else if (typeid(*dimensionModel) == typeid(MultiUniDimModel)) {
-					// TODO: Dichotomous MultiUniDimensional
-				}
+	DimensionModel* dimensionModel) {
+		if (typeid(*itemModel) == typeid(DichotomousModel)) {
+			if (typeid(*dimensionModel) == typeid(UnidimensionalModel)) {
+				int items = itemModel->countItems();
+				parameterSet[a] = new Matrix<double>(1, items);
+				parameterSet[b] = new Matrix<double>(1, items);
+				parameterSet[d] = new Matrix<double>(1, items);
 			}
 			
-			else if (typeid(*dimensionModel) == typeid(PolytomousModel)) {
-				// TODO: Polytomous Model for Unidimensional, Multidimensional and MultiUni
+			else if (typeid(*dimensionModel) == typeid(MultidimensionalModel)) {
+				// TODO: Dichotomous Multidimensional
 			}
+			
+			else if (typeid(*dimensionModel) == typeid(MultiUniDimModel)) {
+				// TODO: Dichotomous MultiUniDimensional
+			}
+		}
+		
+		else if (typeid(*dimensionModel) == typeid(PolytomousModel)) {
+			// TODO: Polytomous Model for Unidimensional, Multidimensional and MultiUni
+		}
 }
 
 void TwoPLModel::successProbability(DimensionModel *dimensionModel,  QuadratureNodes *quadNodes) {
