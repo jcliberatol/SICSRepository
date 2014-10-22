@@ -15,6 +15,26 @@ TwoPLModel::TwoPLModel() {
 
 void TwoPLModel::buildParameterSet(ItemModel* itemModel,
 		DimensionModel* dimensionModel) {
+			if (typeid(*itemModel) == typeid(DichotomousModel)) {
+				if (typeid(*dimensionModel) == typeid(UnidimensionalModel)) {
+					int items = itemModel->countItems();
+					parameterSet[a] = new Matrix<double>(1, items);
+					parameterSet[b] = new Matrix<double>(1, items);
+					parameterSet[d] = new Matrix<double>(1, items);
+				}
+				
+				else if (typeid(*dimensionModel) == typeid(MultidimensionalModel)) {
+					// TODO: Dichotomous Multidimensional
+				}
+				
+				else if (typeid(*dimensionModel) == typeid(MultiUniDimModel)) {
+					// TODO: Dichotomous MultiUniDimensional
+				}
+			}
+			
+			else if (typeid(*dimensionModel) == typeid(PolytomousModel)) {
+				// TODO: Polytomous Model for Unidimensional, Multidimensional and MultiUni
+			}
 }
 
 void TwoPLModel::successProbability(DimensionModel *dimensionModel,  QuadratureNodes *quadNodes) {
