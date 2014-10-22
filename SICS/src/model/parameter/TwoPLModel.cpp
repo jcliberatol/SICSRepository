@@ -2,7 +2,8 @@
  * TwoPLModel.cpp
  *
  *  Created on: 18 Jun 2014
- *      Author: jlgpisa
+ *  Updated on: 22 Oct 2014
+ *      Author: cesandvalp
  */
 
 #include <model/parameter/TwoPLModel.h>
@@ -16,8 +17,34 @@ void TwoPLModel::buildParameterSet(ItemModel* itemModel,
 		DimensionModel* dimensionModel) {
 }
 
-void TwoPLModel::successProbability(DimensionModel *dimensionModel) {
+void TwoPLModel::successProbability(DimensionModel *dimensionModel,  QuadratureNodes *quadNodes) {
+	int q = 0;
+	double a_d, b_d, d_d, theta_d; // d stands from "double"
+	
+	if (dimensionModel != NULL) {
+		q = quadNodes->size();
+	}
+	
+	if (typeid(*dimensionModel) == typeid(UnidimensionalModel)) {
+		int It = parameterSet[a]->nC();
+		if (probabilityMatrix == NULL) {
+			//Creates the matrix if it is not already created
+			probabilityMatrix = new Matrix<double>(q, It);
+		}
+		for (int k = 0; k < q; k++) {
+			for (int i = 0; i < It; i++) {
+				// 2PL Success Probability Function
+				theta_d = (*quadNodes->getTheta())(0, k);
+				a_d = (*parameterSet[a])(0, i);
+				b_d = (*parameterSet[b])(0, i);
+				d_d = (*parameterSet[d])(0, i);
+				double p_d = successProbability(theta_d, a_d, b_d, d_d);
+				(*probabilityMatrix)(k, i) = p_d;
+			}
+		}
+	}
 }
+
 map<Parameter, Matrix<double> *> TwoPLModel::getParameterSet()  {
 	return (this->parameterSet);
 }
