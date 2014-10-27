@@ -165,7 +165,7 @@ void EMTest::runTest() {
 		// Create model
 		Model *model = new Model();
 		ModelFactory *modelFactory = new SICSGeneralModel();
-		model->setModel(modelFactory);
+		model->setModel(modelFactory, Constant::THREE_PL);
 
 		// Set dataset to model
 		model->getItemModel()->setDataset(pM);
@@ -263,7 +263,7 @@ void EMTest::runProcessor() {
 		// Create model
 		Model *model = new Model();
 		ModelFactory *modelFactory = new SICSGeneralModel();
-		model->setModel(modelFactory);
+		model->setModel(modelFactory, Constant::THREE_PL);
 
 		// Set dataset to model
 		model->getItemModel()->setDataset(pM);
