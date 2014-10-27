@@ -82,7 +82,7 @@ void initTests(char *filename){
 }
 
 void oneRun(){
-	Input input;
+		Input input;
 		Matrix<double> cuad(41, 2);
 		input.importCSV((char *) "Cuads.csv", cuad, 1, 0);
 		// **** **** Run model complete and ordered process **** ****
@@ -99,7 +99,7 @@ void oneRun(){
 		// set dataset
 		cout << "Dataset size : " << (*dataSet).countItems() << " x "<< (*dataSet).countIndividuals() << endl;
 		cout << "Created model" << endl;
-		model->setModel(modelFactory);//This is where it is decided what model is the test to make
+		model->setModel(modelFactory, Constant::THREE_PL);//This is where it is decided what model is the test to make
 		model->getItemModel()->setDataset(dataSet);//Sets the dataset.
 
 		// set Theta and weight for the EM Estimation
@@ -140,11 +140,8 @@ void oneRun(){
 		delete model;
 }
 int main(int argc, char *argv[]) {
-
-	cout<<"The show begins";
 	oneRun();
 	//initTests(argv[1]);
-	//oneRun();
 }
 
 
