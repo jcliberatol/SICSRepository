@@ -342,43 +342,12 @@ void EMEstimation::stepM() {
 	 * method 1 is NR
 	 * method 2 is BFGS
 	 */
-	int method = 2;
 
-	if (method == 1) {
-		//Newton Raphson
-		double grad[3 * It];
-		double hess[3 * 3 * It];
-		ThreePLModel::gradient(args, pars, nargs, npars, grad);
-		ThreePLModel::Hessian(args, pars, nargs, npars, hess);
-		for (int i = 0; i < It; ++i) {
-			double targs[3];
-			//fill the args for the item
-			targs[0] = args[i];
-			targs[1] = args[It + i];
-			targs[2] = args[2 * It + i];
-			double tgrad[3];
-			double thess[9];
-			//Pass the item number through the tunnel in memory
-			tgrad[0] = It;
-			thess[0] = It;
-			//Create the gradient pointer
-			void (*tgptr)(double*, double*, int, int, double*);
-			void (*thptr)(double*, double*, int, int, double*);
-			tgptr = &ThreePLModel::itemgradient;
-			thptr = &ThreePLModel::itemHessian;
-			//optimize with these parameters changing the args
-			newton(tgptr, thptr, targs, hess, grad, 3, i, 100, tgrad, thess);
-			//cout<<"Made it this far";
-			//update the args
-			args[i] = targs[0];
-			args[It + i] = targs[1];
-			args[2 * It + i] = targs[2];
-		}
-	}
-	if (method == 2) {
+
+
 		//BFGS
 		optim->searchOptimal(fptr, gptr, hptr, args, pars, nargs, npars);
-	}
+
 
 	// Now pass the optimals to the Arrays.
 
