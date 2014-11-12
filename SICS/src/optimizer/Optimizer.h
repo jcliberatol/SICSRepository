@@ -7,9 +7,6 @@
 
 #ifndef OPTIMIZER_H_
 #define OPTIMIZER_H_
-//#include <optimizer/BFGSOptimizer.h>
-#include <optimizer/NewtonOptimizer.h>
-#include <optimizer/FisherScoringOptimizer.h>
 #include <optimizer/BFGSOptimizer.h>
 
 /**

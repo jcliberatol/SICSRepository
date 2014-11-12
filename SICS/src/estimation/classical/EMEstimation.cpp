@@ -5,7 +5,7 @@
  *      Author: mirt
  */
 
-#include "EMEstimation.h"
+#include <estimation/classical/EMEstimation.h>
 #include <util/util.h>
 
 EMEstimation::EMEstimation() {
@@ -254,23 +254,13 @@ void EMEstimation::stepM() {
 	/*
 	 */
 	//Step M implementation using the BFGS Algorithm
-	/*
-	 * What we need
-	 * fptr the pointer to loglik
-	 * gprt the pointer to gradient
-	 * hessptr the pointer to hessian matrix calculatrix
-	 * args the a,b, and c
-	 * pars, the other parameters q and stuff
-	 * nargs, npars, sizes.
-	 */
-	//fptr
+	//Function pointers to represent the loglikelihood, gradient and hessian
 	double (*fptr)(double*, double*, int, int);
 	void (*gptr)(double*, double*, int, int, double*);
 	void (*hptr)(double*, double*, int, int, double*);
 	fptr = &ThreePLModel::logLikelihood;
 	gptr = &ThreePLModel::gradient;
 	hptr = NULL;
-	//cout<<"Address : "<<&gptr<<" "<<&hptr<<endl;
 	int It = model->getItemModel()->getDataset()->countItems();
 	int q = quadNodes->size();
 	double args[3 * It];
@@ -315,7 +305,6 @@ void EMEstimation::stepM() {
 	// Obtain I
 	pars[nP] = It;
 	nP++;
-	// Obtain theta
 	//Thetas
 
 	Matrix<double>* thetas =quadNodes->getTheta();
@@ -342,12 +331,8 @@ void EMEstimation::stepM() {
 	 * method 1 is NR
 	 * method 2 is BFGS
 	 */
-
-
-
-		//BFGS
+	//BFGS
 		optim->searchOptimal(fptr, gptr, hptr, args, pars, nargs, npars);
-
 
 	// Now pass the optimals to the Arrays.
 
