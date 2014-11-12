@@ -169,11 +169,6 @@ void EMTest::runTest() {
 
 		// Set dataset to model
 		model->getItemModel()->setDataset(pM);
-
-		// Set nodes and weights to model
-		model->getDimensionModel()->getLatentTraitSet()->setTheta(theta);
-		model->getDimensionModel()->getLatentTraitSet()->setWeight(weight);
-
 		// Build parameter set TODO: a model function that loads item and dimension
 		model->getParameterModel()->buildParameterSet(model->getItemModel(),
 				model->getDimensionModel());
@@ -193,8 +188,9 @@ void EMTest::runTest() {
 
 		// Create estimation
 		EMEstimation *em = new EMEstimation();
+		QuadratureNodes nodes(theta,weight);
+		em->setQuadratureNodes(&nodes);
 		em->setModel(model);
-
 		report.startTime();
 		em->estimate();
 		report.endTime();
@@ -268,10 +264,6 @@ void EMTest::runProcessor() {
 		// Set dataset to model
 		model->getItemModel()->setDataset(pM);
 
-		// Set nodes and weights to model
-		model->getDimensionModel()->getLatentTraitSet()->setTheta(theta);
-		model->getDimensionModel()->getLatentTraitSet()->setWeight(weight);
-
 		// Build parameter set TODO: a model function that loads item and dimension
 		model->getParameterModel()->buildParameterSet(model->getItemModel(),
 				model->getDimensionModel());
@@ -291,8 +283,9 @@ void EMTest::runProcessor() {
 
 		// Create estimation
 		EMEstimation *em = new EMEstimation();
+		QuadratureNodes nodes(theta,weight);
+		em->setQuadratureNodes(&nodes);
 		em->setModel(model);
-
 		report.startTime();
 		em->estimate();
 		report.endTime();

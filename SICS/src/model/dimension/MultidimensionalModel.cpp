@@ -19,15 +19,6 @@ MultidimensionalModel::~MultidimensionalModel() {
 	// TODO Auto-generated destructor stub
 }
 
-LatentTraitSet* MultidimensionalModel::getLatentTraitSet() const {
-	return latentTraitSet;
-}
-
-void MultidimensionalModel::setLatentTraitSet(
-		LatentTraitSet* latentTraitSet) {
-	this->latentTraitSet = latentTraitSet;
-}
-
 int MultidimensionalModel::getNumDimensions() {
 }
 

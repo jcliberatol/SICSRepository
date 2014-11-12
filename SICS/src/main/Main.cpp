@@ -101,7 +101,6 @@ void oneRun(){
 		cout << "Created model" << endl;
 		model->setModel(modelFactory);//This is where it is decided what model is the test to make
 		model->getItemModel()->setDataset(dataSet);//Sets the dataset.
-
 		// set Theta and weight for the EM Estimation
 		Matrix<double> *theta = new Matrix<double>(1, 41);
 		Matrix<double> *weight = new Matrix<double>(1, 41);
@@ -133,7 +132,6 @@ void oneRun(){
 		em->setInitialValues("ANDRADE");
 		// run estimation
 		em->estimate();
-		cout<<"breaks here"<<endl;
 		delete modelFactory;
 		delete dataSet;
 		delete em;

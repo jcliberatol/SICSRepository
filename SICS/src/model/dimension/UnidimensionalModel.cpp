@@ -8,7 +8,7 @@
 #include <model/dimension/UnidimensionalModel.h>
 
 UnidimensionalModel::UnidimensionalModel() {
-	latentTraitSet = new LatentTraitSet();
+
 }
 
 int UnidimensionalModel::getNumDimensions() {
@@ -18,23 +18,13 @@ int UnidimensionalModel::getNumDimensions() {
 vector<int> UnidimensionalModel::getDimVector() {
 	vector<int> dimVect;
 
-	int dimension = latentTraitSet->getTheta()->nC();
+	int dimension = 0;//latentTraitSet->getTheta()->nC();
 	dimVect.push_back(dimension);
 
 	return (dimVect);
 }
 
-LatentTraitSet* UnidimensionalModel::getLatentTraitSet() const {
-	return (latentTraitSet);
-}
+UnidimensionalModel::~UnidimensionalModel(){
 
-void UnidimensionalModel::setLatentTraitSet(LatentTraitSet* latentTraitSet) {
-	this->latentTraitSet = latentTraitSet;
-}
-
-UnidimensionalModel::~UnidimensionalModel() {
-	if (latentTraitSet!=NULL) {
-		delete latentTraitSet;
-	}
 }
 

@@ -19,10 +19,6 @@ public:
 	int getNumDimensions ();
 	vector<int> getDimVector();
 
-	// Getters and Setters
-	LatentTraitSet* getLatentTraitSet() const;
-	void setLatentTraitSet(LatentTraitSet* latentTraitSet);
-
 	// Destructor
 	virtual ~MultiUniDimModel();
 };
