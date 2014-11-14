@@ -13,8 +13,8 @@ Model::Model ( ) {
 	dimensionModel = NULL;
 }
 
-void Model::setModel(ModelFactory * modelFactory) {
-	parameterModel = modelFactory->createParameterModel();
+void Model::setModel(ModelFactory * modelFactory, int modelType) {
+	parameterModel = modelFactory->createParameterModel(modelType);
 	itemModel = modelFactory->createItemModel();
 	dimensionModel = modelFactory->createDimensionModel();
 }

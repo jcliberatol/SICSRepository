@@ -30,7 +30,7 @@ public:
 	Model();
 
 	// Methods
-	void setModel ( ModelFactory * );
+	void setModel ( ModelFactory * , int);
 	void successProbability (QuadratureNodes *);
 	void buildParameterSet ();
 

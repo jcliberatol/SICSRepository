@@ -200,17 +200,6 @@ void Matrix<T>::copy(Matrix<T>& a) {
 }
 
 template<class T>
-T Matrix<T>::getDeterminant () {
-	T det = 0.0;
-
-	if ( nCol == 3 && nRow == 3 ) {
-		det = get3x3determinant();
-	}
-
-	return (det);
-}
-
-template<class T>
 ostream& operator<<(ostream &out, Matrix<T> &M) {
 	// Since operator<< is a friend of the Point class, we can access
 	// Point's members directly.

@@ -9,7 +9,7 @@
 #include <util/util.h>
 
 EMEstimation::EMEstimation() {
-	iterations = 100;
+	iterations = 0;
 	model = NULL;
 	f = NULL;
 	r = NULL;
