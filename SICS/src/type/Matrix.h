@@ -57,7 +57,6 @@ public:
 	void reset();/**Reset method, puts all entries in zeros*/
 	void transpose ();/**Transposes the matrix, notice it does not perform memory transpose, only index transpose*/
 	void copy(Matrix<T>&);/**Copy constructor*/
-	T getDeterminant ();/**Outputs the determinant of the matrix*/
 	int nR(); /** Returns number of rows */
 	int nC(); /** Returns number of columns */
 	T sum(); /** Returns the sum of all objects */

@@ -18,6 +18,8 @@ using namespace std;
  */
 class Constant {
 public:
+	enum model_type{RASCH_A1, RASCH_A_CONSTANT, TWO_PL, THREE_PL};
+
 	static double NORM_CONST;
 	static double MAX_EXP;
 	static double INFINITE;
@@ -29,6 +31,9 @@ public:
 	static double reltest ;
 	static double abstol ;
 	static double reltol ;
+	static double D_CONST ;
+
+  
 };
 
 #endif /* CONSTANT_H_ */

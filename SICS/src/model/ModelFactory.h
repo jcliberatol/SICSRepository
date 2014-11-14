@@ -15,10 +15,11 @@
 class ModelFactory {
 public:
 	// Constructor
+
 	ModelFactory();
 
 	// Methods
-	virtual ParameterModel *createParameterModel() = 0;
+	virtual ParameterModel *createParameterModel(int) = 0;
 	virtual ItemModel *createItemModel() = 0;
 	virtual DimensionModel *createDimensionModel() = 0;
 
