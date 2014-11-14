@@ -35,7 +35,9 @@ public:
 	void successProbability(DimensionModel *, QuadratureNodes *);
 	static double logLikelihood(double*, double*, int, int);
 	void setEstimationNodes(QuadratureNodes*);
-
+	static void gradient (double* , double* , int , int , double* );
+	static void Ngradient(double* , double* , int , int , double* );
+	static void NHessian(double* , double* , int , int , double* );
 
 	// Getters and Setters
 	map<Parameter, Matrix<double> *> getParameterSet() ;

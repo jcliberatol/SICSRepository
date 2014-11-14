@@ -13,7 +13,8 @@ SICSGeneralModel::SICSGeneralModel() {
 }
 
 ParameterModel* SICSGeneralModel::createParameterModel() {
-	ParameterModel *parameterModel = new ThreePLModel();//TODO FIX FOR DECISION OF NEW MODELS
+	//ParameterModel *parameterModel = new ThreePLModel();//TODO FIX FOR DECISION OF NEW MODELS
+	ParameterModel *parameterModel = new RaschModel();
 	return (parameterModel);
 }
 

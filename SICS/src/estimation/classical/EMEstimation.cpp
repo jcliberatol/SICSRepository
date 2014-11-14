@@ -8,6 +8,7 @@
 #include "EMEstimation.h"
 #include <util/util.h>
 
+
 EMEstimation::EMEstimation() {
 	iterations = 100;
 	model = NULL;
@@ -58,11 +59,11 @@ void EMEstimation::setInitialValues(map<Parameter, Matrix<double>*> parameterSet
 /**
  * Sets the initial values according to a method of calculating the values
  * Possible methods :
-	 * ANDRADE,
-	 * OSPINA,
-	 * RANDOM,
-	 *
-	 * The default method is OSPINA , this is the fastest method according to the SICS calculations
+ * ANDRADE,
+ * OSPINA,
+ * RANDOM,
+ *
+ * The default method is OSPINA , this is the fastest method according to the SICS calculations
  */
 void EMEstimation::setInitialValues(string method) {
 	/*TODO
@@ -85,75 +86,76 @@ void EMEstimation::setInitialValues(string method) {
 			(*model->getParameterModel()->getParameterSet()[c])(0, i)= randomd()*(2/(double)m);
 
 			cout<<"i : "<<i<<" a "
-								<<(*model->getParameterModel()->getParameterSet()[a])(0, i)<<" b "
-								<<(*model->getParameterModel()->getParameterSet()[d])(0, i)<<" c "
-								<<(*model->getParameterModel()->getParameterSet()[c])(0, i)<<endl;
+					<<(*model->getParameterModel()->getParameterSet()[a])(0, i)<<" b "
+					<<(*model->getParameterModel()->getParameterSet()[d])(0, i)<<" c "
+					<<(*model->getParameterModel()->getParameterSet()[c])(0, i)<<endl;
 		}
 	}
 
 	if(!method.compare("ANDRADE")){
-	//Andrade method
-	int items = model->getParameterModel()->getParameterSet()[a]->nC();
-	//sums of the patterns
-	int totalscores = 0 ;
-	int *itemscores = new int [items];
-	memset(itemscores,0,sizeof(int)*items);
-	double *covariances = new double [items];
-	memset(covariances,0,sizeof(double)*items);
-	double variance = 0;
-	PatternMatrix* data = dynamic_cast<PatternMatrix *>(model->getItemModel()->getDataset());
-	double Ni = (double)data->countIndividuals();
-	for (data->resetIterator(); !data->checkEnd(); data->iterate()) {
-		double df = (double)data->getCurrentFrequency();
-		double bs = (double)data->getCurrentBitSet().count();
-		for (int i = 0 ; i < items ; i++){
-			if(data->getCurrentBitSet()[i]){
-				itemscores[i]+=df;
+		//Andrade method
+		int items = model->getParameterModel()->getParameterSet()[b]->nC();
+		//sums of the patterns
+		int totalscores = 0 ;
+		int *itemscores = new int [items];
+		memset(itemscores,0,sizeof(int)*items);
+		double *covariances = new double [items];
+		memset(covariances,0,sizeof(double)*items);
+		double variance = 0;
+		PatternMatrix* data = dynamic_cast<PatternMatrix *>(model->getItemModel()->getDataset());
+		double Ni = (double)data->countIndividuals();
+		for (data->resetIterator(); !data->checkEnd(); data->iterate()) {
+			double df = (double)data->getCurrentFrequency();
+			double bs = (double)data->getCurrentBitSet().count();
+			for (int i = 0 ; i < items ; i++){
+				if(data->getCurrentBitSet()[i]){
+					itemscores[i]+=df;
+				}
 			}
+			totalscores += bs*df;
 		}
-		totalscores += bs*df;
-	}
-	cout<<"Score total : "<<totalscores<<endl;
-	//calculate variances and covariances
-	for (data->resetIterator(); !data->checkEnd(); data->iterate()){
-		double df = (double)data->getCurrentFrequency();
-		double bs = (double)data->getCurrentBitSet().count();
-		for (int i = 0 ; i < items ; i++){
-			if(data->getCurrentBitSet()[i]){
-				covariances[i]+=((1-itemscores[i]/Ni)*(1-bs/items))*df;
+		cout<<"Score total : "<<totalscores<<endl;
+		//calculate variances and covariances
+		for (data->resetIterator(); !data->checkEnd(); data->iterate()){
+			double df = (double)data->getCurrentFrequency();
+			double bs = (double)data->getCurrentBitSet().count();
+			for (int i = 0 ; i < items ; i++){
+				if(data->getCurrentBitSet()[i]){
+					covariances[i]+=((1-itemscores[i]/Ni)*(1-bs/items))*df;
+				}
 			}
+			variance+=((bs-((double)totalscores/Ni))*(bs-((double)totalscores/Ni)))*df;
 		}
-		variance+=((bs-((double)totalscores/Ni))*(bs-((double)totalscores/Ni)))*df;
-	}
-	variance /= Ni;
-	for (int i = 0 ; i < items ; i++){
-		covariances[i] /= (Ni-1);
-		cout<<"cov : "<<i<<" "<<covariances[i]<<endl;
-	}
-	//Now calculate the standard deviations for the sums and the items
-	long double*stddevs = new long double [items];
-	memset(stddevs,0,sizeof(long double)*items);
-	long double*pearson = new long double [items];
-	memset(pearson,0,sizeof(long double)*items);
-	long double*pis = new long double [items];
-	memset(pis,0,sizeof(long double)*items);
-	for (int i = 0 ; i < items ; i++){
+		variance /= Ni;
+		for (int i = 0 ; i < items ; i++){
+			covariances[i] /= (Ni-1);
+			cout<<"cov : "<<i<<" "<<covariances[i]<<endl;
+		}
+		//Now calculate the standard deviations for the sums and the items
+		long double*stddevs = new long double [items];
+		memset(stddevs,0,sizeof(long double)*items);
+		long double*pearson = new long double [items];
+		memset(pearson,0,sizeof(long double)*items);
+		long double*pis = new long double [items];
+		memset(pis,0,sizeof(long double)*items);
+		for (int i = 0 ; i < items ; i++){
 			double avg= totalscores/Ni;
 			stddevs[i]=stdDev_bin(itemscores[i],Ni,avg);
 			pis[i]=itemscores[i]/Ni;
 			pearson[i]=(covariances[i]/(stddevs[i]*std::sqrt(variance)));
 			//fill a sqrt(pCoef * pCoef / (1.0 - pCoef * pCoef));
-			(*model->getParameterModel()->getParameterSet()[a])(0, i)= std::sqrt((pearson[i]*pearson[i])/(1/pearson[i]*pearson[i]));
+		//	(*model->getParameterModel()->getParameterSet()[a])(0, i)= std::sqrt((pearson[i]*pearson[i])/(1/pearson[i]*pearson[i]));
 			//fill b
-			(*model->getParameterModel()->getParameterSet()[d])(0, i)=normalInverse(pis[i]);
+			(*model->getParameterModel()->getParameterSet()[b])(0, i)= normalInverse(pis[i]);
 			//fill c
-			int m = 4;
-			(*model->getParameterModel()->getParameterSet()[c])(0, i)= 1 / (double)m;//TODO CHANGE BY CONSTANT FROM CONST.H FILE
-			cout<<"i : "<<i<<" a "
+		//	int m = 4;
+		//	(*model->getParameterModel()->getParameterSet()[c])(0, i)= 1 / (double)m;//TODO CHANGE BY CONSTANT FROM CONST.H FILE
+		/*	cout<<"i : "<<i<<" a "
 					<<(*model->getParameterModel()->getParameterSet()[a])(0, i)<<" b "
 					<<(*model->getParameterModel()->getParameterSet()[d])(0, i)<<" c "
-					<<(*model->getParameterModel()->getParameterSet()[c])(0, i)<<endl;
-	}
+					<<(*model->getParameterModel()->getParameterSet()[c])(0, i)<<endl;*/
+			cout<<"i : "<<i<<" b "<<(*model->getParameterModel()->getParameterSet()[b])(0, i)<<endl;
+		}
 	}
 }
 
@@ -188,12 +190,8 @@ void EMEstimation::stepE() {
 	const int q = quadNodes->size();
 	//Weights
 	Matrix<double>* weights =quadNodes->getWeight();
-	//A Matrix
-	Matrix<double>* A = model->getParameterModel()->getParameterSet()[a];
 	//B Matrix
-	Matrix<double>* B = model->getParameterModel()->getParameterSet()[d];
-	//C Matrix
-	Matrix<double>* C = model->getParameterModel()->getParameterSet()[c];
+	Matrix<double>* B = model->getParameterModel()->getParameterSet()[b];
 	//Auxiliar array for the nodes
 	long double faux[q];
 	long double sum = 0.0;
@@ -267,34 +265,23 @@ void EMEstimation::stepM() {
 	double (*fptr)(double*, double*, int, int);
 	void (*gptr)(double*, double*, int, int, double*);
 	void (*hptr)(double*, double*, int, int, double*);
-	fptr = &ThreePLModel::logLikelihood;
-	gptr = &ThreePLModel::gradient;
+	fptr = &RaschModel::logLikelihood;
+	gptr = &RaschModel::gradient;
 	hptr = NULL;
 	//cout<<"Address : "<<&gptr<<" "<<&hptr<<endl;
 	int It = model->getItemModel()->getDataset()->countItems();
 	int q = quadNodes->size();
-	double args[3 * It];
+	double args[It];
 	double pars[2 + 2 * q + q * It];
-	int nargs = 3 * It;
+	int nargs = It;
 	int npars = 2 + 2 * q + q * It;
 	//filling args
 	int nA = 0;
-	// Obtain a
-	//A Matrix
-	Matrix<double>* A = model->getParameterModel()->getParameterSet()[a];
 	//B Matrix
-	Matrix<double>* B = model->getParameterModel()->getParameterSet()[d];
-	//C Matrix
-	Matrix<double>* C = model->getParameterModel()->getParameterSet()[c];
+	Matrix<double>* B = model->getParameterModel()->getParameterSet()[b];
 
-	Matrix<double> DA(*A);
 	Matrix<double> DB(*B);
-	Matrix<double> DC(*C);
 
-	for (int i = 0; i < It; i++) {
-		args[nA] = (*A)(0, i);
-		nA++;
-	}
 
 	// Obtain b
 	for (int i = 0; i < It; i++) {
@@ -302,11 +289,7 @@ void EMEstimation::stepM() {
 		nA++;
 	}
 
-	// Obtain c
-	for (int i = 0; i < It; i++) {
-		args[nA] = (*C)(0, i);
-		nA++;
-	}
+
 	//Filling pars
 	int nP = 0;
 	// Obtain q
@@ -348,8 +331,8 @@ void EMEstimation::stepM() {
 		//Newton Raphson
 		double grad[3 * It];
 		double hess[3 * 3 * It];
-		ThreePLModel::gradient(args, pars, nargs, npars, grad);
-		ThreePLModel::Hessian(args, pars, nargs, npars, hess);
+		RaschModel::gradient(args, pars, nargs, npars, grad);
+		//RaschModel::Hessian(args, pars, nargs, npars, hess);
 		for (int i = 0; i < It; ++i) {
 			double targs[3];
 			//fill the args for the item
@@ -383,31 +366,16 @@ void EMEstimation::stepM() {
 	// Now pass the optimals to the Arrays.
 
 	nA = 0;
-	// Obtain a
-	for (int i = 0; i < It; i++) {
-		(*A)(0, i) = args[nA++];
-		if (fabs((*A)(0, i)) > abs(10)) {
-			(*C)(0, i) = 0.852;
-			cout << "A reset." << endl;
-		}
 
-	}
 	// Obtain b
 	for (int i = 0; i < It; i++) {
 		(*B)(0, i) = args[nA++];
 		if (fabs((*B)(0, i)) > abs(-50)) {
-			(*C)(0, i) = 0.5;
+			//(*C)(0, i) = 0.5;
 			cout << "B reset." << endl;
 		}
 	}
-	// Obtain c
-	for (int i = 0; i < It; i++) {
-		(*C)(0, i) = args[nA++];
-		if (fabs((*C)(0, i)) > abs(600)) {
-			(*C)(0, i) = -1.7364;
-			cout << "C reset." << endl;
-		}
-	}
+
 	//Boundary regularize the arguments
 	//C = -1.7346
 	//B = 0.5;
@@ -419,21 +387,11 @@ void EMEstimation::stepM() {
 	double meanDelta = 0;
 	int DeltaC = 0;
 	for (int v1 = 0; v1 < It; ++v1) {
-		DA(0, v1) = DA(0, v1) - (*A)(0, v1);
 		DB(0, v1) = DB(0, v1) - (*B)(0, v1);
-		DC(0, v1) = DC(0, v1) - (*C)(0, v1);
-		meanDelta = +fabs(DA(0, v1));
-		meanDelta = +fabs(DB(0, v1));
-		meanDelta = +fabs(DC(0, v1));
-		DeltaC += 3;
-		if (fabs(DA(0, v1)) > maxDelta) {
-			maxDelta = fabs(DA(0, v1));
-		}
+		meanDelta += fabs(DB(0, v1)); //se cambio = + a +=
+		DeltaC ++;
 		if (fabs(DB(0, v1)) > maxDelta) {
 			maxDelta = fabs(DB(0, v1));
-		}
-		if (fabs(DC(0, v1)) > maxDelta) {
-			maxDelta = fabs(DC(0, v1));
 		}
 	}
 	meanDelta = meanDelta / DeltaC;
@@ -442,9 +400,7 @@ void EMEstimation::stepM() {
 	}
 	//And set the parameter sets
 	map<Parameter, Matrix<double> *> parSet;
-	parSet[a] = A;
-	parSet[d] = B;
-	parSet[c] = C;
+	parSet[b]= B;
 	// llenar las tres matrices
 	model->getParameterModel()->setParameterSet(parSet);
 
@@ -462,14 +418,7 @@ void EMEstimation::estimate() {
 	/*
 	 * TODO Estimate
 	 */
-	//Transform B and C
-	for (int i = 0; i < model->getItemModel()->countItems(); ++i) {
-		double qa = (*model->getParameterModel()->getParameterSet()[a])(0, i);
-		double qb = (*model->getParameterModel()->getParameterSet()[d])(0, i);
-		double qc = (*model->getParameterModel()->getParameterSet()[c])(0, i);
-		(*model->getParameterModel()->getParameterSet()[c])(0, i) = log(
-				qc / (1 - qc));
-	}
+
 	iterations = 0;
 	while (!convergenceSignal) {
 		cout << "Iteration " << iterations << endl;
@@ -481,23 +430,11 @@ void EMEstimation::estimate() {
 			cout<<"more than 200 iters, stopp"<<endl;
 		}
 	}
-	//Transform B
-	//Transform C
-	for (int i = 0; i < model->getItemModel()->countItems(); ++i) {
-		double qa = (*model->getParameterModel()->getParameterSet()[a])(0, i);
-		double qb = (*model->getParameterModel()->getParameterSet()[d])(0, i);
-		double qc = (*model->getParameterModel()->getParameterSet()[c])(0, i);
-		//(*model->getParameterModel()->getParameterSet()[d])(0,i)= -qb/qa;
-		double ec = exp(qc);
-		(*model->getParameterModel()->getParameterSet()[c])(0, i) = ec
-				/ (1 + ec);
-	}
+
 	cout
-			<< "___________________CONVERGENCE VALUES________________________"
-			<< endl;
-	   cout << *model->getParameterModel()->getParameterSet()[a]
-			<< *model->getParameterModel()->getParameterSet()[d]
-			<< *model->getParameterModel()->getParameterSet()[c]
+	<< "___________________CONVERGENCE VALUES________________________"
+	<< endl;
+	cout <<  *model->getParameterModel()->getParameterSet()[b]
 			<<"______________________________________________________________"<<endl;
 }
 /**Check if all the conditions are met for running the model, can report an error to a logger*/
@@ -527,3 +464,4 @@ QuadratureNodes* EMEstimation::getQuadratureNodes() const {
 void EMEstimation::setQuadratureNodes(QuadratureNodes* nodes) {
 	this->quadNodes = nodes;
 }
+
