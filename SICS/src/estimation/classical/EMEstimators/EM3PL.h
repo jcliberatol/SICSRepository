@@ -19,7 +19,7 @@ public:
 		m->getParameterModel()->setParameterSet(parameterSet);
 	}
 
-	virtual void setInitialValues(string method, Model* m) {
+	virtual void setInitialValues(int method, Model* m) {
 		//TODO MOVE ALGORITHMS TO ANOTHER FILE
 		/*TODO
 		 * Possible methods
@@ -29,7 +29,7 @@ public:
 		 *
 		 * The default method is OSPINA
 		 */
-		if(!method.compare("RANDOM")){
+		if(!method == Constant::RANDOM){
 			std::srand(std::time(0)); // use current time as seed for random generator
 			int items = m->getParameterModel()->getParameterSet()[a]->nC();
 			for (int i = 0 ; i < items ; i++){
@@ -43,7 +43,7 @@ public:
 			}
 		}
 
-		if(!method.compare("ANDRADE")){
+		if(!method == Constant::ANDRADE){
 			//Andrade method
 			int items = m->getParameterModel()->getParameterSet()[a]->nC();
 			//sums of the patterns

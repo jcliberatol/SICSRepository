@@ -12,6 +12,7 @@ Model::Model ( ) {
 	itemModel = NULL;
 	dimensionModel = NULL;
 	itemParametersEstimated = false;
+	type = 0;
 }
 
 void Model::setModel(ModelFactory * modelFactory, int modelType) {
@@ -19,6 +20,7 @@ void Model::setModel(ModelFactory * modelFactory, int modelType) {
 	itemModel = modelFactory->createItemModel();
 	dimensionModel = modelFactory->createDimensionModel();
 	itemParametersEstimated = false;//Undefined behavior TODO
+	type = modelType;
 }
 
 Model::~Model() {
@@ -56,4 +58,8 @@ void Model::successProbability(QuadratureNodes* q) {
 
 void Model::buildParameterSet() {
 	parameterModel->buildParameterSet(itemModel, dimensionModel);
+}
+
+int Model::Modeltype(){
+	return type;
 }

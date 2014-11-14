@@ -24,11 +24,12 @@ class Model {
 	ParameterModel *parameterModel;
 	ItemModel *itemModel;
 	DimensionModel *dimensionModel;
+	int type;
 
 public:
 	// Constructor
 	Model();
-
+	int Modeltype();
 	// Methods
 	void setModel ( ModelFactory * , int);
 	void successProbability (QuadratureNodes *);

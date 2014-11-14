@@ -19,6 +19,7 @@ using namespace std;
 class Constant {
 public:
 	enum model_type{RASCH_A1, RASCH_A_CONSTANT, TWO_PL, THREE_PL};
+	enum initial_value_type{ANDRADE,RANDOM,OSPINA,FIXED};
 
 	static double NORM_CONST;
 	static double MAX_EXP;

@@ -24,7 +24,7 @@ public:
 	//Step M also needs the model, quad nodes, f and r
 	virtual void stepM(Model* m, Matrix<double>* f, Matrix<double>* r,  QuadratureNodes* nodes) = 0 ;
 	//in this cases the model are needed to be filled
-	virtual void setInitialValues(string Method, Model*) = 0;
+	virtual void setInitialValues(int Method, Model*) = 0;
 	virtual void setInitialValues(map<Parameter, Matrix<double>*> parameterSet, Model* m) = 0;
 	virtual ~EMEstimator(){}
 };

@@ -17,7 +17,6 @@ void oneRun(){
 		input.importCSV((char *) "Cuads.csv", cuad, 1, 0);
 		// **** **** Run model complete and ordered process **** ****
 		// Create general pars
-		int It; // Number of items
 
 		Model *model = new Model();
 		// Create general model
@@ -48,8 +47,7 @@ void oneRun(){
 		QuadratureNodes nodes(theta,weight);
 		em->setQuadratureNodes(&nodes);
 		em->setModel(model);
-		cout << "Model setted" << endl;
-		em->setInitialValues("ANDRADE");
+		em->setInitialValues(Constant::ANDRADE);
 		// run estimation
 		em->estimate();
 		delete modelFactory;
