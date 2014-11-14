@@ -7,25 +7,26 @@
 
 #ifndef EMESTIMATOR_H_
 #define EMESTIMATOR_H_
-#include <estimation/classical/ClassicalEstimation.h>
 #include <string>
 #include <trace/Trace.h>
 #include <type/Matrix.h>
 #include <type/PatternMatrix.h>
 #include <type/QuadratureNodes.h>
 #include <optimizer/Optimizer.h>
+#include <util/util.h>
+//#include <estimation/classical/EMEstimators/EM3PL.h>
 
 class EMEstimator {
 public:
-	EMEstimator();
+	EMEstimator(){}
 	//Step E needs the model , the f and r, and the thetas, besides from the data.
-	void stepE(Model* m, Matrix<double>* f, Matrix<double>* r,  QuadratureNodes* nodes);
+	virtual void stepE(Model* m, Matrix<double>* f, Matrix<double>* r,  QuadratureNodes* nodes) = 0;
 	//Step M also needs the model, quad nodes, f and r
-	void stepM(Model* m, Matrix<double>* f, Matrix<double>* r,  QuadratureNodes* nodes);
+	virtual void stepM(Model* m, Matrix<double>* f, Matrix<double>* r,  QuadratureNodes* nodes) = 0 ;
 	//in this cases the model are needed to be filled
-	void setInitialValues(string Method);
-	void setInitialValues(map<Parameter, Matrix<double>*> parameterSet);
-	virtual ~EMEstimator();
+	virtual void setInitialValues(string Method, Model*) = 0;
+	virtual void setInitialValues(map<Parameter, Matrix<double>*> parameterSet, Model* m) = 0;
+	virtual ~EMEstimator(){}
 };
 
 #endif /* EMESTIMATOR_H_ */

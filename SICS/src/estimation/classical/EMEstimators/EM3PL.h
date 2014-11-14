@@ -9,15 +9,106 @@
 #define EM3PL_H_
 #include <estimation/classical/EMEstimators/EMEstimator.h>
 
-class EM3PL : public EMEstimator{
+class EM3PL : public EMEstimator {
 public:
-	EM3PL();
-	virtual ~EM3PL();
-};
+	EM3PL(){}
+	virtual ~EM3PL(){}
 
-void stepE(Model* m, Matrix<double>* f, Matrix<double>* r,  QuadratureNodes* nodes){
 
-	//Dataset by patterns
+	virtual void setInitialValues(map<Parameter, Matrix<double>*> parameterSet, Model* m) {
+		m->getParameterModel()->setParameterSet(parameterSet);
+	}
+
+	virtual void setInitialValues(string method, Model* m) {
+		//TODO MOVE ALGORITHMS TO ANOTHER FILE
+		/*TODO
+		 * Possible methods
+		 * ANDRADE
+		 * OSPINA
+		 * RANDOM
+		 *
+		 * The default method is OSPINA
+		 */
+		if(!method.compare("RANDOM")){
+			std::srand(std::time(0)); // use current time as seed for random generator
+			int items = m->getParameterModel()->getParameterSet()[a]->nC();
+			for (int i = 0 ; i < items ; i++){
+				(*m->getParameterModel()->getParameterSet()[a])(0, i)= randomd()*2;
+				//fill b
+				(*m->getParameterModel()->getParameterSet()[d])(0, i)= randomd()*4-2 ;
+				//fill c
+				int cassualOptions = 4;
+				(*m->getParameterModel()->getParameterSet()[c])(0, i)= randomd()*(2/(double)cassualOptions);
+
+			}
+		}
+
+		if(!method.compare("ANDRADE")){
+			//Andrade method
+			int items = m->getParameterModel()->getParameterSet()[a]->nC();
+			//sums of the patterns
+			int totalscores = 0 ;
+			int *itemscores = new int [items];
+			memset(itemscores,0,sizeof(int)*items);
+			double *covariances = new double [items];
+			memset(covariances,0,sizeof(double)*items);
+			double variance = 0;
+			PatternMatrix* data = dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
+			double Ni = (double)data->countIndividuals();
+			for (data->resetIterator(); !data->checkEnd(); data->iterate()) {
+				double df = (double)data->getCurrentFrequency();
+				double bs = (double)data->getCurrentBitSet().count();
+				for (int i = 0 ; i < items ; i++){
+					if(data->getCurrentBitSet()[i]){
+						itemscores[i]+=df;
+					}
+				}
+				totalscores += bs*df;
+			}
+			cout<<"Score total : "<<totalscores<<endl;
+			//calculate variances and covariances
+			for (data->resetIterator(); !data->checkEnd(); data->iterate()){
+				double df = (double)data->getCurrentFrequency();
+				double bs = (double)data->getCurrentBitSet().count();
+				for (int i = 0 ; i < items ; i++){
+					if(data->getCurrentBitSet()[i]){
+						covariances[i]+=((1-itemscores[i]/Ni)*(1-bs/items))*df;
+					}
+				}
+				variance+=((bs-((double)totalscores/Ni))*(bs-((double)totalscores/Ni)))*df;
+			}
+			variance /= Ni;
+			for (int i = 0 ; i < items ; i++){
+				covariances[i] /= (Ni-1);
+				cout<<"cov : "<<i<<" "<<covariances[i]<<endl;
+			}
+			//Now calculate the standard deviations for the sums and the items
+			long double*stddevs = new long double [items];
+			memset(stddevs,0,sizeof(long double)*items);
+			long double*pearson = new long double [items];
+			memset(pearson,0,sizeof(long double)*items);
+			long double*pis = new long double [items];
+			memset(pis,0,sizeof(long double)*items);
+			for (int i = 0 ; i < items ; i++){
+				double avg= totalscores/Ni;
+				stddevs[i]=stdDev_bin(itemscores[i],Ni,avg);
+				pis[i]=itemscores[i]/Ni;
+				pearson[i]=(covariances[i]/(stddevs[i]*std::sqrt(variance)));
+				//fill a sqrt(pCoef * pCoef / (1.0 - pCoef * pCoef));
+				(*m->getParameterModel()->getParameterSet()[a])(0, i)= std::sqrt((pearson[i]*pearson[i])/(1/pearson[i]*pearson[i]));
+				//fill b
+				(*m->getParameterModel()->getParameterSet()[d])(0, i)=normalInverse(pis[i]);
+				//fill c
+				int cassualOptions = 4;
+
+				(*m->getParameterModel()->getParameterSet()[c])(0, i)= 1 / (double)cassualOptions;//TODO CHANGE BY CONSTANT FROM CONST.H FILE
+			}
+		}
+	}
+
+	virtual void stepE(Model* m, Matrix<double>* f, Matrix<double>* r,  QuadratureNodes* nodes){
+
+		//Dataset by patterns
 		PatternMatrix* data = dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
 		//Pattern iterator is data->iterator
 		//Item number
@@ -87,11 +178,11 @@ void stepE(Model* m, Matrix<double>* f, Matrix<double>* r,  QuadratureNodes* nod
 
 		}
 
-}
+	}
 
-void stepM(Model* m, Matrix<double>* f, Matrix<double>* r,  QuadratureNodes* nodes){
+	virtual void stepM(Model* m, Matrix<double>* f, Matrix<double>* r,  QuadratureNodes* nodes){
 
-	//Step M implementation using the BFGS Algorithm
+		//Step M implementation using the BFGS Algorithm
 		//Function pointers to represent the loglikelihood, gradient and hessian
 		double (*fptr)(double*, double*, int, int);
 		void (*gptr)(double*, double*, int, int, double*);
@@ -241,8 +332,9 @@ void stepM(Model* m, Matrix<double>* f, Matrix<double>* r,  QuadratureNodes* nod
 		parSet[c] = C;
 		// llenar las tres matrices
 		m->getParameterModel()->setParameterSet(parSet);
-}
+	}
 
+};
 
 
 #endif /* EM3PL_H_ */

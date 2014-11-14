@@ -14,6 +14,7 @@
 #include <type/PatternMatrix.h>
 #include <type/QuadratureNodes.h>
 #include <estimation/classical/EMEstimators/EMEstimator.h>
+#include <estimation/classical/EMEstimators/EM3PL.h>
 //#include <optimizer/BFGSOptimizer.h>
 
 /**

@@ -425,10 +425,15 @@ void EMEstimation::estimate() {
 				qc / (1 - qc));
 	}
 	iterations = 0;
+	EMEstimator* estimator = new EM3PL();
 	while (!convergenceSignal) {
 		cout << "Iteration " << iterations << endl;
-		stepE();
-		stepM();
+
+		//stepE();
+		estimator->stepE(model,f,r,quadNodes);
+		//stepM();
+		estimator->stepM(model,f,r,quadNodes);
+		convergenceSignal = model->itemParametersEstimated;
 		iterations++;
 		if (iterations > 200) {
 			convergenceSignal = true;
