@@ -212,16 +212,6 @@ T Matrix<T>::getDeterminant () {
 }
 
 template<class T>
-T Matrix<T>::get3x3determinant () {
-	T det;
-
-	det = m('a')*m('e')*m('i') + m('d')*m('h')*m('c') + m('g')*m('b')*m('f');
-	det -= m('g')*m('e')*m('c') + m('a')*m('h')*m('f') + m('d')*m('b')*m('i');
-
-	return (det);
-}
-
-template<class T>
 ostream& operator<<(ostream &out, Matrix<T> &M) {
 	// Since operator<< is a friend of the Point class, we can access
 	// Point's members directly.

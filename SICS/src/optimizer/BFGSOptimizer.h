@@ -47,6 +47,7 @@ int static bfgs(double (*&fntomin)(double*, double*, int, int),
 	double fmin = Constant::INFINITE;
 	//carefull of negative max iterations
 	if (maxiter <= 0) {
+		cout<<iter<<endl;
 		return (1); //MAX_ITER_REACHED;
 	}
 	//allocate l
@@ -195,8 +196,11 @@ int static bfgs(double (*&fntomin)(double*, double*, int, int),
 			ilast = gradcount; /* periodic restart */
 	} while (count != n || ilast != gradcount);
 	if (iter < maxiter) {
+		cout<<iter<<endl;
 		return (0); //SUCCESS;
+
 	}
+	cout<<iter<<endl;
 	return (3); //N_CONVERGENCE;
 }
 
