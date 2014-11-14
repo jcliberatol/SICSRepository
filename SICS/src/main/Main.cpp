@@ -29,12 +29,12 @@ void oneRun(){
 		// set dataset
 		cout << "Dataset size : " << (*dataSet).countItems() << " x "<< (*dataSet).countIndividuals() << endl;
 		cout << "Created model" << endl;
-		model->setModel(modelFactory);//This is where it is decided what model is the test to make
+		model->setModel(modelFactory, Constant::THREE_PL);//This is where it is decided what model is the test to make
 		model->getItemModel()->setDataset(dataSet);//Sets the dataset.
 		// set Theta and weight for the EM Estimation
 		Matrix<double> *theta = new Matrix<double>(1, 41);
 		Matrix<double> *weight = new Matrix<double>(1, 41);
-		int zero = 0;
+
 		for (int k = 0; k < cuad.nR(); k++) {
 			(*theta)(0, k) = cuad(k, 0);
 			(*weight)(0, k) = cuad(k, 1);

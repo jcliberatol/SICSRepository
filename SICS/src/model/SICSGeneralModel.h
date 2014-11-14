@@ -10,6 +10,8 @@
 
 #include <model/ModelFactory.h>
 #include <model/parameter/ThreePLModel.h>
+#include <model/parameter/TwoPLModel.h>
+#include <model/parameter/RaschModel.h>
 #include <model/item/DichotomousModel.h>
 #include <model/dimension/UnidimensionalModel.h>
 
@@ -19,8 +21,8 @@ public:
 	SICSGeneralModel();
 
 	// Methods
-	ParameterModel *createParameterModel();
-	ItemModel *createItemModel();
+	ParameterModel *createParameterModel(int model);
+	ItemModel	   *createItemModel();
 	DimensionModel *createDimensionModel();
 
 	// Destructor
