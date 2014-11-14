@@ -11,12 +11,14 @@ Model::Model ( ) {
 	parameterModel = NULL;
 	itemModel = NULL;
 	dimensionModel = NULL;
+	itemParametersEstimated = false;
 }
 
 void Model::setModel(ModelFactory * modelFactory, int modelType) {
 	parameterModel = modelFactory->createParameterModel(modelType);
 	itemModel = modelFactory->createItemModel();
 	dimensionModel = modelFactory->createDimensionModel();
+	itemParametersEstimated = false;//Undefined behavior TODO
 }
 
 Model::~Model() {

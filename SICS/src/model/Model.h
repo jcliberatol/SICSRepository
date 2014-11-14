@@ -43,7 +43,8 @@ public:
 
 	ParameterModel* getParameterModel();
 	void setParameterModel(ParameterModel* parameterModel);
-
+	//holds if the estimation has been completed.
+	bool itemParametersEstimated;
 	// Destructor
 	virtual ~Model();
 };

@@ -13,6 +13,7 @@
 #include <type/Matrix.h>
 #include <type/PatternMatrix.h>
 #include <type/QuadratureNodes.h>
+#include <estimation/classical/EMEstimators/EMEstimator.h>
 //#include <optimizer/BFGSOptimizer.h>
 
 /**
