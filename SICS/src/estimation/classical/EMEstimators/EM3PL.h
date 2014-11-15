@@ -14,6 +14,27 @@ public:
 	EM3PL(){}
 	virtual ~EM3PL(){}
 
+	virtual void transform(Model* m){
+		for (int i = 0; i < m->getItemModel()->countItems(); ++i) {
+				double qa = (*m->getParameterModel()->getParameterSet()[a])(0, i);
+				double qb = (*m->getParameterModel()->getParameterSet()[d])(0, i);
+				double qc = (*m->getParameterModel()->getParameterSet()[c])(0, i);
+				(*m->getParameterModel()->getParameterSet()[c])(0, i) = log(
+						qc / (1 - qc));
+			}
+	}
+
+	virtual void untransform(Model* m){
+		for (int i = 0; i < m->getItemModel()->countItems(); ++i) {
+				double qa = (*m->getParameterModel()->getParameterSet()[a])(0, i);
+				double qb = (*m->getParameterModel()->getParameterSet()[d])(0, i);
+				double qc = (*m->getParameterModel()->getParameterSet()[c])(0, i);
+				//(*model->getParameterModel()->getParameterSet()[d])(0,i)= -qb/qa;
+				double ec = exp(qc);
+				(*m->getParameterModel()->getParameterSet()[c])(0, i) = ec
+						/ (1 + ec);
+			}
+		}
 
 	virtual void setInitialValues(map<Parameter, Matrix<double>*> parameterSet, Model* m) {
 		m->getParameterModel()->setParameterSet(parameterSet);

@@ -19,6 +19,10 @@
 class EMEstimator {
 public:
 	EMEstimator(){}
+	//Transforms the parameters before starting an estimation process
+	virtual void transform(Model* m) = 0;
+	//Transforms back the parameters after estimating them
+	virtual void untransform(Model* m) = 0;
 	//Step E needs the model , the f and r, and the thetas, besides from the data.
 	virtual void stepE(Model* m, Matrix<double>* f, Matrix<double>* r,  QuadratureNodes* nodes) = 0;
 	//Step M also needs the model, quad nodes, f and r

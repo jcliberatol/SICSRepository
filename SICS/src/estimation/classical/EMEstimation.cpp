@@ -85,14 +85,15 @@ void EMEstimation::estimate() {
 	/*
 	 * TODO Estimate
 	 */
+
+	//Is this b, or d ?
+
+
+
 	//Transform B and C
-	for (int i = 0; i < model->getItemModel()->countItems(); ++i) {
-		double qa = (*model->getParameterModel()->getParameterSet()[a])(0, i);
-		double qb = (*model->getParameterModel()->getParameterSet()[d])(0, i);
-		double qc = (*model->getParameterModel()->getParameterSet()[c])(0, i);
-		(*model->getParameterModel()->getParameterSet()[c])(0, i) = log(
-				qc / (1 - qc));
-	}
+
+	estimator->transform(model);
+
 	iterations = 0;
 	while (!convergenceSignal) {
 		cout << "Iteration " << iterations << endl;
@@ -105,17 +106,9 @@ void EMEstimation::estimate() {
 			cout<<"more than 200 iters, stop"<<endl;
 		}
 	}
-	//Transform B
-	//Transform C
-	for (int i = 0; i < model->getItemModel()->countItems(); ++i) {
-		double qa = (*model->getParameterModel()->getParameterSet()[a])(0, i);
-		double qb = (*model->getParameterModel()->getParameterSet()[d])(0, i);
-		double qc = (*model->getParameterModel()->getParameterSet()[c])(0, i);
-		//(*model->getParameterModel()->getParameterSet()[d])(0,i)= -qb/qa;
-		double ec = exp(qc);
-		(*model->getParameterModel()->getParameterSet()[c])(0, i) = ec
-				/ (1 + ec);
-	}
+
+	estimator->untransform(model);
+
 	cout
 			<< "___________________CONVERGENCE VALUES________________________"
 			<< endl;
