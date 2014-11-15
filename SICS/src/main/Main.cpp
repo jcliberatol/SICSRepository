@@ -20,7 +20,7 @@ void oneRun(){
 		ModelFactory *modelFactory = new SICSGeneralModel();
 		PatternMatrix *dataSet = new PatternMatrix ();
 		// Load matrix
-		input.importCSV((char *) "Test_10_1_1000.csv", *dataSet, 1, 0);
+		input.importCSV((char *) "Test_100_3_10000.csv", *dataSet, 1, 0);
 		// set dataset
 		model->setModel(modelFactory, Constant::TWO_PL);
 		//This is where it is decided what model is the test to make
