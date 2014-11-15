@@ -24,13 +24,14 @@ class Model {
 	ParameterModel *parameterModel;
 	ItemModel *itemModel;
 	DimensionModel *dimensionModel;
+	int type;
 
 public:
 	// Constructor
 	Model();
-
+	int Modeltype();
 	// Methods
-	void setModel ( ModelFactory * );
+	void setModel ( ModelFactory * , int);
 	void successProbability (QuadratureNodes *);
 	void buildParameterSet ();
 
@@ -43,7 +44,10 @@ public:
 
 	ParameterModel* getParameterModel();
 	void setParameterModel(ParameterModel* parameterModel);
+	//holds if the estimation has been completed.
+	bool itemParametersEstimated;
 
+	void printParameterSet(ostream&);
 	// Destructor
 	virtual ~Model();
 };

@@ -13,6 +13,9 @@
 #include <type/Matrix.h>
 #include <type/PatternMatrix.h>
 #include <type/QuadratureNodes.h>
+#include <estimation/classical/EMEstimators/EMEstimator.h>
+#include <estimation/classical/EMEstimators/EM3PL.h>
+#include <estimation/classical/EMEstimators/EM2PL.h>
 //#include <optimizer/BFGSOptimizer.h>
 
 /**
@@ -56,7 +59,7 @@ public:
 	void setTrace(Trace trace);
 	//Sets the initial values
 	void setInitialValues(map<Parameter, Matrix<double>* > parameterSet);
-	void setInitialValues(string method);
+	void setInitialValues(int method);
 	int getIterations() const;
 	QuadratureNodes* getQuadratureNodes() const;
 	void setQuadratureNodes(QuadratureNodes* latentTraitSet);
@@ -67,6 +70,8 @@ private:
 	Matrix<double>* r;
 	//Holds the trace for the logger outputs
 	Trace* logger;
+	//Estimator object to call estimation functions
+	EMEstimator* estimator;
 	//Model on which the algorithm operates
 	Model* model;
 	//Algorithm of optimization used

@@ -18,7 +18,6 @@
 #include <estimation/classical/EMEstimation.h>
 #include <input/Input.h>
 
-using namespace std;
 
 
 

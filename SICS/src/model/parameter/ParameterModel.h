@@ -34,6 +34,7 @@ public:
 	virtual map<Parameter, Matrix<double> *> getParameterSet()  = 0;
 	virtual void setParameterSet(map<Parameter, Matrix<double> *> parameterSet) = 0;
 	virtual double getProbability (int, int) = 0;
+	virtual void printParameterSet(ostream&)=0;
 
 	// Destructor
 	virtual ~ParameterModel();

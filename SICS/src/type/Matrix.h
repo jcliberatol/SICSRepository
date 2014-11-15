@@ -57,7 +57,6 @@ public:
 	void reset();/**Reset method, puts all entries in zeros*/
 	void transpose ();/**Transposes the matrix, notice it does not perform memory transpose, only index transpose*/
 	void copy(Matrix<T>&);/**Copy constructor*/
-	T getDeterminant ();/**Outputs the determinant of the matrix*/
 	int nR(); /** Returns number of rows */
 	int nC(); /** Returns number of columns */
 	T sum(); /** Returns the sum of all objects */
@@ -198,17 +197,6 @@ void Matrix<T>::copy(Matrix<T>& a) {
 	memcpy(memory,a.memory,sizeof(T)*a.nC()*a.nR());
 	transposed = a.transposed;
 	symmetric = a.symmetric;
-}
-
-template<class T>
-T Matrix<T>::getDeterminant () {
-	T det = 0.0;
-
-	if ( nCol == 3 && nRow == 3 ) {
-		det = get3x3determinant();
-	}
-
-	return (det);
 }
 
 template<class T>
