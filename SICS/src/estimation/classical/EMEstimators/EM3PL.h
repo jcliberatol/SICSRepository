@@ -8,7 +8,7 @@
 #ifndef EM3PL_H_
 #define EM3PL_H_
 #include <estimation/classical/EMEstimators/EMEstimator.h>
-
+#include <model/parameter/ThreePLModel.h>
 class EM3PL : public EMEstimator {
 public:
 	EM3PL(){}

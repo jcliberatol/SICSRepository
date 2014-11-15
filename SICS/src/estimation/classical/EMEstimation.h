@@ -15,6 +15,7 @@
 #include <type/QuadratureNodes.h>
 #include <estimation/classical/EMEstimators/EMEstimator.h>
 #include <estimation/classical/EMEstimators/EM3PL.h>
+#include <estimation/classical/EMEstimators/EM2PL.h>
 //#include <optimizer/BFGSOptimizer.h>
 
 /**

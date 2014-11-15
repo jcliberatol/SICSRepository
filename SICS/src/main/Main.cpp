@@ -8,9 +8,6 @@
 
 #include "Main.h"
 
-
-using namespace std;
-
 void oneRun(){
 	Input input;
 		Matrix<double> cuad(41, 2);
@@ -25,7 +22,7 @@ void oneRun(){
 		// Load matrix
 		input.importCSV((char *) "Test_10_1_1000.csv", *dataSet, 1, 0);
 		// set dataset
-		model->setModel(modelFactory, Constant::THREE_PL);
+		model->setModel(modelFactory, Constant::TWO_PL);
 		//This is where it is decided what model is the test to make
 		model->getItemModel()->setDataset(dataSet);//Sets the dataset.
 		// set Theta and weight for the EM Estimation
@@ -56,8 +53,8 @@ void oneRun(){
 		delete model;
 }
 int main(int argc, char *argv[]) {
-
 	oneRun();
+	return (0);
 }
 
 
