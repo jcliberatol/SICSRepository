@@ -91,6 +91,7 @@ void EMEstimation::estimate() {
 	iterations = 0;
 	while (!convergenceSignal) {
 		cout << "Iteration " << iterations << endl;
+
 		estimator->stepE(model,f,r,quadNodes);
 		estimator->stepM(model,f,r,quadNodes);
 		convergenceSignal = model->itemParametersEstimated;
