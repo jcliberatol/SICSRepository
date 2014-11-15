@@ -7,6 +7,7 @@
 
 #include <type/Constant.h>
 
+int Constant::MAX_EM_ITERS = 300;
 double Constant::NORM_CONST = 1;
 double Constant::MAX_EXP = 35.0;
 double Constant::INFINITE = 1e30;

@@ -82,16 +82,6 @@ void EMEstimation::setInitialValues(int method) {
  * TODO : Output last estimation onto the json for recovery in the program.
  */
 void EMEstimation::estimate() {
-	/*
-	 * TODO Estimate
-	 */
-
-	//Is this b, or d ?
-
-
-
-	//Transform B and C
-
 	estimator->transform(model);
 
 	iterations = 0;
@@ -101,21 +91,14 @@ void EMEstimation::estimate() {
 		estimator->stepM(model,f,r,quadNodes);
 		convergenceSignal = model->itemParametersEstimated;
 		iterations++;
-		if (iterations > 200) {
+		if (iterations > Constant::MAX_EM_ITERS) {
 			convergenceSignal = true;
 			cout<<"more than 200 iters, stop"<<endl;
 		}
 	}
 
 	estimator->untransform(model);
-
-	cout
-			<< "___________________CONVERGENCE VALUES________________________"
-			<< endl;
-	   cout << *model->getParameterModel()->getParameterSet()[a]
-			<< *model->getParameterModel()->getParameterSet()[d]
-			<< *model->getParameterModel()->getParameterSet()[c]
-			<<"______________________________________________________________"<<endl;
+	model->printParameterSet(cout);
 }
 
 

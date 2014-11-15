@@ -60,6 +60,10 @@ void Model::buildParameterSet() {
 	parameterModel->buildParameterSet(itemModel, dimensionModel);
 }
 
+void Model::printParameterSet(ostream& k){
+	parameterModel->printParameterSet(k);
+}
+
 int Model::Modeltype(){
-	return type;
+	return (type);
 }

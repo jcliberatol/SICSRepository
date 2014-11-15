@@ -372,3 +372,9 @@ TwoPLModel::~TwoPLModel() {
 	}
 }
 
+void TwoPLModel::printParameterSet(ostream& out){
+	out<<"Estimated parameters : "<<endl;
+	out<<parameterSet[a]<<endl;
+	out<<parameterSet[d]<<endl;
+}
+

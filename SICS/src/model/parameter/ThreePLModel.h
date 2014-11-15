@@ -43,6 +43,7 @@ public:
 	// Getters and Setters
 	map<Parameter, Matrix<double> *> getParameterSet() ;
 	void setParameterSet(map<Parameter, Matrix<double> *>);
+	void printParameterSet(ostream&);
 	double getProbability(int, int);
 
 	// Destructor

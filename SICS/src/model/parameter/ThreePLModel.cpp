@@ -18,6 +18,13 @@ ThreePLModel::ThreePLModel() {
 
 }
 
+void ThreePLModel::printParameterSet(ostream& out){
+	out<<"Estimated parameters : "<<endl;
+	out<<*parameterSet[a]<<endl;
+	out<<*parameterSet[d]<<endl;
+	out<<*parameterSet[c]<<endl;
+}
+
 void ThreePLModel::setEstimationNodes(QuadratureNodes* n) {
 	this->nodes = n;
 }

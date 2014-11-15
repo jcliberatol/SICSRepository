@@ -46,6 +46,7 @@ public:
 	map<Parameter, Matrix<double> *> getParameterSet();
 	void setParameterSet(map<Parameter, Matrix<double> *>);
 	double getProbability(int, int);
+	void printParameterSet(ostream&);
 
 	// Destructor
 	virtual ~TwoPLModel();

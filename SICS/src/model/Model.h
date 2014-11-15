@@ -46,6 +46,8 @@ public:
 	void setParameterModel(ParameterModel* parameterModel);
 	//holds if the estimation has been completed.
 	bool itemParametersEstimated;
+
+	void printParameterSet(ostream&);
 	// Destructor
 	virtual ~Model();
 };

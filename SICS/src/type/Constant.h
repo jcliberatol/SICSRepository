@@ -21,6 +21,7 @@ public:
 	enum model_type{RASCH_A1, RASCH_A_CONSTANT, TWO_PL, THREE_PL};
 	enum initial_value_type{ANDRADE,RANDOM,OSPINA,FIXED};
 
+	static int MAX_EM_ITERS;
 	static double NORM_CONST;
 	static double MAX_EXP;
 	static double INFINITE;
