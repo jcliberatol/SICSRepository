@@ -24,58 +24,47 @@ class Trace {
 	const char * filename;
 
 public:
-	Trace( const char * );
 
 	template<typename T>
-	void operator() ( Matrix<T>&);
-	template<typename T>
-	void operator() ( T );
+	void operator() ( Matrix<T> & message ) {
 
-	virtual ~Trace();
-	const char* getFilename() const;
-	void setFilename(const char* filename);
+		ofstream file;
+		file.open ( filename, ofstream::app );
+
+		file << message;
+
+		file.close ();
+	}
+
+	template<typename T>
+	void operator ()(T message) {
+		ofstream file;
+		file.open ( filename, ofstream::app );
+
+		file << message;
+
+		file << endl;
+
+		file.close ();
+	}
+
+
+	Trace( const char * filename ) {
+
+		this->filename = filename;
+
+	}
+	~Trace() {
+		// TODO Auto-generated destructor stub
+	}
+
+	const char* getFilename() const {
+		return filename;
+	}
+
+	void setFilename(const char* filename) {
+		this->filename = filename;
+	}
+
 };
-
-
-template<typename T>
-void Trace::operator() ( Matrix<T> & message ) {
-
-	ofstream file;
-	file.open ( filename, ofstream::app );
-
-	file << message;
-
-	file.close ();
-}
-
-template<typename T>
-void Trace::operator ()(T message) {
-	ofstream file;
-	file.open ( filename, ofstream::app );
-
-	file << message;
-
-	file << endl;
-
-	file.close ();
-}
-
-
-Trace::Trace( const char * filename ) {
-
-	this->filename = filename;
-
-}
-Trace::~Trace() {
-	// TODO Auto-generated destructor stub
-}
-
-const char* Trace::getFilename() const {
-	return filename;
-}
-
-void Trace::setFilename(const char* filename) {
-	this->filename = filename;
-}
-
 #endif /* TRACE_H_ */
