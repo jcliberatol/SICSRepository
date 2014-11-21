@@ -11,6 +11,7 @@
 #include <type/Matrix.h>
 #include <optimizer/Optimizer.h>
 #include <model/parameter/ThreePLModel.h>
+#include <model/parameter/OnePLModel.h>
 
 
 /**

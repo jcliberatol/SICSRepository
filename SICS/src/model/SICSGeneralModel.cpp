@@ -28,7 +28,7 @@ ParameterModel* SICSGeneralModel::createParameterModel(int model) {
 
 	if (model == Constant::RASCH_A1) {
 		ParameterModel *parameterModel;
-		// TODO parameterModel = new TwoPLModel();
+		parameterModel = new OnePLModel();
 		return (parameterModel);
 	}
 

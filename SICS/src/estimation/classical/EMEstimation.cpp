@@ -54,6 +54,10 @@ void EMEstimation::setModel(Model* Model) {
 	estimator = new EM3PL(); //Initializes estimator
 	}
 
+	if(Model->Modeltype()==Constant::RASCH_A1){
+		estimator = new EM1PL(); //Initializes estimator
+		}
+
 	if(Model->Modeltype()==Constant::TWO_PL){
 	estimator = new EM2PL(); //Initializes estimator with Cristian's 2PL Model
 	}

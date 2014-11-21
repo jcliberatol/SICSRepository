@@ -1,15 +1,15 @@
 /*
- * RaschModel.h
+ * OnePLModel.h
  *
- *  Created on: 17 Jun 2014
- *      Author: jlgpisa
+ *  Created on: Nov 16, 2014
+ *      Author: anmrodriguezre
  */
 
-#ifndef RASCHMODEL_H_
-#define RASCHMODEL_H_
+#ifndef ONEPLMODEL_H_
+#define ONEPLMODEL_H_
 
-#include <model/parameter/ParameterModel.h>
 #include <typeinfo>
+#include <model/parameter/ParameterModel.h>
 #include <model/item/DichotomousModel.h>
 #include <model/item/PolytomousModel.h>
 #include <model/dimension/UnidimensionalModel.h>
@@ -20,15 +20,17 @@
 #include <cmath>
 #include <type/QuadratureNodes.h>
 
-class RaschModel: public ParameterModel {
+class OnePLModel : public ParameterModel {
+
 private:
 	QuadratureNodes* nodes;
+
 public:
 
 	static double successProbability(double, double);
 
 	// Constructor
-	RaschModel();
+	OnePLModel();
 
 	// Methods
 	void buildParameterSet(ItemModel *, DimensionModel *);
@@ -36,16 +38,14 @@ public:
 	static double logLikelihood(double*, double*, int, int);
 	void setEstimationNodes(QuadratureNodes*);
 	static void gradient (double* , double* , int , int , double* );
-	static void Ngradient(double* , double* , int , int , double* );
-	static void NHessian(double* , double* , int , int , double* );
-
 	// Getters and Setters
 	map<Parameter, Matrix<double> *> getParameterSet() ;
 	void setParameterSet(map<Parameter, Matrix<double> *>);
 	double getProbability (int, int);
-
+	void printParameterSet(ostream&);
 	// Destructor
-	virtual ~RaschModel();
+	virtual ~OnePLModel();
 };
 
-#endif /* RASCHMODEL_H_ */
+
+#endif /* ONEPLMODEL_H_ */
