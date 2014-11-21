@@ -11,7 +11,8 @@
 #include <type/Matrix.h>
 #include <optimizer/Optimizer.h>
 #include <model/parameter/ThreePLModel.h>
-#include <model/parameter/RaschModel.h>
+#include <model/parameter/OnePLModel.h>
+
 
 /**
  * Parent estimation interface for all estimation methods.
