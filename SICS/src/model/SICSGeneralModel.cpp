@@ -34,7 +34,7 @@ ParameterModel* SICSGeneralModel::createParameterModel(int model) {
 
 	if (model == Constant::RASCH_A_CONSTANT) {
 		ParameterModel *parameterModel;
-		// TODO parameterModel = new RaschModel();
+		parameterModel = new OnePLACModel();
 		return (parameterModel);
 	}
 

@@ -11,14 +11,16 @@ public:
 	virtual ~EM1PLAC(){}
 
 	virtual void transform(Model* m){
+		double qa = (*m->getParameterModel()->getParameterSet()[a])(0, 0);
 		for (int i = 0; i < m->getItemModel()->countItems(); ++i) {
-			double qb = (*m->getParameterModel()->getParameterSet()[b])(0, i);
+			double qb = (*m->getParameterModel()->getParameterSet()[d])(0, i);
 		}
 	}
 
 	virtual void untransform(Model* m){
+		double qa = (*m->getParameterModel()->getParameterSet()[a])(0, 0);
 		for (int i = 0; i < m->getItemModel()->countItems(); ++i) {
-			(*m->getParameterModel()->getParameterSet()[b])(0, i) = -(*m->getParameterModel()->getParameterSet()[b])(0, i);
+			(*m->getParameterModel()->getParameterSet()[d])(0, i) = -(*m->getParameterModel()->getParameterSet()[d])(0, i);
 		}
 	}
 
@@ -36,7 +38,8 @@ public:
 		 *
 		 * The default method is OSPINA
 		 */
-		if(!method == Constant::RANDOM){
+		if(method == Constant::RANDOM){
+
 			std::srand(std::time(0)); // use current time as seed for random generator
 			int items = m->getParameterModel()->getParameterSet()[b]->nC();
 			for (int i = 0 ; i < items ; i++){
@@ -45,7 +48,7 @@ public:
 			}
 		}
 
-		if(!method == Constant::ANDRADE){
+		if(method == Constant::ANDRADE){
 			int items = m->getParameterModel()->getParameterSet()[d]->nC();
 							for (int i = 0; i < items; i++) {
 
@@ -61,7 +64,6 @@ public:
 								    	   *Um = new double[numeroDePatrones];
 								    double PII = 0.0;
 								    double frequencyV;
-								    cout<<i<<endl;
 									for (data->resetIterator(); !data->checkEnd(); data->iterate())
 									{
 										    frequencyV = data->getCurrentFrequency();
@@ -115,9 +117,9 @@ public:
 							        corr = covar/(sdT*sdU);
 							        result = std::sqrt((corr*corr)/(1.0-corr*corr)); // este es A
 							        // aqui
-							        cout <<result<<endl;
+							        //cout <<result<<endl;
 							        int ifault;
-							        cout<<(ppnd(PII, &ifault))/corr<<endl; // este es B
+							        //cout<<(ppnd(PII, &ifault))/corr<<endl; // este es B
 									//double T = new double[];
 								//(*model->getParameterModel()->getParameterSet()[a])(0, 0) = result;
 								//fill b

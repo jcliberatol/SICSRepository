@@ -212,5 +212,6 @@ OnePLACModel::~OnePLACModel() {
 
 void OnePLACModel::printParameterSet(ostream& out){
 	out<<"Estimated parameters : "<<endl;
-	out<<*parameterSet[b]<<endl;
+	out<<*parameterSet[a];
+	out<<*parameterSet[d]<<endl;
 }

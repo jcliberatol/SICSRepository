@@ -13,6 +13,7 @@
 #include <model/parameter/TwoPLModel.h>
 #include <model/parameter/RaschModel.h>
 #include <model/parameter/OnePLModel.h>
+#include <model/parameter/OnePLACModel.h>
 #include <model/item/DichotomousModel.h>
 #include <model/dimension/UnidimensionalModel.h>
 

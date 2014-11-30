@@ -62,6 +62,11 @@ void EMEstimation::setModel(Model* Model) {
 	estimator = new EM2PL(); //Initializes estimator with Cristian's 2PL Model
 	}
 
+	if(Model->Modeltype()==Constant::RASCH_A_CONSTANT)
+	{
+		estimator = new EM1PLAC();
+	}
+
 }
 /**
  * Sets the initial values for the estimation, use this for inputting a matrix as initial values
@@ -95,7 +100,6 @@ void EMEstimation::estimate() {
 	iterations = 0;
 	while (!convergenceSignal) {
 		cout << "Iteration " << iterations << endl;
-
 		estimator->stepE(model,f,r,quadNodes);
 		estimator->stepM(model,f,r,quadNodes);
 		convergenceSignal = model->itemParametersEstimated;
@@ -105,7 +109,6 @@ void EMEstimation::estimate() {
 			cout<<"more than 200 iters, stop"<<endl;
 		}
 	}
-
 	estimator->untransform(model);
 	model->printParameterSet(cout);
 }
