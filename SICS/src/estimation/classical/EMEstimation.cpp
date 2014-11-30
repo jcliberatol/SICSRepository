@@ -96,7 +96,6 @@ void EMEstimation::setInitialValues(int method) {
  */
 void EMEstimation::estimate() {
 	estimator->transform(model);
-
 	iterations = 0;
 	while (!convergenceSignal) {
 		cout << "Iteration " << iterations << endl;

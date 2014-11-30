@@ -20,7 +20,7 @@ public:
 	virtual void untransform(Model* m){
 		double qa = (*m->getParameterModel()->getParameterSet()[a])(0, 0);
 		for (int i = 0; i < m->getItemModel()->countItems(); ++i) {
-			(*m->getParameterModel()->getParameterSet()[d])(0, i) = -(*m->getParameterModel()->getParameterSet()[d])(0, i);
+			(*m->getParameterModel()->getParameterSet()[d])(0, i) = -(*m->getParameterModel()->getParameterSet()[d])(0, i)/qa;
 		}
 	}
 
@@ -121,7 +121,7 @@ public:
 							        int ifault;
 							        //cout<<(ppnd(PII, &ifault))/corr<<endl; // este es B
 									//double T = new double[];
-								//(*model->getParameterModel()->getParameterSet()[a])(0, 0) = result;
+								(*m->getParameterModel()->getParameterSet()[a])(0, 0) = result;
 								//fill b
 								(*m->getParameterModel()->getParameterSet()[d])(0, i) = (ppnd(PII, &ifault))/corr;
 				}
