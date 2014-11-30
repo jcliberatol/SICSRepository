@@ -4,7 +4,7 @@
 
 
 #include <estimation/classical/EMEstimators/EMEstimator.h>
-#include <model/parameter/OnePLModel.h>
+#include <model/parameter/OnePLACModel.h>
 class EM1PLAC : public EMEstimator {
 public:
 	EM1PLAC(){}
@@ -127,22 +127,17 @@ public:
 	}
 
 	virtual void stepE(Model* model, Matrix<double>* f, Matrix<double>* r,  QuadratureNodes* nodes){
-			//Dataset by patterns
-			PatternMatrix* data = dynamic_cast<PatternMatrix *>(model->getItemModel()->getDataset());
+		PatternMatrix* data =
+					dynamic_cast<PatternMatrix *>(model->getItemModel()->getDataset());
 			//Pattern iterator is data->iterator
 			//Item number
 			const double items = data->countItems();
 			//Success probability matrix is obtained via pm->getProbability(int,int)
 			ParameterModel* pm = model->getParameterModel();
-			//Thetas
-			Matrix<double>* thetas = nodes->getTheta();
 			//Amount of nodes
 			const int q = nodes->size();
 			//Weights
-			Matrix<double>* weights =nodes->getWeight();
-			//B Matrix
-			Matrix<double>* B = model->getParameterModel()->getParameterSet()[b];
-			//Auxiliar array for the nodes
+			Matrix<double>* weights = nodes->getWeight();
 			long double faux[q];
 			long double sum = 0.0;
 			//Restart f and r to zero
@@ -197,114 +192,112 @@ public:
 
 	virtual void stepM(Model* m, Matrix<double>* f, Matrix<double>* r,  QuadratureNodes* nodes){
 
-		//Step M implementation using the BFGS Algorithm
-		//Function pointers to represent the loglikelihood, gradient and hessian
 		double (*fptr)(double*, double*, int, int);
-		void (*gptr)(double*, double*, int, int, double*);
-		void (*hptr)(double*, double*, int, int, double*);
-		fptr = &OnePLModel::logLikelihood;
-		gptr = &OnePLModel::gradient;
-		hptr = NULL;
-		int It = m->getItemModel()->getDataset()->countItems();
-		int q = nodes->size();
-		//TODO Array is not deleted at the end of the method, find memory for the array
-		double args[It];
-		//TODO Find memory
-		double pars[2 + 2 * q + q * It];
-		int nargs = It;
-		int npars = 2 + 2 * q + q * It;
-		//filling args
-		int nA = 0;
-		//B Matrix
-		Matrix<double>* B = m->getParameterModel()->getParameterSet()[b];
+			void (*gptr)(double*, double*, int, int, double*);
+			void (*hptr)(double*, double*, int, int, double*);
+			fptr = &OnePLACModel::logLikelihood;
+			gptr = &OnePLACModel::gradient;
+			hptr = NULL;
+			//
+			//cout<<"Address : "<<&gptr<<" "<<&hptr<<endl;
+			int It = m->getItemModel()->getDataset()->countItems();
+			int q = nodes->size();
+			int nargs = It + 1;
+			int npars = 2 + 2 * q + q * It;
+			double args[nargs];
+			double pars[npars];
 
-		//TODO Remove delta creations , find a fast way.
-		Matrix<double> DB(*B);
+			//filling args
+			int nA = 0;
+			// Obtain a
+			//A Matrix
+			Matrix<double>* A = m->getParameterModel()->getParameterSet()[a];
 
-		// Obtain b
-		for (int i = 0; i < It; i++) {
-			args[nA] = (*B)(0, i);
-			nA++;
-		}
+			//B Matrix
+			Matrix<double>* D = m->getParameterModel()->getParameterSet()[d];
 
-		//Filling pars
-		int nP = 0;
-		// Obtain q
-		pars[nP] = q;
-		nP++;
-		// Obtain I
-		pars[nP] = It;
-		nP++;
-		//Thetas
+			Matrix<double> DA(*A);
+			Matrix<double> DD(*D);
 
-		Matrix<double>* thetas =nodes->getTheta();
-		for (int k = 0; k < q; k++) {
-			pars[nP] = (*thetas)(0, k);	//TODO correct indexing on this and nearby matrices
-			nP++;
-		}
-		// Obtain f
-		for (int k = 0; k < q; k++) {
-			pars[nP] = (*f)(0, k);
-			nP++;
-		}
-		// Obtain r
-		for (int k = 0; k < q; k++) {
+
+
+			args[nA++] = (*A)(0, 0);
+
+
+			// Obtain d
 			for (int i = 0; i < It; i++) {
-				pars[nP] = (*r)(k, i);
-				nP++;
+				args[nA] = (*D)(0, i);
+				nA++;
 			}
-		}
-		nargs = nA;
-		npars = nP;
-		/*
-		 * Chooses the method
-		 * method 1 is NR
-		 * method 2 is BFGS
-		 */
-		//BFGS
-		//TODO Convert optimizer to static function
-		Optimizer* optim;
-		optim = new Optimizer();
-		optim->searchOptimal(fptr, gptr, hptr, args, pars, nargs, npars);
 
-		// Now pass the optimals to the Arrays.
+			//Filling pars
+			int nP = 0;
+			// Obtain q
+			pars[nP++] = q;
+			// Obtain I
+			pars[nP++] = It;
+			// Obtain theta
+			//Thetas
 
-		nA = 0;
-
-		// Obtain b
-		for (int i = 0; i < It; i++) {
-			(*B)(0, i) = args[nA++];
-			if (fabs((*B)(0, i)) > abs(-50)) {
-				//(*C)(0, i) = 0.5;
+			Matrix<double>* thetas = nodes->getTheta();
+			for (int k = 0; k < q; k++) {
+				pars[nP++] = (*thetas)(0, k);	//TODO correct indexing on this and nearby matrices
 			}
-		}
-		//Boundary regularize the arguments
-		//C = -1.7346
-		//B = 0.5;
-		//A = 0.851
-
-		//Obtain the deltas
-		//Perform substracts
-		double maxDelta = 0;
-		double meanDelta = 0;
-		int DeltaC = 0;
-		for (int v1 = 0; v1 < It; ++v1) {
-			DB(0, v1) = DB(0, v1) - (*B)(0, v1);
-			meanDelta += fabs(DB(0, v1));
-			DeltaC ++;
-			if (fabs(DB(0, v1)) > maxDelta) {
-				maxDelta = fabs(DB(0, v1));
+			// Obtain f
+			for (int k = 0; k < q; k++) {
+				pars[nP++] = (*f)(0, k);
 			}
-		}
-		meanDelta = meanDelta / DeltaC;
-		if (meanDelta < 0.0001 and maxDelta < 0.001) {
-			m->itemParametersEstimated = true;
-		}
-		//And set the parameter sets
-		map<Parameter, Matrix<double> *> parSet;
-		parSet[b] = B;
-		// llenar las tres matrices
-		m->getParameterModel()->setParameterSet(parSet);
+			// Obtain r
+			for (int k = 0; k < q; k++) {
+				for (int i = 0; i < It; i++) {
+					pars[nP++] = (*r)(k, i);
+				}
+			}
+			nargs = nA;
+			npars = nP;
+
+			//BFGS
+			Optimizer* optim;
+		    optim = new Optimizer();
+			optim->searchOptimal(fptr, gptr, hptr, args, pars, nargs, npars);
+
+			nA = 0;
+
+			// Obtain a
+			(*A)(0,0) = args[nA++];
+			if (fabs((*A)(0, 0)) > abs(10)) {
+				//cout << "A reset." <<endl;
+				(*A)(0,0) = 0.851;
+			}
+
+			// Obtain d
+			for (int i = 0; i < It; i++) {
+				(*D)(0, i) = args[nA++];
+				if (fabs((*D)(0, i)) > abs(-50)) {
+					(*D)(0, i) = 0.5;
+					//cout << "D reset." << endl;
+				}
+			}
+
+			//Perform substracts
+			DA(0,0) = DA(0, 0) - (*A)(0,0);
+			double maxDelta = DA(0,0);
+			for (int v1 = 0; v1 < It; ++v1) {
+
+				DD(0, v1) = (DD(0, v1) - (*D)(0, v1));
+				if (fabs(DD(0, v1)) > maxDelta) {
+					maxDelta = fabs(DD(0, v1));
+				}
+			}
+			if ( maxDelta < 0.001) {
+				m->itemParametersEstimated = true;
+			}
+			//And set the parameter sets
+			map<Parameter, Matrix<double> *> parSet;
+			parSet[a] = A;
+			parSet[d] = D;
+			// llenar las tres matrices
+			m->getParameterModel()->setParameterSet(parSet);
 	}
 
 };
