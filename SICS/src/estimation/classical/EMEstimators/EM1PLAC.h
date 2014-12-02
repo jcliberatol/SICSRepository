@@ -51,13 +51,13 @@ public:
 			}
 		}
 
+
+		//ANDRADE O( items * numberOfPattern )
 		if (method == Constant::ANDRADE) {
-			int items = m->getParameterModel()->getParameterSet()[d]->nC();
+			int items = m->getParameterModel()->getParameterSet()[d]->nC(), numeroDePatrones = 0 , iter, ifault;
 			PatternMatrix* data =
 					dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
-			double Ni = data->countIndividuals(), PII, frequencyV;
-			int numeroDePatrones = 0, iter;
-			int ifault;
+			double Ni = data->countIndividuals(), PII, frequencyV, mT, mU, mTU, mUU, covar, sdU, sdT, corr, result;
 			for (data->resetIterator(); !data->checkEnd(); data->iterate())
 				numeroDePatrones++; // esto se debe poder hacer de una forma mas optima! en patternMatrix tener el tamaño!
 			double *T = new double[numeroDePatrones], *U =
@@ -66,7 +66,6 @@ public:
 					new double[numeroDePatrones], *Tm =
 					new double[numeroDePatrones], *Um =
 					new double[numeroDePatrones];
-			double mT, mU, mTU, mUU, covar, sdU, sdT, corr, result;
 			for (int i = 0; i < items; i++) {
 
 				iter = 0;
@@ -107,9 +106,8 @@ public:
 				sdU = std::sqrt(sdU / (Ni - 1.0));
 				corr = covar / (sdT * sdU);
 				if ( !i) (*m->getParameterModel()->getParameterSet()[a])(0, 0) = std::sqrt((corr * corr) / (1.0 - corr * corr));
-				(*m->getParameterModel()->getParameterSet()[d])(0, i) = (ppnd(PII, &ifault)) / corr;
-				cout << (*m->getParameterModel()->getParameterSet()[a])(0, 0)<<endl;
-				cout << (*m->getParameterModel()->getParameterSet()[d])(0, i)<<endl;
+
+				(*m->getParameterModel()->getParameterSet()[d])(0, i) = -(ppnd(PII, &ifault)) / corr;
 			}
 		}
 	}

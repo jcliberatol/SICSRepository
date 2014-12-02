@@ -23,7 +23,7 @@ void oneRun(){
 		input.importCSV((char *) "Test_10_1_1000.csv", *dataSet, 1, 0);
 		// set dataset
 		//RASCH_A1, RASCH_A_CONSTANT, TWO_PL, THREE_PL
-		model->setModel(modelFactory, Constant::RASCH_A_CONSTANT);
+		model->setModel(modelFactory, Constant::RASCH_A1);
 		//This is where it is decided what model is the test to make
 		model->getItemModel()->setDataset(dataSet);//Sets the dataset.
 		// set Theta and weight for the EM Estimation
