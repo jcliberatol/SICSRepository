@@ -72,6 +72,8 @@ private:
 	Matrix<double>* r;
 	//Holds the trace for the logger outputs
 	Trace* logger;
+	//Holds the trace for the time measure outputs
+	Trace* time_logger;
 	//Estimator object to call estimation functions
 	EMEstimator* estimator;
 	//Model on which the algorithm operates
