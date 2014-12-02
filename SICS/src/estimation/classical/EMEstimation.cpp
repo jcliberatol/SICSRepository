@@ -106,7 +106,7 @@ void EMEstimation::estimate() {
 	estimator->transform(model);
 	iterations = 0;
 	while (!convergenceSignal) {
-		cout << "Iteration " << iterations << endl;
+		//cout << "Iteration " << iterations << endl;
 		time_logger->startTimingMeasure();
 		estimator->stepE(model,f,r,quadNodes);
 		time_logger->finishTimingMeasure(0);
