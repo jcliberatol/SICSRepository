@@ -52,62 +52,63 @@ public:
 			}
 		}
 
-		if(!method == Constant::ANDRADE){
-			//Andrade method
-			int items = m->getParameterModel()->getParameterSet()[a]->nC();
-			//sums of the patterns
-			int totalscores = 0 ;
-			int *itemscores = new int [items];
-			memset(itemscores,0,sizeof(int)*items);
-			double *covariances = new double [items];
-			memset(covariances,0,sizeof(double)*items);
-			double variance = 0;
-			PatternMatrix* data = dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
-			double Ni = (double)data->countIndividuals();
-			for (data->resetIterator(); !data->checkEnd(); data->iterate()) {
-				double df = (double)data->getCurrentFrequency();
-				double bs = (double)data->getCurrentBitSet().count();
-				for (int i = 0 ; i < items ; i++){
-					if(data->getCurrentBitSet()[i]){
-						itemscores[i]+=df;
-					}
+
+		//ANDRADE O( items * numberOfPattern )
+		if (method == Constant::ANDRADE) {
+			int items = m->getParameterModel()->getParameterSet()[d]->nC(), numeroDePatrones = 0 , iter, ifault;
+			PatternMatrix* data =
+					dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
+			double Ni = data->countIndividuals(), PII, frequencyV, mT, mU, mTU, mUU, covar, sdU, sdT, corr, result;
+			for (data->resetIterator(); !data->checkEnd(); data->iterate())
+				numeroDePatrones++; // esto se debe poder hacer de una forma mas optima! en patternMatrix tener el tamaño!
+			double *T = new double[numeroDePatrones], *U =
+					new double[numeroDePatrones], *TU =
+					new double[numeroDePatrones], *UU =
+					new double[numeroDePatrones], *Tm =
+					new double[numeroDePatrones], *Um =
+					new double[numeroDePatrones];
+			for (int i = 0; i < items; i++) {
+
+				iter = 0;
+				PII = 0;
+				mT = mU = mTU = mUU = 0.0;
+				for (data->resetIterator(); !data->checkEnd();
+						data->iterate()) {
+					frequencyV = data->getCurrentFrequency();
+					T[iter] = data->getCurrentBitSet().count();
+					PII += frequencyV * data->getCurrentBitSet()[items - i - 1];
+					U[iter] = data->getCurrentBitSet()[items - i - 1];
+					TU[iter] = T[iter] * U[iter];
+					UU[iter] = U[iter] * U[iter];
+					mT += frequencyV * T[iter];
+					mU += frequencyV * U[iter];
+				    mTU += frequencyV * TU[iter];
+				    mUU += frequencyV * UU[iter];
+					iter++;
 				}
-				totalscores += bs*df;
-			}
-			cout<<"Score total : "<<totalscores<<endl;
-			//calculate variances and covariances
-			for (data->resetIterator(); !data->checkEnd(); data->iterate()){
-				double df = (double)data->getCurrentFrequency();
-				double bs = (double)data->getCurrentBitSet().count();
-				for (int i = 0 ; i < items ; i++){
-					if(data->getCurrentBitSet()[i]){
-						covariances[i]+=((1-itemscores[i]/Ni)*(1-bs/items))*df;
-					}
+				PII /= Ni;
+				mT /= Ni;
+				mU /= Ni;
+				mTU /= Ni;
+				mUU /= Ni;
+				covar = mTU - mU * mT;
+				iter = 0;
+				sdT = 0.0;
+				sdU = 0.0;
+				for (data->resetIterator(); !data->checkEnd(); data->iterate()) {
+					frequencyV = data->getCurrentFrequency();
+					Tm[iter] = T[iter] - mT;
+					Um[iter] = U[iter] - mU;
+					sdT += frequencyV * Tm[iter] * Tm[iter];
+					sdU += frequencyV * Um[iter] * Um[iter];
+					iter++;
 				}
-				variance+=((bs-((double)totalscores/Ni))*(bs-((double)totalscores/Ni)))*df;
+				sdT = std::sqrt(sdT / (Ni - 1.0));
+				sdU = std::sqrt(sdU / (Ni - 1.0));
+				corr = covar / (sdT * sdU);
+				(*m->getParameterModel()->getParameterSet()[a])(0, i) = std::sqrt((corr * corr) / (1.0 - corr * corr));
+				(*m->getParameterModel()->getParameterSet()[d])(0, i) = -(ppnd(PII, &ifault)) / corr;
 			}
-			variance /= Ni;
-			for (int i = 0 ; i < items ; i++){
-				covariances[i] /= (Ni-1);
-				cout<<"cov : "<<i<<" "<<covariances[i]<<endl;
-			}
-			//Now calculate the standard deviations for the sums and the items
-			long double*stddevs = new long double [items];
-			memset(stddevs,0,sizeof(long double)*items);
-			long double*pearson = new long double [items];
-			memset(pearson,0,sizeof(long double)*items);
-			long double*pis = new long double [items];
-			memset(pis,0,sizeof(long double)*items);
-			for (int i = 0 ; i < items ; i++){
-				double avg= totalscores/Ni;
-				stddevs[i]=stdDev_bin(itemscores[i],Ni,avg);
-				pis[i]=itemscores[i]/Ni;
-				pearson[i]=(covariances[i]/(stddevs[i]*std::sqrt(variance)));
-				//fill a sqrt(pCoef * pCoef / (1.0 - pCoef * pCoef));
-				(*m->getParameterModel()->getParameterSet()[a])(0, i)= std::sqrt((pearson[i]*pearson[i])/(1/pearson[i]*pearson[i]));
-				//fill b
-				(*m->getParameterModel()->getParameterSet()[d])(0, i)=normalInverse(pis[i]);
-				}
 		}
 	}
 
