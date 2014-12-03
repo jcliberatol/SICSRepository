@@ -216,7 +216,7 @@ void OnePLACModel::printParameterSet(ostream& out){
 	out<<*parameterSet[d]<<endl;*/
 	out <<"\"a\" \"b\" \"c\""<<"\n";
 		for (int k = 0; k <(*parameterSet[d]).nC(); k++) {
-		 out<<(*parameterSet[a])(0,k)<<" "<<(*parameterSet[d])(0,k)<<" "<<0 <<endl;
+		 out<<(*parameterSet[a])(0,0)<<" "<<(*parameterSet[d])(0,k)<<" "<<0 <<endl;
 		}
 
 

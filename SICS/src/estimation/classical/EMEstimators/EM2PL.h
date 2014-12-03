@@ -292,7 +292,7 @@ public:
 			// Obtain a
 			for (int i = 0; i < It; i++) {
 				(*A)(0, i) = args[nA++];
-				if (fabs((*A)(0, i)) > abs(10)) {
+				if  ((*A)(0, i) > 10 || (*A)(0, i) < 0 ) {
 					(*A)(0, i) = 0.851;
 		//			cout << "A reset." << endl;
 				}
@@ -320,9 +320,9 @@ public:
 			for (int v1 = 0; v1 < It; ++v1) {
 				DA(0, v1) = DA(0, v1) - (*A)(0, v1);
 				DB(0, v1) = DB(0, v1) - (*B)(0, v1);
-				meanDelta = +fabs(DA(0, v1));
-				meanDelta = +fabs(DB(0, v1));
-				DeltaC += 3;
+				meanDelta += fabs(DA(0, v1));
+				meanDelta += fabs(DB(0, v1));
+				DeltaC += 2;
 				if (fabs(DA(0, v1)) > maxDelta) {
 					maxDelta = fabs(DA(0, v1));
 				}

@@ -19,10 +19,15 @@ ThreePLModel::ThreePLModel() {
 }
 
 void ThreePLModel::printParameterSet(ostream& out){
-	out<<"Estimated parameters : "<<endl;
+	/*out<<"Estimated parameters : "<<endl;
 	out<<*parameterSet[a]<<endl;
 	out<<*parameterSet[d]<<endl;
-	out<<*parameterSet[c]<<endl;
+	out<<*parameterSet[c]<<endl;*/
+
+	out <<"\"a\" \"b\" \"c\""<<"\n";
+		for (int k = 0; k <(*parameterSet[a]).nC(); k++) {
+		 out<<(*parameterSet[a])(0,k)<<" "<<(*parameterSet[d])(0,k)<<" "<<(*parameterSet[c])(0,k)<<"\n";
+		}
 }
 
 void ThreePLModel::setEstimationNodes(QuadratureNodes* n) {
