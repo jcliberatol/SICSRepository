@@ -294,8 +294,8 @@ public:
 		// Obtain a
 		for (int i = 0; i < It; i++) {
 			(*A)(0, i) = args[nA++];
-			if (fabs((*A)(0, i)) > abs(10)) {
-				(*C)(0, i) = 0.852;
+			if  ((*A)(0, i) > 10 || (*A)(0, i) < 0 )  {
+				(*A)(0, i) = 0.852;
 			}
 
 		}
@@ -303,7 +303,7 @@ public:
 		for (int i = 0; i < It; i++) {
 			(*B)(0, i) = args[nA++];
 			if (fabs((*B)(0, i)) > abs(-50)) {
-				(*C)(0, i) = 0.5;
+				(*B)(0, i) = 0.5;
 			}
 		}
 		// Obtain c
@@ -327,9 +327,9 @@ public:
 			DA(0, v1) = DA(0, v1) - (*A)(0, v1);
 			DB(0, v1) = DB(0, v1) - (*B)(0, v1);
 			DC(0, v1) = DC(0, v1) - (*C)(0, v1);
-			meanDelta = +fabs(DA(0, v1));
-			meanDelta = +fabs(DB(0, v1));
-			meanDelta = +fabs(DC(0, v1));
+			meanDelta += fabs(DA(0, v1));
+			meanDelta += fabs(DB(0, v1));
+			meanDelta += fabs(DC(0, v1));
 			DeltaC += 3;
 			if (fabs(DA(0, v1)) > maxDelta) {
 				maxDelta = fabs(DA(0, v1));

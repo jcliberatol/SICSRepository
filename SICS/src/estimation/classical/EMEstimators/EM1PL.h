@@ -257,7 +257,7 @@ public:
 		for (int i = 0; i < It; i++) {
 			(*B)(0, i) = args[nA++];
 			if (fabs((*B)(0, i)) > abs(-50)) {
-				//(*C)(0, i) = 0.5;
+				(*B)(0, i) = 0.5;
 			}
 		}
 		//Boundary regularize the arguments

@@ -249,7 +249,7 @@ public:
 
 		// Obtain a
 		(*A)(0, 0) = args[nA++];
-		if (fabs((*A)(0, 0)) > abs(10)) {
+		if  ((*A)(0, 0) > 10 || (*A)(0, 0) < 0 )  {
 			//cout << "A reset." <<endl;
 			(*A)(0, 0) = 0.851;
 		}

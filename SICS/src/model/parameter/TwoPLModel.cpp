@@ -373,8 +373,13 @@ TwoPLModel::~TwoPLModel() {
 }
 
 void TwoPLModel::printParameterSet(ostream& out){
-	out<<"Estimated parameters : "<<endl;
+	/*out<<"Estimated parameters : "<<endl;
 	out<<*parameterSet[a]<<endl;
-	out<<*parameterSet[d]<<endl;
+	out<<*parameterSet[d]<<endl;*/
+	out <<"\"a\" \"b\" \"c\""<<"\n";
+	for (int k = 0; k <(*parameterSet[d]).nC(); k++) {
+	 out<<(*parameterSet[a])(0,k)<<" "<<(*parameterSet[d])(0,k)<<" "<<0 <<endl;
+	}
+
 }
 

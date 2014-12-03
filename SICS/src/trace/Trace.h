@@ -11,6 +11,7 @@
 #include <string>
 #include <fstream>
 #include <type/Matrix.h>
+#include <chrono>
 
 using namespace std;
 
@@ -22,6 +23,12 @@ using namespace std;
  * */
 class Trace {
 	const char * filename;
+	chrono::time_point<std::chrono::system_clock> start, end;
+	chrono::duration<double> timeStepE;
+	chrono::duration<double> timeStepM;
+	chrono::duration<double> timeSetInitialValues;
+
+
 
 public:
 
@@ -64,6 +71,45 @@ public:
 
 	void setFilename(const char* filename) {
 		this->filename = filename;
+	}
+
+	void startTimingMeasure(){
+		this->start = chrono::system_clock::now();
+	}
+	/**
+	 *  Type
+	 *  	0 = stepE
+	 *  	1 = stepM
+	 *  	2 = setInitialValues
+	 */
+	void finishTimingMeasure(int type){
+		this->end = chrono::system_clock::now();
+		switch (type) {
+		case 0:
+			this->timeStepE += end - start;
+			break;
+		case 1:
+			this-> timeStepM += end - start;
+			break;
+		case 2:
+			this ->timeSetInitialValues += end -start;
+			break;
+		default:
+			break;
+		}
+	}
+
+	void endTrace(){
+		ofstream file;
+		file.open ( filename, ofstream::app );
+		chrono::duration<double> total= timeSetInitialValues + timeStepE + timeStepM;
+		file << "Step E: "<<timeStepE.count() <<"s "<< (timeStepE/total)*100 << "%\n";
+		file << "Step M: "<<timeStepM.count() <<"s "<< (timeStepM/total)*100 << "%\n";
+		file << "Set initial values: "<<timeSetInitialValues.count() <<"s "<< (timeSetInitialValues/total)*100 << "%\n";
+		file << "Total execution time: "<<total.count() <<"s\n";
+		file << endl;
+
+		file.close ();
 	}
 
 };

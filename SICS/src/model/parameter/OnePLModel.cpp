@@ -107,8 +107,12 @@ double OnePLModel::getProbability(int node, int item) {
 }
 
 void OnePLModel::printParameterSet(ostream& out){
-	out<<"Estimated parameters : "<<endl;
-	out<<*parameterSet[b]<<endl;
+	/*out<<"Estimated parameters : "<<endl;*/
+	out <<"\"a\" \"b\" \"c\""<<"\n";
+	for (int k = 0; k <(*parameterSet[b]).nC(); k++) {
+	 out<<1<<" "<<(*parameterSet[b])(0,k)<<" "<<0 <<"\n";
+	}
+	//out<<*parameterSet[b]<<endl;
 }
 
 

@@ -14,11 +14,14 @@ EMEstimation::EMEstimation() {
 	f = NULL;
 	r = NULL;
 	logger = NULL;
+	Trace t("time.log");
+	time_logger = new Trace(t);
 	optim = NULL;
 	convergenceSignal = false;
 	optim = new Optimizer();
 	quadNodes = NULL;
 	estimator = NULL;
+
 }
 
 EMEstimation::~EMEstimation() {
@@ -28,6 +31,9 @@ EMEstimation::~EMEstimation() {
 	if (r != NULL) {
 		delete r;
 	}
+	if (time_logger != NULL) {
+			delete logger;
+		}
 	if (logger != NULL) {
 		delete logger;
 	}
@@ -84,7 +90,9 @@ void EMEstimation::setInitialValues(map<Parameter, Matrix<double>*> parameterSet
 	 * The default method is OSPINA , this is the fastest method according to the SICS calculations
  */
 void EMEstimation::setInitialValues(int method) {
+	time_logger->startTimingMeasure();
 	estimator->setInitialValues(method,model);
+	time_logger->finishTimingMeasure(2);
 }
 /**
  * Main loop of the EM estimation
@@ -98,9 +106,13 @@ void EMEstimation::estimate() {
 	estimator->transform(model);
 	iterations = 0;
 	while (!convergenceSignal) {
-		cout << "Iteration " << iterations << endl;
+		//cout << "Iteration " << iterations << endl;
+		time_logger->startTimingMeasure();
 		estimator->stepE(model,f,r,quadNodes);
+		time_logger->finishTimingMeasure(0);
+		time_logger->startTimingMeasure();
 		estimator->stepM(model,f,r,quadNodes);
+		time_logger->finishTimingMeasure(1);
 		convergenceSignal = model->itemParametersEstimated;
 		iterations++;
 		if (iterations > Constant::MAX_EM_ITERS) {
@@ -110,6 +122,7 @@ void EMEstimation::estimate() {
 	}
 	estimator->untransform(model);
 	model->printParameterSet(cout);
+	time_logger->endTrace();
 }
 
 
