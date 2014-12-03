@@ -106,7 +106,7 @@ public:
 		file << "Step E: "<<timeStepE.count() <<"s "<< (timeStepE/total)*100 << "%\n";
 		file << "Step M: "<<timeStepM.count() <<"s "<< (timeStepM/total)*100 << "%\n";
 		file << "Set initial values: "<<timeSetInitialValues.count() <<"s "<< (timeSetInitialValues/total)*100 << "%\n";
-
+		file << "Total execution time: "<<total.count() <<"s\n";
 		file << endl;
 
 		file.close ();
