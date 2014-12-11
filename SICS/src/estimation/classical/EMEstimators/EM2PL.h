@@ -9,6 +9,7 @@
 #define EM2PL_H_
 #include <estimation/classical/EMEstimators/EMEstimator.h>
 #include <model/parameter/TwoPLModel.h>
+
 class EM2PL: public EMEstimator {
 public:
 	EM2PL() {
@@ -169,20 +170,16 @@ public:
 		double prob;
 
 		//TODO CAREFULLY PARALLELIZE FOR
-		int counter = 0;
 		for (data->resetIterator(); !data->checkEnd(); data->iterate()) {
 			boost::dynamic_bitset<> currentBitSet = data->getCurrentBitSet();
 			long double currentFrequency =
 					(long double) data->getCurrentFrequency();
+			sum = 0.0;
 
-			counter++;
-
-			for (int k = 0; k < q; k++) {
-				faux[k] = 1;
-			}
 			//Calculate g*(k) for all the k's
 			//first calculate the P for each k and store it in the array f aux
 			for (k = 0; k < q; k++) {
+				faux[k] = faux[k] * (*weights)(0, k);
 				//Calculate the p (iterate over the items in the productory)
 				for (i = 0; i < items; i++) {
 					prob = pm->getProbability(k, i);
@@ -193,13 +190,11 @@ public:
 				}
 				//At this point the productory is calculated and faux[k] is equivalent to p(u_j,theta_k)
 				//Now multiply by the weight
-				faux[k] = faux[k] * (*weights)(0, k);
-			}
-			//compute the total of the p*a' (denominator of the g*)
-			sum = 0.0;
-			for (k = 0; k < q; k++) {
 				sum += faux[k];
 			}
+			//compute the total of the p*a' (denominator of the g*)
+
+
 			for (k = 0; k < q; k++) {
 				faux[k] = faux[k] / sum; //This is g*_j_k
 				//Multiply the f to the frequency of the pattern
