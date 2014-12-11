@@ -141,18 +141,10 @@ public:
 		const double items = data->countItems();
 		//Success probability matrix is obtained via pm->getProbability(int,int)
 		ParameterModel* pm = m->getParameterModel();
-		//Thetas
-		Matrix<double>* thetas = nodes->getTheta();
 		//Amount of nodes
 		const int q = nodes->size();
 		//Weights
 		Matrix<double>* weights = nodes->getWeight();
-		//A Matrix
-		Matrix<double>* A = m->getParameterModel()->getParameterSet()[a];
-		//B Matrix
-		Matrix<double>* B = m->getParameterModel()->getParameterSet()[d];
-		//C Matrix
-		//Matrix<double>* C = model->getParameterModel()->getParameterSet()[c];
 		//Auxiliar array for the nodes
 		long double faux[q];
 		long double sum = 0.0;
