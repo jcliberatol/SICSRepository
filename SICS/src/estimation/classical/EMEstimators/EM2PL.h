@@ -27,7 +27,7 @@ public:
 		for (int i = 0; i < m->getItemModel()->countItems(); ++i) {
 			double qa = (*m->getParameterModel()->getParameterSet()[a])(0, i);
 			double qb = (*m->getParameterModel()->getParameterSet()[d])(0, i);
-			(*m->getParameterModel()->getParameterSet()[d])(0, i) = -qb/qa;
+			(*m->getParameterModel()->getParameterSet()[d])(0, i) = -qb / qa;
 		}
 	}
 
@@ -59,24 +59,26 @@ public:
 		}
 
 		if (method == Constant::ANDRADE) {
-			int items = m->getParameterModel()->getParameterSet()[d]->nC(), numeroDePatrones = 0 , iter, ifault;
+			int items = m->getParameterModel()->getParameterSet()[d]->nC(),
+					numeroDePatrones = 0, iter, ifault;
 			PatternMatrix* data =
-				dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
-			double Ni = data->countIndividuals(), PII, frequencyV, mT, mU, mTU, mUU, covar, sdU, sdT, corr, result;
+					dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
+			double Ni = data->countIndividuals(), PII, frequencyV, mT, mU, mTU,
+					mUU, covar, sdU, sdT, corr, result;
 			for (data->resetIterator(); !data->checkEnd(); data->iterate())
 				numeroDePatrones++; // esto se debe poder hacer de una forma mas optima! en patternMatrix tener el tamaño!
 			double *T = new double[numeroDePatrones], *U =
-			new double[numeroDePatrones], *TU =
-			new double[numeroDePatrones], *UU =
-			new double[numeroDePatrones], *Tm =
-			new double[numeroDePatrones], *Um =
-			new double[numeroDePatrones];
+					new double[numeroDePatrones], *TU =
+					new double[numeroDePatrones], *UU =
+					new double[numeroDePatrones], *Tm =
+					new double[numeroDePatrones], *Um =
+					new double[numeroDePatrones];
 			for (int i = 0; i < items; i++) {
 				iter = 0;
 				PII = 0;
 				mT = mU = mTU = mUU = 0.0;
 				for (data->resetIterator(); !data->checkEnd();
-					data->iterate()) {
+						data->iterate()) {
 					frequencyV = data->getCurrentFrequency();
 					T[iter] = data->getCurrentBitSet().count();
 					PII += frequencyV * data->getCurrentBitSet()[items - i - 1];
@@ -98,22 +100,25 @@ public:
 				iter = 0;
 				sdT = 0.0;
 				sdU = 0.0;
-				for (data->resetIterator(); !data->checkEnd(); data->iterate()) {
+				for (data->resetIterator(); !data->checkEnd();
+						data->iterate()) {
 					frequencyV = data->getCurrentFrequency();
 					Tm[iter] = T[iter] - mT;
 					Um[iter] = U[iter] - mU;
 					sdT += frequencyV * Tm[iter] * Tm[iter];
-			sdU += frequencyV * Um[iter] * Um[iter];
-iter++;
-}
-sdT = std::sqrt(sdT / (Ni - 1.0));
-sdU = std::sqrt(sdU / (Ni - 1.0));
-corr = covar / (sdT * sdU);
-(*m->getParameterModel()->getParameterSet()[a])(0, i) = std::sqrt((corr * corr) / (1.0 - corr * corr));
-(*m->getParameterModel()->getParameterSet()[d])(0, i) = -(ppnd(PII, &ifault)) / corr;
-}
-}
-}
+					sdU += frequencyV * Um[iter] * Um[iter];
+					iter++;
+				}
+				sdT = std::sqrt(sdT / (Ni - 1.0));
+				sdU = std::sqrt(sdU / (Ni - 1.0));
+				corr = covar / (sdT * sdU);
+				(*m->getParameterModel()->getParameterSet()[a])(0, i) =
+						std::sqrt((corr * corr) / (1.0 - corr * corr));
+				(*m->getParameterModel()->getParameterSet()[d])(0, i) = -(ppnd(
+						PII, &ifault)) / corr;
+			}
+		}
+	}
 
 	virtual void stepE(Model* m, Matrix<double>* f, Matrix<double>* r,
 			QuadratureNodes* nodes) {
