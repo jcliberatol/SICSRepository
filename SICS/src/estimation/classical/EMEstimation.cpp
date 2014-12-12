@@ -51,20 +51,20 @@ void EMEstimation::setModel(Model* Model) {
 
 	//Discriminate by models
 	if(Model->Modeltype()==Constant::THREE_PL){
-	estimator = new EM3PL(); //Initializes estimator
+	//estimator = new EM3PL(); //Initializes estimator
 	}
 
 	if(Model->Modeltype()==Constant::RASCH_A1){
-		estimator = new EM1PL(); //Initializes estimator
+		//estimator = new EM1PL(); //Initializes estimator
 		}
 
 	if(Model->Modeltype()==Constant::TWO_PL){
-	estimator = new EM2PL(); //Initializes estimator with Cristian's 2PL Model
+	estimator = new EM2PL(model, quadNodes, f, r); //Initializes estimator with Cristian's 2PL Model
 	}
 
 	if(Model->Modeltype()==Constant::RASCH_A_CONSTANT)
 	{
-		estimator = new EM1PLAC();
+		//estimator = new EM1PLAC();
 	}
 
 }
@@ -95,12 +95,12 @@ void EMEstimation::setInitialValues(int method) {
  * TODO : Output last estimation onto the json for recovery in the program.
  */
 void EMEstimation::estimate() {
-	estimator->transform(model);
+	estimator->transform();
 	iterations = 0;
 	while (!convergenceSignal) {
 		cout << "Iteration " << iterations << endl;
-		estimator->stepE(model,f,r,quadNodes);
-		estimator->stepM(model,f,r,quadNodes);
+		estimator->stepE();
+		estimator->stepM();
 		convergenceSignal = model->itemParametersEstimated;
 		iterations++;
 		if (iterations > Constant::MAX_EM_ITERS) {
@@ -108,7 +108,7 @@ void EMEstimation::estimate() {
 			cout<<"more than 200 iters, stop"<<endl;
 		}
 	}
-	estimator->untransform(model);
+	estimator->untransform();
 	model->printParameterSet(cout);
 }
 

@@ -10,20 +10,34 @@
 #include <estimation/classical/EMEstimators/EMEstimator.h>
 #include <model/parameter/TwoPLModel.h>
 class EM2PL: public EMEstimator {
+private:
+	PatternMatrix* data;
+	Model* m;
+	double items;
+	ParameterModel* pm;
+	QuadratureNodes* nodes;
+	int q;
+	Matrix<double>* weights;
+	long double * faux;
+	long double sum;
+	Matrix<double>* f;
+	Matrix<double>* r;
+	boost::dynamic_bitset<> current_bitset;
+	double (*fptr)(double*, double*, int, int);
+	void (*gptr)(double*, double*, int, int, double*);
+	void (*hptr)(double*, double*, int, int, double*);
 public:
-	EM2PL() {
-	}
 	virtual ~EM2PL() {
 	}
 
-	virtual void transform(Model* m) {
+	virtual void transform() {
 		for (int i = 0; i < m->getItemModel()->countItems(); ++i) {
 			double qa = (*m->getParameterModel()->getParameterSet()[a])(0, i);
 			double qb = (*m->getParameterModel()->getParameterSet()[d])(0, i);
 		}
 	}
 
-	virtual void untransform(Model* m) {
+	virtual void untransform() {
 		for (int i = 0; i < m->getItemModel()->countItems(); ++i) {
 			double qa = (*m->getParameterModel()->getParameterSet()[a])(0, i);
 			double qb = (*m->getParameterModel()->getParameterSet()[d])(0, i);
@@ -120,35 +134,27 @@ public:
 		}
 	}
 
-	virtual void stepE(Model* m, Matrix<double>* f, Matrix<double>* r,
-			QuadratureNodes* nodes) {
+	EM2PL(Model* m, QuadratureNodes* nodes, Matrix<double>* f, Matrix<double>* r)
+	{
+		this->nodes = nodes;
+		this->m = m;
+		this->f = f;
+		this->r = r;
+		sum = 0.0;
+		data = dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
+		data->countItems();
+		pm = m->getParameterModel();
+		q = this->nodes->size();
+		faux = new long double[q];
+		weights = this->nodes->getWeight();
+		items = data->countItems();
+		fptr = &TwoPLModel::logLikelihood;
+		gptr = &TwoPLModel::gradient;
+		hptr = NULL;
+	}
+	virtual void stepE() {
 
-		/*
-		 * What we need
-		 * q
-		 * a pattern iterator
-		 * item number
-		 * success probability matrix
-		 * thetas
-		 * weights
-		 * parameter set
-		 */
-		//Dataset by patterns
-		PatternMatrix* data =
-				dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
-		//Pattern iterator is data->iterator
-		//Item number
-		const double items = data->countItems();
-		//Success probability matrix is obtained via pm->getProbability(int,int)
-		ParameterModel* pm = m->getParameterModel();
-		//Amount of nodes
-		const int q = nodes->size();
-		//Weights
-		Matrix<double>* weights = nodes->getWeight();
-		//Auxiliar array for the nodes
-		long double faux[q];
-		long double sum = 0.0;
-		//Restart f and r to zero
+		sum = 0.0;
 		f->reset();
 		r->reset();
 		//Calculates the success probability for all the nodes.
@@ -156,8 +162,6 @@ public:
 
 		int k, i;
 		double prob;
-		boost::dynamic_bitset<> current_bitset;
-
 		//TODO CAREFULLY PARALLELIZE FOR
 		for (data->resetIterator(); !data->checkEnd(); data->iterate()) {
 
@@ -200,8 +204,7 @@ public:
 
 	}
 
-	virtual void stepM(Model* m, Matrix<double>* f, Matrix<double>* r,
-			QuadratureNodes* nodes) {
+	virtual void stepM() {
 		/*
 		 */
 		//Step M implementation using the BFGS Algorithm
@@ -215,12 +218,8 @@ public:
 		 * nargs, npars, sizes.
 		 */
 		//fptr
-		double (*fptr)(double*, double*, int, int);
-		void (*gptr)(double*, double*, int, int, double*);
-		void (*hptr)(double*, double*, int, int, double*);
-		fptr = &TwoPLModel::logLikelihood;
-		gptr = &TwoPLModel::gradient;
-		hptr = NULL;
+
+
 		//cout<<"Address : "<<&gptr<<" "<<&hptr<<endl;
 		int It = m->getItemModel()->getDataset()->countItems();
 		int q = nodes->size();
