@@ -134,8 +134,8 @@ public:
 		}
 	}
 
-	EM2PL(Model* m, QuadratureNodes* nodes, Matrix<double>* f, Matrix<double>* r)
-	{
+	EM2PL(Model* m, QuadratureNodes* nodes, Matrix<double>* f,
+			Matrix<double>* r) {
 		this->nodes = nodes;
 		this->m = m;
 		this->f = f;
@@ -162,6 +162,14 @@ public:
 
 		int k, i;
 		double prob;
+		double prob_matrix[q][(int)items];
+
+		for (k = 0; k < q; k++) {
+			for (i = 0; i < items; i++) {
+				prob_matrix[k][i] = pm->getProbability(k, i);
+			}
+		}
+
 		//TODO CAREFULLY PARALLELIZE FOR
 		for (data->resetIterator(); !data->checkEnd(); data->iterate()) {
 
@@ -174,7 +182,7 @@ public:
 				faux[k] = (*weights)(0, k);
 				//Calculate the p (iterate over the items in the productory)
 				for (i = 0; i < items; i++) {
-					prob = pm->getProbability(k, i);
+					prob = prob_matrix[k][i];
 					if (!current_bitset[items - i - 1]) {
 						prob = 1 - prob;
 					}
@@ -218,7 +226,6 @@ public:
 		 * nargs, npars, sizes.
 		 */
 		//fptr
-
 
 		//cout<<"Address : "<<&gptr<<" "<<&hptr<<endl;
 		int It = m->getItemModel()->getDataset()->countItems();
