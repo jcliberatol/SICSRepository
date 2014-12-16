@@ -7,11 +7,11 @@
 
 #include <model/parameter/TwoPLModel.h>
 
-TwoPLModel::TwoPLModel() {
+
+//
+TwoPLModel::TwoPLModel(){
 
 	parameterSet[a] = NULL;
-	parameterSet[b] = NULL;
-	parameterSet[c] = NULL;
 	parameterSet[d] = NULL;
 	probabilityMatrix = NULL;
 
@@ -64,12 +64,7 @@ void TwoPLModel::successProbability(DimensionModel *dimensionModel,
 		}
 		for (int k = 0; k < q; k++) {
 			for (int i = 0; i < It; i++) {
-				// 2PL Success Probability Function
-				theta_d = (*quadNodes->getTheta())(0, k);
-				a_d = (*parameterSet[a])(0, i);
-				d_d = (*parameterSet[d])(0, i);
-				double p_d = successProbability(theta_d, a_d, d_d);
-				(*probabilityMatrix)(k, i) = p_d;
+				(*probabilityMatrix)(k, i) = successProbability((*quadNodes->getTheta())(0, k), (*parameterSet[a])(0, i), (*parameterSet[d])(0, i));
 			}
 		}
 	}
@@ -78,18 +73,14 @@ void TwoPLModel::successProbability(DimensionModel *dimensionModel,
 double TwoPLModel::successProbability(double theta, double a, double d) {
 
 	long double exponential = (Constant::D_CONST * ((a * theta) + d));
-
 	if (exponential > Constant::MAX_EXP) {
 		exponential = Constant::MAX_EXP;
 	}
 
-	else if (exponential < -(Constant::MAX_EXP * 1.0)) {
+	else if (exponential < -(Constant::MAX_EXP)) {
 		exponential = -Constant::MAX_EXP;
 	}
-
-	exponential = exp(-exponential);
-
-	return (1 / (1 + exponential));
+	return (1 / (1 + exp(-exponential)));
 }
 
 map<Parameter, Matrix<double> *> TwoPLModel::getParameterSet() {
@@ -363,9 +354,6 @@ double TwoPLModel::logLikelihood(double* args, double* pars, int nargs,
 TwoPLModel::~TwoPLModel() {
 	if (parameterSet[a] != NULL) {
 		delete parameterSet[a];
-	}
-	if (parameterSet[b] != NULL) {
-		delete parameterSet[b];
 	}
 	if (parameterSet[d] != NULL) {
 		delete parameterSet[d];

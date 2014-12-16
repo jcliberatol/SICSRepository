@@ -30,18 +30,14 @@ public:
 	virtual ~EM2PL() {
 	}
 
+	//useless ( used for 3 things )
 	virtual void transform() {
-		for (int i = 0; i < m->getItemModel()->countItems(); ++i) {
-			double qa = (*m->getParameterModel()->getParameterSet()[a])(0, i);
-			double qb = (*m->getParameterModel()->getParameterSet()[d])(0, i);
-		}
+
 	}
 
 	virtual void untransform() {
 		for (int i = 0; i < m->getItemModel()->countItems(); ++i) {
-			double qa = (*m->getParameterModel()->getParameterSet()[a])(0, i);
-			double qb = (*m->getParameterModel()->getParameterSet()[d])(0, i);
-			(*m->getParameterModel()->getParameterSet()[d])(0, i) = -qb / qa;
+			(*m->getParameterModel()->getParameterSet()[d])(0, i) /= -(*m->getParameterModel()->getParameterSet()[a])(0, i);
 		}
 	}
 

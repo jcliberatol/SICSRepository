@@ -55,11 +55,13 @@ void oneRun(char * args) {
 	delete model;
 }
 int main(int argc, char *argv[]) {
+	std::clock_t t = clock();
 	if (argc < 2) {
 		cout << "Desu" << endl;
 		return (0);
 	}
 	oneRun(argv[1]);
+	cout<<"time: "<<clock() - t<<endl;
 	return (0);
 }
 

@@ -87,6 +87,3 @@ private:
 };
 
 #endif /* EM_H_ */
-
-
-//
