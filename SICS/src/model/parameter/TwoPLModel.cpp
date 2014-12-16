@@ -64,15 +64,15 @@ void TwoPLModel::successProbability(DimensionModel *dimensionModel,
 		}
 		for (int k = 0; k < q; k++) {
 			for (int i = 0; i < It; i++) {
-				(*probabilityMatrix)(k, i) = successProbability((*quadNodes->getTheta())(0, k), (*parameterSet[a])(0, i), (*parameterSet[d])(0, i));
+				(*probabilityMatrix)(k, i) = successProbability(&(*quadNodes->getTheta())(0, k), &(*parameterSet[a])(0, i), &(*parameterSet[d])(0, i));
 			}
 		}
 	}
 }
 
-double TwoPLModel::successProbability(double theta, double a, double d) {
+double TwoPLModel::successProbability(double *theta, double *a, double *d) {
 
-	long double exponential = (Constant::D_CONST * ((a * theta) + d));
+	long double exponential = (Constant::D_CONST * ((*a * *theta) + *d));
 	if (exponential > Constant::MAX_EXP) {
 		exponential = Constant::MAX_EXP;
 	}
@@ -161,7 +161,7 @@ void TwoPLModel::gradient(double* args, double* pars, int nargs, int npars,
 
 	for (int k = 0; k < q; k++) {
 		for (unsigned int i = 0; i < items; i++) {
-			P[k * items + i] = successProbability(theta[k], a[i], d[i]);
+			P[k * items + i] = successProbability(&theta[k], &a[i], &d[i]);
 			factor[k * items + i] =
 					(r[k * items + i] - f[k] * P[k * items + i]);
 
@@ -329,7 +329,7 @@ double TwoPLModel::logLikelihood(double* args, double* pars, int nargs,
 
 	for (int k = 0; k < q; ++k) {
 		for (unsigned int i = 0; i < It; ++i) {
-			tp = (TwoPLModel::successProbability(theta[k], a[i], b[i]));
+			tp = (TwoPLModel::successProbability(&theta[k], &a[i], &b[i]));
 			if (tp == 0)
 				tp = 1e-08;
 			tq = 1 - tp;

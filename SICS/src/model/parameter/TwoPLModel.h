@@ -26,7 +26,7 @@ public:
 	// Methods
 	void buildParameterSet(ItemModel *, DimensionModel *);
 	void successProbability(DimensionModel *, QuadratureNodes *);
-	static double successProbability(double, double, double);
+	static double successProbability(double *, double *, double *);
 	static double logLikelihood(double*, double*, int, int);
 	static double patternProbability();
 	static void gradientAux(long double tp, long double tq,
