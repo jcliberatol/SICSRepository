@@ -14,7 +14,6 @@ void oneRun(char * args) {
 	input.importCSV((char *) "Cuads.csv", cuad, 1, 0);
 	// **** **** Run model complete and ordered process **** ****
 	// Create general pars
-
 	Model *model = new Model();
 	// Create general model
 	ModelFactory *modelFactory = new SICSGeneralModel();
@@ -22,6 +21,7 @@ void oneRun(char * args) {
 	// Load matrix
 	input.importCSV(args, *dataSet, 1, 0);
 	// set dataset
+
 	//RASCH_A1, RASCH_A_CONSTANT, TWO_PL, THREE_PL
 	model->setModel(modelFactory, Constant::TWO_PL);
 	//This is where it is decided what model is the test to make
@@ -35,17 +35,22 @@ void oneRun(char * args) {
 		(*weight)(0, k) = cuad(k, 1);
 	}
 
+
 	// build parameter set
 	model->getParameterModel()->buildParameterSet(model->getItemModel(),
 			model->getDimensionModel());
 
 	// Create estimation
+
 	EMEstimation *em = new EMEstimation();
 	//Here is where quadratures must be set.
 	//create the quad nodes
 	QuadratureNodes nodes(theta, weight);
 	em->setQuadratureNodes(&nodes);
+
 	em->setModel(model);
+	cout<<"Setting initial values with   "<<Constant::ANDRADE<<endl;
+	cout<<em<<endl;
 	em->setInitialValues(Constant::ANDRADE);
 	// run estimation
 	em->estimate();

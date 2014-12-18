@@ -15,7 +15,6 @@ ThreePLModel::ThreePLModel() {
 	parameterSet[d] = NULL;
 	probabilityMatrix=NULL;
 	nodes = 0;
-
 }
 
 void ThreePLModel::printParameterSet(ostream& out){
@@ -37,6 +36,7 @@ void ThreePLModel::buildParameterSet(ItemModel* itemModel,
 		if (typeid(*dimensionModel) == typeid(UnidimensionalModel)) {
 
 			int items = itemModel->countItems();
+			cout<<"Setting matrices"<<endl;
 			parameterSet[a] = new Matrix<double>(1, items);
 			parameterSet[d] = new Matrix<double>(1, items);
 			parameterSet[c] = new Matrix<double>(1, items);
@@ -66,6 +66,7 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel, Quadrature
 
 	if ( dimensionModel != NULL ) {
 		q = quadNodes->size();
+		cout<<"Using "<<q<<" Nodes"<<endl;
 	}
 
 
@@ -368,7 +369,7 @@ double ThreePLModel::successProbability_cPrime(double theta, double a, double b,
 }
 
 ThreePLModel::~ThreePLModel() {
-
+	cout<<"Deleting a three pl model"<<endl;
 	if (parameterSet[a] != NULL) {
 		delete parameterSet[a];
 	}

@@ -17,6 +17,7 @@ ParameterModel* SICSGeneralModel::createParameterModel(int model) {
 	if (model == Constant::THREE_PL) {
 		ParameterModel *parameterModel;
 		parameterModel = new ThreePLModel();
+		cout<<"created a 3PL model"<<endl;
 		return (parameterModel);
 	}
 

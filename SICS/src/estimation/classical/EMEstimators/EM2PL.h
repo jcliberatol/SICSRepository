@@ -33,7 +33,6 @@ private:
 public:
 	virtual ~EM2PL() {
 	}
-
 	//useless ( used for 3 things )
 	virtual void transform() {
 
@@ -243,7 +242,7 @@ public:
 		//cout<<"Address : "<<&gptr<<" "<<&hptr<<endl;
 		int It = m->getItemModel()->getDataset()->countItems();
 		int q = nodes->size();
-		double args[3 * It];
+		double args[3 * It]; //TODO not 2 * it here ?
 		double pars[2 + 2 * q + q * It];
 		int nargs = 3 * It;
 		int npars = 2 + 2 * q + q * It;

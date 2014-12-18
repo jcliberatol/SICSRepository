@@ -51,10 +51,11 @@ void EMEstimation::setModel(Model* Model) {
 
 	//Discriminate by models
 	if(Model->Modeltype()==Constant::THREE_PL){
-	//estimator = new EM3PL(); //Initializes estimator
+		//estimator = new EM3PL(model, quadNodes , f , r); //Initializes estimator
 	}
 
 	if(Model->Modeltype()==Constant::RASCH_A1){
+		cout<<"Remember to initialize the estimator , segfault possible"<<endl;
 		//estimator = new EM1PL(); //Initializes estimator
 		}
 
@@ -64,6 +65,7 @@ void EMEstimation::setModel(Model* Model) {
 
 	if(Model->Modeltype()==Constant::RASCH_A_CONSTANT)
 	{
+		cout<<"Remember to initialize the estimator , segfault possible"<<endl;
 		//estimator = new EM1PLAC();
 	}
 
@@ -84,6 +86,7 @@ void EMEstimation::setInitialValues(map<Parameter, Matrix<double>*> parameterSet
 	 * The default method is OSPINA , this is the fastest method according to the SICS calculations
  */
 void EMEstimation::setInitialValues(int method) {
+	cout<<"I did indeed arrived here  "<<estimator<<endl;
 	estimator->setInitialValues(method,model);
 }
 /**
