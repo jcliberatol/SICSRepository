@@ -26,6 +26,10 @@ private:
 	double (*fptr)(double*, double*, int, int);
 	void (*gptr)(double*, double*, int, int, double*);
 	void (*hptr)(double*, double*, int, int, double*);
+	boost::dynamic_bitset<> * bitset_list;
+	int size;
+	long int * frequency_list;
+	
 public:
 	virtual ~EM2PL() {
 	}
@@ -147,6 +151,23 @@ public:
 		fptr = &TwoPLModel::logLikelihood;
 		gptr = &TwoPLModel::gradient;
 		hptr = NULL;
+		
+		map<boost::dynamic_bitset<>, int>::const_iterator it;
+		map<boost::dynamic_bitset<>, int>::const_iterator begin =
+				data->matrix.begin();
+		map<boost::dynamic_bitset<>, int>::const_iterator end =
+				data->matrix.end();
+
+		bitset_list = new boost::dynamic_bitset<>[data->matrix.size()];
+		size = data->matrix.size();
+
+		frequency_list = new long int[size];
+
+		int counter = 0;
+		for (it = begin; it != end; ++it, ++counter) {
+			bitset_list[counter] = it->first;
+			frequency_list[counter] = it->second;
+		}
 	}
 	virtual void stepE() {
 
@@ -169,8 +190,6 @@ public:
 		//TODO CAREFULLY PARALLELIZE FOR
 		for (data->resetIterator(); !data->checkEnd(); data->iterate()) {
 
-			current_bitset = data->getCurrentBitSet();
-
 			sum = 0.0;
 			//Calculate g*(k) for all the k's
 			//first calculate the P for each k and store it in the array f aux
@@ -179,7 +198,7 @@ public:
 				//Calculate the p (iterate over the items in the productory)
 				for (i = 0; i < items; i++) {
 					prob = prob_matrix[k][i];
-					if (!current_bitset[items - i - 1]) {
+					if (!bitset_list[index].test(items - i - 1)) {
 						prob = 1 - prob;
 					}
 					faux[k] = faux[k] * prob;
@@ -189,17 +208,14 @@ public:
 				sum += faux[k];
 			}
 
-			long double current_frequency =
-					(long double) data->getCurrentFrequency();
-
 			for (k = 0; k < q; k++) {
 				faux[k] = faux[k] / sum; //This is g*_j_k
 				//Multiply the f to the frequency of the pattern
-				faux[k] = (current_frequency) * faux[k];
+				faux[k] = ((long double) frequency_list[index]) * faux[k];
 				(*f)(0, k) += faux[k];
 				//Now selectively add the faux to the r
 				for (i = 0; i < items; i++) {
-					if (current_bitset[items - i - 1]) {
+					if (bitset_list[index].test(items - i - 1)) {
 						(*r)(k, i) += faux[k];
 					} // if
 				} // for
