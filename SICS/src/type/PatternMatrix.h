@@ -23,12 +23,12 @@ private:
 	
 
 public:
-	map<boost::dynamic_bitset<>, long int> matrix;
+	map<boost::dynamic_bitset<>,int> matrix;
 	//Constructor
 	PatternMatrix();
 
 	// Methods
-	std::map<boost::dynamic_bitset<>, long int>::const_iterator iterator; /**use this when reading in order*/
+	std::map<boost::dynamic_bitset<>, int>::const_iterator iterator; /**use this when reading in order*/
 	inline void resetIterator(){iterator = matrix.begin();}
 	inline bool checkEnd(){return (iterator==matrix.end());}
 	inline void iterate(){++iterator;}
@@ -40,7 +40,7 @@ public:
 
 	void flush();/**Use this to clean matrix*/
 
-	long int& operator()(boost::dynamic_bitset<>); /**Use this to access a specific pattern frecuency and modify it*/
+	int& operator()(boost::dynamic_bitset<>); /**Use this to access a specific pattern frecuency and modify it*/
 	friend std::ostream& operator<< (std::ostream &, PatternMatrix &);/**Output operator*/
 
 	//DataSet implementations

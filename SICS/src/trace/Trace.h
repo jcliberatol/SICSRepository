@@ -59,7 +59,7 @@ public:
 	}
 
 	const char* getFilename() const {
-		return filename;
+		return (filename);
 	}
 
 	void setFilename(const char* filename) {

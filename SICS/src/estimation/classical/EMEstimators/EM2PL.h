@@ -28,7 +28,7 @@ private:
 	void (*hptr)(double*, double*, int, int, double*);
 	boost::dynamic_bitset<> * bitset_list;
 	int size;
-	long int * frequency_list;
+	int * frequency_list;
 	
 public:
 	virtual ~EM2PL() {
@@ -142,7 +142,6 @@ public:
 		this->r = r;
 		sum = 0.0;
 		data = dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
-		data->countItems();
 		pm = m->getParameterModel();
 		q = this->nodes->size();
 		faux = new long double[q];
@@ -161,7 +160,7 @@ public:
 		bitset_list = new boost::dynamic_bitset<>[data->matrix.size()];
 		size = data->matrix.size();
 
-		frequency_list = new long int[size];
+		frequency_list = new int[size];
 
 		int counter = 0;
 		for (it = begin; it != end; ++it, ++counter) {
@@ -188,6 +187,7 @@ public:
 		}
 
 		//TODO CAREFULLY PARALLELIZE FOR
+		int count = 0 ;
 		for (data->resetIterator(); !data->checkEnd(); data->iterate()) {
 
 			sum = 0.0;
@@ -198,7 +198,7 @@ public:
 				//Calculate the p (iterate over the items in the productory)
 				for (i = 0; i < items; i++) {
 					prob = prob_matrix[k][i];
-					if (!bitset_list[index].test(items - i - 1)) {
+					if (!bitset_list[count].test(items - i - 1)) {
 						prob = 1 - prob;
 					}
 					faux[k] = faux[k] * prob;
@@ -211,15 +211,16 @@ public:
 			for (k = 0; k < q; k++) {
 				faux[k] = faux[k] / sum; //This is g*_j_k
 				//Multiply the f to the frequency of the pattern
-				faux[k] = ((long double) frequency_list[index]) * faux[k];
+				faux[k] = ((long double) frequency_list[count]) * faux[k];
 				(*f)(0, k) += faux[k];
 				//Now selectively add the faux to the r
 				for (i = 0; i < items; i++) {
-					if (bitset_list[index].test(items - i - 1)) {
+					if (bitset_list[count].test(items - i - 1)) {
 						(*r)(k, i) += faux[k];
 					} // if
 				} // for
 			} // for
+			count ++;
 		}
 
 	}
