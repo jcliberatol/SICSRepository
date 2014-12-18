@@ -179,15 +179,14 @@ public:
 		double prob;
 		double prob_matrix[q][(int)items];
 
-		for (k = 0; k < q; k++) {
+				for (k = 0; k < q; k++) {
 			for (i = 0; i < items; i++) {
 				prob_matrix[k][i] = pm->getProbability(k, i);
 			}
 		}
 
 		//TODO CAREFULLY PARALLELIZE FOR
-		int count = 0 ;
-		for (data->resetIterator(); !data->checkEnd(); data->iterate()) {
+		for (int index = 0; index < size; index++) {
 
 			sum = 0.0;
 			//Calculate g*(k) for all the k's
@@ -197,7 +196,8 @@ public:
 				//Calculate the p (iterate over the items in the productory)
 				for (i = 0; i < items; i++) {
 					prob = prob_matrix[k][i];
-					if (!bitset_list[count].test(items - i - 1)) {
+					//if (!current_bitset.test(items - i - 1)) {
+					if (!bitset_list[index].test(items - i - 1)) {
 						prob = 1 - prob;
 					}
 					faux[k] = faux[k] * prob;
@@ -210,19 +210,19 @@ public:
 			for (k = 0; k < q; k++) {
 				faux[k] = faux[k] / sum; //This is g*_j_k
 				//Multiply the f to the frequency of the pattern
-				faux[k] = ((long double) frequency_list[count]) * faux[k];
+				faux[k] = ((long double) frequency_list[index]) * faux[k];
 				(*f)(0, k) += faux[k];
 				//Now selectively add the faux to the r
 				for (i = 0; i < items; i++) {
-					if (bitset_list[count].test(items - i - 1)) {
+					if (bitset_list[index].test(items - i - 1)) {
 						(*r)(k, i) += faux[k];
 					} // if
 				} // for
 			} // for
-			count ++;
 		}
 
 	}
+
 
 	virtual void stepM() {
 		/*
