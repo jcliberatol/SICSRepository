@@ -20,9 +20,10 @@ using namespace std;
 class PatternMatrix : public DataSet {
 
 private:
-	map<boost::dynamic_bitset<>, long int> matrix;
+	
 
 public:
+	map<boost::dynamic_bitset<>, long int> matrix;
 	//Constructor
 	PatternMatrix();
 
