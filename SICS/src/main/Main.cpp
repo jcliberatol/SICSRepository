@@ -49,7 +49,7 @@ void oneRun(char * args) {
 	em->setQuadratureNodes(&nodes);
 
 	em->setModel(model);
-	cout<<"Setting initial values with   "<<Constant::ANDRADE<<endl;
+	cout<<"Setting initial values with option "<<Constant::ANDRADE<<endl;
 	cout<<em<<endl;
 	em->setInitialValues(Constant::ANDRADE);
 	// run estimation
@@ -60,13 +60,17 @@ void oneRun(char * args) {
 	delete model;
 }
 int main(int argc, char *argv[]) {
-	std::clock_t t = clock();
+
+	Timer tm;
+	tm.reset();
+	tm.start();
 	if (argc < 2) {
 		cout << "Desu" << endl;
 		return (0);
 	}
 	oneRun(argv[1]);
-	cout<<"time: "<<clock() - t<<endl;
+	tm.stop();
+	cout<<"time: "<<endl<<tm.totalTime<<endl;
 	return (0);
 }
 

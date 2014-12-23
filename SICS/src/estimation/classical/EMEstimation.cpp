@@ -86,7 +86,6 @@ void EMEstimation::setInitialValues(map<Parameter, Matrix<double>*> parameterSet
 	 * The default method is OSPINA , this is the fastest method according to the SICS calculations
  */
 void EMEstimation::setInitialValues(int method) {
-	cout<<"I did indeed arrived here  "<<estimator<<endl;
 	estimator->setInitialValues(method,model);
 }
 /**

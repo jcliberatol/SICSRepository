@@ -18,6 +18,7 @@
 #include <estimation/classical/EMEstimation.h>
 #include <input/Input.h>
 #include <time.h>
+#include <trace/Trace.h>
 
 
 
