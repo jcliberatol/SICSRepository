@@ -11,6 +11,7 @@
 EMEstimation::EMEstimation() {
 	iterations = 0;
 	model = NULL;
+	profiler = NULL;
 	f = NULL;
 	r = NULL;
 	logger = NULL;
@@ -35,6 +36,11 @@ EMEstimation::~EMEstimation() {
 		delete optim;
 	}
 }
+
+void EMEstimation::setProfiler(Trace* t){
+	profiler = t;
+}
+
 /**
  * Sets the model to be estimated, currently only supports 3PL model
  */
@@ -61,6 +67,7 @@ void EMEstimation::setModel(Model* Model) {
 
 	if(Model->Modeltype()==Constant::TWO_PL){
 	estimator = new EM2PL(model, quadNodes, f, r); //Initializes estimator with Cristian's 2PL Model
+	estimator->setProfiler(profiler);
 	}
 
 	if(Model->Modeltype()==Constant::RASCH_A_CONSTANT)
@@ -99,10 +106,19 @@ void EMEstimation::setInitialValues(int method) {
 void EMEstimation::estimate() {
 	estimator->transform();
 	iterations = 0;
+	profiler->resetTimer("estim");
+	profiler->startTimer("estim");
+	profiler->resetTimer("Et");
+	profiler->resetTimer("Mt");
 	while (!convergenceSignal) {
 		cout << "Iteration " << iterations << endl;
+		profiler->resetTimer("estimation");
+		profiler->startTimer("Et");
 		estimator->stepE();
+		profiler->stopTimer("Et");
+		profiler->startTimer("Mt");
 		estimator->stepM();
+		profiler->stopTimer("Mt");
 		convergenceSignal = model->itemParametersEstimated;
 		iterations++;
 		if (iterations > Constant::MAX_EM_ITERS) {
@@ -112,8 +128,11 @@ void EMEstimation::estimate() {
 	}
 	estimator->untransform();
 	model->printParameterSet(cout);
+	profiler->stopTimer("estim");
+	cout<<"Total time from estimation "<<profiler->dr("estim")<<endl
+			<<"E step time : "<<profiler->dr("Et")<<endl
+			<<"M step time : "<<profiler->dr("Mt")<<endl;
 }
-
 
 /**Returns the iterations that took the estimation to obtain an answer*/
 int EMEstimation::getIterations() const {

@@ -17,6 +17,7 @@
 
 class EMEstimator {
 public:
+	Trace* profiler = 0;
 	EMEstimator(){}
 	EMEstimator(Model* m, QuadratureNodes* nodes, Matrix<double>* f, Matrix<double>* r){}
 	//Transforms the parameters before starting an estimation process
@@ -30,6 +31,9 @@ public:
 	//in this cases the model are needed to be filled
 	virtual void setInitialValues(int Method, Model*) = 0;
 	virtual void setInitialValues(map<Parameter, Matrix<double>*> parameterSet, Model* m) = 0;
+	void setProfiler(Trace* t){
+		profiler = t;
+	}
 	virtual ~EMEstimator(){}
 };
 

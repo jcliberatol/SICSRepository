@@ -26,10 +26,11 @@ using namespace chrono;
 class Trace {
 
 
-	const char * filename;
+
 	map <string, Timer> timers;
 
 public:
+	const char * filename;
 
 	void resetTimer(string s){
 		timers[s].reset();
@@ -50,7 +51,7 @@ public:
 	long int dr(string s){
 		return (timerDuration(s));
 	}
-
+//outputs a matrix
 	template<typename T>
 	void operator() ( Matrix<T> & message ) {
 
@@ -61,7 +62,7 @@ public:
 
 		file.close ();
 	}
-
+//Outputs a message with a new line
 	template<typename T>
 	void operator ()(T message) {
 		ofstream file;
@@ -74,7 +75,17 @@ public:
 		file.close ();
 	}
 
+//Outputs a message with the specified option
+	template<typename T>
+	void operator ()(T message, char option) {
+		ofstream file;
+		file.open ( filename, ofstream::app );
 
+		file << message;
+
+		file.close ();
+	}
+//Defines the filename for the trace
 	Trace( const char * filename ) {
 
 		this->filename = filename;

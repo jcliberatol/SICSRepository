@@ -43,6 +43,8 @@ public:
 	 * Estimates
 	 */
 	EMEstimation();
+
+
 	virtual ~EMEstimation();
 	//Executes the estimation
 	void estimate();
@@ -65,8 +67,9 @@ public:
 	int getIterations() const;
 	QuadratureNodes* getQuadratureNodes() const;
 	void setQuadratureNodes(QuadratureNodes* latentTraitSet);
-
+	void setProfiler(Trace* t);
 private:
+	Trace* profiler;
 	//F and R Matrices, remember to set to zero and open memory in process
 	Matrix<double>* f;
 	Matrix<double>* r;
