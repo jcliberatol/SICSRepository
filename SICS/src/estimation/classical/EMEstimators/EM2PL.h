@@ -13,7 +13,7 @@ class EM2PL: public EMEstimator {
 private:
 	PatternMatrix* data;
 	Model* m;
-	double items;
+	int items;
 	ParameterModel* pm;
 	QuadratureNodes* nodes;
 	int q;
@@ -26,10 +26,11 @@ private:
 	double (*fptr)(double*, double*, int, int);
 	void (*gptr)(double*, double*, int, int, double*);
 	void (*hptr)(double*, double*, int, int, double*);
-	boost::dynamic_bitset<> * bitset_list;
+	//boost::dynamic_bitset<> * bitset_list;
+	bool** bitset_list;
 	int size;
 	int * frequency_list;
-	
+
 public:
 	virtual ~EM2PL() {
 	}
@@ -40,7 +41,8 @@ public:
 
 	virtual void untransform() {
 		for (int i = 0; i < m->getItemModel()->countItems(); ++i) {
-			(*m->getParameterModel()->getParameterSet()[d])(0, i) /= -(*m->getParameterModel()->getParameterSet()[a])(0, i);
+			(*m->getParameterModel()->getParameterSet()[d])(0, i) /=
+					-(*m->getParameterModel()->getParameterSet()[a])(0, i);
 		}
 	}
 
@@ -93,7 +95,13 @@ public:
 				for (data->resetIterator(); !data->checkEnd();
 						data->iterate()) {
 					frequencyV = data->getCurrentFrequency();
-					T[iter] = data->getCurrentBitSet().count();
+
+					T[iter] = 0;
+					for (int i_ = 0; i_ < data->size; i_++) {
+						if (data->getCurrentBitSet()[i_])
+							T[iter]++;
+					}
+					//T[iter] = data->getCurrentBitSet().count();
 					PII += frequencyV * data->getCurrentBitSet()[items - i - 1];
 					U[iter] = data->getCurrentBitSet()[items - i - 1];
 					TU[iter] = T[iter] * U[iter];
@@ -149,14 +157,26 @@ public:
 		fptr = &TwoPLModel::logLikelihood;
 		gptr = &TwoPLModel::gradient;
 		hptr = NULL;
-		
-		map<boost::dynamic_bitset<>, int>::const_iterator it;
-		map<boost::dynamic_bitset<>, int>::const_iterator begin =
-				data->matrix.begin();
-		map<boost::dynamic_bitset<>, int>::const_iterator end =
-				data->matrix.end();
 
-		bitset_list = new boost::dynamic_bitset<>[data->matrix.size()];
+		//map<boost::dynamic_bitset<>, int>::const_iterator it;
+		map<bool*, int>::const_iterator it;
+		//map<boost::dynamic_bitset<>, int>::const_iterator begin =
+		map<bool*, int>::const_iterator begin = data->matrix.begin();
+		//map<boost::dynamic_bitset<>, int>::const_iterator end =
+		map<bool*, int>::const_iterator end = data->matrix.end();
+
+		//bitset_list = new boost::dynamic_bitset<>[data->matrix.size()];
+		bitset_list = new bool*[data->matrix.size()];
+		for (int j = 0; j < data->matrix.size(); j++) {
+			bitset_list[j] = new bool[data->size];
+		}
+
+		//bitset_list = new boost::dynamic_bitset<>[data->matrix.size()];
+		bitset_list = new bool*[data->matrix.size()];
+		for (int j = 0; j < data->matrix.size(); j++) {
+			bitset_list[j] = new bool[data->size];
+		}
+
 		size = data->matrix.size();
 
 		frequency_list = new int[size];
@@ -177,9 +197,9 @@ public:
 
 		int k, i;
 		double prob;
-		double prob_matrix[q][(int)items];
+		double prob_matrix[q][(int) items];
 
-				for (k = 0; k < q; k++) {
+		for (k = 0; k < q; k++) {
 			for (i = 0; i < items; i++) {
 				prob_matrix[k][i] = pm->getProbability(k, i);
 			}
@@ -197,7 +217,7 @@ public:
 				for (i = 0; i < items; i++) {
 					prob = prob_matrix[k][i];
 					//if (!current_bitset.test(items - i - 1)) {
-					if (!bitset_list[index].test(items - i - 1)) {
+					if (!bitset_list[index][items - i - 1]) {
 						prob = 1 - prob;
 					}
 					faux[k] = faux[k] * prob;
@@ -214,7 +234,7 @@ public:
 				(*f)(0, k) += faux[k];
 				//Now selectively add the faux to the r
 				for (i = 0; i < items; i++) {
-					if (bitset_list[index].test(items - i - 1)) {
+					if (bitset_list[index][items - i - 1]) {
 						(*r)(k, i) += faux[k];
 					} // if
 				} // for
@@ -222,7 +242,6 @@ public:
 		}
 
 	}
-
 
 	virtual void stepM() {
 		/*
@@ -238,7 +257,6 @@ public:
 		 * nargs, npars, sizes.
 		 */
 		//fptr
-
 		//cout<<"Address : "<<&gptr<<" "<<&hptr<<endl;
 		int It = m->getItemModel()->getDataset()->countItems();
 		int q = nodes->size();

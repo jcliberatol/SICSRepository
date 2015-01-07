@@ -78,7 +78,7 @@ void oneRun(char * args) {
 	Model *model = new Model();
 	// Create general model
 	ModelFactory *modelFactory = new SICSGeneralModel();
-	PatternMatrix *dataSet = new PatternMatrix();
+	PatternMatrix *dataSet = new PatternMatrix(0);
 	// Load matrix
 	input.importCSV(args, *dataSet, 1, 0);
 	// set dataset
