@@ -171,12 +171,6 @@ public:
 			bitset_list[j] = new bool[data->size];
 		}
 
-		//bitset_list = new boost::dynamic_bitset<>[data->matrix.size()];
-		bitset_list = new bool*[data->matrix.size()];
-		for (int j = 0; j < data->matrix.size(); j++) {
-			bitset_list[j] = new bool[data->size];
-		}
-
 		size = data->matrix.size();
 
 		frequency_list = new int[size];
