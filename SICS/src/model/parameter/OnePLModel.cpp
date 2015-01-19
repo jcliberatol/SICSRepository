@@ -297,8 +297,8 @@ void OnePLModel::gradient(double* args, double* pars, int nargs, int npars,
 OnePLModel::~OnePLModel() {
 
 	if (parameterSet != NULL){
-	delete parameterSet[0][0];
-	delete parameterSet[0];
-	delete parameterSet;
+	delete[] parameterSet[0][0];
+	delete[] parameterSet[0];
+	delete[] parameterSet;
 	}
 }

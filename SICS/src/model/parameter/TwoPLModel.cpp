@@ -24,8 +24,8 @@ void TwoPLModel::buildParameterSet(ItemModel* itemModel,
 		if (typeid(*dimensionModel) == typeid(UnidimensionalModel)) {
 			parameterSet = new double ** [2]; // two parameters
 
-			parameterSet[0] = new double *[1]; // parameter a
-			parameterSet[1] = new double *[1]; // parameter b
+			parameterSet[0] = new double* [1]; // parameter a
+			parameterSet[1] = new double* [1]; // parameter b
 			items = itemModel->countItems();
 			parameterSet[0][0] = new double [items];
 			parameterSet[1][0] = new double [items];
@@ -358,13 +358,13 @@ double TwoPLModel::logLikelihood(double* args, double* pars, int nargs,
 
 TwoPLModel::~TwoPLModel() {
 	if (parameterSet != NULL) {
-		delete parameterSet[0][0];
-		delete parameterSet[1][0];
+		delete[] parameterSet[0][0];
+		delete[] parameterSet[1][0];
 
-		delete parameterSet[0];
-		delete parameterSet[1];
+		delete[] parameterSet[0];
+		delete[] parameterSet[1];
 
-		delete parameterSet;
+		delete[] parameterSet;
 	}
 }
 

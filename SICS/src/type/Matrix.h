@@ -135,7 +135,7 @@ Matrix<T>::Matrix(T** mem , int r, int c) {
 
 	for (int var = 0; var < r; ++var) {
 		for (int j = 0; j < c; ++j) {
-			memory[nCol * r + c] = mem[r][c];
+			memory[nCol * var + j] = mem[var][j];
 		}
 	}
 }

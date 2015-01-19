@@ -17,10 +17,7 @@ int PatternMatrix::countItems() const {
 	return ((matrix.empty()) ? 0 : size);
 }
 int PatternMatrix::freq(vector<char> bitset) {
-	int freq;
-	freq = matrix[bitset];
-	cout<<" freq "<<" "<<freq<<"  ";
-	return freq;
+	return (matrix[bitset]);
 }
 int PatternMatrix::countIndividuals() const {
 
@@ -41,9 +38,7 @@ PatternMatrix::~PatternMatrix() {
 
 //void PatternMatrix::push(boost::dynamic_bitset<> n) {
 void PatternMatrix::push(vector<char> n) {
-	cout<<"p "<<matrix[n];
 	matrix[n]++;
-	cout<<" "<<matrix[n]<<" q";
 }
 
 //void PatternMatrix::push(boost::dynamic_bitset<> n, int k) {

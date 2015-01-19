@@ -202,11 +202,11 @@ double OnePLACModel::logLikelihood(double* args, double* pars, int nargs,
 OnePLACModel::~OnePLACModel() {
 //Carefully destroy according to the model
 	if (parameterSet != NULL){
-	delete parameterSet[1][0];
-	delete parameterSet[0][0];
-	delete parameterSet[0];
-	delete parameterSet[1];
-	delete parameterSet;
+	delete[] parameterSet[1][0];
+	delete[] parameterSet[0][0];
+	delete[] parameterSet[0];
+	delete[] parameterSet[1];
+	delete[] parameterSet;
 	}
 }
 

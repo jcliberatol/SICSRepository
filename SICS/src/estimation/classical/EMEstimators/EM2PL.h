@@ -325,7 +325,7 @@ public:
 		Optimizer* optim;
 		optim = new Optimizer();
 		optim->searchOptimal(fptr, gptr, hptr, args, pars, nargs, npars);
-
+		delete optim;
 		// Now pass the optimals to the Arrays.
 
 		nA = 0;
@@ -375,6 +375,8 @@ public:
 		}
 		//And set the parameter sets
 		double*** parSet;
+		//Must set the parset equal to the original memory in the parameter set
+		parSet = m->getParameterModel()->getParameterSet();
 		parSet[0] = A;
 		parSet[1] = B;
 		// llenar las tres matrices

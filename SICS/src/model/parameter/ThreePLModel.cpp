@@ -378,15 +378,15 @@ ThreePLModel::~ThreePLModel() {
 	cout<<"Deleting a three pl model"<<endl;
 	if (parameterSet != NULL) {
 
-		delete parameterSet[2][0];
-		delete parameterSet[1][0];
-		delete parameterSet[0][0];
+		delete[] parameterSet[2][0];
+		delete[] parameterSet[1][0];
+		delete[] parameterSet[0][0];
 
-		delete parameterSet[0];
-		delete parameterSet[1];
-		delete parameterSet[2];
+		delete[] parameterSet[0];
+		delete[] parameterSet[1];
+		delete[] parameterSet[2];
 
-		delete parameterSet;
+		delete[] parameterSet;
 	}
 
 
