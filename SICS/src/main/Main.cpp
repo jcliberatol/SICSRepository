@@ -82,7 +82,7 @@ void oneRun(char * args) {
 	// Load matrix
 	input.importCSV(args, *dataSet, 1, 0);
 	// set dataset
-
+	dataSet->print();
 	//RASCH_A1, RASCH_A_CONSTANT, TWO_PL, THREE_PL
 	model->setModel(modelFactory, Constant::TWO_PL);
 	//This is where it is decided what model is the test to make
@@ -129,6 +129,13 @@ void oneRun(char * args) {
 	delete profiler;
 }
 int main(int argc, char *argv[]) {
+	double ** ps = new double*[3];
+	ps[0] = new double [3];
+	ps[1] = new double [2];
+	ps[2] = new double [80];
+	for (int i = 0 ; i < 3 ; i++){
+		ps[0][i]=i;
+	}
 
 	Timer tm;
 	tm.reset();

@@ -41,8 +41,8 @@ public:
 	static double logLikelihood(double*, double*, int, int);
 	static void gradient(double*,double*,int,int,double*);
 	// Getters and Setters
-	map<Parameter, Matrix<double> *> getParameterSet() ;
-	void setParameterSet(map<Parameter, Matrix<double> *>);
+	double*** getParameterSet() ;
+	void setParameterSet(double ***);
 	void printParameterSet(ostream&);
 	double getProbability(int, int);
 

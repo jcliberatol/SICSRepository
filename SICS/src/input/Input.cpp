@@ -140,9 +140,10 @@ bool Input::importCSV( char* filename, PatternMatrix& M, unsigned int rowIdx, un
 
 		M.size = dlen;
 		//bitset that holds the bits of a row
-		//boost::dynamic_bitset<> dset (dlen);
-		bool * dset = new bool[dlen];
-
+		//boost::dynamic_bitset<> dset (dlen);S
+		//bool * dset = new bool[dlen];
+		vector<char> dset(dlen);
+		//cout<<&dset[0]<<" "<<dset[0]<<" ";
 		i = 0;
 		int chars = 1;
 
@@ -159,8 +160,8 @@ bool Input::importCSV( char* filename, PatternMatrix& M, unsigned int rowIdx, un
 			i++;
 		}
 		//Bitset is now filled
-		M.push(dset);
 
+		M.push(dset);
 	}
 
 	inFile.close();

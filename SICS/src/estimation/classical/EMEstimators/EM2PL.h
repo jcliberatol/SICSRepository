@@ -37,18 +37,18 @@ public:
 	//useless ( used for 3 things )
 	virtual void transform() {
 
+
 	}
 
 	virtual void untransform() {
 		for (int i = 0; i < m->getItemModel()->countItems(); ++i) {
-			(*m->getParameterModel()->getParameterSet()[d])(0, i) /=
-					-(*m->getParameterModel()->getParameterSet()[a])(0, i);
+			double *** pset = m->getParameterModel()->getParameterSet();
+			pset[1][0][i] /= -pset[0][0][i];
 		}
 	}
 
-	virtual void setInitialValues(map<Parameter, Matrix<double>*> parameterSet,
-			Model* m) {
-		m->getParameterModel()->setParameterSet(parameterSet);
+	virtual void setInitialValues(double *** pset , Model* m) {
+		m->getParameterModel()->setParameterSet(pset);
 	}
 
 	virtual void setInitialValues(int method, Model* m) {
@@ -61,27 +61,28 @@ public:
 		 *
 		 * The default method is OSPINA
 		 */
+		int items = m->getParameterModel()->items;
+		double *** pset = m->getParameterModel()->getParameterSet();
 		if (!method == Constant::RANDOM) {
-			std::srand(std::time(0)); // use current time as seed for random generator
-			int items = m->getParameterModel()->getParameterSet()[a]->nC();
+			std::srand(std::time(0));
+			// use current time as seed for random generator
 			for (int i = 0; i < items; i++) {
-				(*m->getParameterModel()->getParameterSet()[a])(0, i) =
-						randomd() * 2;
+				pset[0][0][i] = randomd	() * 2;
 				//fill b
-				(*m->getParameterModel()->getParameterSet()[d])(0, i) =
-						randomd() * 4 - 2;
+				pset[1][0][i] = randomd() * 4 - 2;
 			}
 		}
 
 		if (method == Constant::ANDRADE) {
-			int items = m->getParameterModel()->getParameterSet()[d]->nC(),
-					numeroDePatrones = 0, iter, ifault;
+			int numeroDePatrones = 0;
+		    int  iter, ifault;
 			PatternMatrix* data =
 					dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
-			double Ni = data->countIndividuals(), PII, frequencyV, mT, mU, mTU,
+			double Ni = data->countIndividuals();
+			double PII, frequencyV, mT, mU, mTU,
 					mUU, covar, sdU, sdT, corr, result;
 			for (data->resetIterator(); !data->checkEnd(); data->iterate())
-				numeroDePatrones++; // esto se debe poder hacer de una forma mas optima! en patternMatrix tener el tamaño!
+			numeroDePatrones++; // esto se debe poder hacer de una forma mas optima! en patternMatrix tener el tamaño!
 			double *T = new double[numeroDePatrones], *U =
 					new double[numeroDePatrones], *TU =
 					new double[numeroDePatrones], *UU =
@@ -132,11 +133,10 @@ public:
 				}
 				sdT = std::sqrt(sdT / (Ni - 1.0));
 				sdU = std::sqrt(sdU / (Ni - 1.0));
+				//cout<<"corr"<<corr<<endl;
 				corr = covar / (sdT * sdU);
-				(*m->getParameterModel()->getParameterSet()[a])(0, i) =
-						std::sqrt((corr * corr) / (1.0 - corr * corr));
-				(*m->getParameterModel()->getParameterSet()[d])(0, i) = -(ppnd(
-						PII, &ifault)) / corr;
+				pset[0][0][i] = std::sqrt((corr * corr	) / (1.0 - corr * corr));
+				pset[1][0][i] = -(ppnd(PII, &ifault)) / corr;
 			}
 		}
 	}
@@ -159,11 +159,11 @@ public:
 		hptr = NULL;
 
 		//map<boost::dynamic_bitset<>, int>::const_iterator it;
-		map<bool*, int>::const_iterator it;
+		map<vector<char>, int>::const_iterator it;
 		//map<boost::dynamic_bitset<>, int>::const_iterator begin =
-		map<bool*, int>::const_iterator begin = data->matrix.begin();
+		map<vector<char>, int>::const_iterator begin = data->matrix.begin();
 		//map<boost::dynamic_bitset<>, int>::const_iterator end =
-		map<bool*, int>::const_iterator end = data->matrix.end();
+		map<vector<char>, int>::const_iterator end = data->matrix.end();
 
 		//bitset_list = new boost::dynamic_bitset<>[data->matrix.size()];
 		bitset_list = new bool*[data->matrix.size()];
@@ -177,7 +177,8 @@ public:
 
 		int counter = 0;
 		for (it = begin; it != end; ++it, ++counter) {
-			bitset_list[counter] = it->first;
+			copy(it->first.begin(),it->first.end(),bitset_list[counter]);
+			//bitset_list[counter] = it->first;
 			frequency_list[counter] = it->second;
 		}
 	}
@@ -262,24 +263,27 @@ public:
 		int nA = 0;
 		// Obtain a
 		//A Matrix
-		Matrix<double>* A = m->getParameterModel()->getParameterSet()[a];
+		double *** pset = m->getParameterModel()->getParameterSet();
+		double** A = pset[0];
+		double** B = pset[1];
+		//Matrix<double>* A = m->getParameterModel()->getParameterSet()[a];
 		//B Matrix
-		Matrix<double>* B = m->getParameterModel()->getParameterSet()[d];
+		//Matrix<double>* B = m->getParameterModel()->getParameterSet()[d];
 		//C Matrix
 		//Matrix<double>* C = model->getParameterModel()->getParameterSet()[c];
 
-		Matrix<double> DA(*A);
-		Matrix<double> DB(*B);
+		Matrix<double> DA(A,1,items);
+		Matrix<double> DB(B,1,items);
 		//Matrix<double> DC(*C);
 
 		for (int i = 0; i < It; i++) {
-			args[nA] = (*A)(0, i);
+			args[nA] = A[0][i];//(*A)(0, i);
 			nA++;
 		}
 
 		// Obtain b
 		for (int i = 0; i < It; i++) {
-			args[nA] = (*B)(0, i);
+			args[nA] = B[0][i];//(*B)(0, i);
 			nA++;
 		}
 
@@ -327,18 +331,18 @@ public:
 		nA = 0;
 		// Obtain a
 		for (int i = 0; i < It; i++) {
-			(*A)(0, i) = args[nA++];
-			if (fabs((*A)(0, i)) > abs(10)) {
-				(*A)(0, i) = 0.851;
+			A[0][i] = args[nA++];
+			if (fabs(A[0][i]) > abs(10)) {
+				A[0][i] = 0.851;
 				//			cout << "A reset." << endl;
 			}
 
 		}
 		// Obtain b
 		for (int i = 0; i < It; i++) {
-			(*B)(0, i) = args[nA++];
-			if (fabs((*B)(0, i)) > abs(-50)) {
-				(*B)(0, i) = 0.5;
+			B[0][i] = args[nA++];
+			if (fabs(B[0][i]) > abs(-50)) {
+				B[0][i] = 0.5;
 				//			cout << "B reset." << endl;
 			}
 		}
@@ -353,8 +357,8 @@ public:
 		double meanDelta = 0;
 		int DeltaC = 0;
 		for (int v1 = 0; v1 < It; ++v1) {
-			DA(0, v1) = DA(0, v1) - (*A)(0, v1);
-			DB(0, v1) = DB(0, v1) - (*B)(0, v1);
+			DA(0, v1) = DA(0, v1) - A[0][v1];
+			DB(0, v1) = DB(0, v1) - B[0][v1];
 			meanDelta = +fabs(DA(0, v1));
 			meanDelta = +fabs(DB(0, v1));
 			DeltaC += 3;
@@ -370,9 +374,9 @@ public:
 			m->itemParametersEstimated = true;
 		}
 		//And set the parameter sets
-		map<Parameter, Matrix<double> *> parSet;
-		parSet[a] = A;
-		parSet[d] = B;
+		double*** parSet;
+		parSet[0] = A;
+		parSet[1] = B;
 		// llenar las tres matrices
 		m->getParameterModel()->setParameterSet(parSet);
 

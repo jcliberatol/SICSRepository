@@ -10,7 +10,7 @@
 
 OnePLModel::OnePLModel() {
 
-	parameterSet[b] = NULL;
+	parameterSet = NULL;
 	probabilityMatrix = NULL;
 	nodes = 0;
 
@@ -23,8 +23,11 @@ void OnePLModel::buildParameterSet(ItemModel* itemModel,
 
 		if (typeid(*dimensionModel) == typeid(UnidimensionalModel)) {
 
-			int items = itemModel->countItems();
-			parameterSet[b] = new Matrix<double>(1, items);
+			const int items = itemModel->countItems();
+			parameterSet = new double**[1];
+			parameterSet[0] = new double*[1];
+			parameterSet[0][0] = new double [items];
+			//parameterSet[b] = new Matrix<double>(1, items);
 
 		}
 
@@ -58,16 +61,16 @@ void OnePLModel::successProbability(DimensionModel *dimensionModel,
 	}
 
 	if (typeid(*dimensionModel) == typeid(UnidimensionalModel)) {
-		int It = parameterSet[b]->nC();
 		if (probabilityMatrix == NULL) {
 			//Creates the matrix if it is not already created
-			probabilityMatrix = new Matrix<double>(q, It);
+			probabilityMatrix = new Matrix<double>(q, items);
 		}
 		for (int k = 0; k < q; k++) {
-			for (int i = 0; i < It; i++) {
+			for (int i = 0; i < items; i++) {
 				// Rasch Success Probability Function
 				theta_d = (*quadNodes->getTheta())(0, k);
-				b_d = (*parameterSet[b])(0, i);
+				b_d = parameterSet[0][0][i]; //zero because b is the only parameter
+				//b_d = (*parameterSet[b])(0, i);
 				double p_d = successProbability(theta_d, b_d);
 				//cout<<a_d<<" "<<d_d<<" "<<c_d<<" "<<theta_d<<" "<<p_d<<" the prox"<<endl;
 				(*probabilityMatrix)(k, i) = p_d;
@@ -94,11 +97,11 @@ double OnePLModel::successProbability(double theta, double b) {
 	return (1 / (1 + exponential));
 }
 
-void OnePLModel::setParameterSet(map<Parameter, Matrix<double> *> pair) {
-	this->parameterSet = parameterSet;
+void OnePLModel::setParameterSet(double*** par) {
+	this->parameterSet = par;
 }
 
-map<Parameter, Matrix<double> *> OnePLModel::getParameterSet() {
+double*** OnePLModel::getParameterSet() {
 	return (this->parameterSet);
 }
 
@@ -108,7 +111,7 @@ double OnePLModel::getProbability(int node, int item) {
 
 void OnePLModel::printParameterSet(ostream& out){
 	out<<"Estimated parameters : "<<endl;
-	out<<*parameterSet[b]<<endl;
+	out<<*parameterSet[0]<<endl;
 }
 
 
@@ -292,7 +295,10 @@ void OnePLModel::gradient(double* args, double* pars, int nargs, int npars,
 }
 
 OnePLModel::~OnePLModel() {
-	if (parameterSet[b] != NULL) {
-		delete parameterSet[b];
+
+	if (parameterSet != NULL){
+	delete parameterSet[0][0];
+	delete parameterSet[0];
+	delete parameterSet;
 	}
 }

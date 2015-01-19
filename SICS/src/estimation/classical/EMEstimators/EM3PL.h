@@ -37,33 +37,38 @@ public:
 
 	virtual void transform(Model* m) {
 		for (int i = 0; i < m->getItemModel()->countItems(); ++i) {
-			double qa = (*m->getParameterModel()->getParameterSet()[a])(0, i);
-			double qb = (*m->getParameterModel()->getParameterSet()[d])(0, i);
-			double qc = (*m->getParameterModel()->getParameterSet()[c])(0, i);
-			(*m->getParameterModel()->getParameterSet()[c])(0, i) = log(
-					qc / (1 - qc));
+			double *** pset = m->getParameterModel()->getParameterSet();
+			double qa = pset[0][0][i];
+			double qb = pset[1][0][i];
+			double qc = pset[2][0][i];
+			//double qa = (*m->getParameterModel()->getParameterSet()[a])(0, i);
+			//double qb = (*m->getParameterModel()->getParameterSet()[d])(0, i);
+			//double qc = (*m->getParameterModel()->getParameterSet()[c])(0, i);
+			pset[2][0][i]= log(qc/(1-qc));
 		}
 	}
 
 	virtual void untransform(Model* m) {
 		for (int i = 0; i < m->getItemModel()->countItems(); ++i) {
-			double qa = (*m->getParameterModel()->getParameterSet()[a])(0, i);
-			double qb = (*m->getParameterModel()->getParameterSet()[d])(0, i);
-			double qc = (*m->getParameterModel()->getParameterSet()[c])(0, i);
+			double *** pset = m->getParameterModel()->getParameterSet();
+			double qa = pset[0][0][i];
+			double qb = pset[1][0][i];
+			double qc = pset[2][0][i];
 			//(*model->getParameterModel()->getParameterSet()[d])(0,i)= -qb/qa;
 			double ec = exp(qc);
-			(*m->getParameterModel()->getParameterSet()[c])(0, i) = ec
-					/ (1 + ec);
+			pset[2][0][i] = ec / (1 + ec);
 		}
 	}
 
-	virtual void setInitialValues(map<Parameter, Matrix<double>*> parameterSet,
+	virtual void setInitialValues(double *** pset,
 			Model* m) {
-		m->getParameterModel()->setParameterSet(parameterSet);
+		m->getParameterModel()->setParameterSet(pset);
 	}
 
 	virtual void setInitialValues(int method, Model* m) {
 		cout << "here we go";
+		int items = m->getParameterModel()->items;
+		double *** pset = m->getParameterModel()->getParameterSet();
 		//TODO MOVE ALGORITHMS TO ANOTHER FILE
 		/*TODO
 		 * Possible methods
@@ -75,17 +80,13 @@ public:
 		 */
 		if (!method == Constant::RANDOM) {
 			std::srand(std::time(0)); // use current time as seed for random generator
-			int items = m->getParameterModel()->getParameterSet()[a]->nC();
 			for (int i = 0; i < items; i++) {
-				(*m->getParameterModel()->getParameterSet()[a])(0, i) =
-						randomd() * 2;
+				pset[0][0][i] = randomd() * 2;
 				//fill b
-				(*m->getParameterModel()->getParameterSet()[d])(0, i) =
-						randomd() * 4 - 2;
+				pset[1][0][i] = randomd() * 4 - 2;
 				//fill c
 				int cassualOptions = 4;
-				(*m->getParameterModel()->getParameterSet()[c])(0, i) =
-						randomd() * (2 / (double) cassualOptions);
+				pset[2][0][i] = randomd() * (2 / (double) cassualOptions);
 
 			}
 		}
@@ -93,10 +94,9 @@ public:
 		//ANDRADE O( items * numberOfPattern )
 		if (method == Constant::ANDRADE) {
 			cout << "welcome to andrade" << endl;
-			int items = m->getParameterModel()->getParameterSet()[d]->nC(),
-					numeroDePatrones = 0, iter, ifault;
-			PatternMatrix* data =
-					dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
+			int numeroDePatrones = 0;
+			int iter, ifault;
+			PatternMatrix* data = dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
 			double Ni = data->countIndividuals(), PII, frequencyV, mT, mU, mTU,
 					mUU, covar, sdU, sdT, corr, result;
 			for (data->resetIterator(); !data->checkEnd(); data->iterate())
@@ -153,11 +153,12 @@ public:
 				sdT = std::sqrt(sdT / (Ni - 1.0));
 				sdU = std::sqrt(sdU / (Ni - 1.0));
 				corr = covar / (sdT * sdU);
-				(*m->getParameterModel()->getParameterSet()[a])(0, i) =
-						std::sqrt((corr * corr) / (1.0 - corr * corr));
-				(*m->getParameterModel()->getParameterSet()[d])(0, i) = -(ppnd(
-						PII, &ifault)) / corr;
-				(*m->getParameterModel()->getParameterSet()[c])(0, i) = 0.2;
+				//(*m->getParameterModel()->getParameterSet()[a])(0, i)
+				pset[0][0][i]=std::sqrt((corr * corr) / (1.0 - corr * corr));
+				//(*m->getParameterModel()->getParameterSet()[d])(0, i)
+				pset[1][0][i]=-(ppnd(PII, &ifault)) / corr;
+				//(*m->getParameterModel()->getParameterSet()[c])(0, i)
+				pset[2][0][i]= 0.2;
 
 			}
 		}
@@ -182,11 +183,11 @@ public:
 		hptr = NULL;
 
 		//map<boost::dynamic_bitset<>, int>::const_iterator it;
-		map<bool*, int>::const_iterator it;
+		map<vector<char>, int>::const_iterator it;
 		//map<boost::dynamic_bitset<>, int>::const_iterator begin =
-		map<bool*, int>::const_iterator begin = data->matrix.begin();
+		map<vector<char>, int>::const_iterator begin = data->matrix.begin();
 		//map<boost::dynamic_bitset<>, int>::const_iterator end =
-		map<bool*, int>::const_iterator end = data->matrix.end();
+		map<vector<char>, int>::const_iterator end = data->matrix.end();
 
 		//bitset_list = new boost::dynamic_bitset<>[data->matrix.size()];
 		bitset_list = new bool*[data->matrix.size()];
@@ -200,7 +201,8 @@ public:
 
 		int counter = 0;
 		for (it = begin; it != end; ++it, ++counter) {
-			bitset_list[counter] = it->first;
+			copy(it->first.begin(),it->first.end(),bitset_list[counter]);
+			//bitset_list[counter] = it->first;
 			frequency_list[counter] = it->second;
 		}
 	}
@@ -285,31 +287,35 @@ public:
 		int npars = 2 + 2 * q + q * It;
 		//filling args
 		int nA = 0;
+		double *** pset = m->getParameterModel()->getParameterSet();
+		double** A = pset[0];
+		double** B = pset[1];
+		double** C = pset[2];
 		// Obtain a
 		//A Matrix
-		Matrix<double>* A = m->getParameterModel()->getParameterSet()[a];
+		//Matrix<double>* A = m->getParameterModel()->getParameterSet()[a];
 		//B Matrix
-		Matrix<double>* B = m->getParameterModel()->getParameterSet()[d];
+		//Matrix<double>* B = m->getParameterModel()->getParameterSet()[d];
 		//C Matrix
-		Matrix<double>* C = m->getParameterModel()->getParameterSet()[c];
+		//Matrix<double>* C = m->getParameterModel()->getParameterSet()[c];
 
-		Matrix<double> DA(*A);
-		Matrix<double> DB(*B);
-		Matrix<double> DC(*C);
+		Matrix<double> DA(A,1,items);
+		Matrix<double> DB(B,1,items);
+		Matrix<double> DC(B,1,items);
 
 		for (int i = 0; i < It; i++) {
-			args[nA] = (*A)(0, i);
+			args[nA] = A[0][i];
 			nA++;
 		}
 
 		// Obtain b
 		for (int i = 0; i < It; i++) {
-			args[nA] = (*B)(0, i);
+			args[nA] = B[0][i];
 			nA++;
 		}
 		// Obtain c
 		for (int i = 0; i < It; i++) {
-			args[nA] = (*C)(0, i);
+			args[nA] = C[0][i];
 			nA++;
 		}
 		//Filling pars
@@ -356,26 +362,26 @@ public:
 		nA = 0;
 		// Obtain a
 		for (int i = 0; i < It; i++) {
-			(*A)(0, i) = args[nA++];
-			if (fabs((*A)(0, i)) > abs(10)) {
-				(*A)(0, i) = 0.851;
+			A[0][i] = args[nA++];
+			if (fabs(A[0][i]) > abs(10)) {
+				A[0][i] = 0.851;
 				//			cout << "A reset." << endl;
 			}
 
 		}
 		// Obtain b
 		for (int i = 0; i < It; i++) {
-			(*B)(0, i) = args[nA++];
-			if (fabs((*B)(0, i)) > abs(-50)) {
-				(*B)(0, i) = 0.5;
+			B[0][i] = args[nA++];
+			if (fabs(B[0][i]) > abs(-50)) {
+				B[0][i] = 0.5;
 				//			cout << "B reset." << endl;
 			}
 		}
 
 		for (int i = 0; i < It; i++) {
-			(*C)(0, i) = args[nA++];
-			if (fabs((*C)(0, i)) > abs(-50)) {
-				(*C)(0, i) = 0.5;
+			C[0][i] = args[nA++];
+			if (fabs(C[0][i]) > abs(-50)) {
+				C[0][i] = 0.5;
 				//			cout << "B reset." << endl;
 			}
 		}
@@ -390,9 +396,9 @@ public:
 		double meanDelta = 0;
 		int DeltaC = 0;
 		for (int v1 = 0; v1 < It; ++v1) {
-			DA(0, v1) = DA(0, v1) - (*A)(0, v1);
-			DB(0, v1) = DB(0, v1) - (*B)(0, v1);
-			DC(0, v1) = DC(0, v1) - (*C)(0, v1);
+			DA(0, v1) = DA(0, v1) - A[0][v1];
+			DB(0, v1) = DB(0, v1) - B[0][v1];
+			DC(0, v1) = DC(0, v1) - C[0][v1];
 
 			meanDelta = +fabs(DA(0, v1));
 			meanDelta = +fabs(DB(0, v1));
@@ -414,10 +420,10 @@ public:
 			m->itemParametersEstimated = true;
 		}
 		//And set the parameter sets
-		map<Parameter, Matrix<double> *> parSet;
-		parSet[a] = A;
-		parSet[d] = B;
-		parSet[c] = C;
+		double *** parSet = new double**[3];
+		parSet[0] = A;
+		parSet[1] = B;
+		parSet[2] = C;
 		// llenar las tres matrices
 		m->getParameterModel()->setParameterSet(parSet);
 

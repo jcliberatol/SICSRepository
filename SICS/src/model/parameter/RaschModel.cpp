@@ -9,7 +9,7 @@
 
 RaschModel::RaschModel() {
 
-	parameterSet[b] = NULL;
+	parameterSet = NULL;
 	probabilityMatrix = NULL;
 	nodes = 0;
 
@@ -23,7 +23,10 @@ void RaschModel::buildParameterSet(ItemModel* itemModel,
 		if (typeid(*dimensionModel) == typeid(UnidimensionalModel)) {
 
 			int items = itemModel->countItems();
-			parameterSet[b] = new Matrix<double>(1, items);
+			parameterSet = new double**[1];
+			parameterSet[0] = new double*[1];
+			parameterSet[0][0] = new double[items];
+			//parameterSet[b] = new Matrix<double>(1, items);
 
 		}
 
@@ -57,16 +60,16 @@ void RaschModel::successProbability(DimensionModel *dimensionModel,
 	}
 
 	if (typeid(*dimensionModel) == typeid(UnidimensionalModel)) {
-		int It = parameterSet[b]->nC();
 		if (probabilityMatrix == NULL) {
 			//Creates the matrix if it is not already created
-			probabilityMatrix = new Matrix<double>(q, It);
+			probabilityMatrix = new Matrix<double>(q, items);
 		}
 		for (int k = 0; k < q; k++) {
-			for (int i = 0; i < It; i++) {
+			for (int i = 0; i < items; i++) {
 				// Rasch Success Probability Function
 				theta_d = (*quadNodes->getTheta())(0, k);
-				b_d = (*parameterSet[b])(0, i);
+				//b_d = (*parameterSet[b])(0, i);
+				b_d = parameterSet[0][0][i];
 				double p_d = successProbability(theta_d, b_d);
 				//cout<<a_d<<" "<<d_d<<" "<<c_d<<" "<<theta_d<<" "<<p_d<<" the prox"<<endl;
 				(*probabilityMatrix)(k, i) = p_d;
@@ -96,11 +99,11 @@ double RaschModel::successProbability(double theta, double b) {
 	//return (c + (1.0 - c)/(1.0 + exponential));
 }
 
-void RaschModel::setParameterSet(map<Parameter, Matrix<double> *> pair) {
-	this->parameterSet = parameterSet;
+void RaschModel::setParameterSet(double*** pair) {
+	this->parameterSet = pair;
 }
 
-map<Parameter, Matrix<double> *> RaschModel::getParameterSet() {
+double*** RaschModel::getParameterSet() {
 	return (this->parameterSet);
 }
 
@@ -338,8 +341,13 @@ void RaschModel::gradient(double* args, double* pars, int nargs, int npars,
 }
 
 RaschModel::~RaschModel() {
-	if (parameterSet[b] != NULL) {
-		delete parameterSet[b];
+
+	if (parameterSet != NULL) {
+		delete parameterSet[0][0];
+		delete parameterSet[0];
+		delete parameterSet;
+
+
 	}
 }
 

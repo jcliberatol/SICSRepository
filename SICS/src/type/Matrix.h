@@ -50,6 +50,7 @@ public:
 	T *memory;
 	int ld;
 	static char del;
+	Matrix(T**, int, int);/*Importing a 2D array*/
 	Matrix(); /**Empty object*/
 	Matrix(int, int); /**Two dimensional Matrix Constructor allocates memory*/
 	Matrix(Matrix<T>&); /**Copy constructor*/
@@ -121,6 +122,22 @@ Matrix<T>::Matrix(int r, int c) {
 	memory = new T[c * r];
 	symmetric = false;
 	ld = c;
+}
+
+template<class T>
+Matrix<T>::Matrix(T** mem , int r, int c) {
+	nCol = c;
+	nRow = r;
+	transposed = false;
+	memory = new T[c * r];
+	symmetric = false;
+	ld = c;
+
+	for (int var = 0; var < r; ++var) {
+		for (int j = 0; j < c; ++j) {
+			memory[nCol * r + c] = mem[r][c];
+		}
+	}
 }
 
 template<class T>

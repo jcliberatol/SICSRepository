@@ -17,13 +17,14 @@
 
 using namespace std;
 
-enum Parameter {a,b,c,d};
 
 class ParameterModel {
 protected:
 
-	map <Parameter, Matrix<double> * > parameterSet;
+	//map <Parameter, Matrix<double> * > parameterSet;
+	double *** parameterSet;
 public:
+	int items;
 	Matrix<double> * probabilityMatrix;
 	// Methods
 	virtual void buildParameterSet ( ItemModel *, DimensionModel *) = 0;
@@ -31,8 +32,8 @@ public:
 
 
 	// Getters and Setters
-	virtual map<Parameter, Matrix<double> *> getParameterSet()  = 0;
-	virtual void setParameterSet(map<Parameter, Matrix<double> *> parameterSet) = 0;
+	virtual double *** getParameterSet()  = 0;
+	virtual void setParameterSet(double *** parameterSet) = 0;
 	virtual double getProbability (int, int) = 0;
 	virtual void printParameterSet(ostream&)=0;
 

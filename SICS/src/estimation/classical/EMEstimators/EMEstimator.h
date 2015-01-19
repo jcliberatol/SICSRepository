@@ -29,8 +29,8 @@ public:
 	//Step M also needs the model, quad nodes, f and r
 	virtual void stepM() = 0 ;
 	//in this cases the model are needed to be filled
-	virtual void setInitialValues(int Method, Model*) = 0;
-	virtual void setInitialValues(map<Parameter, Matrix<double>*> parameterSet, Model* m) = 0;
+	virtual void setInitialValues(int , Model*) = 0;
+	virtual void setInitialValues(double*** , Model*) = 0;
 	void setProfiler(Trace* t){
 		profiler = t;
 	}

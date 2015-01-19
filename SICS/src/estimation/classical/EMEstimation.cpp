@@ -80,7 +80,7 @@ void EMEstimation::setModel(Model* Model) {
 /**
  * Sets the initial values for the estimation, use this for inputting a matrix as initial values
  */
-void EMEstimation::setInitialValues(map<Parameter, Matrix<double>*> parameterSet) {
+void EMEstimation::setInitialValues(double*** parameterSet) {
 	estimator->setInitialValues(parameterSet,model);
 }
 /**
