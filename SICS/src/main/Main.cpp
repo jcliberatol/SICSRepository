@@ -84,7 +84,7 @@ void oneRun(char * args) {
 	// set dataset
 
 	//RASCH_A1, RASCH_A_CONSTANT, TWO_PL, THREE_PL
-	model->setModel(modelFactory, Constant::TWO_PL);
+	model->setModel(modelFactory, Constant::RASCH_A_CONSTANT);
 	//This is where it is decided what model is the test to make
 	model->getItemModel()->setDataset(dataSet);		//Sets the dataset.
 	// set Theta and weight for the EM Estimation
@@ -112,12 +112,13 @@ void oneRun(char * args) {
 	em->setQuadratureNodes(&nodes);
 	em->setModel(model);
 	cout<<"Setting initial values with option "<<Constant::ANDRADE<<endl;
-	cout<<em<<endl;
 	em->setInitialValues(Constant::ANDRADE);
+	cout<<"hello world 1"<<endl;
 	profiler->stopTimer("initial");
 	//Pass the profiler to the estimation object so it can be used to profile each step
 	em->setProfiler(profiler);
 	//Run the estimation
+	cout<<"hello world 2"<<endl;
 	em->estimate();
 	delete modelFactory;
 	delete dataSet;

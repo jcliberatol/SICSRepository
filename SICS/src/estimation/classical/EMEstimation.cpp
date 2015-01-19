@@ -54,7 +54,6 @@ void EMEstimation::setModel(Model* Model) {
 	f = new Matrix<double>(1, q);
 	r = new Matrix<double>(q, It);
 
-
 	//Discriminate by models
 	if(Model->Modeltype()==Constant::THREE_PL){
 		//estimator = new EM3PL(model, quadNodes , f , r); //Initializes estimator
@@ -72,8 +71,8 @@ void EMEstimation::setModel(Model* Model) {
 
 	if(Model->Modeltype()==Constant::RASCH_A_CONSTANT)
 	{
-		cout<<"Remember to initialize the estimator , segfault possible"<<endl;
-		//estimator = new EM1PLAC();
+
+		estimator = new EM1PLAC(model, quadNodes, f, r);
 	}
 
 }
