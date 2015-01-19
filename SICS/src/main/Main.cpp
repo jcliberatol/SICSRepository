@@ -111,8 +111,6 @@ void oneRun(char * args) {
 	QuadratureNodes nodes(theta, weight);
 	em->setQuadratureNodes(&nodes);
 	em->setModel(model);
-	cout<<"Setting initial values with option "<<Constant::ANDRADE<<endl;
-	cout<<em<<endl;
 	em->setInitialValues(Constant::ANDRADE);
 	profiler->stopTimer("initial");
 	//Pass the profiler to the estimation object so it can be used to profile each step
