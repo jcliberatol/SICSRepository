@@ -11,7 +11,7 @@ ThreePLModel::ThreePLModel() {
 
 	parameterSet = NULL;
 	probabilityMatrix=NULL;
-	nodes = 0;
+	nodes = NULL;
 }
 
 void ThreePLModel::printParameterSet(ostream& out){
@@ -30,7 +30,6 @@ void ThreePLModel::buildParameterSet(ItemModel* itemModel,
 		if (typeid(*dimensionModel) == typeid(UnidimensionalModel)) {
 
 			int items = itemModel->countItems();
-			cout<<"Setting matrices"<<endl;
 
 			parameterSet = new double** [3];
 			parameterSet[0] = new double *[1];

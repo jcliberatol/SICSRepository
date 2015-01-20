@@ -57,7 +57,8 @@ void EMEstimation::setModel(Model* Model) {
 
 	//Discriminate by models
 	if(Model->Modeltype()==Constant::THREE_PL){
-		//estimator = new EM3PL(model, quadNodes , f , r); //Initializes estimator
+	estimator = new EM3PL(model, quadNodes , f , r); //Initializes estimator
+	estimator->setProfiler(profiler);
 	}
 
 	if(Model->Modeltype()==Constant::RASCH_A1){

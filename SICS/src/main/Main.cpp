@@ -85,6 +85,7 @@ void oneRun(char * args) {
 	// **** **** Run model complete and ordered process **** ****
 	// Create general pars
 	Model *model = new Model();
+	cout<<"The model address is :"<<model<<endl;
 	// Create general model
 	ModelFactory *modelFactory = new SICSGeneralModel();
 	PatternMatrix *dataSet = new PatternMatrix(0);
@@ -92,7 +93,7 @@ void oneRun(char * args) {
 	input.importCSV(args, *dataSet, 1, 0);
 	// set dataset
 	//RASCH_A1, RASCH_A_CONSTANT, TWO_PL, THREE_PL
-	model->setModel(modelFactory, Constant::TWO_PL);
+	model->setModel(modelFactory, Constant::THREE_PL);
 	//This is where it is decided what model is the test to make
 	model->getItemModel()->setDataset(dataSet);		//Sets the dataset.
 	// set Theta and weight for the EM Estimation
