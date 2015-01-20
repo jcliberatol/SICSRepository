@@ -12,6 +12,7 @@
 class EM2PL: public EMEstimator {
 private:
 	PatternMatrix* data;
+	//Trace* profiler;
 	Model* m;
 	int items;
 	ParameterModel* pm;
@@ -39,6 +40,7 @@ public:
 
 
 	}
+
 
 	virtual void untransform() {
 		for (int i = 0; i < m->getItemModel()->countItems(); ++i) {
@@ -133,7 +135,6 @@ public:
 				}
 				sdT = std::sqrt(sdT / (Ni - 1.0));
 				sdU = std::sqrt(sdU / (Ni - 1.0));
-				//cout<<"corr"<<corr<<endl;
 				corr = covar / (sdT * sdU);
 				pset[0][0][i] = std::sqrt((corr * corr	) / (1.0 - corr * corr));
 				pset[1][0][i] = -(ppnd(PII, &ifault)) / corr;
@@ -183,7 +184,6 @@ public:
 		}
 	}
 	virtual void stepE() {
-
 		sum = 0.0;
 		f->reset();
 		r->reset();
@@ -202,10 +202,11 @@ public:
 
 		//TODO CAREFULLY PARALLELIZE FOR
 		for (int index = 0; index < size; index++) {
-
 			sum = 0.0;
 			//Calculate g*(k) for all the k's
 			//first calculate the P for each k and store it in the array f aux
+			profiler->startTimer("for1");
+
 			for (k = 0; k < q; k++) {
 				faux[k] = (*weights)(0, k);
 				//Calculate the p (iterate over the items in the productory)
@@ -221,7 +222,8 @@ public:
 				//Now multiply by the weight
 				sum += faux[k];
 			}
-
+			profiler->stopTimer("for1");
+			profiler->startTimer("for2");
 			for (k = 0; k < q; k++) {
 				faux[k] = faux[k] / sum; //This is g*_j_k
 				//Multiply the f to the frequency of the pattern
@@ -234,6 +236,7 @@ public:
 					} // if
 				} // for
 			} // for
+			profiler->stopTimer("for2");
 		}
 
 	}
@@ -252,7 +255,6 @@ public:
 		 * nargs, npars, sizes.
 		 */
 		//fptr
-		//cout<<"Address : "<<&gptr<<" "<<&hptr<<endl;
 		int It = m->getItemModel()->getDataset()->countItems();
 		int q = nodes->size();
 		double args[3 * It]; //TODO not 2 * it here ?

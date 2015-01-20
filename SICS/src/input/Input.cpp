@@ -37,8 +37,6 @@ bool Input::importCSV( char* filename, Matrix<double>& M, unsigned int rowIdx, u
 			getline ( inFile, currentLine );
 			trace(currentLine);
 		}
-
-		cout<<"Start while ?"<<endl;
 		while ( !eof ) {
 			getline ( inFile, currentLine );
 
@@ -76,7 +74,6 @@ bool Input::importCSV( char* filename, Matrix<double>& M, unsigned int rowIdx, u
 		}
 
 		inFile.close();
-
 		return (1);
 }
 /*

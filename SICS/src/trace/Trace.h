@@ -26,7 +26,7 @@ using namespace chrono;
 class Trace {
 
 
-
+	long long int activations = 0;
 	map <string, Timer> timers;
 
 public:
@@ -42,6 +42,7 @@ public:
 
 	void stopTimer(string s){
 		timers[s].stop();
+		activations++;
 	}
 
 	long int timerDuration(string s){
@@ -87,7 +88,6 @@ public:
 	}
 //Defines the filename for the trace
 	Trace( const char * filename ) {
-
 		this->filename = filename;
 
 	}

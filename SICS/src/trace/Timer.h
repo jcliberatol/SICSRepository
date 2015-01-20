@@ -16,7 +16,7 @@ using namespace chrono;
 
 /*
  * Class Timer
- * Manages timers that can be started an stopped, works in milliseconds.
+ * Manages timers that can be started an stopped, works in nanoseconds.
  * To Create a timer, reset the timer.
  * Then the timer can be started and stopped by convenience for profiling processes
  * Uses cpp 11 chrono class for measurements
@@ -34,12 +34,12 @@ public:
 	bool counting;
 
 	Timer(){
-		totalTime = duration_cast<milliseconds>(milliseconds(0)).count();
+		totalTime = duration_cast<nanoseconds>(nanoseconds(0)).count();
 		lastCountPoint = clock::now();
 		counting = false;
 	}
 	void reset(){
-		totalTime = duration_cast<milliseconds>(milliseconds(0)).count();
+		totalTime = duration_cast<nanoseconds>(nanoseconds(0)).count();
 		lastCountPoint = clock::now();
 		counting = false;
 	}
@@ -62,7 +62,7 @@ public:
 		if (counting == false) return (1);
 		else {
 			counting = false;
-			totalTime = (totalTime + duration_cast<milliseconds>(clock::now()-lastCountPoint).count());
+			totalTime = (totalTime + duration_cast<nanoseconds>(clock::now()-lastCountPoint).count());
 			return (0);
 		}
 	}
