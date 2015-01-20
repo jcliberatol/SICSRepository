@@ -35,7 +35,7 @@ public:
 	virtual ~EM3PL() {
 	}
 
-	virtual void transform(Model* m) {
+	virtual void transform() {
 		for (int i = 0; i < m->getItemModel()->countItems(); ++i) {
 			double *** pset = m->getParameterModel()->getParameterSet();
 			double qa = pset[0][0][i];
@@ -48,7 +48,7 @@ public:
 		}
 	}
 
-	virtual void untransform(Model* m) {
+	virtual void untransform() {
 		for (int i = 0; i < m->getItemModel()->countItems(); ++i) {
 			double *** pset = m->getParameterModel()->getParameterSet();
 			double qa = pset[0][0][i];
@@ -66,6 +66,8 @@ public:
 	}
 
 	virtual void setInitialValues(int method, Model* m) {
+		cout<<method<<" m"<<endl;
+		cout<<m<<" mondel"<<endl;
 		cout << "here we go";
 		int items = m->getParameterModel()->items;
 		double *** pset = m->getParameterModel()->getParameterSet();
