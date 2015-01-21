@@ -110,7 +110,7 @@ void EMEstimation::estimate() {
 	profiler->resetTimer("Et");
 	profiler->resetTimer("Mt");
 	while (!convergenceSignal) {
-		cout << "Iteration " << iterations << endl;
+		//cout << "Iteration " << iterations << endl;
 		profiler->resetTimer("estimation");
 		profiler->startTimer("Et");
 		estimator->stepE();
@@ -128,9 +128,9 @@ void EMEstimation::estimate() {
 	estimator->untransform();
 	model->printParameterSet(cout);
 	profiler->stopTimer("estim");
-	cout<<"Total time from estimation "<<profiler->dr("estim")<<endl
-			<<"E step time : "<<profiler->dr("Et")<<endl
-			<<"M step time : "<<profiler->dr("Mt")<<endl;
+//	cout<<"Total time from estimation "<<profiler->dr("estim")<<endl
+//			<<"E step time : "<<profiler->dr("Et")<<endl
+//			<<"M step time : "<<profiler->dr("Mt")<<endl;
 }
 
 /**Returns the iterations that took the estimation to obtain an answer*/

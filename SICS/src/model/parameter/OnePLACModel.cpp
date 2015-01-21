@@ -8,7 +8,6 @@ OnePLACModel::OnePLACModel() {
 	parameterSet[d] = NULL;
 	probabilityMatrix = NULL;
 	nodes = 0;
-
 }
 
 void OnePLACModel::setEstimationNodes(QuadratureNodes* n) {
@@ -211,7 +210,10 @@ OnePLACModel::~OnePLACModel() {
 }
 
 void OnePLACModel::printParameterSet(ostream& out){
-	out<<"Estimated parameters : "<<endl;
-	out<<*parameterSet[a];
-	out<<*parameterSet[d]<<endl;
+	out<< "\"a\" \"b\" \"c\""<<endl;
+	int sizeParameter = (*parameterSet[d]).nC();
+    for ( int _i = 0; _i < sizeParameter; _i++)
+    {
+    	out<<(*parameterSet[a])(0,0)<<" "<<(*parameterSet[d])(0, _i)<<" 0.25"<<endl;
+    }
 }

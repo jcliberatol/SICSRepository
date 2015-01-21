@@ -53,7 +53,6 @@ public:
 	}
 
 	virtual void setInitialValues(int method, Model* m) {
-		cout << "EM1PLAC.hSetInitialVAlues" << endl;
 		//TODO MOVE ALGORITHMS TO ANOTHER FILE
 		/*TODO
 		 * Possible methods
@@ -193,7 +192,7 @@ public:
 
 			int k, i;
 			double prob;
-			double prob_matrix[q][(int) items];
+			double prob_matrix[q][ items];
 
 			for (k = 0; k < q; k++) {
 				for (i = 0; i < items; i++) {
@@ -296,9 +295,7 @@ public:
 		//BFGS
 		Optimizer* optim;
 		optim = new Optimizer();
-		cout<<"inicio optimizador"<<endl;
 		optim->searchOptimal(fptr, gptr, hptr, args, pars, nargs, npars);
-		cout<<"fin optimizador"<<endl;
 		nA = 0;
 
 		// Obtain a

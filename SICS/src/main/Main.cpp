@@ -82,7 +82,6 @@ void oneRun(char * args) {
 	// Load matrix
 	input.importCSV(args, *dataSet, 1, 0);
 	// set dataset
-
 	//RASCH_A1, RASCH_A_CONSTANT, TWO_PL, THREE_PL
 	model->setModel(modelFactory, Constant::RASCH_A_CONSTANT);
 	//This is where it is decided what model is the test to make
@@ -95,7 +94,6 @@ void oneRun(char * args) {
 		(*theta)(0, k) = cuad(k, 0);
 		(*weight)(0, k) = cuad(k, 1);
 	}
-
 
 	// build parameter set
 	model->getParameterModel()->buildParameterSet(model->getItemModel(),
@@ -111,14 +109,12 @@ void oneRun(char * args) {
 	QuadratureNodes nodes(theta, weight);
 	em->setQuadratureNodes(&nodes);
 	em->setModel(model);
-	cout<<"Setting initial values with option "<<Constant::ANDRADE<<endl;
+	//cout<<"Setting initial values with option "<<Constant::ANDRADE<<endl;
 	em->setInitialValues(Constant::ANDRADE);
-	cout<<"hello world 1"<<endl;
 	profiler->stopTimer("initial");
 	//Pass the profiler to the estimation object so it can be used to profile each step
 	em->setProfiler(profiler);
 	//Run the estimation
-	cout<<"hello world 2"<<endl;
 	em->estimate();
 	delete modelFactory;
 	delete dataSet;
@@ -140,7 +136,7 @@ int main(int argc, char *argv[]) {
 	}
 	oneRun(argv[1]);
 	tm.stop();
-	cout<<"time: "<<endl<<tm.totalTime<<endl;
+	//cout<<"time: "<<endl<<tm.totalTime<<endl;
 	return (0);
 }
 
