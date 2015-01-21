@@ -80,7 +80,6 @@ void oneRun(char * args) {
 	profiler->startTimer("input");
 	profiler->resetTimer("for1");
 	profiler->resetTimer("for2");
-	profiler->resetTimer("losdosfor");
 	input.importCSV((char *) "Cuads.csv", cuad, 1, 0);
 	// **** **** Run model complete and ordered process **** ****
 	// Create general pars
@@ -93,7 +92,7 @@ void oneRun(char * args) {
 	input.importCSV(args, *dataSet, 1, 0);
 	// set dataset
 	//RASCH_A1, RASCH_A_CONSTANT, TWO_PL, THREE_PL
-	model->setModel(modelFactory, Constant::THREE_PL);
+	model->setModel(modelFactory, Constant::TWO_PL);
 	//This is where it is decided what model is the test to make
 	model->getItemModel()->setDataset(dataSet);		//Sets the dataset.
 	// set Theta and weight for the EM Estimation
@@ -250,12 +249,12 @@ int main(int argc, char *argv[]) {
 	Timer tm;
 	tm.reset();
 	tm.start();
-	if (argc < 3) {
+	if (argc < 2) {
 		cout << "Please specify an input file" << endl;
 		return (0);
 	}
-	//oneRun(argv[1]);
-	runArgs(argv[1],argv[2]);
+	oneRun(argv[1]);
+	//runArgs(argv[1],argv[2]);
 	tm.stop();
 	cout<<"time: "<<endl<<tm.totalTime<<endl;
 	return (0);

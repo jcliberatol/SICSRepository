@@ -8,7 +8,7 @@
 #include <model/parameter/ThreePLModel.h>
 
 ThreePLModel::ThreePLModel() {
-
+	cout<<"The threeplmodel constructor is called right now"<<endl;
 	parameterSet = NULL;
 	probabilityMatrix=NULL;
 	nodes = NULL;
