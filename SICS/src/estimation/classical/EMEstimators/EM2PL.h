@@ -38,9 +38,7 @@ public:
 	//useless ( used for 3 things )
 	virtual void transform() {
 
-
 	}
-
 
 	virtual void untransform() {
 		for (int i = 0; i < m->getItemModel()->countItems(); ++i) {
@@ -49,7 +47,7 @@ public:
 		}
 	}
 
-	virtual void setInitialValues(double *** pset , Model* m) {
+	virtual void setInitialValues(double *** pset, Model* m) {
 		m->getParameterModel()->setParameterSet(pset);
 	}
 
@@ -69,7 +67,7 @@ public:
 			std::srand(std::time(0));
 			// use current time as seed for random generator
 			for (int i = 0; i < items; i++) {
-				pset[0][0][i] = randomd	() * 2;
+				pset[0][0][i] = randomd() * 2;
 				//fill b
 				pset[1][0][i] = randomd() * 4 - 2;
 			}
@@ -77,14 +75,14 @@ public:
 
 		if (method == Constant::ANDRADE) {
 			int numeroDePatrones = 0;
-		    int  iter, ifault;
+			int iter, ifault;
 			PatternMatrix* data =
 					dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
 			double Ni = data->countIndividuals();
-			double PII, frequencyV, mT, mU, mTU,
-					mUU, covar, sdU, sdT, corr, result;
+			double PII, frequencyV, mT, mU, mTU, mUU, covar, sdU, sdT, corr,
+					result;
 			for (data->resetIterator(); !data->checkEnd(); data->iterate())
-			numeroDePatrones++; // esto se debe poder hacer de una forma mas optima! en patternMatrix tener el tamaño!
+				numeroDePatrones++; // esto se debe poder hacer de una forma mas optima! en patternMatrix tener el tamaño!
 			double *T = new double[numeroDePatrones], *U =
 					new double[numeroDePatrones], *TU =
 					new double[numeroDePatrones], *UU =
@@ -136,7 +134,7 @@ public:
 				sdT = std::sqrt(sdT / (Ni - 1.0));
 				sdU = std::sqrt(sdU / (Ni - 1.0));
 				corr = covar / (sdT * sdU);
-				pset[0][0][i] = std::sqrt((corr * corr	) / (1.0 - corr * corr));
+				pset[0][0][i] = std::sqrt((corr * corr) / (1.0 - corr * corr));
 				pset[1][0][i] = -(ppnd(PII, &ifault)) / corr;
 			}
 		}
@@ -178,7 +176,7 @@ public:
 
 		int counter = 0;
 		for (it = begin; it != end; ++it, ++counter) {
-			copy(it->first.begin(),it->first.end(),bitset_list[counter]);
+			copy(it->first.begin(), it->first.end(), bitset_list[counter]);
 			//bitset_list[counter] = it->first;
 			frequency_list[counter] = it->second;
 		}
@@ -205,16 +203,19 @@ public:
 			sum = 0.0;
 			//Calculate g*(k) for all the k's
 			//first calculate the P for each k and store it in the array f aux
-			profiler->startTimer("for1");
+
+			int counter_temp[items] = { 0 };
 
 			for (k = 0; k < q; k++) {
 				faux[k] = (*weights)(0, k);
 				//Calculate the p (iterate over the items in the productory)
+				int counter_set = 0;
 				for (i = 0; i < items; i++) {
-					prob = prob_matrix[k][i];
-					//if (!current_bitset.test(items - i - 1)) {
-					if (!bitset_list[index][items - i - 1]) {
-						prob = 1 - prob;
+					if (bitset_list[index][items - i - 1]) {
+						counter_temp[counter_set++] = i + 1;
+						prob = prob_matrix[k][i];
+					} else {
+						prob = 1 - prob_matrix[k][i];
 					}
 					faux[k] = faux[k] * prob;
 				}
@@ -222,8 +223,6 @@ public:
 				//Now multiply by the weight
 				sum += faux[k];
 			}
-			profiler->stopTimer("for1");
-			profiler->startTimer("for2");
 			for (k = 0; k < q; k++) {
 				faux[k] = faux[k] / sum; //This is g*_j_k
 				//Multiply the f to the frequency of the pattern
@@ -231,12 +230,11 @@ public:
 				(*f)(0, k) += faux[k];
 				//Now selectively add the faux to the r
 				for (i = 0; i < items; i++) {
-					if (bitset_list[index][items - i - 1]) {
-						(*r)(k, i) += faux[k];
-					} // if
+					if (counter_temp[i] == 0)
+						break;
+					(*r)(k, counter_temp[i] - 1) += faux[k];
 				} // for
 			} // for
-			profiler->stopTimer("for2");
 		}
 
 	}
@@ -274,18 +272,18 @@ public:
 		//C Matrix
 		//Matrix<double>* C = model->getParameterModel()->getParameterSet()[c];
 
-		Matrix<double> DA(A,1,items);
-		Matrix<double> DB(B,1,items);
+		Matrix<double> DA(A, 1, items);
+		Matrix<double> DB(B, 1, items);
 		//Matrix<double> DC(*C);
 
 		for (int i = 0; i < It; i++) {
-			args[nA] = A[0][i];//(*A)(0, i);
+			args[nA] = A[0][i];		//(*A)(0, i);
 			nA++;
 		}
 
 		// Obtain b
 		for (int i = 0; i < It; i++) {
-			args[nA] = B[0][i];//(*B)(0, i);
+			args[nA] = B[0][i];		//(*B)(0, i);
 			nA++;
 		}
 
