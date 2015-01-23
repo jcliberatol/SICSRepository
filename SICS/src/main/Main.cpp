@@ -81,6 +81,8 @@ void oneRun(char * args) {
 	profiler->resetTimer("for1");
 	profiler->resetTimer("for2");
 	input.importCSV((char *) "Cuads.csv", cuad, 1, 0);
+	cout<<"Quadrature nodes"<<endl;
+	cout<<cuad<<endl;
 	// **** **** Run model complete and ordered process **** ****
 	// Create general pars
 	Model *model = new Model();
@@ -92,7 +94,7 @@ void oneRun(char * args) {
 	input.importCSV(args, *dataSet, 1, 0);
 	// set dataset
 	//RASCH_A1, RASCH_A_CONSTANT, TWO_PL, THREE_PL
-	model->setModel(modelFactory, Constant::TWO_PL);
+	model->setModel(modelFactory, Constant::THREE_PL);
 	//This is where it is decided what model is the test to make
 	model->getItemModel()->setDataset(dataSet);		//Sets the dataset.
 	// set Theta and weight for the EM Estimation

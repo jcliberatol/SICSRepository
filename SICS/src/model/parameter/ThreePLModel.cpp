@@ -29,7 +29,8 @@ void ThreePLModel::buildParameterSet(ItemModel* itemModel,
 
 		if (typeid(*dimensionModel) == typeid(UnidimensionalModel)) {
 
-			int items = itemModel->countItems();
+			items = itemModel->countItems();
+			cout<<" My items : "<<items<<endl;
 
 			parameterSet = new double** [3];
 			parameterSet[0] = new double *[1];
@@ -40,10 +41,6 @@ void ThreePLModel::buildParameterSet(ItemModel* itemModel,
 			parameterSet[1][0] = new double [items];
 			parameterSet[2][0] = new double [items];
 
-
-			//parameterSet[a] = new Matrix<double>(1, items);
-			//parameterSet[d] = new Matrix<double>(1, items);
-			//parameterSet[c] = new Matrix<double>(1, items);
 
 		}
 

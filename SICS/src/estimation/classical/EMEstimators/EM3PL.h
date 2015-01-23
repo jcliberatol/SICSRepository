@@ -22,7 +22,6 @@ private:
 	long double sum;
 	Matrix<double>* f;
 	Matrix<double>* r;
-	boost::dynamic_bitset<> current_bitset;
 	double (*fptr)(double*, double*, int, int);
 	void (*gptr)(double*, double*, int, int, double*);
 	void (*hptr)(double*, double*, int, int, double*);
@@ -57,12 +56,25 @@ public:
 			//(*model->getParameterModel()->getParameterSet()[d])(0,i)= -qb/qa;
 			double ec = exp(qc);
 			pset[2][0][i] = ec / (1 + ec);
+			cout<<"After transforming"<<endl;
+			for (int i = 0; i < items; i++) {
+							cout<<pset[0][0][i]<<"				";
+							cout<<pset[1][0][i]<<"				";
+							cout<<pset[2][0][i]<<"				"<<endl;
+							}
 		}
 	}
 
 	virtual void setInitialValues(double *** pset,
 			Model* m) {
 		m->getParameterModel()->setParameterSet(pset);
+		int items = m->getParameterModel()->items;
+				cout<<" Initial values are set befor this"<<endl;
+				for (int i = 0; i < items; i++) {
+				cout<<pset[0][0][i]<<"				";
+				cout<<pset[1][0][i]<<"				";
+				cout<<pset[2][0][i]<<"				"<<endl;
+				}
 	}
 
 	virtual void setInitialValues(int method, Model* m) {
@@ -70,7 +82,20 @@ public:
 		cout<<m<<" mondel"<<endl;
 		cout << "here we go";
 		int items = m->getParameterModel()->items;
+		cout<<"Number of items "<<items<<endl;
 		double *** pset = m->getParameterModel()->getParameterSet();
+		for (int i = 0; i < items; i++) {
+				pset[0][0][i]=0;
+				pset[1][0][i]=0;
+				pset[2][0][i]=0;
+				}
+		cout<<" Initial values are initialized after here"<<endl;
+		for (int i = 0; i < items; i++) {
+		cout<<pset[0][0][i]<<"				";
+		cout<<pset[1][0][i]<<"				";
+		cout<<pset[2][0][i]<<"				"<<endl;
+		}
+		cout<<" I hope that the program is still working"<<endl;
 		//TODO MOVE ALGORITHMS TO ANOTHER FILE
 		/*TODO
 		 * Possible methods
@@ -80,22 +105,24 @@ public:
 		 *
 		 * The default method is OSPINA
 		 */
-		if (!method == Constant::RANDOM) {
+		if (method == Constant::RANDOM) {
 			std::srand(std::time(0)); // use current time as seed for random generator
 			for (int i = 0; i < items; i++) {
 				pset[0][0][i] = randomd() * 2;
+				cout<<" Initial values are randomized here"<<endl;
+				cout<<pset[0][0][i]<<"				";
 				//fill b
 				pset[1][0][i] = randomd() * 4 - 2;
+				cout<<pset[1][0][i]<<"				";
 				//fill c
 				int cassualOptions = 4;
 				pset[2][0][i] = randomd() * (2 / (double) cassualOptions);
-
+				cout<<pset[2][0][i]<<"				";
 			}
 		}
-
-		//ANDRADE O( items * numberOfPattern )
+				//ANDRADE O( items * numberOfPattern )
 		if (method == Constant::ANDRADE) {
-			cout << "welcome to andrade" << endl;
+			cout << "Here we decide the new values by andrade's method" << endl;
 			int numeroDePatrones = 0;
 			int iter, ifault;
 			PatternMatrix* data = dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
@@ -109,8 +136,9 @@ public:
 					new double[numeroDePatrones], *Tm =
 					new double[numeroDePatrones], *Um =
 					new double[numeroDePatrones];
+			cout << "Variables have been declared , number of items : "<<items<< endl;
 			for (int i = 0; i < items; i++) {
-
+				cout<<"Item "<<i<<" is being initalized"<<endl;
 				iter = 0;
 				PII = 0;
 				mT = mU = mTU = mUU = 0.0;
@@ -164,6 +192,12 @@ public:
 
 			}
 		}
+		cout<<"-----------calculated the initial values"<<endl;
+		for (int i = 0; i < items; i++) {
+				cout<<pset[0][0][i]<<"				";
+				cout<<pset[1][0][i]<<"				";
+				cout<<pset[2][0][i]<<"				"<<endl;
+				}
 
 	}
 
@@ -210,7 +244,6 @@ public:
 	}
 
 	virtual void stepE() {
-
 		sum = 0.0;
 		f->reset();
 		r->reset();

@@ -204,7 +204,7 @@ public:
 			//Calculate g*(k) for all the k's
 			//first calculate the P for each k and store it in the array f aux
 
-			int counter_temp[items] = { 0 };
+			int counter_temp[items];
 
 			for (k = 0; k < q; k++) {
 				faux[k] = (*weights)(0, k);
