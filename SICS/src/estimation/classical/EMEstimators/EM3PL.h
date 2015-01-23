@@ -48,6 +48,7 @@ public:
 	}
 
 	virtual void untransform() {
+		cout<<"After transforming"<<endl;
 		for (int i = 0; i < m->getItemModel()->countItems(); ++i) {
 			double *** pset = m->getParameterModel()->getParameterSet();
 			double qa = pset[0][0][i];
@@ -56,12 +57,10 @@ public:
 			//(*model->getParameterModel()->getParameterSet()[d])(0,i)= -qb/qa;
 			double ec = exp(qc);
 			pset[2][0][i] = ec / (1 + ec);
-			cout<<"After transforming"<<endl;
-			for (int i = 0; i < items; i++) {
+			pset[1][0][i] = -qb/qa;//Transformacion del B   d=b/-a
 							cout<<pset[0][0][i]<<"				";
 							cout<<pset[1][0][i]<<"				";
 							cout<<pset[2][0][i]<<"				"<<endl;
-							}
 		}
 	}
 
@@ -339,17 +338,20 @@ public:
 		Matrix<double> DC(B,1,items);
 
 		for (int i = 0; i < It; i++) {
+			DA(0,i)=A[0][i];
 			args[nA] = A[0][i];
 			nA++;
 		}
 
 		// Obtain b
 		for (int i = 0; i < It; i++) {
+			DB(0,i)=B[0][i];
 			args[nA] = B[0][i];
 			nA++;
 		}
 		// Obtain c
 		for (int i = 0; i < It; i++) {
+			DC(0,i)=C[0][i];
 			args[nA] = C[0][i];
 			nA++;
 		}
@@ -428,30 +430,29 @@ public:
 		//Obtain the deltas
 		//Perform substracts
 		double maxDelta = 0;
-		double meanDelta = 0;
 		int DeltaC = 0;
 		for (int v1 = 0; v1 < It; ++v1) {
 			DA(0, v1) = DA(0, v1) - A[0][v1];
 			DB(0, v1) = DB(0, v1) - B[0][v1];
 			DC(0, v1) = DC(0, v1) - C[0][v1];
-
-			meanDelta = +fabs(DA(0, v1));
-			meanDelta = +fabs(DB(0, v1));
-			meanDelta = +fabs(DC(0, v1));
 			DeltaC += 3;
 			if (fabs(DA(0, v1)) > maxDelta) {
 				maxDelta = fabs(DA(0, v1));
+				cout<<"Max in A , "<<v1<<endl;
+
 			}
 			if (fabs(DB(0, v1)) > maxDelta) {
 				maxDelta = fabs(DB(0, v1));
+				cout<<"Max in B , "<<v1<<endl;
 			}
 			if (fabs(DC(0, v1)) > maxDelta) {
 				maxDelta = fabs(DC(0, v1));
+				cout<<"Max in C , "<<v1<<endl;
 			}
+			cout<<"MAX DELTAAA "<<endl<<maxDelta<<endl;
 		}
-		meanDelta = meanDelta / DeltaC;
 		//TODO change by constant file
-		if (meanDelta < 0.0001 and maxDelta < 0.001) {
+		if (maxDelta < 0.001) {
 			m->itemParametersEstimated = true;
 		}
 		//And set the parameter sets

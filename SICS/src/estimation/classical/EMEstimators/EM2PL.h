@@ -41,10 +41,15 @@ public:
 	}
 
 	virtual void untransform() {
+		double *** pset = m->getParameterModel()->getParameterSet();
 		for (int i = 0; i < m->getItemModel()->countItems(); ++i) {
-			double *** pset = m->getParameterModel()->getParameterSet();
 			pset[1][0][i] /= -pset[0][0][i];
 		}
+
+		for (int i = 0; i < items; i++) {
+						cout<<pset[0][0][i]<<"				";
+						cout<<pset[1][0][i]<<"				"<<endl;
+			}
 	}
 
 	virtual void setInitialValues(double *** pset, Model* m) {
@@ -205,7 +210,9 @@ public:
 			//first calculate the P for each k and store it in the array f aux
 
 			int counter_temp[items];
-
+			for (int p = 0; p < items; ++p) {
+				counter_temp[p]=0;
+			}
 			for (k = 0; k < q; k++) {
 				faux[k] = (*weights)(0, k);
 				//Calculate the p (iterate over the items in the productory)

@@ -124,11 +124,6 @@ void EMEstimation::estimate() {
 		profiler->stopTimer("Mt");
 		double*** ps = model->parameterModel->getParameterSet();
 		int items = model->parameterModel->items;
-
-		for (int p = 0; p < items; ++p) {
-			cout<<ps[0][0][p]<<"\t\t\t\t"<<ps[1][0][p]<<"\t\t\t\t"<<ps[2][0][p]<<"\t\t\t\t"<<endl;
-		}
-
 		convergenceSignal = model->itemParametersEstimated;
 		iterations++;
 		if (iterations > Constant::MAX_EM_ITERS) {
