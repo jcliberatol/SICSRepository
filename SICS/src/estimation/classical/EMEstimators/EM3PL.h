@@ -25,7 +25,6 @@ private:
 	double (*fptr)(double*, double*, int, int);
 	void (*gptr)(double*, double*, int, int, double*);
 	void (*hptr)(double*, double*, int, int, double*);
-	//boost::dynamic_bitset<> * bitset_list;
 	bool** bitset_list;
 	int size;
 	int * frequency_list;
@@ -40,28 +39,19 @@ public:
 			double qa = pset[0][0][i];
 			double qb = pset[1][0][i];
 			double qc = pset[2][0][i];
-			cout<<"q : "<<qa<<" "<<qb<<" "<<qc<<" "<<endl;
-			//double qa = (*m->getParameterModel()->getParameterSet()[a])(0, i);
-			//double qb = (*m->getParameterModel()->getParameterSet()[d])(0, i);
-			//double qc = (*m->getParameterModel()->getParameterSet()[c])(0, i);
 			pset[2][0][i]= log(qc/(1-qc));
 		}
 	}
 
 	virtual void untransform() {
-		cout<<"After transforming"<<endl;
 		for (int i = 0; i < m->getItemModel()->countItems(); ++i) {
 			double *** pset = m->getParameterModel()->getParameterSet();
 			double qa = pset[0][0][i];
 			double qb = pset[1][0][i];
 			double qc = pset[2][0][i];
-			//(*model->getParameterModel()->getParameterSet()[d])(0,i)= -qb/qa;
 			double ec = exp(qc);
 			pset[2][0][i] = ec / (1 + ec);
-			pset[1][0][i] = -qb/qa;//Transformacion del B   d=b/-a
-							cout<<pset[0][0][i]<<"				";
-							cout<<pset[1][0][i]<<"				";
-							cout<<pset[2][0][i]<<"				"<<endl;
+			pset[1][0][i] = -qb/qa;//Transformacion del B   d=-b/a
 		}
 	}
 
@@ -74,14 +64,6 @@ public:
 						pset[1][0][i]=npset[1][0][i];
 						pset[2][0][i]=npset[2][0][i];
 		}
-
-				cout<<" Initial values are being set here with items "<<items<<endl;
-				for (int i = 0; i < items; i++) {
-				cout<<pset[0][0][i]<<"				";
-				cout<<pset[1][0][i]<<"				";
-				cout<<pset[2][0][i]<<"				"<<endl;
-				}
-				cout<<"Those are the initial values"<<endl;
 	}
 
 	virtual void setInitialValues(int method, Model* m) {
@@ -91,7 +73,7 @@ public:
 				pset[0][0][i]=0;
 				pset[1][0][i]=0;
 				pset[2][0][i]=0;
-				}
+		}
 		//TODO MOVE ALGORITHMS TO ANOTHER FILE
 		/*TODO
 		 * Possible methods
@@ -105,14 +87,11 @@ public:
 			std::srand(std::time(0)); // use current time as seed for random generator
 			for (int i = 0; i < items; i++) {
 				pset[0][0][i] = randomd() * 2;
-				cout<<pset[0][0][i]<<"				";
 				//fill b
 				pset[1][0][i] = randomd() * 4 - 2;
-				cout<<pset[1][0][i]<<"				";
 				//fill c
 				int cassualOptions = 4;
 				pset[2][0][i] = randomd() * (2 / (double) cassualOptions);
-				cout<<pset[2][0][i]<<"				";
 			}
 		}
 				//ANDRADE O( items * numberOfPattern )
@@ -123,7 +102,7 @@ public:
 			double Ni = data->countIndividuals(), PII, frequencyV, mT, mU, mTU,
 					mUU, covar, sdU, sdT, corr, result;
 			for (data->resetIterator(); !data->checkEnd(); data->iterate())
-				pSize++; // esto se debe poder hacer de una forma mas optima! en patternMatrix tener el tamaño!
+				pSize++;
 			double *T = new double[pSize], *U =
 					new double[pSize], *TU =
 					new double[pSize], *UU =
@@ -143,7 +122,6 @@ public:
 						if (data->getCurrentBitSet()[i_])
 							T[iter]++;
 					}
-					//T[iter] = data->getCurrentBitSet().count();
 					PII += frequencyV * data->getCurrentBitSet()[items - i - 1];
 					U[iter] = data->getCurrentBitSet()[items - i - 1];
 					TU[iter] = T[iter] * U[iter];
@@ -175,11 +153,8 @@ public:
 				sdT = std::sqrt(sdT / (Ni - 1.0));
 				sdU = std::sqrt(sdU / (Ni - 1.0));
 				corr = covar / (sdT * sdU);
-				//(*m->getParameterModel()->getParameterSet()[a])(0, i)
 				pset[0][0][i]=std::sqrt((corr * corr) / (1.0 - corr * corr));
-				//(*m->getParameterModel()->getParameterSet()[d])(0, i)
 				pset[1][0][i]=-(ppnd(PII, &ifault)) / corr;
-				//(*m->getParameterModel()->getParameterSet()[c])(0, i)
 				pset[2][0][i]= 0.2;
 
 			}
@@ -203,14 +178,10 @@ public:
 		gptr = &ThreePLModel::gradient;
 		hptr = NULL;
 
-		//map<boost::dynamic_bitset<>, int>::const_iterator it;
 		map<vector<char>, int>::const_iterator it;
-		//map<boost::dynamic_bitset<>, int>::const_iterator begin =
 		map<vector<char>, int>::const_iterator begin = data->matrix.begin();
-		//map<boost::dynamic_bitset<>, int>::const_iterator end =
 		map<vector<char>, int>::const_iterator end = data->matrix.end();
 
-		//bitset_list = new boost::dynamic_bitset<>[data->matrix.size()];
 		bitset_list = new bool*[data->matrix.size()];
 		for (int j = 0; j < data->matrix.size(); j++) {
 			bitset_list[j] = new bool[data->size];
@@ -223,7 +194,6 @@ public:
 		int counter = 0;
 		for (it = begin; it != end; ++it, ++counter) {
 			copy(it->first.begin(),it->first.end(),bitset_list[counter]);
-			//bitset_list[counter] = it->first;
 			frequency_list[counter] = it->second;
 		}
 	}
@@ -296,7 +266,6 @@ public:
 		 * nargs, npars, sizes.
 		 */
 		//fptr
-		//cout<<"Address : "<<&gptr<<" "<<&hptr<<endl;
 		int It = m->getItemModel()->getDataset()->countItems();
 		int q = nodes->size();
 		double args[3 * It];
@@ -309,13 +278,6 @@ public:
 		double** A = pset[0];
 		double** B = pset[1];
 		double** C = pset[2];
-		// Obtain a
-		//A Matrix
-		//Matrix<double>* A = m->getParameterModel()->getParameterSet()[a];
-		//B Matrix
-		//Matrix<double>* B = m->getParameterModel()->getParameterSet()[d];
-		//C Matrix
-		//Matrix<double>* C = m->getParameterModel()->getParameterSet()[c];
 
 		Matrix<double> DA(A,1,items);
 		Matrix<double> DB(B,1,items);
@@ -386,7 +348,6 @@ public:
 			A[0][i] = args[nA++];
 			if (fabs(A[0][i]) > abs(10)) {
 				A[0][i] = 0.851;
-				//			cout << "A reset." << endl;
 			}
 
 		}
@@ -395,7 +356,6 @@ public:
 			B[0][i] = args[nA++];
 			if (fabs(B[0][i]) > abs(-50)) {
 				B[0][i] = 0.5;
-				//			cout << "B reset." << endl;
 			}
 		}
 
@@ -403,7 +363,6 @@ public:
 			C[0][i] = args[nA++];
 			if (fabs(C[0][i]) > abs(-50)) {
 				C[0][i] = 0.5;
-				//			cout << "B reset." << endl;
 			}
 		}
 
@@ -432,7 +391,6 @@ public:
 			}
 
 		}
-		cout<<"MAX DELTA"<<endl<<maxDelta<<endl;
 		//TODO change by constant file
 		if (maxDelta < Constant::CONVERGENCE_DELTA) {
 			m->itemParametersEstimated = true;

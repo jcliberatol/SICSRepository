@@ -8,7 +8,6 @@
 #include <model/parameter/ThreePLModel.h>
 
 ThreePLModel::ThreePLModel() {
-	cout<<"The threeplmodel constructor is called right now"<<endl;
 	parameterSet = NULL;
 	probabilityMatrix=NULL;
 	nodes = NULL;
@@ -30,7 +29,6 @@ void ThreePLModel::buildParameterSet(ItemModel* itemModel,
 		if (typeid(*dimensionModel) == typeid(UnidimensionalModel)) {
 
 			items = itemModel->countItems();
-			cout<<" My items : "<<items<<endl;
 
 			parameterSet = new double** [3];
 			parameterSet[0] = new double *[1];
@@ -67,7 +65,6 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel, Quadrature
 
 	if ( dimensionModel != NULL ) {
 		q = quadNodes->size();
-		cout<<"Using "<<q<<" Nodes"<<endl;
 	}
 
 
@@ -84,11 +81,7 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel, Quadrature
 				a_d = parameterSet[0][0][i];
 				d_d = parameterSet[1][0][i];
 				c_d = parameterSet[2][0][i];
-				//a_d = (*parameterSet[a])(0,i);
-				//d_d = (*parameterSet[d])(0,i);
-				//c_d = (*parameterSet[c])(0,i);
 				double p_d = successProbability ( theta_d, a_d, d_d, c_d );
-				//cout<<a_d<<" "<<d_d<<" "<<c_d<<" "<<theta_d<<" "<<p_d<<" the prox"<<endl;
 				(*probabilityMatrix)(k,i) = p_d;
 
 			}
@@ -121,9 +114,6 @@ double ThreePLModel::successProbability(double theta, double a, double d,
 	exponential = exp(-exponential) ;
 	double ec = exp(c);
 	return ( (ec/(1+ec)) + (1 - (ec/(1+ec))) * (1/(1+exponential)) );
-
-	//return ((ec/(1+ec))+((ec)/((1+ec)*(1+exponential))));
-	//return (c + (1.0 - c)/(1.0 + exponential));
 }
 
 double ThreePLModel::getProbability(int node, int item) {
@@ -333,8 +323,7 @@ double ThreePLModel::logLikelihood (double* args, double* pars, int nargs,
 	// Obtain c
 	for (int i=0; i<It; i++) {
 		c[i] = args [nA ++];
-		//cout<<" "<<c[i];
-	}//cout<<endl;
+	}
 
 	long double tp , tq;
 	long double sum = 0;
@@ -345,13 +334,9 @@ double ThreePLModel::logLikelihood (double* args, double* pars, int nargs,
 			if (tp==0)tp=1e-08;
 			tq = 1-tp;
 			if (tq==0)tq=1e-08;
-			//suma = suma + (rki*logg(pki)+(fki-rki)*logg(qki))
 			sum+=(r[k * It + i]*log(tp))+(f[k]-r[k * It + i])*log(tq);
 		}
 	}
-
-
-	//antiLogit(c, I);
 	delete[] theta;
 	delete[] f;
 	delete[] r;
@@ -371,7 +356,6 @@ double ThreePLModel::successProbability_cPrime(double theta, double a, double b,
 }
 
 ThreePLModel::~ThreePLModel() {
-	cout<<"Deleting a three pl model"<<endl;
 	if (parameterSet != NULL) {
 
 		delete[] parameterSet[2][0];

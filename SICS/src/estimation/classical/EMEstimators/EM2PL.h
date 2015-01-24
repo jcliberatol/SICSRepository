@@ -12,7 +12,6 @@
 class EM2PL: public EMEstimator {
 private:
 	PatternMatrix* data;
-	//Trace* profiler;
 	Model* m;
 	int items;
 	ParameterModel* pm;
@@ -23,11 +22,9 @@ private:
 	long double sum;
 	Matrix<double>* f;
 	Matrix<double>* r;
-	boost::dynamic_bitset<> current_bitset;
 	double (*fptr)(double*, double*, int, int);
 	void (*gptr)(double*, double*, int, int, double*);
 	void (*hptr)(double*, double*, int, int, double*);
-	//boost::dynamic_bitset<> * bitset_list;
 	bool** bitset_list;
 	int size;
 	int * frequency_list;
@@ -35,7 +32,7 @@ private:
 public:
 	virtual ~EM2PL() {
 	}
-	//useless ( used for 3 things )
+
 	virtual void transform() {
 
 	}
@@ -162,14 +159,10 @@ public:
 		gptr = &TwoPLModel::gradient;
 		hptr = NULL;
 
-		//map<boost::dynamic_bitset<>, int>::const_iterator it;
 		map<vector<char>, int>::const_iterator it;
-		//map<boost::dynamic_bitset<>, int>::const_iterator begin =
 		map<vector<char>, int>::const_iterator begin = data->matrix.begin();
-		//map<boost::dynamic_bitset<>, int>::const_iterator end =
 		map<vector<char>, int>::const_iterator end = data->matrix.end();
 
-		//bitset_list = new boost::dynamic_bitset<>[data->matrix.size()];
 		bitset_list = new bool*[data->matrix.size()];
 		for (int j = 0; j < data->matrix.size(); j++) {
 			bitset_list[j] = new bool[data->size];
@@ -182,7 +175,6 @@ public:
 		int counter = 0;
 		for (it = begin; it != end; ++it, ++counter) {
 			copy(it->first.begin(), it->first.end(), bitset_list[counter]);
-			//bitset_list[counter] = it->first;
 			frequency_list[counter] = it->second;
 		}
 	}

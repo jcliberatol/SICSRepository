@@ -207,25 +207,19 @@ void runArgs(char * filename,char * initialValues){
 		break;
 	case Constant::TWO_PL:
 		matrix_initial = new double** [2];
-		//Pass a
 		matrix_initial[0] = new double* [1];
 		matrix_initial[0][0] = new double [a_init->nC()];
-		for (int var = 0; var < a_init->nC(); ++var) {
-			matrix_initial[0][0][var] = (*a_init)(0,var);
-		}
-		//Pass b
 		matrix_initial[1] = new double* [1];
 		matrix_initial[1][0] = new double [b_init->nC()];
+		for (int var = 0; var < a_init->nC(); ++var) {
+					matrix_initial[0][0][var] = (*a_init)(0,var);
+				}
 		for (int var = 0; var < b_init->nC(); ++var) {
 			matrix_initial[1][0][var] = (*b_init)(0,var);
 		}
 		break;
 	case Constant::THREE_PL:
-		//matrix_initial[a] = a_init;
-		//matrix_initial[d] = b_init;
-		//matrix_initial[c] = c_init;
 		int items = model->getItemModel()->countItems();
-		cout<<" My items : "<<items<<endl;
 
 		matrix_initial = new double** [3];
 		matrix_initial[0] = new double *[1];
@@ -237,27 +231,41 @@ void runArgs(char * filename,char * initialValues){
 		matrix_initial[2][0] = new double [items];
 		for (int var = 0; var < a_init->nC(); ++var) {
 			matrix_initial[0][0][var] = (*a_init)(0,var);
-			cout<<matrix_initial[0][0][var]<<endl;
 		}
 		for (int var = 0; var < b_init->nC(); ++var) {
 			matrix_initial[1][0][var] = (*b_init)(0,var);
-			cout<<matrix_initial[1][0][var]<<endl;
 		}
 		for (int var = 0; var < c_init->nC(); ++var) {
 			matrix_initial[2][0][var] = (*c_init)(0,var);
-			cout<<matrix_initial[2][0][var]<<endl;
 		}
-		cout<<"Passing vals"<<endl;
-		//Aqui esta el error
 		break;
 	}
-
-
-
 	//Delete the matrix initial aFTER THIS REMEMBER TODO
 	em->setInitialValues(matrix_initial);
 	// run estimation
-	cout<<"Passed vals"<<endl;
+
+	switch (model_const) {
+	case Constant::THREE_PL:
+		delete[] matrix_initial[0][0] ;
+		delete[] matrix_initial[1][0] ;
+		delete[] matrix_initial[2][0] ;
+
+		delete[] matrix_initial[0] ;
+		delete[] matrix_initial[1] ;
+		delete[] matrix_initial[2] ;
+
+		delete[] matrix_initial ;
+		break;
+	case Constant::TWO_PL:
+
+		delete[] matrix_initial[0][0] ;
+		delete[] matrix_initial[1][0] ;
+		delete[] matrix_initial[1] ;
+		delete[] matrix_initial[0] ;
+		delete[] matrix_initial ;
+
+	}
+
 
 	profiler->stopTimer("initial");
 	em->setProfiler(profiler);

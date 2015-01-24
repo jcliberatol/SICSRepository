@@ -92,3 +92,9 @@ Ignored a header line :
 Unproper end of file, read cancelled
 Input Errors: 
 Inconsistent line length , stopped importing
+Ignored a header line : 
+"pt.cuad","w.cuad"
+Unproper end of file, read cancelled
+Input Errors: 
+File does not exists:
+Test_100_1_10000.csv
