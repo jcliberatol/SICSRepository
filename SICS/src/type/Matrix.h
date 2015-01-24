@@ -45,7 +45,7 @@ private:
 	T m(char);
 	T get3x3determinant ();
 public:
-	bool transposed;
+	//bool transposed;
 	bool symmetric;
 	T *memory;
 	int ld;
@@ -61,7 +61,7 @@ public:
 	int nR(); /** Returns number of rows */
 	int nC(); /** Returns number of columns */
 	T sum(); /** Returns the sum of all objects */
-	T & operator()(const int nCol, const int nRow); /** Accessing operator for a element */
+	inline T & operator()(const int nCol, const int nRow); /** Accessing operator for a element */
 	T & operator()(const int element); /**Accessing operator for a element */
 	friend ostream& operator<<<T>(ostream &, Matrix<T> &); /** Output operator */
 	bool isSymmetric() const; /** Symmetry flag for optimizations */
@@ -104,7 +104,7 @@ Matrix<T>::Matrix() {
 	nRow = 0;
 	ld = 0;
 	memory = NULL;
-	transposed = false;
+	//transposed = false;
 	symmetric = false;
 }
 
@@ -118,7 +118,7 @@ template<class T>
 Matrix<T>::Matrix(int r, int c) {
 	nCol = c;
 	nRow = r;
-	transposed = false;
+	//transposed = false;
 	memory = new T[c * r];
 	symmetric = false;
 	ld = c;
@@ -128,7 +128,7 @@ template<class T>
 Matrix<T>::Matrix(T** mem , int r, int c) {
 	nCol = c;
 	nRow = r;
-	transposed = false;
+	//transposed = false;
 	memory = new T[c * r];
 	symmetric = false;
 	ld = c;
@@ -144,7 +144,7 @@ template<class T>
 Matrix<T>::Matrix(char I, int c) {
 	nCol = c;
 	nRow = c;
-	transposed = false;
+	//transposed = false;
 	memory = new T[c * c];
 	ld = c;
 	symmetric = false;
@@ -163,13 +163,9 @@ Matrix<T>::Matrix(char I, int c) {
 }
 
 template<class T>
-T & Matrix<T>::operator()(const int r, const int c) {
-	if (!transposed) {
+inline T & Matrix<T>::operator()(const int r, const int c) {
 		return (memory[nCol * r + c]);
-	}
-	else {
-		return (memory[nRow * c + r]);
-	}
+
 }
 
 template<class T>
@@ -200,19 +196,12 @@ void Matrix<T>::reset() {
 }
 
 template<class T>
-void Matrix<T>::transpose() {
-	transposed = !transposed;
-	swap (nCol, nRow);
-}
-
-template<class T>
 void Matrix<T>::copy(Matrix<T>& a) {
 	this->nCol = a.nC();
 	this->nRow = a.nR();
 	memory = new T[a.nC() * a.nR()];
 
 	memcpy(memory,a.memory,sizeof(T)*a.nC()*a.nR());
-	transposed = a.transposed;
 	symmetric = a.symmetric;
 }
 

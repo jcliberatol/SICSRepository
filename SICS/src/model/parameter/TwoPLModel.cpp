@@ -51,7 +51,7 @@ void TwoPLModel::buildParameterSet(ItemModel* itemModel,
 
 }
 
-void TwoPLModel::successProbability(DimensionModel *dimensionModel,
+inline void TwoPLModel::successProbability(DimensionModel *dimensionModel,
 		QuadratureNodes *quadNodes) {
 	int q = 0;
 	double a_d, d_d, theta_d; // d stands from "double"
@@ -74,7 +74,7 @@ void TwoPLModel::successProbability(DimensionModel *dimensionModel,
 	}
 }
 
-double TwoPLModel::successProbability(double *theta, double *a, double *d) {
+inline double TwoPLModel::successProbability(double *theta, double *a, double *d) {
 
 	long double exponential = (Constant::D_CONST * ((*a * *theta) + *d));
 	if (exponential > Constant::MAX_EXP) {
@@ -96,7 +96,7 @@ void TwoPLModel::setParameterSet(double *** pair) {
 }
 
 double TwoPLModel::getProbability(int node, int item) {
-	return ((*probabilityMatrix)(node, item));;
+	return ((*probabilityMatrix)(node, item));
 }
 
 void TwoPLModel::gradient(double* args, double* pars, int nargs, int npars,
