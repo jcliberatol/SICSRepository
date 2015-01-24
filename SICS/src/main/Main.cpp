@@ -156,7 +156,7 @@ void runArgs(char * filename,char * initialValues){
 	input.importCSV(filename, *dataSet, 1, 0);
 	// set dataset
 	//RASCH_A1, RASCH_A_CONSTANT, TWO_PL, THREE_PL
-	int model_const =  Constant::THREE_PL;
+	int model_const =  Constant::TWO_PL;
 	model->setModel(modelFactory, model_const);
 	//This is where it is decided what model is the test to make
 	model->getItemModel()->setDataset(dataSet);//Sets the dataset.

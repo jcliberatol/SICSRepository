@@ -30,7 +30,7 @@ void TwoPLModel::buildParameterSet(ItemModel* itemModel,
 			parameterSet[0][0] = new double [items];
 			parameterSet[1][0] = new double [items];
 
-			//parameterSet[a] = new Matrix<double>(1, items);
+			//para<meterSet[a] = new Matrix<double>(1, items);
 			//parameterSet[d] = new Matrix<double>(1, items);
 
 		}
