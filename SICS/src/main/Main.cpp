@@ -7,6 +7,7 @@
 //============================================================================
 
 #include "Main.h"
+#define ESTIMATION_MODEL Constant::THREE_PL
 
 void profilerOut(Trace* profile, int type){
 	//Types of profiling :
@@ -91,7 +92,7 @@ void oneRun(char * args) {
 	input.importCSV(args, *dataSet, 1, 0);
 	// set dataset
 	//RASCH_A1, RASCH_A_CONSTANT, TWO_PL, THREE_PL
-	model->setModel(modelFactory, Constant::THREE_PL);
+	model->setModel(modelFactory, ESTIMATION_MODEL);
 	//This is where it is decided what model is the test to make
 	model->getItemModel()->setDataset(dataSet);		//Sets the dataset.
 	// set Theta and weight for the EM Estimation
@@ -156,7 +157,7 @@ void runArgs(char * filename,char * initialValues){
 	input.importCSV(filename, *dataSet, 1, 0);
 	// set dataset
 	//RASCH_A1, RASCH_A_CONSTANT, TWO_PL, THREE_PL
-	int model_const =  Constant::THREE_PL;
+	int model_const =  ESTIMATION_MODEL;
 	model->setModel(modelFactory, model_const);
 	//This is where it is decided what model is the test to make
 	model->getItemModel()->setDataset(dataSet);//Sets the dataset.
