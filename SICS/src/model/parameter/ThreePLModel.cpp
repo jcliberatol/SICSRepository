@@ -8,21 +8,14 @@
 #include <model/parameter/ThreePLModel.h>
 
 ThreePLModel::ThreePLModel() {
-
-	parameterSet[a] = NULL;
-	parameterSet[b] = NULL;
-	parameterSet[c] = NULL;
-	parameterSet[d] = NULL;
+	cout<<"The threeplmodel constructor is called right now"<<endl;
+	parameterSet = NULL;
 	probabilityMatrix=NULL;
-	nodes = 0;
-
+	nodes = NULL;
 }
 
 void ThreePLModel::printParameterSet(ostream& out){
-	out<<"Estimated parameters : "<<endl;
-	out<<*parameterSet[a]<<endl;
-	out<<*parameterSet[d]<<endl;
-	out<<*parameterSet[c]<<endl;
+
 }
 
 void ThreePLModel::setEstimationNodes(QuadratureNodes* n) {
@@ -36,10 +29,18 @@ void ThreePLModel::buildParameterSet(ItemModel* itemModel,
 
 		if (typeid(*dimensionModel) == typeid(UnidimensionalModel)) {
 
-			int items = itemModel->countItems();
-			parameterSet[a] = new Matrix<double>(1, items);
-			parameterSet[d] = new Matrix<double>(1, items);
-			parameterSet[c] = new Matrix<double>(1, items);
+			items = itemModel->countItems();
+			cout<<" My items : "<<items<<endl;
+
+			parameterSet = new double** [3];
+			parameterSet[0] = new double *[1];
+			parameterSet[1] = new double *[1];
+			parameterSet[2] = new double *[1];
+
+			parameterSet[0][0] = new double [items];
+			parameterSet[1][0] = new double [items];
+			parameterSet[2][0] = new double [items];
+
 
 		}
 
@@ -66,23 +67,26 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel, Quadrature
 
 	if ( dimensionModel != NULL ) {
 		q = quadNodes->size();
+		cout<<"Using "<<q<<" Nodes"<<endl;
 	}
 
 
 
 	if(typeid(*dimensionModel)==typeid(UnidimensionalModel)) {
-		int It = parameterSet[a]->nC();
 		if(probabilityMatrix == NULL){
 				//Creates the matrix if it is not already created
-				probabilityMatrix = new Matrix<double>(q,It);
+				probabilityMatrix = new Matrix<double>(q,items);
 			}
 		for (int k = 0; k < q; k++) {
-			for ( int i = 0; i < It; i++ ){
+			for ( int i = 0; i < items; i++ ){
 				// 3PL Success Probability Function
 				theta_d = (*quadNodes->getTheta())(0,k);
-				a_d = (*parameterSet[a])(0,i);
-				d_d = (*parameterSet[d])(0,i);
-				c_d = (*parameterSet[c])(0,i);
+				a_d = parameterSet[0][0][i];
+				d_d = parameterSet[1][0][i];
+				c_d = parameterSet[2][0][i];
+				//a_d = (*parameterSet[a])(0,i);
+				//d_d = (*parameterSet[d])(0,i);
+				//c_d = (*parameterSet[c])(0,i);
 				double p_d = successProbability ( theta_d, a_d, d_d, c_d );
 				//cout<<a_d<<" "<<d_d<<" "<<c_d<<" "<<theta_d<<" "<<p_d<<" the prox"<<endl;
 				(*probabilityMatrix)(k,i) = p_d;
@@ -93,12 +97,11 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel, Quadrature
 
 }
 
-map<Parameter, Matrix<double> *> ThreePLModel::getParameterSet()  {
+double *** ThreePLModel::getParameterSet()  {
 	return (this->parameterSet);
 }
 
-void ThreePLModel::setParameterSet(
-		map<Parameter, Matrix<double> *> parameterSet) {
+void ThreePLModel::setParameterSet(double ***) {
 	this->parameterSet = parameterSet;
 }
 
@@ -368,19 +371,20 @@ double ThreePLModel::successProbability_cPrime(double theta, double a, double b,
 }
 
 ThreePLModel::~ThreePLModel() {
+	cout<<"Deleting a three pl model"<<endl;
+	if (parameterSet != NULL) {
 
-	if (parameterSet[a] != NULL) {
-		delete parameterSet[a];
+		delete[] parameterSet[2][0];
+		delete[] parameterSet[1][0];
+		delete[] parameterSet[0][0];
+
+		delete[] parameterSet[0];
+		delete[] parameterSet[1];
+		delete[] parameterSet[2];
+
+		delete[] parameterSet;
 	}
-	if (parameterSet[b] != NULL) {
-		delete parameterSet[b];
-	}
-	if (parameterSet[c] != NULL) {
-		delete parameterSet[c];
-	}
-	if (parameterSet[d] != NULL) {
-		delete parameterSet[d];
-	}
+
 
 }
 

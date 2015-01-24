@@ -21,12 +21,15 @@
  * future suport for multiscale and longitudinal models can be implemented.
  * */
 class Model {
+
+	public:
+
 	ParameterModel *parameterModel;
 	ItemModel *itemModel;
 	DimensionModel *dimensionModel;
 	int type;
 
-public:
+
 	// Constructor
 	Model();
 	int Modeltype();

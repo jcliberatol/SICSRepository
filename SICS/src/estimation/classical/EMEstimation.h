@@ -16,8 +16,6 @@
 #include <estimation/classical/EMEstimators/EMEstimator.h>
 #include <estimation/classical/EMEstimators/EM3PL.h>
 #include <estimation/classical/EMEstimators/EM2PL.h>
-#include <estimation/classical/EMEstimators/EM1PL.h>
-#include <estimation/classical/EMEstimators/EM1PLAC.h>
 //#include <optimizer/BFGSOptimizer.h>
 
 /**
@@ -43,6 +41,8 @@ public:
 	 * Estimates
 	 */
 	EMEstimation();
+
+
 	virtual ~EMEstimation();
 	//Executes the estimation
 	void estimate();
@@ -60,13 +60,14 @@ public:
 	void setTrace(string filename);
 	void setTrace(Trace trace);
 	//Sets the initial values
-	void setInitialValues(map<Parameter, Matrix<double>* > parameterSet);
+	void setInitialValues(double*** parameterSet);
 	void setInitialValues(int method);
 	int getIterations() const;
 	QuadratureNodes* getQuadratureNodes() const;
 	void setQuadratureNodes(QuadratureNodes* latentTraitSet);
-
+	void setProfiler(Trace* t);
 private:
+	Trace* profiler;
 	//F and R Matrices, remember to set to zero and open memory in process
 	Matrix<double>* f;
 	Matrix<double>* r;
@@ -87,6 +88,3 @@ private:
 };
 
 #endif /* EM_H_ */
-
-
-//

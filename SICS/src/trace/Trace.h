@@ -11,8 +11,11 @@
 #include <string>
 #include <fstream>
 #include <type/Matrix.h>
+#include <chrono>
+#include <trace/Timer.h>
 
 using namespace std;
+using namespace chrono;
 
 /**
  * Trace class for constructing execution and error logs onto files.
@@ -21,10 +24,35 @@ using namespace std;
  * trace object can take ostreams, so any output class of cpp can output to the trace
  * */
 class Trace {
-	const char * filename;
+
+
+	long long int activations = 0;
+	map <string, Timer> timers;
 
 public:
+	const char * filename;
 
+	void resetTimer(string s){
+		timers[s].reset();
+	}
+
+	void startTimer(string s){
+		timers[s].start();
+	}
+
+	void stopTimer(string s){
+		timers[s].stop();
+		activations++;
+	}
+
+	long int timerDuration(string s){
+		return (timers[s].totalTime);
+	}
+
+	long int dr(string s){
+		return (timerDuration(s));
+	}
+//outputs a matrix
 	template<typename T>
 	void operator() ( Matrix<T> & message ) {
 
@@ -35,7 +63,7 @@ public:
 
 		file.close ();
 	}
-
+//Outputs a message with a new line
 	template<typename T>
 	void operator ()(T message) {
 		ofstream file;
@@ -48,22 +76,39 @@ public:
 		file.close ();
 	}
 
+//Outputs a message with the specified option
+	template<typename T>
+	void operator ()(T message, char option) {
+		ofstream file;
+		file.open ( filename, ofstream::app );
 
+		file << message;
+
+		file.close ();
+	}
+//Defines the filename for the trace
 	Trace( const char * filename ) {
-
 		this->filename = filename;
 
 	}
 	~Trace() {
 		// TODO Auto-generated destructor stub
 	}
-
 	const char* getFilename() const {
-		return filename;
+		return (filename);
 	}
 
 	void setFilename(const char* filename) {
 		this->filename = filename;
+	}
+
+	void endTrace(){
+		ofstream file;
+		file.open ( filename, ofstream::app );
+		//output of the trace goes here.
+		file << endl;
+
+		file.close ();
 	}
 
 };

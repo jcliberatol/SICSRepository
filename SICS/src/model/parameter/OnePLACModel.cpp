@@ -1,11 +1,8 @@
 #include <model/parameter/OnePLACModel.h>
 
 OnePLACModel::OnePLACModel() {
-
-	parameterSet[a] = NULL;
-	parameterSet[b] = NULL;
-	parameterSet[c] = NULL;
-	parameterSet[d] = NULL;
+	int items = 0;
+	parameterSet = NULL;
 	probabilityMatrix = NULL;
 	nodes = 0;
 
@@ -21,10 +18,18 @@ void OnePLACModel::buildParameterSet(ItemModel* itemModel,
 	if (typeid(*itemModel) == typeid(DichotomousModel)) {
 
 		if (typeid(*dimensionModel) == typeid(UnidimensionalModel)) {
+			parameterSet = new double ** [2]; // two parameters
 
-			int items = itemModel->countItems();
-			parameterSet[a] = new Matrix<double>(1, 1);
-			parameterSet[d] = new Matrix<double>(1, items);
+			parameterSet[0] = new double *[1]; // parameter a
+			parameterSet[1] = new double *[1]; // parameter b
+			items = itemModel->countItems();
+
+			parameterSet[0][0] = new double [1];
+			parameterSet[1][0] = new double [items];
+
+
+			//parameterSet[a] = new Matrix<double>(1, 1);
+			//parameterSet[d] = new Matrix<double>(1, items);
 
 		}
 
@@ -54,17 +59,18 @@ void OnePLACModel::successProbability(DimensionModel *dimensionModel,
 	}
 
 	if (typeid(*dimensionModel) == typeid(UnidimensionalModel)) {
-		int It = parameterSet[d]->nC();
 		if (probabilityMatrix == NULL) {
 			//Creates the matrix if it is not already created
-			probabilityMatrix = new Matrix<double>(q, It);
+			probabilityMatrix = new Matrix<double>(q, items);
 		}
-		a_d = (*parameterSet[a])(0, 0);
+		//a_d = (*parameterSet[a])(0, 0);
+		a_d = parameterSet[0][0][0];
 		for (int k = 0; k < q; k++) {
-			for (int i = 0; i < It; i++) {
+			for (int i = 0; i < items; i++) {
 				// 3PL Success Probability Function
 				theta_d = (*quadNodes->getTheta())(0, k);
-				d_d = (*parameterSet[d])(0, i);
+				d_d = parameterSet[1][0][i];
+				//d_d = (*parameterSet[d])(0, i);
 				double p_d = successProbability(theta_d, a_d, d_d);
 				(*probabilityMatrix)(k, i) = p_d;
 
@@ -74,12 +80,12 @@ void OnePLACModel::successProbability(DimensionModel *dimensionModel,
 
 }
 
-map<Parameter, Matrix<double> *> OnePLACModel::getParameterSet() {
+double *** OnePLACModel::getParameterSet() {
 	return (this->parameterSet);
 }
 
 void OnePLACModel::setParameterSet(
-		map<Parameter, Matrix<double> *> parameterSet) {
+		double ***) {
 	this->parameterSet = parameterSet;
 }
 
@@ -194,24 +200,16 @@ double OnePLACModel::logLikelihood(double* args, double* pars, int nargs,
 }
 
 OnePLACModel::~OnePLACModel() {
-
-	if (parameterSet[a] != NULL) {
-		delete parameterSet[a];
+//Carefully destroy according to the model
+	if (parameterSet != NULL){
+	delete[] parameterSet[1][0];
+	delete[] parameterSet[0][0];
+	delete[] parameterSet[0];
+	delete[] parameterSet[1];
+	delete[] parameterSet;
 	}
-	if (parameterSet[b] != NULL) {
-		delete parameterSet[b];
-	}
-	if (parameterSet[c] != NULL) {
-		delete parameterSet[c];
-	}
-	if (parameterSet[d] != NULL) {
-		delete parameterSet[d];
-	}
-
 }
 
 void OnePLACModel::printParameterSet(ostream& out){
-	out<<"Estimated parameters : "<<endl;
-	out<<*parameterSet[a];
-	out<<*parameterSet[d]<<endl;
+
 }

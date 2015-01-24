@@ -1,0 +1,91 @@
+Profiling file : Profile.log
+Total time :100
+Input time :0.0410717
+Initial time :2.0618
+Estimation time :97.8944
+E step time:35.8501
+M step time:61.9799
+Profiling file : Profile.log
+Total time :100
+Input time :0.0369979
+Initial time :2.06263
+Estimation time :97.8977
+E step time:35.9144
+M step time:61.9146
+Profiling file : Profile.log
+Total time :100
+Input time :0.0257075
+Initial time :0.936181
+Estimation time :99.0317
+E step time:18.7151
+M step time:80.2095
+Profiling file : Profile.log
+Total time :100
+Input time :0.0366957
+Initial time :1.98298
+Estimation time :97.9775
+E step time:35.9477
+M step time:61.9677
+Profiling file : Profile.log
+Total time :100
+Input time :0.0225175
+Initial time :0.862418
+Estimation time :99.1128
+E step time:18.7435
+M step time:80.2522
+Profiling file : Profile.log
+Total time :100
+Input time :0.0202375
+Initial time :0.90394
+Estimation time :99.0736
+E step time:18.7466
+M step time:80.219
+Profiling file : Profile.log
+Total time :100
+Input time :0.0221921
+Initial time :0.861055
+Estimation time :99.1145
+E step time:18.739
+M step time:80.2668
+Profiling file : Profile.log
+Total time :100
+Input time :0.0226265
+Initial time :0.825867
+Estimation time :99.1492
+E step time:18.7687
+M step time:80.2652
+Profiling file : Profile.log
+Total time :100
+Input time :0.0203519
+Initial time :0.847994
+Estimation time :99.1271
+E step time:18.7667
+M step time:80.2519
+Profiling file : Profile.log
+Total time :100
+Input time :0.00943648
+Initial time :0.308258
+Estimation time :99.6807
+E step time:10.616
+M step time:88.9483
+Profiling file : Profile.log
+Total time :100
+Input time :0.0100845
+Initial time :0.319344
+Estimation time :99.6689
+E step time:11.2106
+M step time:88.3305
+Profiling file : Profile.log
+Total time :100
+Input time :0.0685088
+Initial time :1.25599
+Estimation time :98.6527
+E step time:17.3784
+M step time:80.8404
+Profiling file : Profile.log
+Total time :100
+Input time :0
+Initial time :0.757576
+Estimation time :98.4848
+E step time:16.6667
+M step time:74.2424

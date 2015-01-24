@@ -39,8 +39,8 @@ public:
 	void setEstimationNodes(QuadratureNodes*);
 	static void gradient (double* , double* , int , int , double* );
 	// Getters and Setters
-	map<Parameter, Matrix<double> *> getParameterSet() ;
-	void setParameterSet(map<Parameter, Matrix<double> *>);
+	double *** getParameterSet() ;
+	void setParameterSet(double***);
 	double getProbability (int, int);
 	void printParameterSet(ostream&);
 	// Destructor

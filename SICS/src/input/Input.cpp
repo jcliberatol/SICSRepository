@@ -37,8 +37,6 @@ bool Input::importCSV( char* filename, Matrix<double>& M, unsigned int rowIdx, u
 			getline ( inFile, currentLine );
 			trace(currentLine);
 		}
-
-
 		while ( !eof ) {
 			getline ( inFile, currentLine );
 
@@ -76,7 +74,6 @@ bool Input::importCSV( char* filename, Matrix<double>& M, unsigned int rowIdx, u
 		}
 
 		inFile.close();
-
 		return (1);
 }
 /*
@@ -138,9 +135,12 @@ bool Input::importCSV( char* filename, PatternMatrix& M, unsigned int rowIdx, un
 			i++;
 		}
 
+		M.size = dlen;
 		//bitset that holds the bits of a row
-		boost::dynamic_bitset<> dset (dlen);
-
+		//boost::dynamic_bitset<> dset (dlen);S
+		//bool * dset = new bool[dlen];
+		vector<char> dset(dlen);
+		//cout<<&dset[0]<<" "<<dset[0]<<" ";
 		i = 0;
 		int chars = 1;
 
@@ -150,15 +150,15 @@ bool Input::importCSV( char* filename, PatternMatrix& M, unsigned int rowIdx, un
 				chars++;
 			}
 			if( processLine[i]=='1') {
-				dset.set(dlen-chars);
+				dset[dlen-chars] = true;
 				chars++;
 			}
 
 			i++;
 		}
 		//Bitset is now filled
-		M.push(dset);
 
+		M.push(dset);
 	}
 
 	inFile.close();

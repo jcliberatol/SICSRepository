@@ -7,12 +7,11 @@
 
 #include <model/parameter/TwoPLModel.h>
 
-TwoPLModel::TwoPLModel() {
 
-	parameterSet[a] = NULL;
-	parameterSet[b] = NULL;
-	parameterSet[c] = NULL;
-	parameterSet[d] = NULL;
+//
+TwoPLModel::TwoPLModel(){
+
+	parameterSet= NULL;
 	probabilityMatrix = NULL;
 
 }
@@ -23,10 +22,16 @@ void TwoPLModel::buildParameterSet(ItemModel* itemModel,
 	if (typeid(*itemModel) == typeid(DichotomousModel)) {
 
 		if (typeid(*dimensionModel) == typeid(UnidimensionalModel)) {
+			parameterSet = new double ** [2]; // two parameters
 
-			int items = itemModel->countItems();
-			parameterSet[a] = new Matrix<double>(1, items);
-			parameterSet[d] = new Matrix<double>(1, items);
+			parameterSet[0] = new double* [1]; // parameter a
+			parameterSet[1] = new double* [1]; // parameter b
+			items = itemModel->countItems();
+			parameterSet[0][0] = new double [items];
+			parameterSet[1][0] = new double [items];
+
+			//para<meterSet[a] = new Matrix<double>(1, items);
+			//parameterSet[d] = new Matrix<double>(1, items);
 
 		}
 
@@ -57,47 +62,38 @@ void TwoPLModel::successProbability(DimensionModel *dimensionModel,
 	}
 
 	if (typeid(*dimensionModel) == typeid(UnidimensionalModel)) {
-		int It = parameterSet[a]->nC();
 		if (probabilityMatrix == NULL) {
 			//Creates the matrix if it is not already created
-			probabilityMatrix = new Matrix<double>(q, It);
+			probabilityMatrix = new Matrix<double>(q, items);
 		}
 		for (int k = 0; k < q; k++) {
-			for (int i = 0; i < It; i++) {
-				// 2PL Success Probability Function
-				theta_d = (*quadNodes->getTheta())(0, k);
-				a_d = (*parameterSet[a])(0, i);
-				d_d = (*parameterSet[d])(0, i);
-				double p_d = successProbability(theta_d, a_d, d_d);
-				(*probabilityMatrix)(k, i) = p_d;
+			for (int i = 0; i < items; i++) {
+				double* theta = &(*quadNodes->getTheta())(0, k);
+				(*probabilityMatrix)(k, i) = successProbability( theta ,/* &(*parameterSet[a])(0, i)*/ &parameterSet[0][0][i],/* &(*parameterSet[d])(0, i)*/ &parameterSet[1][0][i]);
 			}
 		}
 	}
 }
 
-double TwoPLModel::successProbability(double theta, double a, double d) {
+double TwoPLModel::successProbability(double *theta, double *a, double *d) {
 
-	long double exponential = (Constant::D_CONST * ((a * theta) + d));
-
+	long double exponential = (Constant::D_CONST * ((*a * *theta) + *d));
 	if (exponential > Constant::MAX_EXP) {
 		exponential = Constant::MAX_EXP;
 	}
 
-	else if (exponential < -(Constant::MAX_EXP * 1.0)) {
+	else if (exponential < -(Constant::MAX_EXP)) {
 		exponential = -Constant::MAX_EXP;
 	}
-
-	exponential = exp(-exponential);
-
-	return (1 / (1 + exponential));
+	return (1 / (1 + exp(-exponential)));
 }
 
-map<Parameter, Matrix<double> *> TwoPLModel::getParameterSet() {
+double *** TwoPLModel::getParameterSet() {
 	return (this->parameterSet);
 }
 
-void TwoPLModel::setParameterSet(map<Parameter, Matrix<double> *> pair) {
-	this->parameterSet = parameterSet;
+void TwoPLModel::setParameterSet(double *** pair) {
+	this->parameterSet = pair;
 }
 
 double TwoPLModel::getProbability(int node, int item) {
@@ -170,7 +166,7 @@ void TwoPLModel::gradient(double* args, double* pars, int nargs, int npars,
 
 	for (int k = 0; k < q; k++) {
 		for (unsigned int i = 0; i < items; i++) {
-			P[k * items + i] = successProbability(theta[k], a[i], d[i]);
+			P[k * items + i] = successProbability(&theta[k], &a[i], &d[i]);
 			factor[k * items + i] =
 					(r[k * items + i] - f[k] * P[k * items + i]);
 
@@ -338,7 +334,7 @@ double TwoPLModel::logLikelihood(double* args, double* pars, int nargs,
 
 	for (int k = 0; k < q; ++k) {
 		for (unsigned int i = 0; i < It; ++i) {
-			tp = (TwoPLModel::successProbability(theta[k], a[i], b[i]));
+			tp = (TwoPLModel::successProbability(&theta[k], &a[i], &b[i]));
 			if (tp == 0)
 				tp = 1e-08;
 			tq = 1 - tp;
@@ -361,20 +357,17 @@ double TwoPLModel::logLikelihood(double* args, double* pars, int nargs,
 }
 
 TwoPLModel::~TwoPLModel() {
-	if (parameterSet[a] != NULL) {
-		delete parameterSet[a];
-	}
-	if (parameterSet[b] != NULL) {
-		delete parameterSet[b];
-	}
-	if (parameterSet[d] != NULL) {
-		delete parameterSet[d];
+	if (parameterSet != NULL) {
+		delete[] parameterSet[0][0];
+		delete[] parameterSet[1][0];
+
+		delete[] parameterSet[0];
+		delete[] parameterSet[1];
+
+		delete[] parameterSet;
 	}
 }
 
 void TwoPLModel::printParameterSet(ostream& out){
-	out<<"Estimated parameters : "<<endl;
-	out<<*parameterSet[a]<<endl;
-	out<<*parameterSet[d]<<endl;
 }
 
