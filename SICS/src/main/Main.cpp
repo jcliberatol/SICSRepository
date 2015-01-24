@@ -81,12 +81,9 @@ void oneRun(char * args) {
 	profiler->resetTimer("for1");
 	profiler->resetTimer("for2");
 	input.importCSV((char *) "Cuads.csv", cuad, 1, 0);
-	cout<<"Quadrature nodes"<<endl;
-	cout<<cuad<<endl;
 	// **** **** Run model complete and ordered process **** ****
 	// Create general pars
 	Model *model = new Model();
-	cout<<"The model address is :"<<model<<endl;
 	// Create general model
 	ModelFactory *modelFactory = new SICSGeneralModel();
 	PatternMatrix *dataSet = new PatternMatrix(0);
@@ -159,7 +156,7 @@ void runArgs(char * filename,char * initialValues){
 	input.importCSV(filename, *dataSet, 1, 0);
 	// set dataset
 	//RASCH_A1, RASCH_A_CONSTANT, TWO_PL, THREE_PL
-	int model_const =  Constant::TWO_PL;
+	int model_const =  Constant::THREE_PL;
 	model->setModel(modelFactory, model_const);
 	//This is where it is decided what model is the test to make
 	model->getItemModel()->setDataset(dataSet);//Sets the dataset.
@@ -197,8 +194,6 @@ void runArgs(char * filename,char * initialValues){
 		(*b_init)(0,k) = mat_initialValues(k,1);
 		(*c_init)(0,k) = mat_initialValues(k,2);
 	}
-
-
 	double *** matrix_initial;
 
 	switch (model_const) {
@@ -228,11 +223,40 @@ void runArgs(char * filename,char * initialValues){
 		//matrix_initial[a] = a_init;
 		//matrix_initial[d] = b_init;
 		//matrix_initial[c] = c_init;
+		int items = model->getItemModel()->countItems();
+		cout<<" My items : "<<items<<endl;
+
+		matrix_initial = new double** [3];
+		matrix_initial[0] = new double *[1];
+		matrix_initial[1] = new double *[1];
+		matrix_initial[2] = new double *[1];
+
+		matrix_initial[0][0] = new double [items];
+		matrix_initial[1][0] = new double [items];
+		matrix_initial[2][0] = new double [items];
+		for (int var = 0; var < a_init->nC(); ++var) {
+			matrix_initial[0][0][var] = (*a_init)(0,var);
+			cout<<matrix_initial[0][0][var]<<endl;
+		}
+		for (int var = 0; var < b_init->nC(); ++var) {
+			matrix_initial[1][0][var] = (*b_init)(0,var);
+			cout<<matrix_initial[1][0][var]<<endl;
+		}
+		for (int var = 0; var < c_init->nC(); ++var) {
+			matrix_initial[2][0][var] = (*c_init)(0,var);
+			cout<<matrix_initial[2][0][var]<<endl;
+		}
+		cout<<"Passing vals"<<endl;
+		//Aqui esta el error
 		break;
 	}
 
+
+
+	//Delete the matrix initial aFTER THIS REMEMBER TODO
 	em->setInitialValues(matrix_initial);
 	// run estimation
+	cout<<"Passed vals"<<endl;
 
 	profiler->stopTimer("initial");
 	em->setProfiler(profiler);
@@ -255,8 +279,8 @@ int main(int argc, char *argv[]) {
 		cout << "Please specify an input file" << endl;
 		return (0);
 	}
-	oneRun(argv[1]);
-	//runArgs(argv[1],argv[2]);
+	//oneRun(argv[1]);
+	runArgs(argv[1],argv[2]);
 	tm.stop();
 	cout<<"time: "<<endl<<tm.totalTime<<endl;
 	return (0);

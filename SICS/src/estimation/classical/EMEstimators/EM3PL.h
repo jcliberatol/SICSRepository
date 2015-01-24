@@ -40,6 +40,7 @@ public:
 			double qa = pset[0][0][i];
 			double qb = pset[1][0][i];
 			double qc = pset[2][0][i];
+			cout<<"q : "<<qa<<" "<<qb<<" "<<qc<<" "<<endl;
 			//double qa = (*m->getParameterModel()->getParameterSet()[a])(0, i);
 			//double qb = (*m->getParameterModel()->getParameterSet()[d])(0, i);
 			//double qc = (*m->getParameterModel()->getParameterSet()[c])(0, i);
@@ -64,37 +65,33 @@ public:
 		}
 	}
 
-	virtual void setInitialValues(double *** pset,
+	virtual void setInitialValues(double *** npset,
 			Model* m) {
-		m->getParameterModel()->setParameterSet(pset);
-		int items = m->getParameterModel()->items;
-				cout<<" Initial values are set befor this"<<endl;
+		double *** pset = m->getParameterModel()->getParameterSet();
+		items = m->getParameterModel()->items;
+		for (int i = 0; i < items; i++) {
+						pset[0][0][i]=npset[0][0][i];
+						pset[1][0][i]=npset[1][0][i];
+						pset[2][0][i]=npset[2][0][i];
+		}
+
+				cout<<" Initial values are being set here with items "<<items<<endl;
 				for (int i = 0; i < items; i++) {
 				cout<<pset[0][0][i]<<"				";
 				cout<<pset[1][0][i]<<"				";
 				cout<<pset[2][0][i]<<"				"<<endl;
 				}
+				cout<<"Those are the initial values"<<endl;
 	}
 
 	virtual void setInitialValues(int method, Model* m) {
-		cout<<method<<" m"<<endl;
-		cout<<m<<" mondel"<<endl;
-		cout << "here we go";
-		int items = m->getParameterModel()->items;
-		cout<<"Number of items "<<items<<endl;
+		items = m->getParameterModel()->items;
 		double *** pset = m->getParameterModel()->getParameterSet();
 		for (int i = 0; i < items; i++) {
 				pset[0][0][i]=0;
 				pset[1][0][i]=0;
 				pset[2][0][i]=0;
 				}
-		cout<<" Initial values are initialized after here"<<endl;
-		for (int i = 0; i < items; i++) {
-		cout<<pset[0][0][i]<<"				";
-		cout<<pset[1][0][i]<<"				";
-		cout<<pset[2][0][i]<<"				"<<endl;
-		}
-		cout<<" I hope that the program is still working"<<endl;
 		//TODO MOVE ALGORITHMS TO ANOTHER FILE
 		/*TODO
 		 * Possible methods
@@ -108,7 +105,6 @@ public:
 			std::srand(std::time(0)); // use current time as seed for random generator
 			for (int i = 0; i < items; i++) {
 				pset[0][0][i] = randomd() * 2;
-				cout<<" Initial values are randomized here"<<endl;
 				cout<<pset[0][0][i]<<"				";
 				//fill b
 				pset[1][0][i] = randomd() * 4 - 2;
@@ -121,23 +117,20 @@ public:
 		}
 				//ANDRADE O( items * numberOfPattern )
 		if (method == Constant::ANDRADE) {
-			cout << "Here we decide the new values by andrade's method" << endl;
-			int numeroDePatrones = 0;
+			int pSize = 0;
 			int iter, ifault;
 			PatternMatrix* data = dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
 			double Ni = data->countIndividuals(), PII, frequencyV, mT, mU, mTU,
 					mUU, covar, sdU, sdT, corr, result;
 			for (data->resetIterator(); !data->checkEnd(); data->iterate())
-				numeroDePatrones++; // esto se debe poder hacer de una forma mas optima! en patternMatrix tener el tamaño!
-			double *T = new double[numeroDePatrones], *U =
-					new double[numeroDePatrones], *TU =
-					new double[numeroDePatrones], *UU =
-					new double[numeroDePatrones], *Tm =
-					new double[numeroDePatrones], *Um =
-					new double[numeroDePatrones];
-			cout << "Variables have been declared , number of items : "<<items<< endl;
+				pSize++; // esto se debe poder hacer de una forma mas optima! en patternMatrix tener el tamaño!
+			double *T = new double[pSize], *U =
+					new double[pSize], *TU =
+					new double[pSize], *UU =
+					new double[pSize], *Tm =
+					new double[pSize], *Um =
+					new double[pSize];
 			for (int i = 0; i < items; i++) {
-				cout<<"Item "<<i<<" is being initalized"<<endl;
 				iter = 0;
 				PII = 0;
 				mT = mU = mTU = mUU = 0.0;
@@ -191,13 +184,6 @@ public:
 
 			}
 		}
-		cout<<"-----------calculated the initial values"<<endl;
-		for (int i = 0; i < items; i++) {
-				cout<<pset[0][0][i]<<"				";
-				cout<<pset[1][0][i]<<"				";
-				cout<<pset[2][0][i]<<"				"<<endl;
-				}
-
 	}
 
 	EM3PL(Model* m, QuadratureNodes* nodes, Matrix<double>* f,
@@ -260,8 +246,7 @@ public:
 		}
 
 		//TODO CAREFULLY PARALLELIZE FOR
-		int count = 0;
-		for (data->resetIterator(); !data->checkEnd(); data->iterate()) {
+		for (int count = 0; count < size; count++) {
 
 			sum = 0.0;
 			//Calculate g*(k) for all the k's
@@ -293,7 +278,6 @@ public:
 					} // if
 				} // for
 			} // for
-			count++;
 		}
 
 	}
@@ -438,21 +422,19 @@ public:
 			DeltaC += 3;
 			if (fabs(DA(0, v1)) > maxDelta) {
 				maxDelta = fabs(DA(0, v1));
-				cout<<"Max in A , "<<v1<<endl;
 
 			}
 			if (fabs(DB(0, v1)) > maxDelta) {
 				maxDelta = fabs(DB(0, v1));
-				cout<<"Max in B , "<<v1<<endl;
 			}
 			if (fabs(DC(0, v1)) > maxDelta) {
 				maxDelta = fabs(DC(0, v1));
-				cout<<"Max in C , "<<v1<<endl;
 			}
-			cout<<"MAX DELTAAA "<<endl<<maxDelta<<endl;
+
 		}
+		cout<<"MAX DELTA"<<endl<<maxDelta<<endl;
 		//TODO change by constant file
-		if (maxDelta < 0.001) {
+		if (maxDelta < Constant::CONVERGENCE_DELTA) {
 			m->itemParametersEstimated = true;
 		}
 		//And set the parameter sets

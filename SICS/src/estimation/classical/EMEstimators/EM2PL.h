@@ -79,7 +79,7 @@ public:
 		}
 
 		if (method == Constant::ANDRADE) {
-			int numeroDePatrones = 0;
+			int pSize = 0;
 			int iter, ifault;
 			PatternMatrix* data =
 					dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
@@ -87,13 +87,13 @@ public:
 			double PII, frequencyV, mT, mU, mTU, mUU, covar, sdU, sdT, corr,
 					result;
 			for (data->resetIterator(); !data->checkEnd(); data->iterate())
-				numeroDePatrones++; // esto se debe poder hacer de una forma mas optima! en patternMatrix tener el tamaño!
-			double *T = new double[numeroDePatrones], *U =
-					new double[numeroDePatrones], *TU =
-					new double[numeroDePatrones], *UU =
-					new double[numeroDePatrones], *Tm =
-					new double[numeroDePatrones], *Um =
-					new double[numeroDePatrones];
+				pSize++; // esto se debe poder hacer de una forma mas optima! en patternMatrix tener el tamaño!
+			double *T = new double[pSize], *U =
+					new double[pSize], *TU =
+					new double[pSize], *UU =
+					new double[pSize], *Tm =
+					new double[pSize], *Um =
+					new double[pSize];
 			for (int i = 0; i < items; i++) {
 				iter = 0;
 				PII = 0;
@@ -377,7 +377,7 @@ public:
 			}
 		}
 		meanDelta = meanDelta / DeltaC;
-		if (meanDelta < 0.0001 and maxDelta < 0.001) {
+		if (maxDelta < Constant::CONVERGENCE_DELTA) {
 			m->itemParametersEstimated = true;
 		}
 		//And set the parameter sets

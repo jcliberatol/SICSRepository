@@ -115,11 +115,9 @@ void EMEstimation::estimate() {
 		cout << "Iteration " << iterations << endl;
 		profiler->resetTimer("estimation");
 		profiler->startTimer("Et");
-		cout<<"Here comes the step E"<<endl;
 		estimator->stepE();
 		profiler->stopTimer("Et");
 		profiler->startTimer("Mt");
-		cout<<"Here comes the step M"<<endl;
 		estimator->stepM();
 		profiler->stopTimer("Mt");
 		double*** ps = model->parameterModel->getParameterSet();

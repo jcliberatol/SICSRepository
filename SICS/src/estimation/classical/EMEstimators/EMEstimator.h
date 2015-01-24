@@ -14,6 +14,7 @@
 #include <type/QuadratureNodes.h>
 #include <optimizer/Optimizer.h>
 #include <util/util.h>
+#include <type/Constant.h>
 
 class EMEstimator {
 public:
