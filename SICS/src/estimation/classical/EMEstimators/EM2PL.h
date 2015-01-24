@@ -144,6 +144,7 @@ public:
 
 	EM2PL(Model* m, QuadratureNodes* nodes, Matrix<double>* f,
 			Matrix<double>* r) {
+		profiler = NULL;
 		this->nodes = nodes;
 		this->m = m;
 		this->f = f;
@@ -205,6 +206,7 @@ public:
 			for (int p = 0; p < items; ++p) {
 				counter_temp[p]=0;
 			}
+			profiler->startTimer("for1");
 			for (k = 0; k < q; k++) {
 				faux[k] = (*weights)(0, k);
 				//Calculate the p (iterate over the items in the productory)
@@ -222,6 +224,8 @@ public:
 				//Now multiply by the weight
 				sum += faux[k];
 			}
+			profiler->stopTimer("for1");
+			profiler->startTimer("for2");
 			for (k = 0; k < q; k++) {
 				faux[k] = faux[k] / sum; //This is g*_j_k
 				//Multiply the f to the frequency of the pattern
@@ -234,6 +238,7 @@ public:
 					(*r)(k, counter_temp[i] - 1) += faux[k];
 				} // for
 			} // for
+			profiler->stopTimer("for2");
 		}
 
 	}
@@ -255,7 +260,9 @@ public:
 		int It = m->getItemModel()->getDataset()->countItems();
 		int q = nodes->size();
 		double args[2 * It]; //TODO not 2 * it here ?
+		profiler->startTimer("fyr");
 		double pars[2 + 2 * q + q * It];
+		profiler->stopTimer("fyr");
 		int nargs = 2 * It;
 		int npars = 2 + 2 * q + q * It;
 		//filling args
@@ -287,6 +294,7 @@ public:
 		}
 
 		//Filling pars
+		profiler->startTimer("fyr");
 		int nP = 0;
 		// Obtain q
 		pars[nP] = q;
@@ -302,6 +310,7 @@ public:
 			pars[nP] = (*thetas)(0, k);	//TODO correct indexing on this and nearby matrices
 			nP++;
 		}
+
 		// Obtain f
 		for (int k = 0; k < q; k++) {
 			pars[nP] = (*f)(0, k);
@@ -314,6 +323,7 @@ public:
 				nP++;
 			}
 		}
+		profiler->stopTimer("fyr");
 		nargs = nA;
 		npars = nP;
 		/*
@@ -323,7 +333,9 @@ public:
 		 */
 		Optimizer* optim;
 		optim = new Optimizer();
+		profiler->startTimer("optim");
 		optim->searchOptimal(fptr, gptr, hptr, args, pars, nargs, npars);
+		profiler->stopTimer("optim");
 		delete optim;
 		// Now pass the optimals to the Arrays.
 

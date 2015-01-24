@@ -39,6 +39,7 @@ EMEstimation::~EMEstimation() {
 
 void EMEstimation::setProfiler(Trace* t){
 	profiler = t;
+	//model->parameterModel->setProfiler(t);
 }
 
 /**
@@ -126,7 +127,7 @@ void EMEstimation::estimate() {
 		iterations++;
 		if (iterations > Constant::MAX_EM_ITERS) {
 			convergenceSignal = true;
-			cout<<"more than 200 iters, stop"<<endl;
+			cout<<"more than "<<Constant::MAX_EM_ITERS<<"iters, stop"<<endl;
 		}
 	}
 	estimator->untransform();

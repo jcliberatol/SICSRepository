@@ -63,6 +63,10 @@ void profilerOut(Trace* profile, int type){
 		//Mstep time
 		(*profile)("M step time:",'n');
 		(*profile)((float)profile->dr("Mt"));
+		(*profile)("F and R transference time:",'n');
+		(*profile)((float)profile->dr("fyr"));
+		(*profile)("optim time:",'n');
+		(*profile)((float)profile->dr("optim"));
 
 	}
 	else{
@@ -81,6 +85,8 @@ void oneRun(char * args) {
 	profiler->startTimer("input");
 	profiler->resetTimer("for1");
 	profiler->resetTimer("for2");
+	profiler->resetTimer("fyr");
+	profiler->resetTimer("optim");
 	input.importCSV((char *) "Cuads.csv", cuad, 1, 0);
 	// **** **** Run model complete and ordered process **** ****
 	// Create general pars

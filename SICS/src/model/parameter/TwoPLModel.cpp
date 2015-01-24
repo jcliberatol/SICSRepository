@@ -115,35 +115,35 @@ void TwoPLModel::gradient(double* args, double* pars, int nargs, int npars,
 	int nA = 0;
 	int nP = 0;
 	int q, items;
-	double *theta, *r, *f, *a, *d, *c;
+	//double *theta, *r, *f, *a, *d, *c;
+	double *a, *d, *c;
 
 	// Obtain q
 	q = pars[nP++]; // q is obtained and npars is augmented
 	// Obtain I
 	items = pars[nP++];
-
-	theta = new double[q];
-	r = new double[q * items];
-	f = new double[q];
+	//theta = new double[q];
+	//r = new double[q * items];
+	//f = new double[q];
 	a = new double[items];
 	d = new double[items];
 
 	// Obtain theta
-	for (int k = 0; k < q; k++) {
-		theta[k] = pars[nP++];
-	}
-
-	// Obtain f
-	for (int k = 0; k < q; k++) {
-		f[k] = pars[nP++];
-	}
-
-	// Obtain r
-	for (int k = 0; k < q; k++) {
-		for (int i = 0; i < items; i++) {
-			r[k * items + i] = pars[nP++];
-		}
-	}
+//	for (int k = 0; k < q; k++) {
+//		theta[k] = pars[nP++];
+//	}
+//
+//	// Obtain f
+//	for (int k = 0; k < q; k++) {
+//		f[k] = pars[nP++];
+//	}
+//
+//	// Obtain r
+//	for (int k = 0; k < q; k++) {
+//		for (int i = 0; i < items; i++) {
+//			r[k * items + i] = pars[nP++];
+//		}
+//	}
 
 	// Obtain a
 	for (int i = 0; i < items; i++) {
@@ -166,11 +166,14 @@ void TwoPLModel::gradient(double* args, double* pars, int nargs, int npars,
 
 	for (int k = 0; k < q; k++) {
 		for (unsigned int i = 0; i < items; i++) {
-			P[k * items + i] = successProbability(&theta[k], &a[i], &d[i]);
+			//P[k * items + i] = successProbability(&theta[k], &a[i], &d[i]);
+			P[k * items + i] = successProbability(&pars[k+2], &a[i], &d[i]);
 			factor[k * items + i] =
-					(r[k * items + i] - f[k] * P[k * items + i]);
+					//(r[k * items + i] - f[k] * P[k * items + i]);
+					(pars[(k * items + i)+2+(2*q)] - pars[k+2+q] * P[k * items + i]);
 
-			h_0[2 * items * k + 2 * i + 0] = Constant::D_CONST * theta[k];
+			//h_0[2 * items * k + 2 * i + 0] = Constant::D_CONST * theta[k];
+			h_0[2 * items * k + 2 * i + 0] = Constant::D_CONST * pars[k+2];
 			h_0[2 * items * k + 2 * i + 1] = Constant::D_CONST;
 		}
 	}
@@ -190,13 +193,11 @@ void TwoPLModel::gradient(double* args, double* pars, int nargs, int npars,
 	delete[] h_0;
 	delete[] P;
 	delete[] factor;
-
-	delete[] theta;
-	delete[] r;
-	delete[] f;
+//	delete[] theta;
+//	delete[] r;
+//	delete[] f;
 	delete[] a;
 	delete[] d;
-
 	int hc = 0;
 	for (int n = 0; n < 2; ++n) {
 		for (int i = 0; i < items; ++i) {
@@ -268,6 +269,7 @@ void TwoPLModel::Hessian(double* args, double* pars, int nargs, int npars,
 
 double TwoPLModel::logLikelihood(double* args, double* pars, int nargs,
 		int npars) {
+	cout<<".";
 
 //args
 	/*
@@ -288,7 +290,8 @@ double TwoPLModel::logLikelihood(double* args, double* pars, int nargs,
 	int nP = 0;
 
 	int q, It;
-	double *theta, *r, *f, *a, *b;
+	double *a, *b;
+	//double *theta, *r, *f, *a, *b;
 
 // Obtain q
 	q = pars[nP++]; // q is obtained and npars is augmented
@@ -296,28 +299,28 @@ double TwoPLModel::logLikelihood(double* args, double* pars, int nargs,
 // Obtain I
 	It = pars[nP++];
 
-	theta = new double[q];
-	r = new double[q * It];
-	f = new double[q];
+//	theta = new double[q];
+//	r = new double[q * It];
+//	f = new double[q];
 	a = new double[It];
 	b = new double[It];
 
 // Obtain theta
-	for (int k = 0; k < q; k++) {
-		theta[k] = pars[nP++];
-	}
+//	for (int k = 0; k < q; k++) {
+//		theta[k] = pars[nP++];
+//	}
 
 // Obtain f
-	for (int k = 0; k < q; k++) {
-		f[k] = pars[nP++];
-	}
+//	for (int k = 0; k < q; k++) {
+//		f[k] = pars[nP++];
+//	}
 
 // Obtain r
-	for (int k = 0; k < q; k++) {
-		for (int i = 0; i < It; i++) {
-			r[k * It + i] = pars[nP++];
-		}
-	}
+//	for (int k = 0; k < q; k++) {
+//		for (int i = 0; i < It; i++) {
+//			r[k * It + i] = pars[nP++];
+//		}
+//	}
 
 // Obtain a
 	for (int i = 0; i < It; i++) {
@@ -334,21 +337,23 @@ double TwoPLModel::logLikelihood(double* args, double* pars, int nargs,
 
 	for (int k = 0; k < q; ++k) {
 		for (unsigned int i = 0; i < It; ++i) {
-			tp = (TwoPLModel::successProbability(&theta[k], &a[i], &b[i]));
+			//tp = (TwoPLModel::successProbability(&theta[k], &a[i], &b[i]));
+			tp = (TwoPLModel::successProbability(&pars[k+2], &a[i], &b[i]));
 			if (tp == 0)
 				tp = 1e-08;
 			tq = 1 - tp;
 			if (tq == 0)
 				tq = 1e-08;
 
-			sum += (r[k * It + i] * log(tp)) + (f[k] - r[k * It + i]) * log(tq);
+			//sum += (r[k * It + i] * log(tp)) + (f[k] - r[k * It + i]) * log(tq);
+			sum += (pars[(k * It + i)+2+(2*q)] * log(tp)) + (pars[k+2+q] - pars[(k * It + i)+2+(2*q)]) * log(tq);
 		}
 	}
 
 //antiLogit(c, I);
-	delete[] theta;
-	delete[] f;
-	delete[] r;
+//	delete[] theta;
+//	delete[] f;
+//	delete[] r;
 	delete[] a;
 	delete[] b;
 
@@ -369,5 +374,14 @@ TwoPLModel::~TwoPLModel() {
 }
 
 void TwoPLModel::printParameterSet(ostream& out){
+	cout<<"2PL Model Parameters :"<<endl;
+	cout<<"Discrimination parameter"<<endl;
+	for (int i = 0; i < items; ++i) {
+		cout<<parameterSet[0][0][i]<<" ";
+	}cout<<endl;
+	cout<<"Dificulty parameter"<<endl;
+	for (int i = 0; i < items; ++i) {
+			cout<<parameterSet[1][0][i]<<" ";
+	}cout<<endl;
 }
 

@@ -14,6 +14,7 @@
 #include <model/dimension/DimensionModel.h>
 #include <type/DataSet.h>
 #include <type/QuadratureNodes.h>
+#include <trace/Trace.h>
 
 using namespace std;
 
@@ -25,6 +26,7 @@ protected:
 	double *** parameterSet;
 public:
 	int items;
+	Trace* profiler = 0;
 	Matrix<double> * probabilityMatrix;
 	// Methods
 	virtual void buildParameterSet ( ItemModel *, DimensionModel *) = 0;
@@ -36,7 +38,9 @@ public:
 	virtual void setParameterSet(double *** parameterSet) = 0;
 	virtual double getProbability (int, int) = 0;
 	virtual void printParameterSet(ostream&)=0;
-
+	void setProfiler(Trace* t){
+			profiler = t;
+		}
 	// Destructor
 	virtual ~ParameterModel();
 };

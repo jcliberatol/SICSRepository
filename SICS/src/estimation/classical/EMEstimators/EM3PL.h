@@ -214,20 +214,27 @@ public:
 				prob_matrix[k][i] = pm->getProbability(k, i);
 			}
 		}
-
 		//TODO CAREFULLY PARALLELIZE FOR
-		for (int count = 0; count < size; count++) {
-
+		for (int index = 0; index < size; index++) {
 			sum = 0.0;
 			//Calculate g*(k) for all the k's
 			//first calculate the P for each k and store it in the array f aux
+
+			int counter_temp[items];
+			for (int p = 0; p < items; ++p) {
+				counter_temp[p]=0;
+			}
+			profiler->startTimer("for1");
 			for (k = 0; k < q; k++) {
 				faux[k] = (*weights)(0, k);
 				//Calculate the p (iterate over the items in the productory)
+				int counter_set = 0;
 				for (i = 0; i < items; i++) {
-					prob = prob_matrix[k][i];
-					if (!bitset_list[count][items - i - 1]) {
-						prob = 1 - prob;
+					if (bitset_list[index][items - i - 1]) {
+						counter_temp[counter_set++] = i + 1;
+						prob = prob_matrix[k][i];
+					} else {
+						prob = 1 - prob_matrix[k][i];
 					}
 					faux[k] = faux[k] * prob;
 				}
@@ -235,19 +242,21 @@ public:
 				//Now multiply by the weight
 				sum += faux[k];
 			}
-
+			profiler->stopTimer("for1");
+			profiler->startTimer("for2");
 			for (k = 0; k < q; k++) {
 				faux[k] = faux[k] / sum; //This is g*_j_k
 				//Multiply the f to the frequency of the pattern
-				faux[k] = ((long double) frequency_list[count]) * faux[k];
+				faux[k] = ((long double) frequency_list[index]) * faux[k];
 				(*f)(0, k) += faux[k];
 				//Now selectively add the faux to the r
 				for (i = 0; i < items; i++) {
-					if (bitset_list[count][items - i - 1]) {
-						(*r)(k, i) += faux[k];
-					} // if
+					if (counter_temp[i] == 0)
+						break;
+					(*r)(k, counter_temp[i] - 1) += faux[k];
 				} // for
 			} // for
+			profiler->stopTimer("for2");
 		}
 
 	}
@@ -391,12 +400,12 @@ public:
 			}
 
 		}
+		cout<<"Max delta : "<<maxDelta<<endl;
 		//TODO change by constant file
 		if (maxDelta < Constant::CONVERGENCE_DELTA) {
 			m->itemParametersEstimated = true;
 		}
 		//And set the parameter sets
-		//double *** parSet = new double**[3];
 		double *** parSet = m->getParameterModel()->getParameterSet();
 		parSet[0] = A;
 		parSet[1] = B;
