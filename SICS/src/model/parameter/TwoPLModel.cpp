@@ -53,7 +53,6 @@ void TwoPLModel::buildParameterSet(ItemModel* itemModel,
 
 void TwoPLModel::successProbability(DimensionModel *dimensionModel,
 		QuadratureNodes *quadNodes) {
-
 	int q = 0;
 	double a_d, d_d, theta_d; // d stands from "double"
 
@@ -69,7 +68,7 @@ void TwoPLModel::successProbability(DimensionModel *dimensionModel,
 		for (int k = 0; k < q; k++) {
 			for (int i = 0; i < items; i++) {
 				double* theta = &(*quadNodes->getTheta())(0, k);
-				(*probabilityMatrix)(k, i) = successProbability( theta ,/* &(*parameterSet[a])(0, i)*/ &parameterSet[0][0][i],/* &(*parameterSet[d])(0, i)*/ &parameterSet[1][0][i]);
+				(*probabilityMatrix)(k, i) = successProbability( theta , &parameterSet[0][0][i], &parameterSet[1][0][i]);
 			}
 		}
 	}
@@ -193,9 +192,6 @@ void TwoPLModel::gradient(double* args, double* pars, int nargs, int npars,
 	delete[] h_0;
 	delete[] P;
 	delete[] factor;
-//	delete[] theta;
-//	delete[] r;
-//	delete[] f;
 	delete[] a;
 	delete[] d;
 	int hc = 0;
@@ -269,7 +265,6 @@ void TwoPLModel::Hessian(double* args, double* pars, int nargs, int npars,
 
 double TwoPLModel::logLikelihood(double* args, double* pars, int nargs,
 		int npars) {
-	cout<<".";
 
 //args
 	/*

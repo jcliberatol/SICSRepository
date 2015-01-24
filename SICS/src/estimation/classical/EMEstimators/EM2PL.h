@@ -227,9 +227,7 @@ public:
 			profiler->stopTimer("for1");
 			profiler->startTimer("for2");
 			for (k = 0; k < q; k++) {
-				faux[k] = faux[k] / sum; //This is g*_j_k
-				//Multiply the f to the frequency of the pattern
-				faux[k] = ((long double) frequency_list[index]) * faux[k];
+				faux[k] *= frequency_list[index]/ sum; //This is g*_j_k
 				(*f)(0, k) += faux[k];
 				//Now selectively add the faux to the r
 				for (i = 0; i < items; i++) {
