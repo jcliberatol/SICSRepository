@@ -7,7 +7,7 @@
 //============================================================================
 
 #include "Main.h"
-#define ESTIMATION_MODEL Constant::THREE_PL
+#define ESTIMATION_MODEL Constant::TWO_PL
 
 void profilerOut(Trace* profile, int type){
 	//Types of profiling :
@@ -196,7 +196,7 @@ void runArgs(char * filename,char * initialValues){
 		(*c_init)(0,k) = mat_initialValues(k,2);
 	}
 	double *** matrix_initial;
-
+	int items = model->getItemModel()->countItems();
 	switch (model_const) {
 	case Constant::RASCH_A1:
 		//matrix_initial[b] = b_init;
@@ -208,18 +208,18 @@ void runArgs(char * filename,char * initialValues){
 	case Constant::TWO_PL:
 		matrix_initial = new double** [2];
 		matrix_initial[0] = new double* [1];
-		matrix_initial[0][0] = new double [a_init->nC()];
 		matrix_initial[1] = new double* [1];
-		matrix_initial[1][0] = new double [b_init->nC()];
-		for (int var = 0; var < a_init->nC(); ++var) {
+
+		matrix_initial[0][0] = new double [items];
+		matrix_initial[1][0] = new double [items];
+		for (int var = 0; var < items; ++var) {
 					matrix_initial[0][0][var] = (*a_init)(0,var);
 				}
-		for (int var = 0; var < b_init->nC(); ++var) {
+		for (int var = 0; var < items; ++var) {
 			matrix_initial[1][0][var] = (*b_init)(0,var);
 		}
 		break;
 	case Constant::THREE_PL:
-		int items = model->getItemModel()->countItems();
 
 		matrix_initial = new double** [3];
 		matrix_initial[0] = new double *[1];
@@ -229,21 +229,34 @@ void runArgs(char * filename,char * initialValues){
 		matrix_initial[0][0] = new double [items];
 		matrix_initial[1][0] = new double [items];
 		matrix_initial[2][0] = new double [items];
-		for (int var = 0; var < a_init->nC(); ++var) {
+		for (int var = 0; var < items; ++var) {
 			matrix_initial[0][0][var] = (*a_init)(0,var);
 		}
-		for (int var = 0; var < b_init->nC(); ++var) {
+		for (int var = 0; var < items; ++var) {
 			matrix_initial[1][0][var] = (*b_init)(0,var);
 		}
-		for (int var = 0; var < c_init->nC(); ++var) {
+		for (int var = 0; var < items; ++var) {
 			matrix_initial[2][0][var] = (*c_init)(0,var);
 		}
 		break;
 	}
+	//delete a_init;
+	//delete b_init;
+	//delete c_init;
 	//Delete the matrix initial aFTER THIS REMEMBER TODO
 	em->setInitialValues(matrix_initial);
 	// run estimation
-
+	profiler->stopTimer("initial");
+	em->setProfiler(profiler);
+	em->estimate();
+	delete modelFactory;
+	delete dataSet;
+	delete em;
+	delete model;
+	profiler->stopTimer("total");
+	//Out the profiler here
+	profilerOut(profiler,4);
+	delete profiler;
 	switch (model_const) {
 	case Constant::THREE_PL:
 		delete[] matrix_initial[0][0] ;
@@ -256,28 +269,16 @@ void runArgs(char * filename,char * initialValues){
 
 		delete[] matrix_initial ;
 		break;
-	case Constant::TWO_PL:
-
-		delete[] matrix_initial[0][0] ;
-		delete[] matrix_initial[1][0] ;
-		delete[] matrix_initial[1] ;
-		delete[] matrix_initial[0] ;
-		delete[] matrix_initial ;
-
+	case Constant::TWO_PL :
+		//delete[] matrix_initial[0][0] ;
+		//delete[] matrix_initial[1][0] ;
+		//delete[] matrix_initial[0] ;
+		//delete[] matrix_initial[1] ;
+		//delete[] matrix_initial ;
+		break;
 	}
-
-
-	profiler->stopTimer("initial");
-	em->setProfiler(profiler);
-	em->estimate();
-	delete modelFactory;
-	delete dataSet;
-	delete em;
-	delete model;
-	profiler->stopTimer("total");
-	//Out the profiler here
-	profilerOut(profiler,4);
-	delete profiler;
+	//delete weight;
+	//delete theta;
 }
 
 int main(int argc, char *argv[]) {

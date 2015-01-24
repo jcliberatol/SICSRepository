@@ -396,7 +396,8 @@ public:
 			m->itemParametersEstimated = true;
 		}
 		//And set the parameter sets
-		double *** parSet = new double**[3];
+		//double *** parSet = new double**[3];
+		double *** parSet = m->getParameterModel()->getParameterSet();
 		parSet[0] = A;
 		parSet[1] = B;
 		parSet[2] = C;
@@ -404,7 +405,6 @@ public:
 		m->getParameterModel()->setParameterSet(parSet);
 
 	}
-	;
 };
 
 #endif /* EM3PL_H_ */

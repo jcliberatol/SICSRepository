@@ -254,9 +254,9 @@ public:
 		//fptr
 		int It = m->getItemModel()->getDataset()->countItems();
 		int q = nodes->size();
-		double args[3 * It]; //TODO not 2 * it here ?
+		double args[2 * It]; //TODO not 2 * it here ?
 		double pars[2 + 2 * q + q * It];
-		int nargs = 3 * It;
+		int nargs = 2 * It;
 		int npars = 2 + 2 * q + q * It;
 		//filling args
 		int nA = 0;
@@ -354,13 +354,10 @@ public:
 		//Perform substracts
 		double maxDelta = 0;
 		double meanDelta = 0;
-		int DeltaC = 0;
 		for (int v1 = 0; v1 < It; ++v1) {
 			DA(0, v1) = DA(0, v1) - A[0][v1];
 			DB(0, v1) = DB(0, v1) - B[0][v1];
-			meanDelta = +fabs(DA(0, v1));
-			meanDelta = +fabs(DB(0, v1));
-			DeltaC += 3;
+
 			if (fabs(DA(0, v1)) > maxDelta) {
 				maxDelta = fabs(DA(0, v1));
 			}
@@ -368,7 +365,7 @@ public:
 				maxDelta = fabs(DB(0, v1));
 			}
 		}
-		meanDelta = meanDelta / DeltaC;
+
 		if (maxDelta < Constant::CONVERGENCE_DELTA) {
 			m->itemParametersEstimated = true;
 		}
