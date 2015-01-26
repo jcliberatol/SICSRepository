@@ -43,6 +43,7 @@ public:
 	double *** getParameterSet() ;
 	void setParameterSet(double ***);
 	double getProbability (int, int);
+	string getStringParameters();
 
 	// Destructor
 	virtual ~RaschModel();

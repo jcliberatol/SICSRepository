@@ -6,6 +6,7 @@
  */
 
 #include <model/parameter/ThreePLModel.h>
+#include <string>
 
 ThreePLModel::ThreePLModel() {
 	parameterSet = NULL;
@@ -15,6 +16,24 @@ ThreePLModel::ThreePLModel() {
 
 void ThreePLModel::printParameterSet(ostream& out){
 
+}
+
+string ThreePLModel::getStringParameters(){
+	//If the parameter set is null
+	if(parameterSet == NULL){
+		return ("Error In Parameter set return please move the getStringParameters Method to another point of execution");
+	}
+	//If the parameter set exists
+	string pars = "";
+	for (int i = 0; i < items; ++i) {
+		pars = pars + "Item : " + std::to_string(i);
+		pars = pars + " " + std::to_string(parameterSet[0][0][i]) + "," +
+				std::to_string(parameterSet[1][0][i]) + ","+ std::to_string(parameterSet[2][0][i]) + " ";
+	}
+	parameterSet[0][0] = new double [items];
+	parameterSet[1][0] = new double [items];
+	parameterSet[2][0] = new double [items];
+	return ("stringPars");
 }
 
 void ThreePLModel::setEstimationNodes(QuadratureNodes* n) {

@@ -64,6 +64,10 @@ void Model::printParameterSet(ostream& k){
 	parameterModel->printParameterSet(k);
 }
 
+string Model::getStringParameters(){
+	return (parameterModel->getStringParameters());
+}
+
 int Model::Modeltype(){
 	return (type);
 }

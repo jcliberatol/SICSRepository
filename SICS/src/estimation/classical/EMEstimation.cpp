@@ -125,6 +125,7 @@ void EMEstimation::estimate() {
 		int items = model->parameterModel->items;
 		convergenceSignal = model->itemParametersEstimated;
 		iterations++;
+		profiler->upCount("iterations");
 		if (iterations > Constant::MAX_EM_ITERS) {
 			convergenceSignal = true;
 			cout<<"more than "<<Constant::MAX_EM_ITERS<<"iters, stop"<<endl;

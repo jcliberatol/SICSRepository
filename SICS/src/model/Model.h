@@ -13,6 +13,7 @@
 #include <model/dimension/DimensionModel.h>
 #include <model/ModelFactory.h>
 #include <type/QuadratureNodes.h>
+#include <string>
 /**
  * Model class that holds the structures for the IRT models
  * can vary across parameters, items and dimensions
@@ -51,6 +52,8 @@ class Model {
 	bool itemParametersEstimated;
 
 	void printParameterSet(ostream&);
+
+	string getStringParameters();
 	// Destructor
 	virtual ~Model();
 };

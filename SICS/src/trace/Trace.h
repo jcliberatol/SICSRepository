@@ -13,6 +13,7 @@
 #include <type/Matrix.h>
 #include <chrono>
 #include <trace/Timer.h>
+#include <string>
 
 using namespace std;
 using namespace chrono;
@@ -25,12 +26,32 @@ using namespace chrono;
  * */
 class Trace {
 
-
-	long long int activations = 0;
 	map <string, Timer> timers;
+	map <string, string> messages;
+	map <string, int> counters;
 
 public:
 	const char * filename;
+
+	void startCounter(string id){
+		counters[id] = 0;
+	}
+
+	void upCount(string id){
+		counters[id] = counters[id]+1;
+	}
+
+	int readCounter(string id){
+		return (counters[id]);
+	}
+
+	void storeMessage(string id, string message){
+		messages[id]=message;
+	}
+
+	string readMessage(string id){
+		return (messages[id]);
+	}
 
 	void resetTimer(string s){
 		timers[s].reset();
@@ -42,7 +63,6 @@ public:
 
 	void stopTimer(string s){
 		timers[s].stop();
-		activations++;
 	}
 
 	long int timerDuration(string s){

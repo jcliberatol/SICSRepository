@@ -16,6 +16,10 @@ OnePLModel::OnePLModel() {
 
 }
 
+string OnePLModel::getStringParameters(){
+	return ("stringPars");
+}
+
 void OnePLModel::buildParameterSet(ItemModel* itemModel,
 		DimensionModel* dimensionModel) {
 

@@ -15,6 +15,7 @@
 #include <type/DataSet.h>
 #include <type/QuadratureNodes.h>
 #include <trace/Trace.h>
+#include <string>
 
 using namespace std;
 
@@ -41,6 +42,7 @@ public:
 	void setProfiler(Trace* t){
 			profiler = t;
 		}
+	virtual string getStringParameters() = 0;
 	// Destructor
 	virtual ~ParameterModel();
 };

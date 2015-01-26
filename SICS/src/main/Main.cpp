@@ -69,6 +69,18 @@ void profilerOut(Trace* profile, int type){
 		(*profile)((float)profile->dr("optim"));
 
 	}
+	else if (type == 5){
+		//Starts pacho profile
+		(*profile)("File:",'n');
+		//Filename
+		(*profile)(profile->readMessage("filename"));
+		//Item parameters
+		(*profile)("Item parameters");
+		//Pattern Parameters
+
+		//Convergence time
+		//Iterations
+	}
 	else{
 		(*profile)("No profiling selected please select a profiling mode");
 	}
@@ -145,6 +157,8 @@ void runArgs(char * filename,char * initialValues){
 	Input input;
 	Matrix<double> cuad(41, 2);
 	Trace* profiler = new Trace("Profile.log");
+	profiler->storeMessage("filename",filename);
+	profiler->startCounter("iterations");
 	profiler->resetTimer("total");
 	profiler->startTimer("total");
 	profiler->resetTimer("input");
@@ -295,8 +309,8 @@ int main(int argc, char *argv[]) {
 		cout << "Please specify an input file" << endl;
 		return (0);
 	}
-	//oneRun(argv[1]);
-	runArgs(argv[1],argv[2]);
+	oneRun(argv[1]);
+	//runArgs(argv[1],argv[2]);
 	tm.stop();
 	cout<<"time: "<<endl<<tm.totalTime<<endl;
 	return (0);

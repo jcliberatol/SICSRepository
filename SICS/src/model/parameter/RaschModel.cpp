@@ -15,6 +15,10 @@ RaschModel::RaschModel() {
 
 }
 
+string RaschModel::getStringParameters(){
+	return ("stringPars");
+}
+
 void RaschModel::buildParameterSet(ItemModel* itemModel,
 		DimensionModel* dimensionModel) {
 

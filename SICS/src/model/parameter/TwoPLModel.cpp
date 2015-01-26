@@ -16,6 +16,10 @@ TwoPLModel::TwoPLModel(){
 
 }
 
+string TwoPLModel::getStringParameters(){
+	return ("stringPars");
+}
+
 void TwoPLModel::buildParameterSet(ItemModel* itemModel,
 		DimensionModel* dimensionModel) {
 

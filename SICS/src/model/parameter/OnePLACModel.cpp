@@ -8,6 +8,10 @@ OnePLACModel::OnePLACModel() {
 
 }
 
+string OnePLACModel::getStringParameters(){
+	return ("stringPars");
+}
+
 void OnePLACModel::setEstimationNodes(QuadratureNodes* n) {
 	this->nodes = n;
 }

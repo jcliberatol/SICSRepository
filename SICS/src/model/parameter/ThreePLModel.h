@@ -44,6 +44,7 @@ public:
 	double*** getParameterSet() ;
 	void setParameterSet(double ***);
 	void printParameterSet(ostream&);
+	string getStringParameters();
 	double getProbability(int, int);
 
 	// Destructor
