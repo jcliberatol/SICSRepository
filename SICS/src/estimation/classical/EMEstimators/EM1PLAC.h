@@ -34,14 +34,10 @@ public:
 
 	virtual void untransform() {
 		double *** pset = m->getParameterModel()->getParameterSet();
+		double qa = pset[0][0][0];
 		for (int i = 0; i < m->getItemModel()->countItems(); ++i) {
-			pset[1][0][i] /= -pset[0][0][i];
+			pset[1][0][i] = -pset[1][0][i]/qa;
 		}
-
-		for (int i = 0; i < items; i++) {
-						cout<<pset[0][0][i]<<"				";
-						cout<<pset[1][0][i]<<"				"<<endl;
-			}
 	}
 
 	virtual void setInitialValues(double *** pset, Model* m) {
@@ -63,78 +59,76 @@ public:
 		if (!method == Constant::RANDOM) {
 			std::srand(std::time(0));
 			// use current time as seed for random generator
+			pset[0][0][0] = randomd() * 2;
 			for (int i = 0; i < items; i++) {
-				pset[0][0][i] = randomd() * 2;
+
 				//fill b
 				pset[1][0][i] = randomd() * 4 - 2;
 			}
 		}
 
 		if (method == Constant::ANDRADE) {
-			int pSize = 0;
-			int iter, ifault;
-			PatternMatrix* data =
-					dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
-			double Ni = data->countIndividuals();
-			double PII, frequencyV, mT, mU, mTU, mUU, covar, sdU, sdT, corr,
-					result;
-			for (data->resetIterator(); !data->checkEnd(); data->iterate())
-				pSize++; // esto se debe poder hacer de una forma mas optima! en patternMatrix tener el tamaño!
-			double *T = new double[pSize], *U =
-					new double[pSize], *TU =
-					new double[pSize], *UU =
-					new double[pSize], *Tm =
-					new double[pSize], *Um =
-					new double[pSize];
-			for (int i = 0; i < items; i++) {
-				iter = 0;
-				PII = 0;
-				mT = mU = mTU = mUU = 0.0;
-				for (data->resetIterator(); !data->checkEnd();
-						data->iterate()) {
-					frequencyV = data->getCurrentFrequency();
+					int numeroDePatrones = 0, iter, ifault;
+					PatternMatrix* data =
+							dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
+					double Ni = data->countIndividuals(), PII, frequencyV, mT, mU, mTU,
+							mUU, covar, sdU, sdT, corr, result;
+					for (data->resetIterator(); !data->checkEnd(); data->iterate())
+						numeroDePatrones++; // esto se debe poder hacer de una forma mas optima! en patternMatrix tener el tamaño!
+					double *T = new double[numeroDePatrones], *U =
+							new double[numeroDePatrones], *TU =
+							new double[numeroDePatrones], *UU =
+							new double[numeroDePatrones], *Tm =
+							new double[numeroDePatrones], *Um =
+							new double[numeroDePatrones];
+					for (int i = 0; i < items; i++) {
 
-					T[iter] = 0;
-					for (int i_ = 0; i_ < data->size; i_++) {
-						if (data->getCurrentBitSet()[i_])
-							T[iter]++;
+						iter = 0;
+						PII = 0;
+						mT = mU = mTU = mUU = 0.0;
+						for (data->resetIterator(); !data->checkEnd();
+								data->iterate()) {
+							frequencyV = data->getCurrentFrequency();
+							T[iter] = 0; // do this in a function
+							for (int i_ = 0; i_ < data->size; i_++) {
+								if (data->getCurrentBitSet()[i_])
+									T[iter]++;
+							}
+							PII += frequencyV * data->getCurrentBitSet()[items - i - 1];
+							U[iter] = data->getCurrentBitSet()[items - i - 1];
+							TU[iter] = T[iter] * U[iter];
+							UU[iter] = U[iter] * U[iter];
+							mT += frequencyV * T[iter];
+							mU += frequencyV * U[iter];
+							mTU += frequencyV * TU[iter];
+							mUU += frequencyV * UU[iter];
+							iter++;
+						}
+						PII /= Ni;
+						mT /= Ni;
+						mU /= Ni;
+						mTU /= Ni;
+						mUU /= Ni;
+						covar = mTU - mU * mT;
+						iter = 0;
+						sdT = 0.0;
+						sdU = 0.0;
+						for (data->resetIterator(); !data->checkEnd();
+								data->iterate()) {
+							frequencyV = data->getCurrentFrequency();
+							Tm[iter] = T[iter] - mT;
+							Um[iter] = U[iter] - mU;
+							sdT += frequencyV * Tm[iter] * Tm[iter];
+							sdU += frequencyV * Um[iter] * Um[iter];
+							iter++;
+						}
+						sdT = std::sqrt(sdT / (Ni - 1.0));
+						sdU = std::sqrt(sdU / (Ni - 1.0));
+						corr = covar / (sdT * sdU);
+						if (!i) pset[0][0][0] = std::sqrt((corr * corr) / (1.0 - corr * corr));
+						pset[1][0][i] = -(ppnd(PII, &ifault)) / corr;
 					}
-					//T[iter] = data->getCurrentBitSet().count();
-					PII += frequencyV * data->getCurrentBitSet()[items - i - 1];
-					U[iter] = data->getCurrentBitSet()[items - i - 1];
-					TU[iter] = T[iter] * U[iter];
-					UU[iter] = U[iter] * U[iter];
-					mT += frequencyV * T[iter];
-					mU += frequencyV * U[iter];
-					mTU += frequencyV * TU[iter];
-					mUU += frequencyV * UU[iter];
-					iter++;
 				}
-				PII /= Ni;
-				mT /= Ni;
-				mU /= Ni;
-				mTU /= Ni;
-				mUU /= Ni;
-				covar = mTU - mU * mT;
-				iter = 0;
-				sdT = 0.0;
-				sdU = 0.0;
-				for (data->resetIterator(); !data->checkEnd();
-						data->iterate()) {
-					frequencyV = data->getCurrentFrequency();
-					Tm[iter] = T[iter] - mT;
-					Um[iter] = U[iter] - mU;
-					sdT += frequencyV * Tm[iter] * Tm[iter];
-					sdU += frequencyV * Um[iter] * Um[iter];
-					iter++;
-				}
-				sdT = std::sqrt(sdT / (Ni - 1.0));
-				sdU = std::sqrt(sdU / (Ni - 1.0));
-				corr = covar / (sdT * sdU);
-				pset[0][0][i] = std::sqrt((corr * corr) / (1.0 - corr * corr));
-				pset[1][0][i] = -(ppnd(PII, &ifault)) / corr;
-			}
-		}
 	}
 
 	EM1PLAC(Model* m, QuadratureNodes* nodes, Matrix<double>* f,
@@ -151,8 +145,8 @@ public:
 		faux = new long double[q];
 		weights = this->nodes->getWeight();
 		items = data->countItems();
-		fptr = &TwoPLModel::logLikelihood;
-		gptr = &TwoPLModel::gradient;
+		fptr = &OnePLACModel::logLikelihood;
+		gptr = &OnePLACModel::gradient;
 		hptr = NULL;
 
 		map<vector<char>, int>::const_iterator it;
@@ -201,7 +195,7 @@ public:
 			for (int p = 0; p < items; ++p) {
 				counter_temp[p]=0;
 			}
-			profiler->startTimer("for1");
+			//profiler->startTimer("for1");
 			for (k = 0; k < q; k++) {
 				faux[k] = (*weights)(0, k);
 				//Calculate the p (iterate over the items in the productory)
@@ -219,8 +213,8 @@ public:
 				//Now multiply by the weight
 				sum += faux[k];
 			}
-			profiler->stopTimer("for1");
-			profiler->startTimer("for2");
+			//profiler->stopTimer("for1");
+			//profiler->startTimer("for2");
 			for (k = 0; k < q; k++) {
 				faux[k] *= frequency_list[index]/ sum; //This is g*_j_k
 				(*f)(0, k) += faux[k];
@@ -231,159 +225,255 @@ public:
 					(*r)(k, counter_temp[i] - 1) += faux[k];
 				} // for
 			} // for
-			profiler->stopTimer("for2");
+			//profiler->stopTimer("for2");
 		}
 
 	}
-
 	virtual void stepM() {
-		/*
-		 */
-		//Step M implementation using the BFGS Algorithm
-		/*
-		 * What we need
-		 * fptr the pointer to loglik
-		 * gprt the pointer to gradient
-		 * hessptr the pointer to hessian matrix calculatrix
-		 * args the a,b, and c
-		 * pars, the other parameters q and stuff
-		 * nargs, npars, sizes.
-		 */
-		//fptr
-		int It = m->getItemModel()->getDataset()->countItems();
-		int q = nodes->size();
-		double args[2 * It]; //TODO not 2 * it here ?
-		profiler->startTimer("fyr");
-		double pars[2 + 2 * q + q * It];
-		profiler->stopTimer("fyr");
-		int nargs = 2 * It;
-		int npars = 2 + 2 * q + q * It;
-		//filling args
-		int nA = 0;
-		// Obtain a
-		//A Matrix
-		double *** pset = m->getParameterModel()->getParameterSet();
-		double** A = pset[0];
-		double** B = pset[1];
-		//Matrix<double>* A = m->getParameterModel()->getParameterSet()[a];
-		//B Matrix
-		//Matrix<double>* B = m->getParameterModel()->getParameterSet()[d];
-		//C Matrix
-		//Matrix<double>* C = model->getParameterModel()->getParameterSet()[c];
+			int It = m->getItemModel()->getDataset()->countItems();
+			int q = nodes->size();
+			int nargs = It + 1;
+			int npars = 2 + 2 * q + q * It;
+			double args[nargs];
+			double pars[npars];
 
-		Matrix<double> DA(A, 1, items);
-		Matrix<double> DB(B, 1, items);
-		//Matrix<double> DC(*C);
+			//filling args
+			int nA = 0;
+			// Obtain a
+			//A Matrix
+			double *** pset = m->getParameterModel()->getParameterSet();
+			double** A = pset[0];
+			double** D = pset[1];
+			Matrix<double> DA(A, 1, items);
+			Matrix<double> DD(D, 1, items);
 
-		for (int i = 0; i < It; i++) {
-			args[nA] = A[0][i];		//(*A)(0, i);
-			nA++;
-		}
+			args[nA++] = A[0][0];
 
-		// Obtain b
-		for (int i = 0; i < It; i++) {
-			args[nA] = B[0][i];		//(*B)(0, i);
-			nA++;
-		}
-
-		//Filling pars
-		profiler->startTimer("fyr");
-		int nP = 0;
-		// Obtain q
-		pars[nP] = q;
-		nP++;
-		// Obtain I
-		pars[nP] = It;
-		nP++;
-		// Obtain theta
-		//Thetas
-
-		Matrix<double>* thetas = nodes->getTheta();
-		for (int k = 0; k < q; k++) {
-			pars[nP] = (*thetas)(0, k);	//TODO correct indexing on this and nearby matrices
-			nP++;
-		}
-
-		// Obtain f
-		for (int k = 0; k < q; k++) {
-			pars[nP] = (*f)(0, k);
-			nP++;
-		}
-		// Obtain r
-		for (int k = 0; k < q; k++) {
+			// Obtain d
 			for (int i = 0; i < It; i++) {
-				pars[nP] = (*r)(k, i);
-				nP++;
-			}
-		}
-		profiler->stopTimer("fyr");
-		nargs = nA;
-		npars = nP;
-		/*
-		 * Chooses the method
-		 * method 1 is NR
-		 * method 2 is BFGS
-		 */
-		Optimizer* optim;
-		optim = new Optimizer();
-		profiler->startTimer("optim");
-		optim->searchOptimal(fptr, gptr, hptr, args, pars, nargs, npars);
-		profiler->stopTimer("optim");
-		delete optim;
-		// Now pass the optimals to the Arrays.
-
-		nA = 0;
-		// Obtain a
-		for (int i = 0; i < It; i++) {
-			A[0][i] = args[nA++];
-			if (fabs(A[0][i]) > abs(10)) {
-				A[0][i] = 0.851;
-				//			cout << "A reset." << endl;
+				args[nA] = D[0][i];
+				nA++;
 			}
 
-		}
-		// Obtain b
-		for (int i = 0; i < It; i++) {
-			B[0][i] = args[nA++];
-			if (fabs(B[0][i]) > abs(-50)) {
-				B[0][i] = 0.5;
-				//			cout << "B reset." << endl;
+			//Filling pars
+			int nP = 0;
+			// Obtain q
+			pars[nP++] = q;
+			// Obtain I
+			pars[nP++] = It;
+			// Obtain theta
+			//Thetas
+
+			Matrix<double>* thetas = nodes->getTheta();
+			for (int k = 0; k < q; k++) {
+				pars[nP++] = (*thetas)(0, k);//TODO correct indexing on this and nearby matrices
 			}
-		}
-
-		//Boundary regularize the arguments
-		//B = 0.5;
-		//A = 0.851
-
-		//Obtain the deltas
-		//Perform substracts
-		double maxDelta = 0;
-		double meanDelta = 0;
-		for (int v1 = 0; v1 < It; ++v1) {
-			DA(0, v1) = DA(0, v1) - A[0][v1];
-			DB(0, v1) = DB(0, v1) - B[0][v1];
-
-			if (fabs(DA(0, v1)) > maxDelta) {
-				maxDelta = fabs(DA(0, v1));
+			// Obtain f
+			for (int k = 0; k < q; k++) {
+				pars[nP++] = (*f)(0, k);
 			}
-			if (fabs(DB(0, v1)) > maxDelta) {
-				maxDelta = fabs(DB(0, v1));
+			// Obtain r
+			for (int k = 0; k < q; k++) {
+				for (int i = 0; i < It; i++) {
+					pars[nP++] = (*r)(k, i);
+				}
 			}
-		}
+			nargs = nA;
+			npars = nP;
 
-		if (maxDelta < Constant::CONVERGENCE_DELTA) {
-			m->itemParametersEstimated = true;
-		}
-		//And set the parameter sets
-		double*** parSet;
-		//Must set the parset equal to the original memory in the parameter set
-		parSet = m->getParameterModel()->getParameterSet();
-		parSet[0] = A;
-		parSet[1] = B;
-		// llenar las tres matrices
-		m->getParameterModel()->setParameterSet(parSet);
+			//BFGS
+			Optimizer* optim;
+			optim = new Optimizer();
+			optim->searchOptimal(fptr, gptr, hptr, args, pars, nargs, npars);
+			nA = 0;
 
-	}
+			// Obtain a
+			A[0][0] = args[nA++];
+			if (fabs(A[0][0]) > abs(10)) {
+				//cout << "A reset." <<endl;
+				A[0][0] = 0.851;
+			}
+
+			// Obtain d
+			for (int i = 0; i < It; i++) {
+				D[0][i] = args[nA++];
+				if (fabs(D[0][i]) > abs(-50)) {
+					D[0][i] = 0.5;
+					//cout << "D reset." << endl;
+				}
+			}
+
+			//Perform substracts
+			DA(0, 0) = DA(0, 0) - A[0][0];
+			double maxDelta = DA(0, 0);
+			for (int v1 = 0; v1 < It; ++v1) {
+
+				DD(0, v1) = (DD(0, v1) - D[0][v1]);
+				if (fabs(DD(0, v1)) > maxDelta) {
+					maxDelta = fabs(DD(0, v1));
+				}
+			}
+			if (maxDelta < 0.001) {
+				m->itemParametersEstimated = true;
+			}
+			//And set the parameter sets
+			double*** parSet;
+			parSet = m->getParameterModel()->getParameterSet();
+			parSet[0] = A;
+			parSet[1] = D;
+
+			// llenar las tres matrices
+			m->getParameterModel()->setParameterSet(parSet);
+
+		}
+//	virtual void stepM() {
+//		/*
+//		 */
+//		//Step M implementation using the BFGS Algorithm
+//		/*
+//		 * What we need
+//		 * fptr the pointer to loglik
+//		 * gprt the pointer to gradient
+//		 * hessptr the pointer to hessian matrix calculatrix
+//		 * args the a,b, and c
+//		 * pars, the other parameters q and stuff
+//		 * nargs, npars, sizes.
+//		 */
+//		//fptr
+//		int It = m->getItemModel()->getDataset()->countItems();
+//		int q = nodes->size();
+//		double args[2 * It]; //TODO not 2 * it here ?
+//		profiler->startTimer("fyr");
+//		double pars[2 + 2 * q + q * It];
+//		profiler->stopTimer("fyr");
+//		int nargs = 2 * It;
+//		int npars = 2 + 2 * q + q * It;
+//		//filling args
+//		int nA = 0;
+//		// Obtain a
+//		//A Matrix
+//		double *** pset = m->getParameterModel()->getParameterSet();
+//		double** A = pset[0];
+//		double** B = pset[1];
+//		//Matrix<double>* A = m->getParameterModel()->getParameterSet()[a];
+//		//B Matrix
+//		//Matrix<double>* B = m->getParameterModel()->getParameterSet()[d];
+//		//C Matrix
+//		//Matrix<double>* C = model->getParameterModel()->getParameterSet()[c];
+//
+//		Matrix<double> DA(A, 1, items);
+//		Matrix<double> DB(B, 1, items);
+//		//Matrix<double> DC(*C);
+//
+//		for (int i = 0; i < It; i++) {
+//			args[nA] = A[0][i];		//(*A)(0, i);
+//			nA++;
+//		}
+//
+//		// Obtain b
+//		for (int i = 0; i < It; i++) {
+//			args[nA] = B[0][i];		//(*B)(0, i);
+//			nA++;
+//		}
+//
+//		//Filling pars
+//		profiler->startTimer("fyr");
+//		int nP = 0;
+//		// Obtain q
+//		pars[nP] = q;
+//		nP++;
+//		// Obtain I
+//		pars[nP] = It;
+//		nP++;
+//		// Obtain theta
+//		//Thetas
+//
+//		Matrix<double>* thetas = nodes->getTheta();
+//		for (int k = 0; k < q; k++) {
+//			pars[nP] = (*thetas)(0, k);	//TODO correct indexing on this and nearby matrices
+//			nP++;
+//		}
+//
+//		// Obtain f
+//		for (int k = 0; k < q; k++) {
+//			pars[nP] = (*f)(0, k);
+//			nP++;
+//		}
+//		// Obtain r
+//		for (int k = 0; k < q; k++) {
+//			for (int i = 0; i < It; i++) {
+//				pars[nP] = (*r)(k, i);
+//				nP++;
+//			}
+//		}
+//		profiler->stopTimer("fyr");
+//		nargs = nA;
+//		npars = nP;
+//		/*
+//		 * Chooses the method
+//		 * method 1 is NR
+//		 * method 2 is BFGS
+//		 */
+//		Optimizer* optim;
+//		optim = new Optimizer();
+//		profiler->startTimer("optim");
+//		optim->searchOptimal(fptr, gptr, hptr, args, pars, nargs, npars);
+//		profiler->stopTimer("optim");
+//		delete optim;
+//		// Now pass the optimals to the Arrays.
+//
+//		nA = 0;
+//		// Obtain a
+//		for (int i = 0; i < It; i++) {
+//			A[0][i] = args[nA++];
+//			if (fabs(A[0][i]) > abs(10)) {
+//				A[0][i] = 0.851;
+//				//			cout << "A reset." << endl;
+//			}
+//
+//		}
+//		// Obtain b
+//		for (int i = 0; i < It; i++) {
+//			B[0][i] = args[nA++];
+//			if (fabs(B[0][i]) > abs(-50)) {
+//				B[0][i] = 0.5;
+//				//			cout << "B reset." << endl;
+//			}
+//		}
+//
+//		//Boundary regularize the arguments
+//		//B = 0.5;
+//		//A = 0.851
+//
+//		//Obtain the deltas
+//		//Perform substracts
+//		double maxDelta = 0;
+//		double meanDelta = 0;
+//		for (int v1 = 0; v1 < It; ++v1) {
+//			DA(0, v1) = DA(0, v1) - A[0][v1];
+//			DB(0, v1) = DB(0, v1) - B[0][v1];
+//
+//			if (fabs(DA(0, v1)) > maxDelta) {
+//				maxDelta = fabs(DA(0, v1));
+//			}
+//			if (fabs(DB(0, v1)) > maxDelta) {
+//				maxDelta = fabs(DB(0, v1));
+//			}
+//		}
+//
+//		if (maxDelta < Constant::CONVERGENCE_DELTA) {
+//			m->itemParametersEstimated = true;
+//		}
+//		//And set the parameter sets
+//		double*** parSet;
+//		//Must set the parset equal to the original memory in the parameter set
+//		parSet = m->getParameterModel()->getParameterSet();
+//		parSet[0] = A;
+//		parSet[1] = B;
+//		// llenar las tres matrices
+//		m->getParameterModel()->setParameterSet(parSet);
+//
+//	}
 	;
 
 };
