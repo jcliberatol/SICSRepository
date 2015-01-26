@@ -37,7 +37,7 @@ EMEstimation::~EMEstimation() {
 	}
 }
 
-void EMEstimation::setProfiler(Trace* t){
+void EMEstimation::setProfiler(Trace* t) {
 	profiler = t;
 	//model->parameterModel->setProfiler(t);
 }
@@ -55,27 +55,27 @@ void EMEstimation::setModel(Model* Model) {
 	f = new Matrix<double>(1, q);
 	r = new Matrix<double>(q, It);
 
-
 	//Discriminate by models
-	if(Model->Modeltype()==Constant::THREE_PL){
-	estimator = new EM3PL(model, quadNodes , f , r); //Initializes estimator
-	estimator->setProfiler(profiler);
+	if (Model->Modeltype() == Constant::THREE_PL) {
+		estimator = new EM3PL(model, quadNodes, f, r); //Initializes estimator
+		estimator->setProfiler(profiler);
 	}
 
-	if(Model->Modeltype()==Constant::RASCH_A1){
-		cout<<"Remember to initialize the estimator , segfault possible"<<endl;
+	if (Model->Modeltype() == Constant::RASCH_A1) {
+		cout << "Remember to initialize the estimator , segfault possible"
+				<< endl;
 		//estimator = new EM1PL(); //Initializes estimator
-		}
-
-	if(Model->Modeltype()==Constant::TWO_PL){
-	estimator = new EM2PL(model, quadNodes, f, r); //Initializes estimator with Cristian's 2PL Model
-	estimator->setProfiler(profiler);
 	}
 
-	if(Model->Modeltype()==Constant::RASCH_A_CONSTANT)
-	{
-		cout<<"Remember to initialize the estimator , segfault possible"<<endl;
-		//estimator = new EM1PLAC();
+	if (Model->Modeltype() == Constant::TWO_PL) {
+		estimator = new EM2PL(model, quadNodes, f, r); //Initializes estimator with Cristian's 2PL Model
+		estimator->setProfiler(profiler);
+	}
+
+	if (Model->Modeltype() == Constant::RASCH_A_CONSTANT) {
+		cout << "Remember to initialize the estimator , segfault possible"
+				<< endl;
+		estimator = new EM1PLAC(model, quadNodes, f, r);
 	}
 
 }
@@ -83,19 +83,19 @@ void EMEstimation::setModel(Model* Model) {
  * Sets the initial values for the estimation, use this for inputting a matrix as initial values
  */
 void EMEstimation::setInitialValues(double*** parameterSet) {
-	estimator->setInitialValues(parameterSet,model);
+	estimator->setInitialValues(parameterSet, model);
 }
 /**
  * Sets the initial values according to a method of calculating the values
  * Possible methods :
-	 * ANDRADE,
-	 * OSPINA,
-	 * RANDOM,
-	 *
-	 * The default method is OSPINA , this is the fastest method according to the SICS calculations
+ * ANDRADE,
+ * OSPINA,
+ * RANDOM,
+ *
+ * The default method is OSPINA , this is the fastest method according to the SICS calculations
  */
 void EMEstimation::setInitialValues(int method) {
-	estimator->setInitialValues(method,model);
+	estimator->setInitialValues(method, model);
 }
 /**
  * Main loop of the EM estimation
@@ -128,15 +128,16 @@ void EMEstimation::estimate() {
 		profiler->upCount("iterations");
 		if (iterations > Constant::MAX_EM_ITERS) {
 			convergenceSignal = true;
-			cout<<"more than "<<Constant::MAX_EM_ITERS<<"iters, stop"<<endl;
+			cout << "more than " << Constant::MAX_EM_ITERS << "iters, stop"
+					<< endl;
 		}
 	}
 	estimator->untransform();
 	model->printParameterSet(cout);
 	profiler->stopTimer("estim");
-	cout<<"Total time from estimation "<<profiler->dr("estim")<<endl
-			<<"E step time : "<<profiler->dr("Et")<<endl
-			<<"M step time : "<<profiler->dr("Mt")<<endl;
+	cout << "Total time from estimation " << profiler->dr("estim") << endl
+			<< "E step time : " << profiler->dr("Et") << endl
+			<< "M step time : " << profiler->dr("Mt") << endl;
 }
 
 /**Returns the iterations that took the estimation to obtain an answer*/

@@ -106,17 +106,86 @@ double OnePLACModel::getProbability(int node, int item) {
 	return ((*probabilityMatrix)(node, item));
 }
 
-void OnePLACModel::gradient(double* args, double* pars, int nargs, int npars, double* gradient) {
-	double hh = 0.000001;
-	//(f(x+h)-f(x))/h
-	double grad = logLikelihood(args, pars, nargs, npars);
-	for (int i = 0; i < nargs; i++) {
-		args[i] = args[i] + hh;
-		gradient[i] = logLikelihood(args, pars, nargs, npars);
-		args[i] = args[i] - hh;
-		gradient[i] -=  grad;
-		gradient[i] = gradient[i] / hh;
+void OnePLACModel::gradient(double* args, double* pars, int nargs, int npars,
+		double* gradient) {
+//	double numerico;
+//	double normal;
+//	double hh = 0.000001;
+//	double grad = logLikelihood(args, pars, nargs, npars);
+//	cout<<"numerico"<<endl;
+//	for (int i = 0; i < nargs; i++) {
+//		args[i] = args[i] + hh;
+//		gradient[i] = logLikelihood(args, pars, nargs, npars);
+//		args[i] = args[i] - hh;
+//		gradient[i] -=  grad;
+//		gradient[i] = gradient[i] / hh;
+//		cout<<gradient[i]<<endl;
+//	}
+
+	int nA = 0;
+	int nP = 0;
+	int q, items;
+	double *theta, *r, *f, *a, *d, *c;
+
+	// Obtain q
+	q = pars[nP++]; // q is obtained and npars is augmented
+	// Obtain I
+	items = pars[nP++];
+
+	theta = new double[q];
+	r = new double[q * items];
+	f = new double[q];
+	a = new double[1];
+	d = new double[items];
+
+	// Obtain theta
+	for (int k = 0; k < q; k++) {
+		theta[k] = pars[nP++];
 	}
+
+	// Obtain f
+	for (int k = 0; k < q; k++) {
+		f[k] = pars[nP++];
+	}
+
+	// Obtain r
+	for (int k = 0; k < q; k++) {
+		for (int i = 0; i < items; i++) {
+			r[k * items + i] = pars[nP++];
+		}
+	}
+
+	// Obtain a
+	a[0] = args[nA++];
+	// Obtain d
+	for (int i = 0; i < items; i++) {
+		d[i] = args[nA++];
+	}
+	double sumTA = 0.0;
+	double sumTBs = 0.0;
+	double aux;
+	for ( int i = 0; i < items; i++ )
+	{
+		sumTBs = 0.0;
+		for ( int k = 0; k < q; k++ )
+		{
+			aux = (r[k*items+i]-f[k]*successProbability(theta[k], a[0], d[i]));
+			sumTBs += aux;
+			sumTA += theta[k]*aux;
+		}
+		gradient[1+i] = -sumTBs;
+	}
+
+    gradient[0] = -sumTA;
+//    cout<<"normal"<<endl;
+//    for ( int i = 0; i < nargs; i++)
+//    	cout<<gradient[i]<<endl;
+	delete[] theta;
+	delete[] r;
+	delete[] f;
+	delete[] a;
+	delete[] d;
+
 }
 double OnePLACModel::logLikelihood(double* args, double* pars, int nargs,
 		int npars) {
@@ -215,5 +284,8 @@ OnePLACModel::~OnePLACModel() {
 }
 
 void OnePLACModel::printParameterSet(ostream& out){
-
+		cout<<parameterSet[0][0][0]<<endl;
+		for (int i = 0; i < items; ++i) {
+				cout<<parameterSet[1][0][i]<<" ";
+		}cout<<endl;
 }
