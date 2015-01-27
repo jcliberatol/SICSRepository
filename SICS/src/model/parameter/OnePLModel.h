@@ -15,28 +15,20 @@
 #include <model/dimension/UnidimensionalModel.h>
 #include <model/dimension/MultidimensionalModel.h>
 #include <model/dimension/MultiUniDimModel.h>
-#include <type/PatternMatrix.h>
 #include <type/Constant.h>
 #include <cmath>
-#include <type/QuadratureNodes.h>
 
 class OnePLModel : public ParameterModel {
 
-private:
-	QuadratureNodes* nodes;
-
 public:
-
-	static double successProbability(double, double);
-
 	// Constructor
 	OnePLModel();
 
 	// Methods
 	void buildParameterSet(ItemModel *, DimensionModel *);
-	void successProbability(DimensionModel *, QuadratureNodes *);
+	inline void successProbability(DimensionModel *, QuadratureNodes *);
+	inline static double successProbability(double*, double*);
 	static double logLikelihood(double*, double*, int, int);
-	void setEstimationNodes(QuadratureNodes*);
 	static void gradient (double* , double* , int , int , double* );
 	// Getters and Setters
 	double *** getParameterSet() ;

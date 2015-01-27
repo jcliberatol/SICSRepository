@@ -16,6 +16,7 @@
 #include <estimation/classical/EMEstimators/EMEstimator.h>
 #include <estimation/classical/EMEstimators/EM3PL.h>
 #include <estimation/classical/EMEstimators/EM2PL.h>
+#include <estimation/classical/EMEstimators/EM1PL.h>
 #include <estimation/classical/EMEstimators/EM1PLAC.h>
 //#include <optimizer/BFGSOptimizer.h>
 

@@ -7,7 +7,7 @@
 //============================================================================
 
 #include "Main.h"
-#define ESTIMATION_MODEL Constant::TWO_PL
+#define ESTIMATION_MODEL Constant::RASCH_A1
 
 void profilerOut(Trace* profile, int type){
 	//Types of profiling :
@@ -219,7 +219,12 @@ void runArgs(char * filename,char * initialValues){
 	int items = model->getItemModel()->countItems();
 	switch (model_const) {
 	case Constant::RASCH_A1:
-		//matrix_initial[b] = b_init;
+		matrix_initial = new double** [1];
+		matrix_initial[0] = new double* [1];
+		matrix_initial[0][0] = new double [items];
+		for (int var = 0; var < items; ++var) {
+			matrix_initial[0][0][var] = (*b_init)(0,var);
+		}
 		break;
 	case Constant::RASCH_A_CONSTANT:
 		//matrix_initial[a] = a_init;
@@ -233,8 +238,8 @@ void runArgs(char * filename,char * initialValues){
 		matrix_initial[0][0] = new double [items];
 		matrix_initial[1][0] = new double [items];
 		for (int var = 0; var < items; ++var) {
-					matrix_initial[0][0][var] = (*a_init)(0,var);
-				}
+			matrix_initial[0][0][var] = (*a_init)(0,var);
+		}
 		for (int var = 0; var < items; ++var) {
 			matrix_initial[1][0][var] = (*b_init)(0,var);
 		}
@@ -294,6 +299,11 @@ void runArgs(char * filename,char * initialValues){
 		//delete[] matrix_initial[1][0] ;
 		//delete[] matrix_initial[0] ;
 		//delete[] matrix_initial[1] ;
+		//delete[] matrix_initial ;
+		break;
+	case Constant::RASCH_A1 :
+		//delete[] matrix_initial[0][0] ;
+		//delete[] matrix_initial[0] ;
 		//delete[] matrix_initial ;
 		break;
 	}
