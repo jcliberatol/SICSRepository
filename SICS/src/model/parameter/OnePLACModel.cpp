@@ -108,19 +108,7 @@ double OnePLACModel::getProbability(int node, int item) {
 
 void OnePLACModel::gradient(double* args, double* pars, int nargs, int npars,
 		double* gradient) {
-//	double numerico;
-//	double normal;
-//	double hh = 0.000001;
-//	double grad = logLikelihood(args, pars, nargs, npars);
-//	cout<<"numerico"<<endl;
-//	for (int i = 0; i < nargs; i++) {
-//		args[i] = args[i] + hh;
-//		gradient[i] = logLikelihood(args, pars, nargs, npars);
-//		args[i] = args[i] - hh;
-//		gradient[i] -=  grad;
-//		gradient[i] = gradient[i] / hh;
-//		cout<<gradient[i]<<endl;
-//	}
+
 
 	int nA = 0;
 	int nP = 0;
@@ -177,9 +165,6 @@ void OnePLACModel::gradient(double* args, double* pars, int nargs, int npars,
 	}
 
     gradient[0] = -sumTA;
-//    cout<<"normal"<<endl;
-//    for ( int i = 0; i < nargs; i++)
-//    	cout<<gradient[i]<<endl;
 	delete[] theta;
 	delete[] r;
 	delete[] f;
