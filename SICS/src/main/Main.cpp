@@ -7,7 +7,7 @@
 //============================================================================
 
 #include "Main.h"
-#define ESTIMATION_MODEL Constant::RASCH_A_CONSTANT
+#define ESTIMATION_MODEL Constant::TWO_PL
 
 void profilerOut(Trace* profile, int type){
 	//Types of profiling :
@@ -19,54 +19,54 @@ void profilerOut(Trace* profile, int type){
 		(*profile)("Profiling file : ",'n');
 		(*profile)(profile->filename);
 		(*profile)("Total time :",'n');
-		(*profile)(profile->dr("total"));
+		(*profile)(profile->dr("total")/1000000000);
 
 	}
 	else if(type==2){
 		profilerOut(profile,1);
 		(*profile)("Input time :",'n');
-		(*profile)(profile->dr("input"));
+		(*profile)(profile->dr("input")/1000000000);
 		(*profile)("Initial time :",'n');
-		(*profile)(profile->dr("initial"));
+		(*profile)(profile->dr("initial")/1000000000);
 	}
 	else if(type==3){
 		profilerOut(profile,2);
 		(*profile)("Estimation time :",'n');
-		(*profile)(profile->dr("estim"));
+		(*profile)(profile->dr("estim")/1000000000);
 		//Estep time
 		(*profile)("E step time:",'n');
-		(*profile)(profile->dr("Et"));
+		(*profile)(profile->dr("Et")/1000000000);
 		//Mstep time
 		(*profile)("M step time:",'n');
-		(*profile)(profile->dr("Mt"));
+		(*profile)(profile->dr("Mt")/1000000000);
 	}
 	else if(type == 4){
 		(*profile)("_______________________________");
 		(*profile)("Profiling file : ",'n');
 		(*profile)(profile->filename);
 		(*profile)("Total time :",'n');
-		float total = (float)profile->dr("total");
-		(*profile)((float)profile->dr("total"));
+		float total = (float)profile->dr("total")/1000000000;
+		(*profile)((float)profile->dr("total")/1000000000);
 		(*profile)("Input time :",'n');
-		(*profile)((float)profile->dr("input"));
+		(*profile)((float)profile->dr("input")/1000000000);
 		(*profile)("Initial time :",'n');
-		(*profile)((float)profile->dr("initial"));
+		(*profile)((float)profile->dr("initial")/1000000000);
 		(*profile)("Estimation time :",'n');
-		(*profile)((float)profile->dr("estim"));
+		(*profile)((float)profile->dr("estim")/1000000000);
 		//Estep time
 		(*profile)("E step time:",'n');
-		(*profile)((float)profile->dr("Et"));
+		(*profile)((float)profile->dr("Et")/1000000000);
 		(*profile)("First for time:",'n');
-		(*profile)((float)profile->dr("for1"));
+		(*profile)((float)profile->dr("for1")/1000000000);
 		(*profile)("Second for time:",'n');
-		(*profile)((float)profile->dr("for2"));
+		(*profile)((float)profile->dr("for2")/1000000000);
 		//Mstep time
 		(*profile)("M step time:",'n');
-		(*profile)((float)profile->dr("Mt"));
+		(*profile)((float)profile->dr("Mt")/1000000000);
 		(*profile)("F and R transference time:",'n');
-		(*profile)((float)profile->dr("fyr"));
+		(*profile)((float)profile->dr("fyr")/1000000000);
 		(*profile)("optim time:",'n');
-		(*profile)((float)profile->dr("optim"));
+		(*profile)((float)profile->dr("optim")/1000000000);
 
 	}
 	else if (type == 5){
@@ -133,6 +133,7 @@ void oneRun(char * args) {
 	EMEstimation *em = new EMEstimation();
 	//Here is where quadratures must be set.
 	//create the quad nodes
+	em->setProfiler(profiler);
 	QuadratureNodes nodes(theta, weight);
 	em->setQuadratureNodes(&nodes);
 	em->setModel(model);
@@ -308,8 +309,8 @@ int main(int argc, char *argv[]) {
 		cout << "Please specify an input file" << endl;
 		return (0);
 	}
-	oneRun(argv[1]);
-	//runArgs(argv[1],argv[2]);
+	//oneRun(argv[1]);
+	runArgs(argv[1],argv[2]);
 	tm.stop();
 	//cout<<"time: "<<endl<<tm.totalTime<<endl;
 	return (0);
