@@ -269,8 +269,10 @@ OnePLACModel::~OnePLACModel() {
 }
 
 void OnePLACModel::printParameterSet(ostream& out){
-		cout<<parameterSet[0][0][0]<<endl;
-		for (int i = 0; i < items; ++i) {
-				cout<<parameterSet[1][0][i]<<" ";
-		}cout<<endl;
+		out << "\"a\" \"b\" \"c\"" << endl;
+
+			for (int _i = 0; _i < items; _i++) {
+				out << parameterSet[0][0][0] << " " << parameterSet[1][0][_i]
+						<< " 0.25" << endl;
+		}
 }

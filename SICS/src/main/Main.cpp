@@ -7,7 +7,7 @@
 //============================================================================
 
 #include "Main.h"
-#define ESTIMATION_MODEL Constant::TWO_PL
+#define ESTIMATION_MODEL Constant::RASCH_A_CONSTANT
 
 void profilerOut(Trace* profile, int type){
 	//Types of profiling :
@@ -116,7 +116,6 @@ void oneRun(char * args) {
 	// set Theta and weight for the EM Estimation
 	Matrix<double> *theta = new Matrix<double>(1, 41);
 	Matrix<double> *weight = new Matrix<double>(1, 41);
-
 	for (int k = 0; k < cuad.nR(); k++) {
 		(*theta)(0, k) = cuad(k, 0);
 		(*weight)(0, k) = cuad(k, 1);
@@ -312,7 +311,7 @@ int main(int argc, char *argv[]) {
 	oneRun(argv[1]);
 	//runArgs(argv[1],argv[2]);
 	tm.stop();
-	cout<<"time: "<<endl<<tm.totalTime<<endl;
+	//cout<<"time: "<<endl<<tm.totalTime<<endl;
 	return (0);
 }
 

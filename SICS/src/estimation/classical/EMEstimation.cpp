@@ -73,8 +73,8 @@ void EMEstimation::setModel(Model* Model) {
 	}
 
 	if (Model->Modeltype() == Constant::RASCH_A_CONSTANT) {
-		cout << "Remember to initialize the estimator , segfault possible"
-				<< endl;
+//		cout << "Remember to initialize the estimator , segfault possible"
+//				<< endl;
 		estimator = new EM1PLAC(model, quadNodes, f, r);
 	}
 
@@ -113,7 +113,7 @@ void EMEstimation::estimate() {
 	profiler->resetTimer("Et");
 	profiler->resetTimer("Mt");
 	while (!convergenceSignal) {
-		cout << "Iteration " << iterations << endl;
+		//cout << "Iteration " << iterations << endl;
 		profiler->resetTimer("estimation");
 		profiler->startTimer("Et");
 		estimator->stepE();
@@ -135,9 +135,9 @@ void EMEstimation::estimate() {
 	estimator->untransform();
 	model->printParameterSet(cout);
 	profiler->stopTimer("estim");
-	cout << "Total time from estimation " << profiler->dr("estim") << endl
-			<< "E step time : " << profiler->dr("Et") << endl
-			<< "M step time : " << profiler->dr("Mt") << endl;
+//	cout << "Total time from estimation " << profiler->dr("estim") << endl
+//			<< "E step time : " << profiler->dr("Et") << endl
+//			<< "M step time : " << profiler->dr("Mt") << endl;
 }
 
 /**Returns the iterations that took the estimation to obtain an answer*/
