@@ -9,11 +9,10 @@
 
 PatternMatrix::PatternMatrix(int size) {
 	this->size = size;
-
+	count_set_bits = NULL;
 }
 
 int PatternMatrix::countItems() const {
-	//Checks if map is empty if not returns the size of the first bitset
 	return ((matrix.empty()) ? 0 : size);
 }
 int PatternMatrix::freq(vector<char> bitset) {
@@ -21,7 +20,6 @@ int PatternMatrix::freq(vector<char> bitset) {
 }
 int PatternMatrix::countIndividuals() const {
 
-	//map<boost::dynamic_bitset<>, int>::const_iterator it;
 	map<vector<char>, int>::const_iterator it;
 	int counter = 0;
 
@@ -50,30 +48,29 @@ void PatternMatrix::flush() {
 	matrix.clear();
 }
 
-void PatternMatrix::print(){
-	for (iterator = matrix.begin(); iterator != matrix.end();
-				++iterator) {
-			for (unsigned int var = 0; var < size; ++var) {
-				int k = iterator->first[var];
-				cout << k;
-			}
-			cout << " " << iterator->second << std::endl;
+void PatternMatrix::print() {
+	for (iterator = matrix.begin(); iterator != matrix.end(); ++iterator) {
+		for (unsigned int var = 0; var < size; ++var) {
+			int k = iterator->first[var];
+			cout << k;
 		}
+		cout << " " << iterator->second << std::endl;
+	}
 }
 
-//int & PatternMatrix::operator()(boost::dynamic_bitset<> n) {
-//int & PatternMatrix::operator()(bool* n) {
-//	return (matrix[n]);
-//}
+int PatternMatrix::countBitSet(bool * bitset, int index) {
+	if (count_set_bits == NULL) {
+		count_set_bits = new int[matrix.size()];
+		for (int i = 0; i < matrix.size(); i++)
+			count_set_bits[i] = -1;
+	}
 
-//std::ostream& operator<<(std::ostream & out, PatternMatrix & pm) {
-//	for (pm.iterator = pm.matrix.begin(); pm.iterator != pm.matrix.end();
-//			++pm.iterator) {
-//		for (unsigned int var = 0; var < size; ++var) {
-//			int k = pm.iterator->first[var];
-//			out << k;
-//		}
-//		out << " " << pm.iterator->second << std::endl;
-//	}
-//	return (out);
-//}
+	if (count_set_bits[index] == -1) {
+		count_set_bits[index] = 0;
+		for (int i = 0; i < size; i++)
+			if(bitset[i])
+				count_set_bits[index]++;
+	}
+
+	return (count_set_bits[index]);
+}
