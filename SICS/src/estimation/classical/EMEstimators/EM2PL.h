@@ -44,9 +44,9 @@ public:
 		}
 
 		for (int i = 0; i < items; i++) {
-						cout<<pset[0][0][i]<<"				";
-						cout<<pset[1][0][i]<<"				"<<endl;
-			}
+			cout << pset[0][0][i] << "				";
+			cout << pset[1][0][i] << "				" << endl;
+		}
 	}
 
 	virtual void setInitialValues(double *** pset, Model* m) {
@@ -81,32 +81,43 @@ public:
 			PatternMatrix* data =
 					dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
 			double Ni = data->countIndividuals();
-			double PII, frequencyV, mT, mU, mTU, mUU, covar, sdU, sdT, corr,
-					result;
-			for (data->resetIterator(); !data->checkEnd(); data->iterate())
-				pSize++; // esto se debe poder hacer de una forma mas optima! en patternMatrix tener el tamaño!
-			double *T = new double[pSize], *U =
-					new double[pSize], *TU =
-					new double[pSize], *UU =
-					new double[pSize], *Tm =
-					new double[pSize], *Um =
-					new double[pSize];
+			double PII;
+			double frequencyV;
+			double mT;
+			double mU;
+			double mTU;
+			double mUU;
+			double covar;
+			double sdU;
+			double sdT;
+			double corr;
+			double result;
+
+			pSize = data->matrix.size();
+
+			double *T = new double[pSize];
+			double *U = new double[pSize];
+			double *TU = new double[pSize];
+			double *UU = new double[pSize];
+			double *Tm = new double[pSize];
+			double *Um = new double[pSize];
+
 			for (int i = 0; i < items; i++) {
 				iter = 0;
 				PII = 0;
 				mT = mU = mTU = mUU = 0.0;
-				for (data->resetIterator(); !data->checkEnd();
-						data->iterate()) {
-					frequencyV = data->getCurrentFrequency();
+				for (int index = 0; index < size; index++) {
+					frequencyV = frequency_list[index];
 
 					T[iter] = 0;
-					for (int i_ = 0; i_ < data->size; i_++) {
-						if (data->getCurrentBitSet()[i_])
-							T[iter]++;
-					}
-					//T[iter] = data->getCurrentBitSet().count();
-					PII += frequencyV * data->getCurrentBitSet()[items - i - 1];
-					U[iter] = data->getCurrentBitSet()[items - i - 1];
+					profiler->startTimer("forandrade");
+
+					T[iter] = data->countBitSet(bitset_list[index], index);
+
+					profiler->stopTimer("forandrade");
+
+					PII += frequencyV * bitset_list[index][i];
+					U[iter] = bitset_list[index][i];
 					TU[iter] = T[iter] * U[iter];
 					UU[iter] = U[iter] * U[iter];
 					mT += frequencyV * T[iter];
@@ -115,6 +126,7 @@ public:
 					mUU += frequencyV * UU[iter];
 					iter++;
 				}
+
 				PII /= Ni;
 				mT /= Ni;
 				mU /= Ni;
@@ -124,15 +136,16 @@ public:
 				iter = 0;
 				sdT = 0.0;
 				sdU = 0.0;
-				for (data->resetIterator(); !data->checkEnd();
-						data->iterate()) {
-					frequencyV = data->getCurrentFrequency();
+
+				for (int index = 0; index < size; index++) {
+					frequencyV = frequency_list[index];
 					Tm[iter] = T[iter] - mT;
 					Um[iter] = U[iter] - mU;
 					sdT += frequencyV * Tm[iter] * Tm[iter];
 					sdU += frequencyV * Um[iter] * Um[iter];
 					iter++;
 				}
+
 				sdT = std::sqrt(sdT / (Ni - 1.0));
 				sdU = std::sqrt(sdU / (Ni - 1.0));
 				corr = covar / (sdT * sdU);
@@ -204,7 +217,7 @@ public:
 
 			int counter_temp[items];
 			for (int p = 0; p < items; ++p) {
-				counter_temp[p]=0;
+				counter_temp[p] = 0;
 			}
 			profiler->startTimer("for1");
 			for (k = 0; k < q; k++) {
@@ -227,7 +240,7 @@ public:
 			profiler->stopTimer("for1");
 			profiler->startTimer("for2");
 			for (k = 0; k < q; k++) {
-				faux[k] *= frequency_list[index]/ sum; //This is g*_j_k
+				faux[k] *= frequency_list[index] / sum; //This is g*_j_k
 				(*f)(0, k) += faux[k];
 				//Now selectively add the faux to the r
 				for (i = 0; i < items; i++) {
