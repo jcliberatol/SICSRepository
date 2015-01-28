@@ -28,10 +28,7 @@
 								<option id="gnu.cpp.compiler.option.optimization.level.1260422835" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.optimization.level.more" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.debugging.level.1977103182" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.723842463" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="/home/jliberato/git/SICSRepository/SICS/src"/>
-									<listOptionValue builtIn="false" value="/home/mirt/git/SICSRepository/SICS/src"/>
-									<listOptionValue builtIn="false" value="/home/jliberato/git/lib/boost"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/SICS/SICS/src}&quot;"/>
+									<listOptionValue builtIn="false" value="../../SICS/src"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.other.other.1877876475" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" useByScannerDiscovery="false" value=" -c -fmessage-length=0" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.include.files.407836542" name="Include files (-include)" superClass="gnu.cpp.compiler.option.include.files" useByScannerDiscovery="false"/>
@@ -51,14 +48,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.base.1302773911" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base">
 								<option defaultValue="gnu.c.optimization.level.most" id="gnu.c.compiler.option.optimization.level.415773573" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" useByScannerDiscovery="false" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.debugging.level.540266480" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.c.debugging.level.none" valueType="enumerated"/>
-								<option id="gnu.c.compiler.option.include.paths.1858570268" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="/home/mirt/git/lib"/>
-									<listOptionValue builtIn="false" value="/home/jliberato/git/lib/boost"/>
-									<listOptionValue builtIn="false" value="/home/jliberato/git/lib"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/SICS/SICS/src}&quot;"/>
-									<listOptionValue builtIn="false" value="/home/mirt/git/SICSRepository/SICS/src/lib/boost"/>
-									<listOptionValue builtIn="false" value="/home/mirt/git/SICSRepository/SICS/src/lib/boost/boost"/>
-								</option>
+								<option id="gnu.c.compiler.option.include.paths.1858570268" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath"/>
 								<option id="gnu.c.compiler.option.dialect.std.1783818569" name="Language standard" superClass="gnu.c.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.c.compiler.dialect.c11" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.misc.other.474535784" name="Other flags" superClass="gnu.c.compiler.option.misc.other" useByScannerDiscovery="false" value="-c -fmessage-length=0" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.155616745" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
@@ -73,13 +63,7 @@
 								</inputType>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.assembler.base.1671018240" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.base">
-								<option id="gnu.both.asm.option.include.paths.370158781" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/home/jliberato/git/lib/boost"/>
-									<listOptionValue builtIn="false" value="/home/jliberato/git/lib"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/SICS/SICS/src}&quot;"/>
-									<listOptionValue builtIn="false" value="/home/mirt/git/SICSRepository/SICS/src/lib/boost"/>
-									<listOptionValue builtIn="false" value="/home/jlgpisa/git/lib/boost"/>
-								</option>
+								<option id="gnu.both.asm.option.include.paths.370158781" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath"/>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.647624984" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
 						</toolChain>

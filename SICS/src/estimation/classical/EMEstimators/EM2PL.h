@@ -77,7 +77,7 @@ public:
 
 		if (method == Constant::ANDRADE) {
 			int pSize = 0;
-			int iter, ifault;
+			int ifault;
 			PatternMatrix* data =
 					dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
 			double Ni = data->countIndividuals();
@@ -103,28 +103,21 @@ public:
 			double *Um = new double[pSize];
 
 			for (int i = 0; i < items; i++) {
-				iter = 0;
 				PII = 0;
 				mT = mU = mTU = mUU = 0.0;
 				for (int index = 0; index < size; index++) {
 					frequencyV = frequency_list[index];
 
-					T[iter] = 0;
-					profiler->startTimer("forandrade");
-
-					T[iter] = data->countBitSet(bitset_list[index], index);
-
-					profiler->stopTimer("forandrade");
-
-					PII += frequencyV * bitset_list[index][i];
-					U[iter] = bitset_list[index][i];
-					TU[iter] = T[iter] * U[iter];
-					UU[iter] = U[iter] * U[iter];
-					mT += frequencyV * T[iter];
-					mU += frequencyV * U[iter];
-					mTU += frequencyV * TU[iter];
-					mUU += frequencyV * UU[iter];
-					iter++;
+					T[index] = 0;
+					T[index] = data->countBitSet(bitset_list[index], index);
+					PII += frequencyV * bitset_list[index][items - i - 1];
+					U[index] = bitset_list[index][items - i - 1];
+					TU[index] = T[index] * U[index];
+					UU[index] = U[index] * U[index];
+					mT += frequencyV * T[index];
+					mU += frequencyV * U[index];
+					mTU += frequencyV * TU[index];
+					mUU += frequencyV * UU[index];
 				}
 
 				PII /= Ni;
@@ -133,17 +126,15 @@ public:
 				mTU /= Ni;
 				mUU /= Ni;
 				covar = mTU - mU * mT;
-				iter = 0;
 				sdT = 0.0;
 				sdU = 0.0;
 
 				for (int index = 0; index < size; index++) {
 					frequencyV = frequency_list[index];
-					Tm[iter] = T[iter] - mT;
-					Um[iter] = U[iter] - mU;
-					sdT += frequencyV * Tm[iter] * Tm[iter];
-					sdU += frequencyV * Um[iter] * Um[iter];
-					iter++;
+					Tm[index] = T[index] - mT;
+					Um[index] = U[index] - mU;
+					sdT += frequencyV * Tm[index] * Tm[index];
+					sdU += frequencyV * Um[index] * Um[index];
 				}
 
 				sdT = std::sqrt(sdT / (Ni - 1.0));
@@ -193,6 +184,7 @@ public:
 		}
 	}
 	virtual void stepE() {
+		profiler->startTimer("for1");
 		sum = 0.0;
 		f->reset();
 		r->reset();
@@ -203,27 +195,24 @@ public:
 		double prob;
 		double prob_matrix[q][(int) items];
 
-		for (k = 0; k < q; k++) {
-			for (i = 0; i < items; i++) {
+		for (k = 0; k < q; ++k) {
+			for (i = 0; i < items; ++i) {
 				prob_matrix[k][i] = pm->getProbability(k, i);
 			}
 		}
+
+		int counter_temp[items];
+		int counter_set;
 
 		//TODO CAREFULLY PARALLELIZE FOR
 		for (int index = 0; index < size; index++) {
 			sum = 0.0;
 			//Calculate g*(k) for all the k's
 			//first calculate the P for each k and store it in the array f aux
-
-			int counter_temp[items];
-			for (int p = 0; p < items; ++p) {
-				counter_temp[p] = 0;
-			}
-			profiler->startTimer("for1");
 			for (k = 0; k < q; k++) {
 				faux[k] = (*weights)(0, k);
 				//Calculate the p (iterate over the items in the productory)
-				int counter_set = 0;
+				counter_set = 0;
 				for (i = 0; i < items; i++) {
 					if (bitset_list[index][items - i - 1]) {
 						counter_temp[counter_set++] = i + 1;
@@ -231,25 +220,19 @@ public:
 					} else {
 						prob = 1 - prob_matrix[k][i];
 					}
-					faux[k] = faux[k] * prob;
+					faux[k] *= prob;
 				}
 				//At this point the productory is calculated and faux[k] is equivalent to p(u_j,theta_k)
 				//Now multiply by the weight
 				sum += faux[k];
 			}
-			profiler->stopTimer("for1");
-			profiler->startTimer("for2");
+
 			for (k = 0; k < q; k++) {
 				faux[k] *= frequency_list[index] / sum; //This is g*_j_k
 				(*f)(0, k) += faux[k];
-				//Now selectively add the faux to the r
-				for (i = 0; i < items; i++) {
-					if (counter_temp[i] == 0)
-						break;
+				for (i = 0; i < counter_set; i++)
 					(*r)(k, counter_temp[i] - 1) += faux[k];
-				} // for
 			} // for
-			profiler->stopTimer("for2");
 		}
 
 	}
@@ -270,10 +253,8 @@ public:
 		//fptr
 		int It = m->getItemModel()->getDataset()->countItems();
 		int q = nodes->size();
-		double args[2 * It]; //TODO not 2 * it here ?
-		profiler->startTimer("fyr");
+		double args[2 * It];
 		double pars[2 + 2 * q + q * It];
-		profiler->stopTimer("fyr");
 		int nargs = 2 * It;
 		int npars = 2 + 2 * q + q * It;
 		//filling args
@@ -305,7 +286,6 @@ public:
 		}
 
 		//Filling pars
-		profiler->startTimer("fyr");
 		int nP = 0;
 		// Obtain q
 		pars[nP] = q;
@@ -334,7 +314,6 @@ public:
 				nP++;
 			}
 		}
-		profiler->stopTimer("fyr");
 		nargs = nA;
 		npars = nP;
 		/*
@@ -354,19 +333,19 @@ public:
 		// Obtain a
 		for (int i = 0; i < It; i++) {
 			A[0][i] = args[nA++];
-			if (fabs(A[0][i]) > abs(10)) {
-				A[0][i] = 0.851;
-				//			cout << "A reset." << endl;
-			}
+//			if (fabs(A[0][i]) > abs(10)) {
+//				A[0][i] = 0.851;
+//				//			cout << "A reset." << endl;
+//			}
 
 		}
 		// Obtain b
 		for (int i = 0; i < It; i++) {
 			B[0][i] = args[nA++];
-			if (fabs(B[0][i]) > abs(-50)) {
-				B[0][i] = 0.5;
-				//			cout << "B reset." << endl;
-			}
+//			if (fabs(B[0][i]) > abs(-50)) {
+//				B[0][i] = 0.5;
+//				//			cout << "B reset." << endl;
+//			}
 		}
 
 		//Boundary regularize the arguments

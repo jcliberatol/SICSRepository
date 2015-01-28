@@ -112,7 +112,7 @@ void EMEstimation::estimate() {
 	profiler->resetTimer("Et");
 	profiler->resetTimer("Mt");
 	while (!convergenceSignal) {
-		//cout << "Iteration " << iterations << endl;
+		cout << "Iteration " << iterations << endl;
 		profiler->resetTimer("estimation");
 		profiler->startTimer("Et");
 		estimator->stepE();

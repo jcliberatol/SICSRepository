@@ -110,43 +110,20 @@ void TwoPLModel::gradient(double* args, double* pars, int nargs, int npars,
 	 * What we need
 	 * items
 	 * q
-	 * theta array
 	 * D
 	 * a, b, c
-	 * f and r
 	 */
 	int nA = 0;
 	int nP = 0;
 	int q, items;
-	//double *theta, *r, *f, *a, *d, *c;
 	double *a, *d, *c;
 
 	// Obtain q
 	q = pars[nP++]; // q is obtained and npars is augmented
 	// Obtain I
 	items = pars[nP++];
-	//theta = new double[q];
-	//r = new double[q * items];
-	//f = new double[q];
 	a = new double[items];
 	d = new double[items];
-
-	// Obtain theta
-//	for (int k = 0; k < q; k++) {
-//		theta[k] = pars[nP++];
-//	}
-//
-//	// Obtain f
-//	for (int k = 0; k < q; k++) {
-//		f[k] = pars[nP++];
-//	}
-//
-//	// Obtain r
-//	for (int k = 0; k < q; k++) {
-//		for (int i = 0; i < items; i++) {
-//			r[k * items + i] = pars[nP++];
-//		}
-//	}
 
 	// Obtain a
 	for (int i = 0; i < items; i++) {
@@ -169,13 +146,10 @@ void TwoPLModel::gradient(double* args, double* pars, int nargs, int npars,
 
 	for (int k = 0; k < q; k++) {
 		for (unsigned int i = 0; i < items; i++) {
-			//P[k * items + i] = successProbability(&theta[k], &a[i], &d[i]);
 			P[k * items + i] = successProbability(&pars[k+2], &a[i], &d[i]);
 			factor[k * items + i] =
-					//(r[k * items + i] - f[k] * P[k * items + i]);
 					(pars[(k * items + i)+2+(2*q)] - pars[k+2+q] * P[k * items + i]);
 
-			//h_0[2 * items * k + 2 * i + 0] = Constant::D_CONST * theta[k];
 			h_0[2 * items * k + 2 * i + 0] = Constant::D_CONST * pars[k+2];
 			h_0[2 * items * k + 2 * i + 1] = Constant::D_CONST;
 		}
