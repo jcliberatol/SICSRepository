@@ -7,16 +7,15 @@
 
 #include <model/parameter/TwoPLModel.h>
 
-
 //
-TwoPLModel::TwoPLModel(){
+TwoPLModel::TwoPLModel() {
 
-	parameterSet= NULL;
+	parameterSet = NULL;
 	probabilityMatrix = NULL;
 
 }
 
-string TwoPLModel::getStringParameters(){
+string TwoPLModel::getStringParameters() {
 	return ("stringPars");
 }
 
@@ -26,13 +25,13 @@ void TwoPLModel::buildParameterSet(ItemModel* itemModel,
 	if (typeid(*itemModel) == typeid(DichotomousModel)) {
 
 		if (typeid(*dimensionModel) == typeid(UnidimensionalModel)) {
-			parameterSet = new double ** [2]; // two parameters
+			parameterSet = new double **[2]; // two parameters
 
-			parameterSet[0] = new double* [1]; // parameter a
-			parameterSet[1] = new double* [1]; // parameter b
+			parameterSet[0] = new double*[1]; // parameter a
+			parameterSet[1] = new double*[1]; // parameter b
 			items = itemModel->countItems();
-			parameterSet[0][0] = new double [items];
-			parameterSet[1][0] = new double [items];
+			parameterSet[0][0] = new double[items];
+			parameterSet[1][0] = new double[items];
 
 			//para<meterSet[a] = new Matrix<double>(1, items);
 			//parameterSet[d] = new Matrix<double>(1, items);
@@ -72,13 +71,15 @@ inline void TwoPLModel::successProbability(DimensionModel *dimensionModel,
 		for (int k = 0; k < q; k++) {
 			for (int i = 0; i < items; i++) {
 				double* theta = &(*quadNodes->getTheta())(0, k);
-				(*probabilityMatrix)(k, i) = successProbability( theta , &parameterSet[0][0][i], &parameterSet[1][0][i]);
+				(*probabilityMatrix)(k, i) = successProbability(theta,
+						&parameterSet[0][0][i], &parameterSet[1][0][i]);
 			}
 		}
 	}
 }
 
-inline double TwoPLModel::successProbability(double *theta, double *a, double *d) {
+inline double TwoPLModel::successProbability(double *theta, double *a,
+		double *d) {
 
 	long double exponential = (Constant::D_CONST * ((*a * *theta) + *d));
 	if (exponential > Constant::MAX_EXP) {
@@ -146,11 +147,11 @@ void TwoPLModel::gradient(double* args, double* pars, int nargs, int npars,
 
 	for (int k = 0; k < q; k++) {
 		for (unsigned int i = 0; i < items; i++) {
-			P[k * items + i] = successProbability(&pars[k+2], &a[i], &d[i]);
-			factor[k * items + i] =
-					(pars[(k * items + i)+2+(2*q)] - pars[k+2+q] * P[k * items + i]);
+			P[k * items + i] = successProbability(&pars[k + 2], &a[i], &d[i]);
+			factor[k * items + i] = (pars[(k * items + i) + 2 + (2 * q)]
+					- pars[k + 2 + q] * P[k * items + i]);
 
-			h_0[2 * items * k + 2 * i + 0] = Constant::D_CONST * pars[k+2];
+			h_0[2 * items * k + 2 * i + 0] = Constant::D_CONST * pars[k + 2];
 			h_0[2 * items * k + 2 * i + 1] = Constant::D_CONST;
 		}
 	}
@@ -311,7 +312,7 @@ double TwoPLModel::logLikelihood(double* args, double* pars, int nargs,
 	for (int k = 0; k < q; ++k) {
 		for (unsigned int i = 0; i < It; ++i) {
 			//tp = (TwoPLModel::successProbability(&theta[k], &a[i], &b[i]));
-			tp = (TwoPLModel::successProbability(&pars[k+2], &a[i], &b[i]));
+			tp = (TwoPLModel::successProbability(&pars[k + 2], &a[i], &b[i]));
 			if (tp == 0)
 				tp = 1e-08;
 			tq = 1 - tp;
@@ -319,7 +320,9 @@ double TwoPLModel::logLikelihood(double* args, double* pars, int nargs,
 				tq = 1e-08;
 
 			//sum += (r[k * It + i] * log(tp)) + (f[k] - r[k * It + i]) * log(tq);
-			sum += (pars[(k * It + i)+2+(2*q)] * log(tp)) + (pars[k+2+q] - pars[(k * It + i)+2+(2*q)]) * log(tq);
+			sum += (pars[(k * It + i) + 2 + (2 * q)] * log(tp))
+					+ (pars[k + 2 + q] - pars[(k * It + i) + 2 + (2 * q)])
+							* log(tq);
 		}
 	}
 
@@ -346,15 +349,21 @@ TwoPLModel::~TwoPLModel() {
 	}
 }
 
-void TwoPLModel::printParameterSet(ostream& out){
-	cout<<"2PL Model Parameters :"<<endl;
-	cout<<"Discrimination parameter"<<endl;
-	for (int i = 0; i < items; ++i) {
-		cout<<parameterSet[0][0][i]<<" ";
-	}cout<<endl;
-	cout<<"Dificulty parameter"<<endl;
-	for (int i = 0; i < items; ++i) {
-			cout<<parameterSet[1][0][i]<<" ";
-	}cout<<endl;
+void TwoPLModel::printParameterSet(ostream& out) {
+	out << "\"a\" \"b\" \"c\"" << endl;
+
+	for (int i = 0; i < items; i++) {
+		out << parameterSet[0][0][i] << " " << parameterSet[1][0][i] << " " << 0
+				<< endl;
+	}
+//	cout<<"2PL Model Parameters :"<<endl;
+//	cout<<"Discrimination parameter"<<endl;
+//	for (int i = 0; i < items; ++i) {
+//		cout<<parameterSet[0][0][i]<<" ";
+//	}cout<<endl;
+//	cout<<"Dificulty parameter"<<endl;
+//	for (int i = 0; i < items; ++i) {
+//			cout<<parameterSet[1][0][i]<<" ";
+//	}cout<<endl;
 }
 

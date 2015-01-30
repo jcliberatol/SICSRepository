@@ -112,7 +112,7 @@ void EMEstimation::estimate() {
 	profiler->resetTimer("Et");
 	profiler->resetTimer("Mt");
 	while (!convergenceSignal) {
-		cout << "Iteration " << iterations << endl;
+		//cout << "Iteration " << iterations << endl;
 		profiler->resetTimer("estimation");
 		profiler->startTimer("Et");
 		estimator->stepE();
@@ -124,11 +124,12 @@ void EMEstimation::estimate() {
 		int items = model->parameterModel->items;
 		convergenceSignal = model->itemParametersEstimated;
 		iterations++;
+		//cout<<" "<<iterations;
 		profiler->upCount("iterations");
 		if (iterations > Constant::MAX_EM_ITERS) {
 			convergenceSignal = true;
-			cout << "more than " << Constant::MAX_EM_ITERS << "iters, stop"
-					<< endl;
+			//cout << "more than " << Constant::MAX_EM_ITERS << "iters, stop"
+					//<< endl;
 		}
 	}
 	estimator->untransform();

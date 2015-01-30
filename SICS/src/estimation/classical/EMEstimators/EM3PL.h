@@ -39,7 +39,7 @@ public:
 			double qa = pset[0][0][i];
 			double qb = pset[1][0][i];
 			double qc = pset[2][0][i];
-			pset[2][0][i]= log(qc/(1-qc));
+			pset[2][0][i] = log(qc / (1 - qc));
 		}
 	}
 
@@ -51,18 +51,17 @@ public:
 			double qc = pset[2][0][i];
 			double ec = exp(qc);
 			pset[2][0][i] = ec / (1 + ec);
-			pset[1][0][i] = -qb/qa;//Transformacion del B   d=-b/a
+			pset[1][0][i] = -qb / qa; //Transformacion del B   d=-b/a
 		}
 	}
 
-	virtual void setInitialValues(double *** npset,
-			Model* m) {
+	virtual void setInitialValues(double *** npset, Model* m) {
 		double *** pset = m->getParameterModel()->getParameterSet();
 		items = m->getParameterModel()->items;
 		for (int i = 0; i < items; i++) {
-						pset[0][0][i]=npset[0][0][i];
-						pset[1][0][i]=npset[1][0][i];
-						pset[2][0][i]=npset[2][0][i];
+			pset[0][0][i] = npset[0][0][i];
+			pset[1][0][i] = npset[1][0][i];
+			pset[2][0][i] = npset[2][0][i];
 		}
 	}
 
@@ -70,9 +69,9 @@ public:
 		items = m->getParameterModel()->items;
 		double *** pset = m->getParameterModel()->getParameterSet();
 		for (int i = 0; i < items; i++) {
-				pset[0][0][i]=0;
-				pset[1][0][i]=0;
-				pset[2][0][i]=0;
+			pset[0][0][i] = 0;
+			pset[1][0][i] = 0;
+			pset[2][0][i] = 0;
 		}
 		//TODO MOVE ALGORITHMS TO ANOTHER FILE
 		/*TODO
@@ -94,21 +93,19 @@ public:
 				pset[2][0][i] = randomd() * (2 / (double) cassualOptions);
 			}
 		}
-				//ANDRADE O( items * numberOfPattern )
+		//ANDRADE O( items * numberOfPattern )
 		if (method == Constant::ANDRADE) {
 			int pSize = 0;
 			int iter, ifault;
-			PatternMatrix* data = dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
+			PatternMatrix* data =
+					dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
 			double Ni = data->countIndividuals(), PII, frequencyV, mT, mU, mTU,
 					mUU, covar, sdU, sdT, corr, result;
 			for (data->resetIterator(); !data->checkEnd(); data->iterate())
 				pSize++;
-			double *T = new double[pSize], *U =
-					new double[pSize], *TU =
-					new double[pSize], *UU =
-					new double[pSize], *Tm =
-					new double[pSize], *Um =
-					new double[pSize];
+			double *T = new double[pSize], *U = new double[pSize], *TU =
+					new double[pSize], *UU = new double[pSize], *Tm =
+					new double[pSize], *Um = new double[pSize];
 			for (int i = 0; i < items; i++) {
 				iter = 0;
 				PII = 0;
@@ -153,9 +150,9 @@ public:
 				sdT = std::sqrt(sdT / (Ni - 1.0));
 				sdU = std::sqrt(sdU / (Ni - 1.0));
 				corr = covar / (sdT * sdU);
-				pset[0][0][i]=std::sqrt((corr * corr) / (1.0 - corr * corr));
-				pset[1][0][i]=-(ppnd(PII, &ifault)) / corr;
-				pset[2][0][i]= 0.2;
+				pset[0][0][i] = std::sqrt((corr * corr) / (1.0 - corr * corr));
+				pset[1][0][i] = -(ppnd(PII, &ifault)) / corr;
+				pset[2][0][i] = 0.2;
 
 			}
 		}
@@ -193,7 +190,7 @@ public:
 
 		int counter = 0;
 		for (it = begin; it != end; ++it, ++counter) {
-			copy(it->first.begin(),it->first.end(),bitset_list[counter]);
+			copy(it->first.begin(), it->first.end(), bitset_list[counter]);
 			frequency_list[counter] = it->second;
 		}
 	}
@@ -209,55 +206,44 @@ public:
 		double prob;
 		double prob_matrix[q][(int) items];
 
+		int counter_temp[items];
+		int counter_set;
+
 		for (k = 0; k < q; k++) {
 			for (i = 0; i < items; i++) {
 				prob_matrix[k][i] = pm->getProbability(k, i);
 			}
 		}
-		//TODO CAREFULLY PARALLELIZE FOR
+		//TODO CAREFULLY
 		for (int index = 0; index < size; index++) {
-			sum = 0.0;
-			//Calculate g*(k) for all the k's
-			//first calculate the P for each k and store it in the array f aux
-
-			int counter_temp[items];
-			for (int p = 0; p < items; ++p) {
-				counter_temp[p]=0;
-			}
-			profiler->startTimer("for1");
-			for (k = 0; k < q; k++) {
-				faux[k] = (*weights)(0, k);
-				//Calculate the p (iterate over the items in the productory)
-				int counter_set = 0;
-				for (i = 0; i < items; i++) {
-					if (bitset_list[index][items - i - 1]) {
-						counter_temp[counter_set++] = i + 1;
-						prob = prob_matrix[k][i];
-					} else {
-						prob = 1 - prob_matrix[k][i];
+					sum = 0.0;
+					//Calculate g*(k) for all the k's
+					//first calculate the P for each k and store it in the array f aux
+					for (k = 0; k < q; k++) {
+						faux[k] = (*weights)(0, k);
+						//Calculate the p (iterate over the items in the productory)
+						counter_set = 0;
+						for (i = 0; i < items; i++) {
+							if (bitset_list[index][items - i - 1]) {
+								counter_temp[counter_set++] = i + 1;
+								prob = prob_matrix[k][i];
+							} else {
+								prob = 1 - prob_matrix[k][i];
+							}
+							faux[k] *= prob;
+						}
+						//At this point the productory is calculated and faux[k] is equivalent to p(u_j,theta_k)
+						//Now multiply by the weight
+						sum += faux[k];
 					}
-					faux[k] = faux[k] * prob;
+
+					for (k = 0; k < q; k++) {
+						faux[k] *= frequency_list[index] / sum; //This is g*_j_k
+						(*f)(0, k) += faux[k];
+						for (i = 0; i < counter_set; i++)
+							(*r)(k, counter_temp[i] - 1) += faux[k];
+					} // for
 				}
-				//At this point the productory is calculated and faux[k] is equivalent to p(u_j,theta_k)
-				//Now multiply by the weight
-				sum += faux[k];
-			}
-			profiler->stopTimer("for1");
-			profiler->startTimer("for2");
-			for (k = 0; k < q; k++) {
-				faux[k] = faux[k] / sum; //This is g*_j_k
-				//Multiply the f to the frequency of the pattern
-				faux[k] = ((long double) frequency_list[index]) * faux[k];
-				(*f)(0, k) += faux[k];
-				//Now selectively add the faux to the r
-				for (i = 0; i < items; i++) {
-					if (counter_temp[i] == 0)
-						break;
-					(*r)(k, counter_temp[i] - 1) += faux[k];
-				} // for
-			} // for
-			profiler->stopTimer("for2");
-		}
 
 	}
 
@@ -288,25 +274,25 @@ public:
 		double** B = pset[1];
 		double** C = pset[2];
 
-		Matrix<double> DA(A,1,items);
-		Matrix<double> DB(B,1,items);
-		Matrix<double> DC(B,1,items);
+		Matrix<double> DA(A, 1, items);
+		Matrix<double> DB(B, 1, items);
+		Matrix<double> DC(B, 1, items);
 
 		for (int i = 0; i < It; i++) {
-			DA(0,i)=A[0][i];
+			DA(0, i) = A[0][i];
 			args[nA] = A[0][i];
 			nA++;
 		}
 
 		// Obtain b
 		for (int i = 0; i < It; i++) {
-			DB(0,i)=B[0][i];
+			DB(0, i) = B[0][i];
 			args[nA] = B[0][i];
 			nA++;
 		}
 		// Obtain c
 		for (int i = 0; i < It; i++) {
-			DC(0,i)=C[0][i];
+			DC(0, i) = C[0][i];
 			args[nA] = C[0][i];
 			nA++;
 		}
@@ -355,23 +341,26 @@ public:
 		// Obtain a
 		for (int i = 0; i < It; i++) {
 			A[0][i] = args[nA++];
-			if (fabs(A[0][i]) > abs(10)) {
+			if (fabs(A[0][i]) > abs(5)) { //5
 				A[0][i] = 0.851;
+				//cout<<"A";
 			}
 
 		}
 		// Obtain b
 		for (int i = 0; i < It; i++) {
 			B[0][i] = args[nA++];
-			if (fabs(B[0][i]) > abs(-50)) {
-				B[0][i] = 0.5;
+			if (fabs(B[0][i]) > abs(5)) {
+				B[0][i] = 0;
+				//cout<<"B";
 			}
 		}
 
 		for (int i = 0; i < It; i++) {
 			C[0][i] = args[nA++];
-			if (fabs(C[0][i]) > abs(-50)) {
+			if (fabs(C[0][i]) > abs(20)) {
 				C[0][i] = 0.5;
+				//cout<<"C";
 			}
 		}
 
@@ -400,11 +389,12 @@ public:
 			}
 
 		}
-		cout<<"Max delta : "<<maxDelta<<endl;
 		//TODO change by constant file
 		if (maxDelta < Constant::CONVERGENCE_DELTA) {
 			m->itemParametersEstimated = true;
 		}
+		//cout<<maxDelta<<endl;
+		//cout<<maxDelta<<endl;
 		//And set the parameter sets
 		double *** parSet = m->getParameterModel()->getParameterSet();
 		parSet[0] = A;

@@ -7,7 +7,7 @@
 //============================================================================
 
 #include "Main.h"
-#define ESTIMATION_MODEL Constant::TWO_PL
+#define ESTIMATION_MODEL Constant::THREE_PL
 
 void profilerOut(Trace* profile, int type){
 	//Types of profiling :
@@ -319,8 +319,8 @@ int main(int argc, char *argv[]) {
 		cout << "Please specify an input file" << endl;
 		return (0);
 	}
-	oneRun(argv[1]);
-	//runArgs(argv[1],argv[2]);
+	//oneRun(argv[1]);
+	runArgs(argv[1],argv[2]);
 	tm.stop();
 	//cout<<"time: "<<endl<<tm.totalTime<<endl;
 	return (0);

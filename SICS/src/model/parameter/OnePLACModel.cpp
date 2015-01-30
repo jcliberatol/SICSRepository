@@ -109,7 +109,6 @@ double OnePLACModel::getProbability(int node, int item) {
 void OnePLACModel::gradient(double* args, double* pars, int nargs, int npars,
 		double* gradient) {
 
-
 	int nA = 0;
 	int nP = 0;
 	int q, items;

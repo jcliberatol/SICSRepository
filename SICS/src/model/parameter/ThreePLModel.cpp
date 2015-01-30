@@ -14,10 +14,6 @@ ThreePLModel::ThreePLModel() {
 	nodes = NULL;
 }
 
-void ThreePLModel::printParameterSet(ostream& out){
-
-}
-
 string ThreePLModel::getStringParameters(){
 	//If the parameter set is null
 	if(parameterSet == NULL){
@@ -391,3 +387,12 @@ ThreePLModel::~ThreePLModel() {
 
 }
 
+void ThreePLModel::printParameterSet(ostream& out) {
+	out << "\"a\" \"b\" \"c\"" << endl;
+
+	for (int i = 0; i < items; i++) {
+		out << parameterSet[0][0][i] << " " << parameterSet[1][0][i] << " " << parameterSet[2][0][i]
+				<< endl;
+	}
+
+}

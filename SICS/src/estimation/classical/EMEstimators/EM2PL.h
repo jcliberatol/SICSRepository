@@ -43,10 +43,6 @@ public:
 			pset[1][0][i] /= -pset[0][0][i];
 		}
 
-		for (int i = 0; i < items; i++) {
-			cout << pset[0][0][i] << "				";
-			cout << pset[1][0][i] << "				" << endl;
-		}
 	}
 
 	virtual void setInitialValues(double *** pset, Model* m) {
