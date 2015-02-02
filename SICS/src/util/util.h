@@ -43,7 +43,25 @@ inline double normalInverse(double point){
 	int err = 0;
 	return(ppnd(point,&err));
 }
-
+inline void ramsay(double* v0, double* v1, double* v2, int size)
+{
+	double dX[size], dX2[size], d2X2[size], accel, accelI, numerator = 0.0, denominator = 0.0;
+	for ( int i = 0; i < size; i++ )
+	{
+		dX[i] = v0[i]  - v1[i];
+		dX2[i] = v1[i] - v2[i];
+		d2X2[i] = dX[i] - dX2[i];
+	}
+	for ( int i = 0; i < size; i++ )
+	{
+		numerator += dX[i]*dX[i];
+		denominator += d2X2[i]*d2X2[i];
+	}
+	accel = 1 - sqrt(numerator/denominator);
+	if ( accel < -5.0) accel = -5;
+	accelI = 1-accel;
+	for ( int i = 0; i < size; i++ ) v0[i] = accelI*v0[i]+accel*v1[i];
+}
 
 
 #endif /* UTIL_H_ */
