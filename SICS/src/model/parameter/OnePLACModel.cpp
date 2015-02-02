@@ -89,7 +89,7 @@ double *** OnePLACModel::getParameterSet() {
 }
 
 void OnePLACModel::setParameterSet(
-		double ***) {
+		double *** parameterSet) {
 	this->parameterSet = parameterSet;
 }
 

@@ -227,8 +227,15 @@ void runArgs(char * filename,char * initialValues){
 		}
 		break;
 	case Constant::RASCH_A_CONSTANT:
-		//matrix_initial[a] = a_init;
-		//matrix_initial[d] = b_init;
+		matrix_initial = new double** [2];
+		matrix_initial[0] = new double* [1];
+		matrix_initial[1] = new double* [1];
+		matrix_initial[0][0] = new double [1];
+		matrix_initial[1][0] = new double [items];
+		matrix_initial[0][0][0] = (*a_init)(0,0);
+		for (int var = 0; var < items; ++var) {
+			matrix_initial[1][0][var] = (*b_init)(0,var);
+		}
 		break;
 	case Constant::TWO_PL:
 		matrix_initial = new double** [2];
@@ -320,8 +327,8 @@ int main(int argc, char *argv[]) {
 		return (0);
 	}
 	//oneRun(argv[1]);
-	//runArgs(argv[1],argv[2]);
-	oneRun(argv[1]);
+	runArgs(argv[1],argv[2]);
+	//oneRun(argv[1]);
 	tm.stop();
 	//cout<<"time: "<<endl<<tm.totalTime<<endl;
 	return (0);
