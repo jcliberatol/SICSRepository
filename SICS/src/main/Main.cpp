@@ -7,7 +7,7 @@
 //============================================================================
 
 #include "Main.h"
-#define ESTIMATION_MODEL Constant::THREE_PL
+#define ESTIMATION_MODEL Constant::RASCH_A_CONSTANT
 
 void profilerOut(Trace* profile, int type){
 	//Types of profiling :
@@ -320,7 +320,8 @@ int main(int argc, char *argv[]) {
 		return (0);
 	}
 	//oneRun(argv[1]);
-	runArgs(argv[1],argv[2]);
+	//runArgs(argv[1],argv[2]);
+	oneRun(argv[1]);
 	tm.stop();
 	//cout<<"time: "<<endl<<tm.totalTime<<endl;
 	return (0);
