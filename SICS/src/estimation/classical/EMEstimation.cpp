@@ -112,6 +112,8 @@ void EMEstimation::estimate() {
 	profiler->resetTimer("Et");
 	profiler->resetTimer("Mt");
 	while (!convergenceSignal) {
+		iterations++;
+		Constant::ITER = iterations;
 		//cout << "Iteration " << iterations << endl;
 		profiler->resetTimer("estimation");
 		profiler->startTimer("Et");
@@ -123,8 +125,9 @@ void EMEstimation::estimate() {
 		double*** ps = model->parameterModel->getParameterSet();
 		int items = model->parameterModel->items;
 		convergenceSignal = model->itemParametersEstimated;
-		iterations++;
+
 		//cout<<" "<<iterations;
+
 		profiler->upCount("iterations");
 		if (iterations > Constant::MAX_EM_ITERS) {
 			convergenceSignal = true;

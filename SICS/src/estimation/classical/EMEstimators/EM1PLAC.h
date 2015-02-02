@@ -1,4 +1,3 @@
-
 #ifndef EM1PLAC_H_
 #define EM1PLAC_H_
 #include <estimation/classical/EMEstimators/EMEstimator.h>
@@ -125,7 +124,8 @@ public:
 				sdU = std::sqrt(sdU / (Ni - 1.0));
 				corr = covar / (sdT * sdU);
 				if (!i)
-					pset[0][0][0] = std::sqrt((corr * corr) / (1.0 - corr * corr));
+					pset[0][0][0] = std::sqrt(
+							(corr * corr) / (1.0 - corr * corr));
 				pset[1][0][i] = -(ppnd(PII, &ifault)) / corr;
 			}
 		}
@@ -285,6 +285,38 @@ public:
 		Optimizer* optim;
 		optim = new Optimizer();
 		optim->searchOptimal(fptr, gptr, hptr, args, pars, nargs, npars);
+		if (Constant::ITER > 3) {
+			if (Constant::ITER % 3 == 1) {
+				m->back_2 = new double[nargs];
+				for ( int ii = 0; ii < nargs; ii++ ) m->back_2[ii] = args[ii];
+
+			} else if (Constant::ITER % 3 == 2) {
+				m->back_1 = new double[nargs];
+				for ( int ii = 0; ii < nargs; ii++ ) m->back_1[ii] = args[ii];
+
+			} else {
+				double dX[nargs], dX2[nargs], d2X2[nargs], accel, accelI,
+						numerator = 0.0, denominator = 0.0;
+
+				for (int ii = 0; ii < nargs; ii++) {
+					dX[ii] = args[ii] - m->back_1[ii];
+					dX2[ii] = m->back_1[ii] - m->back_2[ii];
+					d2X2[ii] = dX[ii] - dX2[ii];
+				}
+				for (int ii = 0; ii < nargs; ii++) {
+					numerator += dX[ii] * dX[ii];
+					denominator += d2X2[ii] * d2X2[ii];
+				}
+				accel = 1 - sqrt(numerator / denominator);
+				if (accel < -5.0)
+					accel = -5;
+				accelI = 1 - accel;
+				for (int ii = 0; ii < nargs; ii++)
+				{
+					args[ii] = accelI * args[ii] + accel * m->back_1[ii];
+				}
+			}
+		}
 		nA = 0;
 
 		// Obtain a
@@ -313,7 +345,7 @@ public:
 				maxDelta = fabs(DD(0, v1));
 			}
 		}
-		if (maxDelta < 0.001) {
+		if (maxDelta < 0.0001) {
 			m->itemParametersEstimated = true;
 		}
 		//And set the parameter sets

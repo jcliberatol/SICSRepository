@@ -20,3 +20,4 @@ double Constant::reltest	=	10.0;
 double Constant::abstol  =    0.00001;
 double Constant::reltol  =    1e-8;
 double Constant::D_CONST = 1;
+int Constant::ITER = 0;

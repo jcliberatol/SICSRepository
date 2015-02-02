@@ -29,7 +29,7 @@ class Model {
 	ItemModel *itemModel;
 	DimensionModel *dimensionModel;
 	int type;
-
+	double *back_1, *back_2;
 
 	// Constructor
 	Model();

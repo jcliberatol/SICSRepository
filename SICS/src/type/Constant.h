@@ -20,7 +20,7 @@ class Constant {
 public:
 	enum model_type{RASCH_A1, RASCH_A_CONSTANT, TWO_PL, THREE_PL};
 	enum initial_value_type{ANDRADE,RANDOM,OSPINA,FIXED};
-
+	static int ITER;
 	static double CONVERGENCE_DELTA;
 	static int MAX_EM_ITERS;
 	static double NORM_CONST;
@@ -35,6 +35,7 @@ public:
 	static double abstol ;
 	static double reltol ;
 	static double D_CONST ;
+
 
   
 };
