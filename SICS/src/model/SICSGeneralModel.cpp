@@ -14,35 +14,29 @@ SICSGeneralModel::SICSGeneralModel() {
 
 ParameterModel* SICSGeneralModel::createParameterModel(int model) {
 
-	if (model == Constant::THREE_PL) {
-		ParameterModel *parameterModel;
-		parameterModel = new ThreePLModel();
-		return (parameterModel);
-	}
-
-	if (model == Constant::TWO_PL) {
+	if (model == Constant::TWO_PL)
+	{
 		ParameterModel *parameterModel;
 		parameterModel = new TwoPLModel();
 		return (parameterModel);
 	}
-
-	if (model == Constant::RASCH_A1) {
+	else if (model == Constant::RASCH_A1)
+	{
 		ParameterModel *parameterModel;
 		parameterModel = new OnePLModel();
 		return (parameterModel);
 	}
-
-	if (model == Constant::RASCH_A_CONSTANT) {
-		cout<<"SICSGeneralMOdel"<<endl;
+	else if (model == Constant::RASCH_A_CONSTANT) {
 		ParameterModel *parameterModel;
 		parameterModel = new OnePLACModel();
 		return (parameterModel);
 	}
-
-	// Default Parameter Model.
-	ParameterModel *parameterModel;
-	parameterModel = new ThreePLModel();
-	return (parameterModel);
+	else
+	{
+		ParameterModel *parameterModel;
+		parameterModel = new ThreePLModel();
+		return (parameterModel);
+	}
 }
 
 ItemModel* SICSGeneralModel::createItemModel() {
