@@ -144,6 +144,27 @@ void oneRun(char * args) {
 	em->setProfiler(profiler);
 	//Run the estimation
 	em->estimate();
+
+
+	/*
+	 * Now we will run the estimation of individual parameter
+	 */
+	//first create the latenTrait objects
+	LatentTraits * latentTraits;
+	latentTraits = new LatentTraits(dataSet);
+	//Now create the estimation
+	LatentTraitEstimation * lte = new LatentTraitEstimation();
+	//Pass the model
+	lte->setModel(model);
+	//Pass the latent traits
+	lte->setLatentTraits(latentTraits);
+	//Pass the quadrature nodes
+	lte->setQuadratureNodes(&nodes);
+	//Ready to estimate
+	lte->estimateLatentTraits();
+	//finished
+	//now read the latent traits but we will do this later
+	lte->getLatentTraits()->print();
 	delete modelFactory;
 	delete dataSet;
 	delete em;

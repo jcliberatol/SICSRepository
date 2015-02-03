@@ -14,7 +14,7 @@ class LatentTraitEstimation {
 public:
 	LatentTraitEstimation();
 	virtual ~LatentTraitEstimation();
-	void setModel(Model* model);
+
 	Model* model;
 	QuadratureNodes * quadNodes;
 	LatentTraits * lt;
@@ -40,7 +40,9 @@ public:
 	void setLatentTraits(LatentTraits * ltt) {
 		lt = ltt;
 	}
-
+	void setModel(Model* m){
+			model = m;
+		}
 	void estimateLatentTraits() {
 
 		map<vector<char>, int>::const_iterator it;
@@ -50,9 +52,8 @@ public:
 		int counter = 0;
 
 		for (it = begin; it != end; ++it, ++counter) {
-			int sum_num = 0;
-			int sum_den = 0;
-
+			double sum_num = 0;
+			double sum_den = 0;
 			for(int i = 0; i < quadNodes->size() ; ++i){
 				double pp = patternProbabilities(it->first, i);
 				sum_num += (*quadNodes->getTheta())(0,i) * ((* quadNodes->getWeight())(0,i)) * pp;

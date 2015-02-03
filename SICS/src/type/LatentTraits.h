@@ -23,6 +23,9 @@ public:
 		delete traits;
 	};
 
+	void print(){
+		cout<<(*traits);
+	}
 	PatternMatrix *pm;
 	Matrix<double> * traits;
 
