@@ -10,4 +10,3 @@
 Estimation::~Estimation() {
 	// TODO Auto-generated destructor stub
 }
-

@@ -338,10 +338,7 @@ public:
 		// Obtain b
 		for (int i = 0; i < It; i++) {
 			B[0][i] = args[nA++];
-//			if (fabs(B[0][i]) > abs(-50)) {
-//				B[0][i] = 0.5;
-//				//			cout << "B reset." << endl;
-//			}
+
 		}
 
 		//Boundary regularize the arguments
