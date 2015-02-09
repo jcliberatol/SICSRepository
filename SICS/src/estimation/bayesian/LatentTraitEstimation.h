@@ -9,16 +9,16 @@
 #define LATENTTRAITESTIMATION_H_
 #include <model/Model.h>
 #include <type/LatentTraits.h>
+#include <sstream>
 
 class LatentTraitEstimation {
 public:
-	LatentTraitEstimation();
-	virtual ~LatentTraitEstimation();
+	LatentTraitEstimation(){}
+	virtual ~LatentTraitEstimation(){}
 
 	Model* model;
 	QuadratureNodes * quadNodes;
 	LatentTraits * lt;
-
 
 	double patternProbabilities(vector<char> pattern, int node) {
 		double p = 1;
@@ -40,9 +40,9 @@ public:
 	void setLatentTraits(LatentTraits * ltt) {
 		lt = ltt;
 	}
-	void setModel(Model* m){
-			model = m;
-		}
+	void setModel(Model* m) {
+		model = m;
+	}
 	void estimateLatentTraits() {
 
 		map<vector<char>, int>::const_iterator it;
@@ -54,13 +54,26 @@ public:
 		for (it = begin; it != end; ++it, ++counter) {
 			double sum_num = 0;
 			double sum_den = 0;
-			for(int i = 0; i < quadNodes->size() ; ++i){
+
+//			TODO export output to test with Liberato profiler.
+
+//			for(int i = 0; i < 10; i++){
+//				cout<< (int)it->first.at(i) << " ";
+//				temp += (int)it->first.at(i);
+//				temp << (int)it->first.at(i) << " ";
+//				cout<< temp.str();
+//				cout<< "freq = " << it->second << endl;
+//			}
+//			cout<< endl;
+
+			for (int i = 0; i < quadNodes->size(); ++i) {
 				double pp = patternProbabilities(it->first, i);
-				sum_num += (*quadNodes->getTheta())(0,i) * ((* quadNodes->getWeight())(0,i)) * pp;
-				sum_den += (*quadNodes->getWeight())(0,i) * pp;
+				sum_num += (*quadNodes->getTheta())(0, i)
+						* ((*quadNodes->getWeight())(0, i)) * pp;
+				sum_den += (*quadNodes->getWeight())(0, i) * pp;
 			}
 
-			(*lt->traits)(counter, lt->dim -1) = sum_num/sum_den;
+			(*lt->traits)(counter, lt->dim - 1) = sum_num / sum_den;
 		}
 	}
 

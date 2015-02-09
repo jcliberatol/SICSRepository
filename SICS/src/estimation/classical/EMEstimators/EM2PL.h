@@ -106,8 +106,8 @@ public:
 
 					T[index] = 0;
 					T[index] = data->countBitSet(bitset_list[index], index);
-					PII += frequencyV * bitset_list[index][items - i - 1];
-					U[index] = bitset_list[index][items - i - 1];
+					PII += frequencyV * bitset_list[index][i];
+					U[index] = bitset_list[index][i];
 					TU[index] = T[index] * U[index];
 					UU[index] = U[index] * U[index];
 					mT += frequencyV * T[index];
@@ -210,7 +210,7 @@ public:
 				//Calculate the p (iterate over the items in the productory)
 				counter_set = 0;
 				for (i = 0; i < items; i++) {
-					if (bitset_list[index][items - i - 1]) {
+					if (bitset_list[index][i]) {
 						counter_temp[counter_set++] = i + 1;
 						prob = prob_matrix[k][i];
 					} else {

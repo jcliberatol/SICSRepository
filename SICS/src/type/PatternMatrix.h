@@ -44,6 +44,7 @@ public:
 	void flush();/**Use this to clean matrix*/
 	void print();
 
+
 	friend std::ostream& operator<< (std::ostream &, PatternMatrix &);/**Output operator*/
 
 	//DataSet implementations
