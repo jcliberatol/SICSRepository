@@ -7,7 +7,7 @@
 
 #include <type/Constant.h>
 
-double Constant::CONVERGENCE_DELTA = 0.0002;
+double Constant::CONVERGENCE_DELTA = 0.0001;
 int Constant::MAX_EM_ITERS = 300;
 double Constant::NORM_CONST = 1;
 double Constant::MAX_EXP = 35.0;

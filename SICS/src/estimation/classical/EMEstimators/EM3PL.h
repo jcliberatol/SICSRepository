@@ -344,26 +344,7 @@ public:
 				for ( int ii = 0; ii < nargs; ii++ ) m->back_1[ii] = args[ii];
 
 			} else {
-				double dX[nargs], dX2[nargs], d2X2[nargs], accel, accelI,
-						numerator = 0.0, denominator = 0.0;
-
-				for (int ii = 0; ii < nargs; ii++) {
-					dX[ii] = args[ii] - m->back_1[ii];
-					dX2[ii] = m->back_1[ii] - m->back_2[ii];
-					d2X2[ii] = dX[ii] - dX2[ii];
-				}
-				for (int ii = 0; ii < nargs; ii++) {
-					numerator += dX[ii] * dX[ii];
-					denominator += d2X2[ii] * d2X2[ii];
-				}
-				accel = 1 - sqrt(numerator / denominator);
-				if (accel < -5.0)
-					accel = -5;
-				accelI = 1 - accel;
-				for (int ii = 0; ii < nargs; ii++)
-				{
-					args[ii] = accelI * args[ii] + accel * m->back_1[ii];
-				}
+				ramsay(args, m->back_1, m->back_2, nargs);
 			}
 		}
 		// Now pass the optimals to the Arrays.

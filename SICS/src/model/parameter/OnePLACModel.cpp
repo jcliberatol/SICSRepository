@@ -272,6 +272,6 @@ void OnePLACModel::printParameterSet(ostream& out){
 
 			for (int _i = 0; _i < items; _i++) {
 				out << parameterSet[0][0][0] << " " << parameterSet[1][0][_i]
-						<< " 0.25" << endl;
+						<< " 0" << endl;
 		}
 }
