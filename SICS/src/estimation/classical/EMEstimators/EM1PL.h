@@ -2,7 +2,7 @@
  * EM1PL.h
  *
  *  Created on: Nov 16, 2014
- *      Author: anmrodriguezre
+ *      Author: jcliberatol
  */
 
 #ifndef EM1PL_H_
@@ -73,7 +73,7 @@ public:
 			double PII, frequencyV, mT, mU, mTU, mUU, covar, sdU, sdT, corr,
 					result;
 			for (data->resetIterator(); !data->checkEnd(); data->iterate())
-				pSize++; // esto se debe poder hacer de una forma mas optima! en patternMatrix tener el tamaño!
+				pSize++;
 			double *T = new double[pSize], *U =
 					new double[pSize], *TU =
 					new double[pSize], *UU =
@@ -94,8 +94,8 @@ public:
 							T[iter]++;
 					}
 					//T[iter] = data->getCurrentBitSet().count();
-					PII += frequencyV * data->getCurrentBitSet()[items - i - 1];
-					U[iter] = data->getCurrentBitSet()[items - i - 1];
+					PII += frequencyV * data->getCurrentBitSet()[i];
+					U[iter] = data->getCurrentBitSet()[i];
 					TU[iter] = T[iter] * U[iter];
 					UU[iter] = U[iter] * U[iter];
 					mT += frequencyV * T[iter];
@@ -198,7 +198,7 @@ public:
 				//Calculate the p (iterate over the items in the productory)
 				int counter_set = 0;
 				for (i = 0; i < items; i++) {
-					if (bitset_list[index][items - i - 1]) {
+					if (bitset_list[index][i]) {
 						counter_temp[counter_set++] = i + 1;
 						prob = prob_matrix[k][i];
 					} else {

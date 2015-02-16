@@ -21,18 +21,16 @@ using namespace std;
 
 
 class ParameterModel {
-protected:
-
+public:
 	//map <Parameter, Matrix<double> * > parameterSet;
 	double *** parameterSet;
-public:
 	int items;
 	Trace* profiler = 0;
 	Matrix<double> * probabilityMatrix;
 	// Methods
 	virtual void buildParameterSet ( ItemModel *, DimensionModel *) = 0;
 	virtual void successProbability (DimensionModel *, QuadratureNodes *) = 0;
-
+	virtual double successProbability(double, double*) = 0;
 
 	// Getters and Setters
 	virtual double *** getParameterSet()  = 0;

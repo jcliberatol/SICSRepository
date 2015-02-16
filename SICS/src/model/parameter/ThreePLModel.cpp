@@ -131,6 +131,23 @@ double ThreePLModel::successProbability(double theta, double a, double d,
 	return ( (ec/(1+ec)) + (1 - (ec/(1+ec))) * (1/(1+exponential)) );
 }
 
+double ThreePLModel::successProbability(double theta, double * zita) {
+
+	long double exponential = (Constant::NORM_CONST)*(zita[0]*theta+zita[1]);
+
+	if ( exponential > Constant::MAX_EXP ) {
+		exponential = Constant::MAX_EXP;
+	}
+
+	else if ( exponential < -(Constant::MAX_EXP*1.0) ) {
+		exponential = -Constant::MAX_EXP;
+	}
+
+	exponential = exp(-exponential) ;
+	double ec = exp(zita[2]);
+	return ( (ec/(1+ec)) + (1 - (ec/(1+ec))) * (1/(1+exponential)) );
+}
+
 double ThreePLModel::getProbability(int node, int item) {
 	return ((*probabilityMatrix)(node, item));
 }

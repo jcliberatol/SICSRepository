@@ -73,7 +73,7 @@ public:
 			double Ni = data->countIndividuals(), PII, frequencyV, mT, mU, mTU,
 					mUU, covar, sdU, sdT, corr, result;
 			for (data->resetIterator(); !data->checkEnd(); data->iterate())
-				numeroDePatrones++; // esto se debe poder hacer de una forma mas optima! en patternMatrix tener el tamaño!
+				numeroDePatrones++;
 			double *T = new double[numeroDePatrones], *U =
 					new double[numeroDePatrones], *TU =
 					new double[numeroDePatrones], *UU =
@@ -93,8 +93,8 @@ public:
 						if (data->getCurrentBitSet()[i_])
 							T[iter]++;
 					}
-					PII += frequencyV * data->getCurrentBitSet()[items - i - 1];
-					U[iter] = data->getCurrentBitSet()[items - i - 1];
+					PII += frequencyV * data->getCurrentBitSet()[i];
+					U[iter] = data->getCurrentBitSet()[i];
 					TU[iter] = T[iter] * U[iter];
 					UU[iter] = U[iter] * U[iter];
 					mT += frequencyV * T[iter];
@@ -201,7 +201,7 @@ public:
 				//Calculate the p (iterate over the items in the productory)
 				int counter_set = 0;
 				for (i = 0; i < items; i++) {
-					if (bitset_list[index][items - i - 1]) {
+					if (bitset_list[index][i]) {
 						counter_temp[counter_set++] = i + 1;
 						prob = prob_matrix[k][i];
 					} else {

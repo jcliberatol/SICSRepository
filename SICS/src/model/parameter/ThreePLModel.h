@@ -30,6 +30,7 @@ private:
 public:
 
 	static double successProbability(double, double, double, double);
+	double successProbability(double, double *);
 	static double successProbability_cPrime (double, double, double, double);
 	// Constructor
 	ThreePLModel();

@@ -13,7 +13,6 @@
 #include <cmath>
 #include <type/QuadratureNodes.h>
 
-
 class OnePLACModel: public ParameterModel {
 
 private:
@@ -21,17 +20,18 @@ private:
 public:
 
 	static double successProbability(double, double, double);
+	double successProbability(double, double *);
 	// Constructor
 	OnePLACModel();
 
 	// Methods
-	void setEstimationNodes(QuadratureNodes * );
+	void setEstimationNodes(QuadratureNodes *);
 	void buildParameterSet(ItemModel *, DimensionModel *);
 	void successProbability(DimensionModel *, QuadratureNodes *);
 	static double logLikelihood(double*, double*, int, int);
-	static void gradient(double*,double*,int,int,double*);
+	static void gradient(double*, double*, int, int, double*);
 	// Getters and Setters
-	double *** getParameterSet() ;
+	double *** getParameterSet();
 	void setParameterSet(double ***);
 	double getProbability(int, int);
 	void printParameterSet(ostream&);

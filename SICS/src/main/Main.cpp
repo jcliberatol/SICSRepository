@@ -9,6 +9,8 @@
 #include "Main.h"
 //#define ESTIMATION_MODEL Constant::THREE_PL
 #define ESTIMATION_MODEL Constant::TWO_PL
+//#define ESTIMATION_MODEL Constant::RASCH_A1
+//#define ESTIMATION_MODEL Constant::RASCH_A_CONSTANT
 
 void profilerOut(Trace* profile, int type){
 	//Types of profiling :
@@ -161,7 +163,8 @@ void oneRun(char * args) {
 	//Pass the quadrature nodes
 	lte->setQuadratureNodes(&nodes);
 	//Ready to estimate
-	lte->estimateLatentTraits();
+	//lte->estimateLatentTraitsEAP();
+	lte->estimateLatentTraitsMAP();
 	//finished
 	//now read the latent traits but we will do this later
 	lte->getLatentTraits()->print();

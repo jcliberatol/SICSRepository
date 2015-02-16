@@ -70,18 +70,32 @@ inline void TwoPLModel::successProbability(DimensionModel *dimensionModel,
 		}
 		for (int k = 0; k < q; k++) {
 			for (int i = 0; i < items; i++) {
-				double* theta = &(*quadNodes->getTheta())(0, k);
-				(*probabilityMatrix)(k, i) = successProbability(theta,
-						&parameterSet[0][0][i], &parameterSet[1][0][i]);
+				theta_d = (*quadNodes->getTheta())(0, k);
+				a_d = parameterSet[0][0][i];
+				d_d = parameterSet[1][0][i];
+				(*probabilityMatrix)(k, i) = successProbability(theta_d, a_d,
+						d_d);
 			}
 		}
 	}
 }
 
-inline double TwoPLModel::successProbability(double *theta, double *a,
-		double *d) {
+inline double TwoPLModel::successProbability(double theta, double a, double d) {
 
-	long double exponential = (Constant::D_CONST * ((*a * *theta) + *d));
+	long double exponential = (Constant::D_CONST * ((a * theta) + d));
+	if (exponential > Constant::MAX_EXP) {
+		exponential = Constant::MAX_EXP;
+	}
+
+	else if (exponential < -(Constant::MAX_EXP)) {
+		exponential = -Constant::MAX_EXP;
+	}
+	return (1 / (1 + exp(-exponential)));
+}
+
+inline double TwoPLModel::successProbability(double theta, double * zita) {
+
+	long double exponential = (Constant::D_CONST * ((zita[0] * theta) + zita[1]));
 	if (exponential > Constant::MAX_EXP) {
 		exponential = Constant::MAX_EXP;
 	}
@@ -147,7 +161,7 @@ void TwoPLModel::gradient(double* args, double* pars, int nargs, int npars,
 
 	for (int k = 0; k < q; k++) {
 		for (unsigned int i = 0; i < items; i++) {
-			P[k * items + i] = successProbability(&pars[k + 2], &a[i], &d[i]);
+			P[k * items + i] = successProbability(pars[k + 2], a[i], d[i]);
 			factor[k * items + i] = (pars[(k * items + i) + 2 + (2 * q)]
 					- pars[k + 2 + q] * P[k * items + i]);
 
@@ -174,6 +188,7 @@ void TwoPLModel::gradient(double* args, double* pars, int nargs, int npars,
 	delete[] a;
 	delete[] d;
 	int hc = 0;
+
 	for (int n = 0; n < 2; ++n) {
 		for (int i = 0; i < items; ++i) {
 			gradient[hc++] = -static_cast<double>(h[i * 2 + n]);
@@ -312,7 +327,7 @@ double TwoPLModel::logLikelihood(double* args, double* pars, int nargs,
 	for (int k = 0; k < q; ++k) {
 		for (unsigned int i = 0; i < It; ++i) {
 			//tp = (TwoPLModel::successProbability(&theta[k], &a[i], &b[i]));
-			tp = (TwoPLModel::successProbability(&pars[k + 2], &a[i], &b[i]));
+			tp = (TwoPLModel::successProbability(pars[k + 2], a[i], b[i]));
 			if (tp == 0)
 				tp = 1e-08;
 			tq = 1 - tp;
