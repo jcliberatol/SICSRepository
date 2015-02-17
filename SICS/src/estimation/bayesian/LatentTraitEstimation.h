@@ -13,6 +13,7 @@
 #include <type/Constant.h>
 #include <optimizer/Brent_fmin.h>
 #define t_zita t_model->parameterModel->parameterSet
+#define gg t_model->parameterModel->successProbability
 
 class LatentTraitEstimation {
 public:
@@ -39,20 +40,18 @@ public:
 		return p;
 	}
 
-	static double patternProbabilities(double theta, vector<char> pattern, int node,
-			Model * t_model) {
+	static double patternProbabilities(double theta, vector<char> pattern,
+			int node, Model * t_model) {
 		double p = 1;
 
 		for (int i = 0; i < pattern.size(); i++) {
 			if (pattern.at(i) > 0) {
-				p *= t_model->parameterModel->successProbability(theta,
+				p *= gg(theta,
 						new double[3] { t_zita[0][0][i], t_zita[1][0][i] });
 
 			} else {
-				p *= 1
-						- t_model->parameterModel->successProbability(theta,
-								new double[3] { t_zita[0][0][i],
-								t_zita[1][0][i] });
+				p *= 1 - gg(theta, new double[3] { t_zita[0][0][i],
+				t_zita[1][0][i] });
 			}
 		}
 		return p;
@@ -82,13 +81,6 @@ public:
 			double sum_num = 0;
 			double sum_den = 0;
 
-//			TODO export output to test with Liberato profiler.
-
-//			for (int i = 0; i < 10; i++) {
-//				cout << (int) it->first.at(i) << " ";
-//			}
-//			cout << endl;
-
 			for (int i = 0; i < quadNodes->size(); ++i) {
 				double pp = patternProbabilities(it->first, i);
 				sum_num += (*quadNodes->getTheta())(0, i)
@@ -116,15 +108,14 @@ public:
 
 		for (it = begin; it != end; ++it, ++counter) {
 
-			for (int i = 0; i < 10; i++) {
+			for (int i = 0; i < 10; i++)
 				cout << (int) it->first.at(i) << " ";
-			}
 			cout << endl;
 
 			double (*function)(double, vector<char>, int, Model *) = &logL;
 			(*lt->traits)(counter, lt->dim - 1) = Brent_fmin(new double[2] { -5,
 					5 }, 0.0001220703, function, it->first, counter,
-					this->model, 100000);
+					this->model, 1);
 		}
 	}
 

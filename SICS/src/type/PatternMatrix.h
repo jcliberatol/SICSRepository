@@ -24,6 +24,7 @@ private:
 public:
 	int size;
 	map<vector<char>, int> matrix;
+	bool** bitset_list;
 	int * count_set_bits;
 
 	//Constructor

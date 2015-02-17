@@ -10,6 +10,7 @@
 PatternMatrix::PatternMatrix(int size) {
 	this->size = size;
 	count_set_bits = NULL;
+	bool** bitset_list = NULL;
 }
 
 int PatternMatrix::countItems() const {
@@ -34,12 +35,10 @@ PatternMatrix::~PatternMatrix() {
 	// TODO Auto-generated destructor stub
 }
 
-//void PatternMatrix::push(boost::dynamic_bitset<> n) {
 void PatternMatrix::push(vector<char> n) {
 	matrix[n]++;
 }
 
-//void PatternMatrix::push(boost::dynamic_bitset<> n, int k) {
 void PatternMatrix::push(vector<char> n, int k) {
 	matrix[n] = matrix[n] + k;
 }

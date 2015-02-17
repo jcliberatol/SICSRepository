@@ -1,10 +1,3 @@
-/*
- * NLMOptimizer.h
- *
- *  Created on: Feb 11, 2015
- *      Author: cesandovalp
- */
-
 #ifndef OPTIMIZER_BRENT_FMIN_
 #define OPTIMIZER_BRENT_FMIN_
 
@@ -12,26 +5,21 @@
 #include <float.h>
 #include <type/Constant.h>
 #include <model/Model.h>
+#define SIGR (3. - sqrt(5.)) * .5
 
+enum variables{v, w, x, u, fv, fw, fx, fu};
 const double * default_interval = new double[2] { -5, 5 };
 
 double static Brent_fmin(double * interval, double tol,
 		double (*function)(double, vector<char>, int, Model*),
 		vector<char> pattern, int node, Model *model, int maxIters) {
-	/*  c is the squared inverse of the golden ratio */
-	const double c = (3. - sqrt(5.)) * .5;
 
-	double a, b, d, e, p, q, r, u, v, w, x;
-	double t2, fu, fv, fw, fx, xm, eps, tol1, tol3;
+	double d, e, p, q, r, u, v, w, x;
+	double t2, fu, fv, fw, fx, xm, tol1, tol3;
 
-	/*  eps is approximately the square root of the relative machine precision. */
-	eps = DBL_EPSILON;
-	tol1 = eps + 1.;/* the smallest 1.000... > 1 */
-	eps = sqrt(eps);
+	tol1 = DBL_EPSILON; + 1.;/* the smallest 1.000... > 1 */
 
-	a = interval[0];
-	b = interval[1];
-	v = a + c * (b - a);
+	v = interval[0] + SIGR * (interval[1] - interval[0]);
 	w = v;
 	x = v;
 
@@ -46,17 +34,14 @@ double static Brent_fmin(double * interval, double tol,
 	int iter = 0;
 	while (true) {
 		iter++;
-		xm = (a + b) * .5;
-		tol1 = eps * fabs(x) + tol3;
+		xm = (interval[0] + interval[1]) * .5;
+		tol1 = sqrt(DBL_EPSILON) * fabs(x) + tol3;
 		t2 = tol1 * 2.;
 
 		/* check stopping criterion */
 
-		if (fabs(x - xm) <= t2 - (b - a) * .5 || iter > maxIters)
+		if (fabs(x - xm) <= t2 - (interval[1] - interval[0]) * .5) // || iter > maxIters)
 			break;
-		p = 0.;
-		q = 0.;
-		r = 0.;
 		if (fabs(e) > tol1) { /* fit parabola */
 
 			r = (x - w) * (fx - fv);
@@ -71,14 +56,14 @@ double static Brent_fmin(double * interval, double tol,
 			e = d;
 		}
 
-		if (fabs(p) >= fabs(q * .5 * r) || p <= q * (a - x)
-				|| p >= q * (b - x)) { /* a golden-section step */
+		if (fabs(p) >= fabs(q * .5 * r) || p <= q * (interval[0] - x)
+				|| p >= q * (interval[1] - x)) { /* a golden-section step */
 
 			if (x < xm)
-				e = b - x;
+				e = interval[1] - x;
 			else
-				e = a - x;
-			d = c * e;
+				e = interval[0] - x;
+			d = SIGR * e;
 		} else { /* a parabolic-interpolation step */
 
 			d = p / q;
@@ -86,7 +71,7 @@ double static Brent_fmin(double * interval, double tol,
 
 			/* f must not be evaluated too close to ax or bx */
 
-			if (u - a < t2 || b - u < t2) {
+			if (u - interval[0] < t2 || interval[1] - u < t2) {
 				d = tol1;
 				if (x >= xm)
 					d = -d;
@@ -104,21 +89,13 @@ double static Brent_fmin(double * interval, double tol,
 
 		fu = (*function)(u, pattern, node, model);
 
-		//cout << "u = " << u << " fu = " << fu << endl;
-
 		/*  update  a, b, v, w, and x */
 
-		if (x <= fu) {
-			if (u < x)
-				a = u;
-			else
-				b = u;
-		}
 		if (fu <= fx) {
 			if (u < x)
-				b = x;
+				interval[1] = x;
 			else
-				a = x;
+				interval[0] = x;
 			v = w;
 			w = x;
 			x = u;
@@ -126,6 +103,10 @@ double static Brent_fmin(double * interval, double tol,
 			fw = fx;
 			fx = fu;
 		} else {
+			if (u < x)
+				interval[0] = u;
+			else
+				interval[1] = u;
 			if (fu <= fw || w == x) {
 				v = w;
 				fv = fw;
