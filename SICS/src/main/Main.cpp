@@ -8,7 +8,8 @@
 
 #include "Main.h"
 //#define ESTIMATION_MODEL Constant::THREE_PL
-#define ESTIMATION_MODEL Constant::TWO_PL
+//RASCH_A1, RASCH_A_CONSTANT, TWO_PL, THREE_PL
+#define ESTIMATION_MODEL Constant::THREE_PL
 //#define ESTIMATION_MODEL Constant::RASCH_A1
 //#define ESTIMATION_MODEL Constant::RASCH_A_CONSTANT
 

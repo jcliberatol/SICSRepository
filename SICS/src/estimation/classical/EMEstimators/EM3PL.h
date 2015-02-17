@@ -95,67 +95,74 @@ public:
 		}
 		//ANDRADE O( items * numberOfPattern )
 		if (method == Constant::ANDRADE) {
-			int pSize = 0;
-			int iter, ifault;
-			PatternMatrix* data =
-					dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
-			double Ni = data->countIndividuals(), PII, frequencyV, mT, mU, mTU,
-					mUU, covar, sdU, sdT, corr, result;
-			for (data->resetIterator(); !data->checkEnd(); data->iterate())
-				pSize++;
-			double *T = new double[pSize], *U = new double[pSize], *TU =
-					new double[pSize], *UU = new double[pSize], *Tm =
-					new double[pSize], *Um = new double[pSize];
-			for (int i = 0; i < items; i++) {
-				iter = 0;
-				PII = 0;
-				mT = mU = mTU = mUU = 0.0;
-				for (data->resetIterator(); !data->checkEnd();
-						data->iterate()) {
-					frequencyV = data->getCurrentFrequency();
+					int pSize = 0;
+					int ifault;
+					PatternMatrix* data =
+							dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
+					double Ni = data->countIndividuals();
+					double PII;
+					double frequencyV;
+					double mT;
+					double mU;
+					double mTU;
+					double mUU;
+					double covar;
+					double sdU;
+					double sdT;
+					double corr;
+					double result;
 
-					T[iter] = 0;
-					for (int i_ = 0; i_ < data->size; i_++) {
-						if (data->getCurrentBitSet()[i_])
-							T[iter]++;
+					pSize = data->matrix.size();
+
+					double *T = new double[pSize];
+					double *U = new double[pSize];
+					double *TU = new double[pSize];
+					double *UU = new double[pSize];
+					double *Tm = new double[pSize];
+					double *Um = new double[pSize];
+
+					for (int i = 0; i < items; i++) {
+						PII = 0;
+						mT = mU = mTU = mUU = 0.0;
+						for (int index = 0; index < size; index++) {
+							frequencyV = frequency_list[index];
+
+							T[index] = 0;
+							T[index] = data->countBitSet(bitset_list[index], index);
+							PII += frequencyV * bitset_list[index][i];
+							U[index] = bitset_list[index][i];
+							TU[index] = T[index] * U[index];
+							UU[index] = U[index] * U[index];
+							mT += frequencyV * T[index];
+							mU += frequencyV * U[index];
+							mTU += frequencyV * TU[index];
+							mUU += frequencyV * UU[index];
+						}
+
+						PII /= Ni;
+						mT /= Ni;
+						mU /= Ni;
+						mTU /= Ni;
+						mUU /= Ni;
+						covar = mTU - mU * mT;
+						sdT = 0.0;
+						sdU = 0.0;
+
+						for (int index = 0; index < size; index++) {
+							frequencyV = frequency_list[index];
+							Tm[index] = T[index] - mT;
+							Um[index] = U[index] - mU;
+							sdT += frequencyV * Tm[index] * Tm[index];
+							sdU += frequencyV * Um[index] * Um[index];
+						}
+
+						sdT = std::sqrt(sdT / (Ni - 1.0));
+						sdU = std::sqrt(sdU / (Ni - 1.0));
+						corr = covar / (sdT * sdU);
+						pset[0][0][i] = std::sqrt((corr * corr) / (1.0 - corr * corr));
+						pset[1][0][i] = -(ppnd(PII, &ifault)) / corr;
 					}
-					PII += frequencyV * data->getCurrentBitSet()[items - i - 1];
-					U[iter] = data->getCurrentBitSet()[items - i - 1];
-					TU[iter] = T[iter] * U[iter];
-					UU[iter] = U[iter] * U[iter];
-					mT += frequencyV * T[iter];
-					mU += frequencyV * U[iter];
-					mTU += frequencyV * TU[iter];
-					mUU += frequencyV * UU[iter];
-					iter++;
 				}
-				PII /= Ni;
-				mT /= Ni;
-				mU /= Ni;
-				mTU /= Ni;
-				mUU /= Ni;
-				covar = mTU - mU * mT;
-				iter = 0;
-				sdT = 0.0;
-				sdU = 0.0;
-				for (data->resetIterator(); !data->checkEnd();
-						data->iterate()) {
-					frequencyV = data->getCurrentFrequency();
-					Tm[iter] = T[iter] - mT;
-					Um[iter] = U[iter] - mU;
-					sdT += frequencyV * Tm[iter] * Tm[iter];
-					sdU += frequencyV * Um[iter] * Um[iter];
-					iter++;
-				}
-				sdT = std::sqrt(sdT / (Ni - 1.0));
-				sdU = std::sqrt(sdU / (Ni - 1.0));
-				corr = covar / (sdT * sdU);
-				pset[0][0][i] = std::sqrt((corr * corr) / (1.0 - corr * corr));
-				pset[1][0][i] = -(ppnd(PII, &ifault)) / corr;
-				pset[2][0][i] = 0.2;
-
-			}
-		}
 	}
 
 	EM3PL(Model* m, QuadratureNodes* nodes, Matrix<double>* f,
