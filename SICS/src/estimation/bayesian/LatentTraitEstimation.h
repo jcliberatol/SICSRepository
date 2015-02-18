@@ -27,11 +27,13 @@ public:
 	QuadratureNodes * quadNodes;
 	LatentTraits * lt;
 
+	//Deprecated
 	inline double patternProbabilities(vector<char> pattern, int node) {
 		double p = 1;
 
 		for (int i = 0; i < pattern.size(); i++) {
 			if (pattern.at(i) > 0) {
+		//		std::cout<<".";
 				p *= (*model->parameterModel->probabilityMatrix)(node, i);
 			} else {
 				p *= 1 - (*model->parameterModel->probabilityMatrix)(node, i);
@@ -40,12 +42,44 @@ public:
 		return p;
 	}
 
+	inline double patternProbabilities(bool * pattern, int size, int node) {
+		double p = 1;
+
+		for (int i = 0; i < size; i++) {
+			if (pattern[i]) {
+			//	std::cout<<".";
+				p *= (*model->parameterModel->probabilityMatrix)(node, i);
+			} else {
+				p *= 1 - (*model->parameterModel->probabilityMatrix)(node, i);
+			}
+		}
+		return p;
+	}
+
+	//Deprecated
 	static double patternProbabilities(double theta, vector<char> pattern,
 			int node, Model * t_model) {
 		double p = 1;
 
 		for (int i = 0; i < pattern.size(); i++) {
 			if (pattern.at(i) > 0) {
+				p *= gg(theta,
+						new double[3] { t_zita[0][0][i], t_zita[1][0][i]});
+
+			} else {
+				p *= 1 - gg(theta, new double[3] { t_zita[0][0][i],
+				t_zita[1][0][i] });
+			}
+		}
+		return p;
+	}
+
+	static double patternProbabilities(double theta, bool * pattern, int size,
+			int node, Model * t_model) {
+		double p = 1;
+
+		for (int i = 0; i < size; i++) {
+			if (pattern[i] > 0) {
 				p *= gg(theta,
 						new double[3] { t_zita[0][0][i], t_zita[1][0][i] });
 
@@ -69,7 +103,8 @@ public:
 		model = m;
 	}
 
-	void estimateLatentTraitsEAP() {
+	//Deprecated
+	void estimateLatentTraitsEAPD() {
 
 		map<vector<char>, int>::const_iterator it;
 		map<vector<char>, int>::const_iterator begin = lt->pm->matrix.begin();
@@ -92,14 +127,45 @@ public:
 		}
 	}
 
-	static double logL(double theta, vector<char> pattern, int node,
+	void estimateLatentTraitsEAP() {
+
+		bool ** pattern_list = lt->pm->getBitsetList();
+		int size = lt->pm->matrix.size();
+
+		int counter = 0;
+
+		for (int index = 0; index < size; index++, ++counter) {
+			double sum_num = 0;
+			double sum_den = 0;
+
+			for (int i = 0; i < quadNodes->size(); ++i) {
+				double pp = patternProbabilities(pattern_list[index], lt->pm->size, i);
+				sum_num += (*quadNodes->getTheta())(0, i)
+						* ((*quadNodes->getWeight())(0, i)) * pp;
+				sum_den += (*quadNodes->getWeight())(0, i) * pp;
+			}
+
+			(*lt->traits)(counter, lt->dim - 1) = sum_num / sum_den;
+		}
+	}
+
+	//Deprecated
+	static double logLD(double theta, vector<char> pattern, int node,
 			Model *model) {
 		return -(log(patternProbabilities(theta, pattern, node, model))
 				- ((theta * theta) / 2));
 
 	}
 
-	void estimateLatentTraitsMAP() {
+	static double logL(double theta, bool * pattern, int size, int node,
+			Model *model) {
+		return (-(log(patternProbabilities(theta, pattern, size, node, model))
+				- ((theta * theta) / 2)));
+
+	}
+
+	//Deprecated
+	void estimateLatentTraitsMAPD() {
 		map<vector<char>, int>::const_iterator it;
 		map<vector<char>, int>::const_iterator begin = lt->pm->matrix.begin();
 		map<vector<char>, int>::const_iterator end = lt->pm->matrix.end();
@@ -107,14 +173,24 @@ public:
 		int counter = 0;
 
 		for (it = begin; it != end; ++it, ++counter) {
-
-			for (int i = 0; i < 10; i++)
-				cout << (int) it->first.at(i) << " ";
-			cout << endl;
-
-			double (*function)(double, vector<char>, int, Model *) = &logL;
+			double (*function)(double, vector<char>, int, Model *) = &logLD;
 			(*lt->traits)(counter, lt->dim - 1) = Brent_fmin(new double[2] { -5,
 					5 }, 0.0001220703, function, it->first, counter,
+					this->model, 1);
+		}
+	}
+
+	void estimateLatentTraitsMAP() {
+		bool ** pattern_list = lt->pm->getBitsetList();
+		int * frequency_list = lt->pm->getFrequencyList();
+		int size = lt->pm->matrix.size();
+
+		int counter = 0;
+
+		for (int index = 0; index < size; index++, ++counter) {
+			double (*function)(double, bool *, int, int, Model *) = &logL;
+			(*lt->traits)(counter, lt->dim - 1) = Brent_fmin(new double[2] { -5,
+					5 }, 0.0001220703, function, pattern_list[index], lt->pm->size, counter,
 					this->model, 1);
 		}
 	}
