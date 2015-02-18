@@ -60,6 +60,10 @@ void Model::buildParameterSet() {
 	parameterModel->buildParameterSet(itemModel, dimensionModel);
 }
 
+void Model::madeHessiana( int sizeI )
+{
+	Model::Hessiana = new double[sizeI];
+}
 void Model::printParameterSet(ostream& k){
 	parameterModel->printParameterSet(k);
 }

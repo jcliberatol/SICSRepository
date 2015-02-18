@@ -23,7 +23,7 @@ public:
 	void searchOptimal(double (*functionPtr)(double*,double*,int,int),
 			void (*gradientPtr)(double*,double*,int,int,double*),
 			void (*HessianPtr)(double*,double*,int,int,double*),
-			double* args, double* pars, int nargs, int npars);
+			double* args, double* pars, int nargs, int npars, double* hessiana);
 	~Optimizer();
 
 };

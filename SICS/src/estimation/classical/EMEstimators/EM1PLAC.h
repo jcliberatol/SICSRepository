@@ -284,7 +284,8 @@ public:
 		//BFGS
 		Optimizer* optim;
 		optim = new Optimizer();
-		optim->searchOptimal(fptr, gptr, hptr, args, pars, nargs, npars);
+		m->Hessiana = new double[(nargs*(nargs+1))/2];
+		optim->searchOptimal(fptr, gptr, hptr, args, pars, nargs, npars, m->Hessiana);
 		if (Constant::ITER > 3) {
 			if (Constant::ITER % 3 == 1) {
 				m->back_2 = new double[nargs];

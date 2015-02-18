@@ -30,6 +30,7 @@ class Model {
 	DimensionModel *dimensionModel;
 	int type;
 	double *back_1, *back_2;
+	double *Hessiana;
 
 	// Constructor
 	Model();
@@ -38,11 +39,10 @@ class Model {
 	void setModel ( ModelFactory * , int);
 	void successProbability (QuadratureNodes *);
 	void buildParameterSet ();
-
+	void madeHessiana( int );
 	// Getters and Setters
 	DimensionModel* getDimensionModel();
 	void setDimensionModel(DimensionModel* dimensionModel);
-
 	ItemModel* getItemModel();
 	void setItemModel(ItemModel* itemModel);
 
