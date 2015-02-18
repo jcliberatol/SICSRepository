@@ -25,7 +25,7 @@ private:
 	double (*fptr)(double*, double*, int, int);
 	void (*gptr)(double*, double*, int, int, double*);
 	void (*hptr)(double*, double*, int, int, double*);
-	bool** bitset_list;
+	bool ** bitset_list;
 	int size;
 	int * frequency_list;
 
@@ -160,24 +160,10 @@ public:
 		gptr = &TwoPLModel::gradient;
 		hptr = NULL;
 
-		map<vector<char>, int>::const_iterator it;
-		map<vector<char>, int>::const_iterator begin = data->matrix.begin();
-		map<vector<char>, int>::const_iterator end = data->matrix.end();
-
-		bitset_list = new bool*[data->matrix.size()];
-		for (int j = 0; j < data->matrix.size(); j++) {
-			bitset_list[j] = new bool[data->size];
-		}
+		bitset_list = data->getBitsetList();
+		frequency_list = data->getFrequencyList();
 
 		size = data->matrix.size();
-
-		frequency_list = new int[size];
-
-		int counter = 0;
-		for (it = begin; it != end; ++it, ++counter) {
-			copy(it->first.begin(), it->first.end(), bitset_list[counter]);
-			frequency_list[counter] = it->second;
-		}
 	}
 	virtual void stepE() {
 		profiler->startTimer("for1");
