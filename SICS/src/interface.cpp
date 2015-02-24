@@ -3,6 +3,7 @@
 
 void estimatingParameters(int ** dataI, int nRowsDataI, int nColumnsDataI, char * modelI, int dimI, char * initValI, double epsilonConvI, int maxIterI, bool verboseI) {
 	Input input;
+	Constant::EPSILON = epsilonConvI;
 	Matrix<double> cuad(41, 2);
 	//Create the profiler to profile the program
 	Trace* profiler = new Trace("Profile.log");
@@ -67,7 +68,7 @@ void estimatingParameters(int ** dataI, int nRowsDataI, int nColumnsDataI, char 
 	QuadratureNodes nodes(theta, weight);
 	em->setQuadratureNodes(&nodes);
 	em->setModel(model);
-	em->setInitialValues(Constant::ANDRADE);
+	em->setInitialValues(Constant::ANDRADE); // initvalI here!
 	profiler->stopTimer("initial");
 	//Pass the profiler to the estimation object so it can be used to profile each step
 	em->setProfiler(profiler);

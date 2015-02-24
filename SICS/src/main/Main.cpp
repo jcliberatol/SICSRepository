@@ -7,6 +7,7 @@
 //============================================================================
 
 #include "Main.h"
+#include <stdlib.h>
 #define ESTIMATION_MODEL Constant::RASCH_A_CONSTANT
 
 //void profilerOut(Trace* profile, int type){
@@ -331,6 +332,18 @@ int main(int argc, char *argv[]) {
 //	//oneRun(argv[1]);
 //	tm.stop();
 //	//cout<<"time: "<<endl<<tm.totalTime<<endl;
+	const int items = 5, peoples = 5;
+	int **DataI;
+	DataI = new int *[peoples];
+	for ( int i = 0; i < peoples; i++ ) DataI[i] = new int[items];
+	char *model, *initValues;
+	for ( int i = 0; i < peoples; i++ ) for ( int j = 0; j<  items; j++ ) DataI[i][j] = rand()%2;
+	model = "RASCH_A_CONSTANT";
+	initValues = "ANDRADE";
+	double epsilon = 0.001;
+	int maxNIteration = 200;
+	bool verbose = true;
+	estimatingParameters(DataI, peoples, items, model, 1, initValues, epsilon, maxNIteration, verbose);
 	return (0);
 }
 
