@@ -292,7 +292,10 @@ public:
 		// Obtain b
 		for (int i = 0; i < It; i++) {
 			B[0][i] = args[nA++];
-			if (fabs(B[0][i]) > abs(5)) {
+			double a = A[0][i];
+			double d = B[0][i];
+			double b = -d/a;
+			if (fabs(b) > abs(5)) {
 				B[0][i] = 0;
 				//cout<<"B";
 			}
