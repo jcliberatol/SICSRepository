@@ -343,7 +343,13 @@ int main(int argc, char *argv[]) {
 	double epsilon = 0.001;
 	int maxNIteration = 200;
 	bool verbose = true;
-	estimatingParameters(DataI, peoples, items, model, 1, initValues, epsilon, maxNIteration, verbose);
+	double *parameters;
+	parameters = new double[items+1];
+	estimatingParameters(DataI, peoples, items, model, 1, initValues, epsilon, maxNIteration, verbose, parameters);
+	for ( int i = 0;i  <= items; i++ )
+	{
+		cout<<parameters[i] <<" ";
+	}
 	return (0);
 }
 

@@ -100,7 +100,13 @@ void OnePLModel::printParameterSet(ostream& out){
 		out<<1<<" "<<(parameterSet[0][0][k])<<" "<<0 <<"\n";
 	}
 }
-
+void OnePLModel::getParameters(double * parameters)
+{
+	for ( int i = 0; i < items; i++ )
+	{
+		parameters[i] = parameterSet[1][0][i];
+	}
+}
 
 double OnePLModel::logLikelihood(double* args, double* pars, int nargs,
 		int npars) {

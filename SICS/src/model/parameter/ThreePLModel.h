@@ -43,6 +43,7 @@ public:
 	// Getters and Setters
 	double*** getParameterSet() ;
 	void setParameterSet(double ***);
+	void getParameters(double * );
 	void printParameterSet(ostream&);
 	string getStringParameters();
 	double getProbability(int, int);

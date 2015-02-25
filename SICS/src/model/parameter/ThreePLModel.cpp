@@ -396,3 +396,16 @@ void ThreePLModel::printParameterSet(ostream& out) {
 	}
 
 }
+void ThreePLModel::getParameters(double * parameters)
+{
+	int i = 0;
+	for (int j = 0; i < items; i++) {
+		parameters[i++] = parameterSet[0][0][j];
+	}
+	for (int j = 0; i < items; i++) {
+		parameters[i++] = parameterSet[1][0][j];
+	}
+	for (int j = 0; i < items; i++) {
+		parameters[i++] = parameterSet[2][0][j];
+	}
+}

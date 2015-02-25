@@ -275,3 +275,12 @@ void OnePLACModel::printParameterSet(ostream& out){
 						<< " 0" << endl;
 		}
 }
+void OnePLACModel::getParameters(double * parameters)
+{
+	parameters[0] = parameterSet[0][0][0];
+	for ( int i = 0; i < items; i++ )
+	{
+		parameters[i+1] = parameterSet[1][0][i];
+	}
+}
+
