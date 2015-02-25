@@ -77,39 +77,26 @@ int PatternMatrix::countBitSet(bool * bitset, int index) {
 
 bool ** PatternMatrix::getBitsetList() {
 
-//	if (bitset_list == NULL) {
-//		bitset_list = new bool*[matrix.size()];
-//		for (int j = 0; j < matrix.size(); j++) {
-//			bitset_list[j] = new bool[size];
-//		}
-//
-//		frequency_list = new int[matrix.size()];
-//		int counter = 0;
-//
-//		for (iterator = begin; iterator != end; ++iterator, ++counter) {
-//			copy(iterator->first.begin(), iterator->first.end(),
-//					bitset_list[counter]);
-//			frequency_list[counter] = iterator->second;
-//		}
-//	}
+	if (bitset_list == NULL) {
 
-	map<vector<char>, int>::const_iterator it;
-	map<vector<char>, int>::const_iterator begin = matrix.begin();
-	map<vector<char>, int>::const_iterator end = matrix.end();
+		map<vector<char>, int>::const_iterator it;
+		map<vector<char>, int>::const_iterator begin = matrix.begin();
+		map<vector<char>, int>::const_iterator end = matrix.end();
 
-	bitset_list = new bool*[matrix.size()];
+		bitset_list = new bool*[matrix.size()];
 
-	for (int j = 0; j < matrix.size(); j++) {
-		bitset_list[j] = new bool[size];
-	}
+		for (int j = 0; j < matrix.size(); j++) {
+			bitset_list[j] = new bool[size];
+		}
 
-	frequency_list = new int[matrix.size()];
-	//frequency_list = data->getFrequencyList();
+		frequency_list = new int[matrix.size()];
+		//frequency_list = data->getFrequencyList();
 
-	int counter = 0;
-	for (it = begin; it != end; ++it, ++counter) {
-		copy(it->first.begin(), it->first.end(), bitset_list[counter]);
-		frequency_list[counter] = it->second;
+		int counter = 0;
+		for (it = begin; it != end; ++it, ++counter) {
+			copy(it->first.begin(), it->first.end(), bitset_list[counter]);
+			frequency_list[counter] = it->second;
+		}
 	}
 
 	return bitset_list;

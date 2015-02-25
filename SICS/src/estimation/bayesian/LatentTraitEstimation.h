@@ -104,7 +104,7 @@ public:
 	}
 
 	//Deprecated
-	void estimateLatentTraitsEAPD() {
+	void estimateLatentTraitsEAP_() {
 
 		map<vector<char>, int>::const_iterator it;
 		map<vector<char>, int>::const_iterator begin = lt->pm->matrix.begin();
@@ -150,7 +150,7 @@ public:
 	}
 
 	//Deprecated
-	static double logLD(double theta, vector<char> pattern, int node,
+	static double logL_(double theta, vector<char> pattern, int node,
 			Model *model) {
 		return -(log(patternProbabilities(theta, pattern, node, model))
 				- ((theta * theta) / 2));
@@ -165,7 +165,7 @@ public:
 	}
 
 	//Deprecated
-	void estimateLatentTraitsMAPD() {
+	void estimateLatentTraitsMAP_() {
 		map<vector<char>, int>::const_iterator it;
 		map<vector<char>, int>::const_iterator begin = lt->pm->matrix.begin();
 		map<vector<char>, int>::const_iterator end = lt->pm->matrix.end();
@@ -173,7 +173,7 @@ public:
 		int counter = 0;
 
 		for (it = begin; it != end; ++it, ++counter) {
-			double (*function)(double, vector<char>, int, Model *) = &logLD;
+			double (*function)(double, vector<char>, int, Model *) = &logL_;
 			(*lt->traits)(counter, lt->dim - 1) = Brent_fmin(new double[2] { -5,
 					5 }, 0.0001220703, function, it->first, counter,
 					this->model, 1);
