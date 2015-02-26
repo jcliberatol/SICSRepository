@@ -22,3 +22,4 @@ double Constant::reltol  =    1e-8;
 double Constant::D_CONST = 1;
 int Constant::ITER = 0;
 bool Constant::CAPTURE_HESSIANA = true;
+double Constant::EPSILONC = 10000;

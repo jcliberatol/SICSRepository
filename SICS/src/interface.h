@@ -13,6 +13,6 @@
 
 
 #define _INTERFACE_H
-	void estimatingParameters(int **, int, int, char *, int , char *, double, int, bool, double *);
+	void estimatingParameters(int **, int, int, char *, int , char *, double, int, bool, double *, int &, double &, double &);
 	void profilerOut(Trace*, int );
 #endif

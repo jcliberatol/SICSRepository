@@ -1,7 +1,7 @@
 #include "interface.h"
 #define ESTIMATION_MODEL Constant::RASCH_A_CONSTANT
 
-void estimatingParameters(int ** dataI, int nRowsDataI, int nColumnsDataI, char * modelI, int dimI, char * initValI, double epsilonConvI, int maxIterI, bool verboseI, double *parametersO) {
+void estimatingParameters(int ** dataI, int nRowsDataI, int nColumnsDataI, char * modelI, int dimI, char * initValI, double epsilonConvI, int maxIterI, bool verboseI, double *parametersO, int & numberOfCyclesO, double & logLikO, double & convEp) {
 	Input input;
 	Constant::EPSILON = epsilonConvI;
 	Matrix<double> cuad(41, 2);
@@ -75,6 +75,8 @@ void estimatingParameters(int ** dataI, int nRowsDataI, int nColumnsDataI, char 
 	//Run the estimation
 	em->estimate();
 	model->parameterModel->getParameters(parametersO);
+	numberOfCyclesO = Constant::ITER;
+	convEp = Constant::EPSILONC;
 	delete modelFactory;
 	delete dataSet;
 	delete em;

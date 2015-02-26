@@ -36,6 +36,7 @@ public:
 	static double abstol ;
 	static double reltol ;
 	static double D_CONST ;
+	static double EPSILONC;
 
 
 

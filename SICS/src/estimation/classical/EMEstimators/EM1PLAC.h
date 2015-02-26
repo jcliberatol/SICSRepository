@@ -327,6 +327,7 @@ public:
 				maxDelta = fabs(DD(0, v1));
 			}
 		}
+		Constant::EPSILONC = maxDelta;
 		if (maxDelta < Constant::CONVERGENCE_DELTA) {
 			m->itemParametersEstimated = true;
 		}

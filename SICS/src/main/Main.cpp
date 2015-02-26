@@ -341,15 +341,21 @@ int main(int argc, char *argv[]) {
 	model = "RASCH_A_CONSTANT";
 	initValues = "ANDRADE";
 	double epsilon = 0.001;
-	int maxNIteration = 200;
+	int maxNIteration = 1;
 	bool verbose = true;
 	double *parameters;
 	parameters = new double[items+1];
-	estimatingParameters(DataI, peoples, items, model, 1, initValues, epsilon, maxNIteration, verbose, parameters);
+	int numberOfCycles = -1;
+	double logLik = -1;
+	double convEp = -1;
+	estimatingParameters(DataI, peoples, items, model, 1, initValues, epsilon, maxNIteration, verbose, parameters, numberOfCycles, logLik, convEp);
 	for ( int i = 0;i  <= items; i++ )
 	{
-		cout<<parameters[i] <<" ";
+		std::cout<<parameters[i] <<" ";
 	}
+	std::cout<<endl;
+	std::cout<<numberOfCycles<<endl;
+	std::cout<<convEp<<endl;
 	return (0);
 }
 

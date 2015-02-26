@@ -403,6 +403,7 @@ public:
 
 		}
 		//TODO change by constant file
+		Constant::EPSILONC = maxDelta;
 		if (maxDelta < Constant::CONVERGENCE_DELTA) {
 			m->itemParametersEstimated = true;
 		}
