@@ -21,7 +21,7 @@
 #include <trace/Trace.h>
 #include <estimation/bayesian/LatentTraitEstimation.h>
 #include <type/LatentTraits.h>
-
+#include <util/fitness/ItemFit.h>
 
 
 
