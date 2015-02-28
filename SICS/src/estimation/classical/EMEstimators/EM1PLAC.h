@@ -162,7 +162,7 @@ public:
 
 	}
 
-	virtual void stepM() {
+	virtual void stepM(double *** parameters) {
 		int It = m->getItemModel()->getDataset()->countItems();
 		int q = nodes->size();
 		int nargs = It + 1;
@@ -218,6 +218,11 @@ public:
 		Optimizer* optim;
 		optim = new Optimizer();
 		optim->searchOptimal(fptr, gptr, hptr, args, pars, nargs, npars);
+
+		std::copy(&((*parameters)[1][0]), (&((*parameters)[1][0])) + nargs, &((*parameters)[0][0]));
+		std::copy(&((*parameters)[2][0]), (&((*parameters)[2][0])) + nargs, &((*parameters)[1][0]));
+		std::copy(&args[0], &args[0] + nargs, &((*parameters)[2][0]));
+
 		nA = 0;
 
 		// Obtain a

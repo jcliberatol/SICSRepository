@@ -189,7 +189,7 @@ public:
 
 	}
 
-	virtual void stepM() {
+	virtual void stepM(double *** parameters) {
 		/*
 		 */
 		//Step M implementation using the BFGS Algorithm
@@ -277,6 +277,9 @@ public:
 		optim = new Optimizer();
 		optim->searchOptimal(fptr, gptr, hptr, args, pars, nargs, npars);
 
+		std::copy(&((*parameters)[1][0]), (&((*parameters)[1][0])) + nargs, &((*parameters)[0][0]));
+		std::copy(&((*parameters)[2][0]), (&((*parameters)[2][0])) + nargs, &((*parameters)[1][0]));
+		std::copy(&args[0], &args[0] + nargs, &((*parameters)[2][0]));
 		// Now pass the optimals to the Arrays.
 
 		nA = 0;
@@ -294,7 +297,7 @@ public:
 			B[0][i] = args[nA++];
 			double a = A[0][i];
 			double d = B[0][i];
-			double b = -d/a;
+			double b = -d / a;
 			if (fabs(b) > abs(5)) {
 				B[0][i] = 0;
 				//cout<<"B";
