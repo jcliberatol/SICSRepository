@@ -17,31 +17,6 @@ string OnePLModel::getStringParameters() {
 	return ("stringPars");
 }
 
-void OnePLModel::buildParameterSet(ItemModel* itemModel,
-		DimensionModel* dimensionModel) {
-
-	if (typeid(*itemModel) == typeid(DichotomousModel)) {
-
-		if (typeid(*dimensionModel) == typeid(UnidimensionalModel)) {
-
-			items = itemModel->countItems();
-			parameterSet = new double**[1];
-			parameterSet[0] = new double*[1];
-			parameterSet[0][0] = new double[items];
-		}
-
-		else if (typeid(*dimensionModel) == typeid(MultidimensionalModel)) {
-			// TODO: Dichotomous Multidimensional
-		}
-
-		else if (typeid(*dimensionModel) == typeid(MultiUniDimModel)) {
-			// TODO: Dichotomous MultiUniDimensional
-		}
-	} else if (typeid(*dimensionModel) == typeid(PolytomousModel)) {
-		// TODO: Polytomous Model for Unidimensional, Multidimensional and MultiUni
-	}
-}
-
 inline void OnePLModel::successProbability(DimensionModel *dimensionModel,
 		QuadratureNodes * quadNodes) {
 
