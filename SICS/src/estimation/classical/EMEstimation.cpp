@@ -72,8 +72,6 @@ void EMEstimation::setModel(Model* Model) {
 	}
 
 	if (Model->Modeltype() == Constant::RASCH_A_CONSTANT) {
-		//		cout << "Remember to initialize the estimator , segfault possible"
-		//				<< endl;
 		estimator = new EM1PLAC(model, quadNodes, f, r);
 	}
 
@@ -111,14 +109,39 @@ void EMEstimation::estimate() {
 	profiler->startTimer("estim");
 	profiler->resetTimer("Et");
 	profiler->resetTimer("Mt");
+
+	double ** args_hist;
+	int size = 2 * model->getItemModel()->getDataset()->countItems();
+	(args_hist) = new double*[3];
+	(args_hist)[0] = new double[size];
+	(args_hist)[1] = new double[size];
+	(args_hist)[2] = new double[size];
+
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < size; j++)
+			args_hist[i][j] = 0;
+
 	while (!convergenceSignal) {
-		//cout << "Iteration " << iterations << endl;
+		//cout<<iterations<<endl;
 		profiler->resetTimer("estimation");
 		profiler->startTimer("Et");
 		estimator->stepE();
 		profiler->stopTimer("Et");
 		profiler->startTimer("Mt");
-		estimator->stepM();
+		estimator->stepM(&args_hist);
+
+		if ((iterations + 1) % 3 == 0){
+			int It = model->getItemModel()->getDataset()->countItems();
+			ramsay(&args_hist, size);
+			double *** parSet = model->getParameterModel()->getParameterSet();
+
+			std::copy(&(args_hist[2][0]), &(args_hist[2][0]) + It, &(parSet[0][0][0]));
+			std::copy(&(args_hist[2][0]) + It, &(args_hist[2][0]) + (2 * It), &(parSet[1][0][0]));
+			std::copy(&(args_hist[2][0]) + (2 * It), &(args_hist[2][0]) + (3 * It), &(parSet[2][0][0]));
+
+			model->getParameterModel()->setParameterSet(parSet);
+		}
+
 		profiler->stopTimer("Mt");
 		double*** ps = model->parameterModel->getParameterSet();
 		int items = model->parameterModel->items;
@@ -129,7 +152,7 @@ void EMEstimation::estimate() {
 		if (iterations > Constant::MAX_EM_ITERS) {
 			convergenceSignal = true;
 			//cout << "more than " << Constant::MAX_EM_ITERS << "iters, stop"
-					//<< endl;
+			//<< endl;
 		}
 	}
 	estimator->untransform();
