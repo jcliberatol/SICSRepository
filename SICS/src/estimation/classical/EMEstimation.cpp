@@ -58,17 +58,14 @@ void EMEstimation::setModel(Model* Model) {
 	//Discriminate by models
 	if (Model->Modeltype() == Constant::THREE_PL) {
 		estimator = new EM3PL(model, quadNodes, f, r); //Initializes estimator
-		estimator->setProfiler(profiler);
 	}
 
 	if (Model->Modeltype() == Constant::RASCH_A1) {
 		estimator = new EM1PL(model, quadNodes, f, r); //Initializes estimator
-		estimator->setProfiler(profiler);
 	}
 
 	if (Model->Modeltype() == Constant::TWO_PL) {
 		estimator = new EM2PL(model, quadNodes, f, r); //Initializes estimator with Cristian's 2PL Model
-		estimator->setProfiler(profiler);
 	}
 
 	if (Model->Modeltype() == Constant::RASCH_A_CONSTANT) {
@@ -105,10 +102,6 @@ void EMEstimation::setInitialValues(int method) {
 void EMEstimation::estimate() {
 	estimator->transform();
 	iterations = 0;
-	profiler->resetTimer("estim");
-	profiler->startTimer("estim");
-	profiler->resetTimer("Et");
-	profiler->resetTimer("Mt");
 
 	double ** args_hist;
 	int size = 2 * model->getItemModel()->getDataset()->countItems();
@@ -123,11 +116,9 @@ void EMEstimation::estimate() {
 
 	while (!convergenceSignal) {
 		//cout<<iterations<<endl;
-		profiler->resetTimer("estimation");
-		profiler->startTimer("Et");
+		cout<<"stepE()"<<endl;
 		estimator->stepE();
-		profiler->stopTimer("Et");
-		profiler->startTimer("Mt");
+		cout<<"stepM()"<<endl;
 		estimator->stepM(&args_hist);
 
 		if ((iterations + 1) % 3 == 0){
@@ -141,14 +132,13 @@ void EMEstimation::estimate() {
 
 			model->getParameterModel()->setParameterSet(parSet);
 		}
+		//cout<<"→1"<<endl;
 
-		profiler->stopTimer("Mt");
 		double*** ps = model->parameterModel->getParameterSet();
 		int items = model->parameterModel->items;
 		convergenceSignal = model->itemParametersEstimated;
 		iterations++;
 		//cout<<" "<<iterations;
-		profiler->upCount("iterations");
 		if (iterations > Constant::MAX_EM_ITERS) {
 			convergenceSignal = true;
 			//cout << "more than " << Constant::MAX_EM_ITERS << "iters, stop"
@@ -157,7 +147,6 @@ void EMEstimation::estimate() {
 	}
 	estimator->untransform();
 	model->printParameterSet(cout);
-	profiler->stopTimer("estim");
 	//	cout << "Total time from estimation " << profiler->dr("estim") << endl
 	//			<< "E step time : " << profiler->dr("Et") << endl
 	//			<< "M step time : " << profiler->dr("Mt") << endl;

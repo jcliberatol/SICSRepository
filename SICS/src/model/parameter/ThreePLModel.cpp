@@ -45,8 +45,6 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel, Quadrature
 		q = quadNodes->size();
 	}
 
-
-
 	if(typeid(*dimensionModel)==typeid(UnidimensionalModel)) {
 		if(probabilityMatrix == NULL){
 				//Creates the matrix if it is not already created
