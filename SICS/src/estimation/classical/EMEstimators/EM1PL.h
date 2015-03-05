@@ -11,23 +11,6 @@
 #include <model/parameter/OnePLModel.h>
 class EM1PL: public EMEstimator {
 private:
-	PatternMatrix* data;
-	Model* m;
-	int items;
-	ParameterModel* pm;
-	QuadratureNodes* nodes;
-	int q;
-	Matrix<double>* weights;
-	long double * faux;
-	long double sum;
-	Matrix<double>* f;
-	Matrix<double>* r;
-	double (*fptr)(double*, double*, int, int);
-	void (*gptr)(double*, double*, int, int, double*);
-	void (*hptr)(double*, double*, int, int, double*);
-	bool** bitset_list;
-	int size;
-	int * frequency_list;
 
 public:
 	virtual ~EM1PL() {
@@ -54,7 +37,7 @@ public:
 		 * The default method is OSPINA
 		 */
 		int items = m->getParameterModel()->items;
-		double *** pset = m->getParameterModel()->getParameterSet();
+		pset = m->getParameterModel()->getParameterSet();
 		if (method == Constant::RANDOM) {
 			std::srand(std::time(0));
 			// use current time as seed for random generator

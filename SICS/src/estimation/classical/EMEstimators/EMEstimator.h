@@ -137,6 +137,7 @@ public:
 			PII = 0;
 			mT = mU = mTU = mUU = 0.0;
 			for (int index = 0; index < size; index++) {
+
 				frequencyV = frequency_list[index];
 
 				T[index] = 0;
@@ -173,6 +174,7 @@ public:
 			corr = covar / (sdT * sdU);
 			pset[0][0][i] = std::sqrt((corr * corr) / (1.0 - corr * corr));
 			pset[1][0][i] = -(ppnd(PII, &ifault)) / corr;
+			pset[2][0][i] = 0.2;
 		}
 	}
 	void setProfiler(Trace* t) {

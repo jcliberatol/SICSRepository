@@ -55,12 +55,14 @@ public:
 
 		if (method == Constant::ANDRADE) {
 			Andrade();
+			for (int i = 0; i < items; i++) {
+				pset[2][0][i] = 0;
+			}
 		}
 	}
 
 	EM2PL(Model* m, QuadratureNodes* nodes, Matrix<double>* f,
 			Matrix<double>* r) {
-		profiler = NULL;
 		this->nodes = nodes;
 		this->m = m;
 		this->f = f;
@@ -162,14 +164,11 @@ public:
 		 */
 		Optimizer* optim;
 		optim = new Optimizer();
-		profiler->startTimer("optim");
 		optim->searchOptimal(fptr, gptr, hptr, args, pars, nargs, npars);
 
 		std::copy(&((*parameters)[1][0]), (&((*parameters)[1][0])) + nargs, &((*parameters)[0][0]));
 		std::copy(&((*parameters)[2][0]), (&((*parameters)[2][0])) + nargs, &((*parameters)[1][0]));
 		std::copy(&args[0], &args[0] + nargs, &((*parameters)[2][0]));
-
-		profiler->stopTimer("optim");
 
 		delete optim;
 		// Now pass the optimals to the Arrays.
