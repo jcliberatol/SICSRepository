@@ -19,8 +19,7 @@ double static Brent_fmin(double * interval, double tol,
 	double d, e, p, q, r, u, v, w, x;
 	double t2, fu, fv, fw, fx, xm, tol1, tol3;
 
-	tol1 = DBL_EPSILON;
-	+1.;/* the smallest 1.000... > 1 */
+	tol1 = DBL_EPSILON + 1.;
 
 	v = interval[0] + SIGR * (interval[1] - interval[0]);
 	w = v;
@@ -161,8 +160,7 @@ double static Brent_fmin(double * interval, double tol,
 	double d, e, p, q, r, u, v, w, x;
 	double t2, fu, fv, fw, fx, xm, tol1, tol3;
 
-	tol1 = DBL_EPSILON;
-	+1.;/* the smallest 1.000... > 1 */
+	tol1 = DBL_EPSILON + 1.;
 
 	v = interval[0] + SIGR * (interval[1] - interval[0]);
 	w = v;

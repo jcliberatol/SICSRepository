@@ -33,13 +33,12 @@ public:
 
 		for (int i = 0; i < pattern.size(); i++) {
 			if (pattern.at(i) > 0) {
-		//		std::cout<<".";
 				p *= (*model->parameterModel->probabilityMatrix)(node, i);
 			} else {
 				p *= 1 - (*model->parameterModel->probabilityMatrix)(node, i);
 			}
 		}
-		return p;
+		return (p);
 	}
 
 	inline double patternProbabilities(bool * pattern, int size, int node) {
@@ -47,13 +46,12 @@ public:
 
 		for (int i = 0; i < size; i++) {
 			if (pattern[i]) {
-			//	std::cout<<".";
 				p *= (*model->parameterModel->probabilityMatrix)(node, i);
 			} else {
 				p *= 1 - (*model->parameterModel->probabilityMatrix)(node, i);
 			}
 		}
-		return p;
+		return (p);
 	}
 
 	//Deprecated
@@ -63,15 +61,15 @@ public:
 
 		for (int i = 0; i < pattern.size(); i++) {
 			if (pattern.at(i) > 0) {
-				p *= gg(theta,
-						new double[3] { t_zita[0][0][i], t_zita[1][0][i]});
+				p *= gg(theta, new double[3] { t_zita[0][0][i], t_zita[1][0][i],
+						t_zita[2][0][i] });
 
 			} else {
 				p *= 1 - gg(theta, new double[3] { t_zita[0][0][i],
-				t_zita[1][0][i] });
+				t_zita[1][0][i], t_zita[2][0][i] });
 			}
 		}
-		return p;
+		return (p);
 	}
 
 	static double patternProbabilities(double theta, bool * pattern, int size,
@@ -80,19 +78,19 @@ public:
 
 		for (int i = 0; i < size; i++) {
 			if (pattern[i] > 0) {
-				p *= gg(theta,
-						new double[3] { t_zita[0][0][i], t_zita[1][0][i] });
+				p *= gg(theta, new double[3] { t_zita[0][0][i], t_zita[1][0][i],
+						t_zita[2][0][i] });
 
 			} else {
 				p *= 1 - gg(theta, new double[3] { t_zita[0][0][i],
-				t_zita[1][0][i] });
+				t_zita[1][0][i], t_zita[2][0][i] });
 			}
 		}
-		return p;
+		return (p);
 	}
 
 	LatentTraits * getLatentTraits() {
-		return lt;
+		return (lt);
 	}
 
 	void setLatentTraits(LatentTraits * ltt) {
@@ -139,7 +137,8 @@ public:
 			double sum_den = 0;
 
 			for (int i = 0; i < quadNodes->size(); ++i) {
-				double pp = patternProbabilities(pattern_list[index], lt->pm->size, i);
+				double pp = patternProbabilities(pattern_list[index],
+						lt->pm->size, i);
 				sum_num += (*quadNodes->getTheta())(0, i)
 						* ((*quadNodes->getWeight())(0, i)) * pp;
 				sum_den += (*quadNodes->getWeight())(0, i) * pp;
@@ -147,13 +146,19 @@ public:
 
 			(*lt->traits)(counter, lt->dim - 1) = sum_num / sum_den;
 		}
+
+		for (int j = 0; j < size; j++) {
+			delete pattern_list[j];
+		}
+
+		delete pattern_list;
 	}
 
 	//Deprecated
 	static double logL_(double theta, vector<char> pattern, int node,
 			Model *model) {
-		return -(log(patternProbabilities(theta, pattern, node, model))
-				- ((theta * theta) / 2));
+		return (-(log(patternProbabilities(theta, pattern, node, model))
+				- ((theta * theta) / 2)));
 
 	}
 
@@ -190,9 +195,16 @@ public:
 		for (int index = 0; index < size; index++, ++counter) {
 			double (*function)(double, bool *, int, int, Model *) = &logL;
 			(*lt->traits)(counter, lt->dim - 1) = Brent_fmin(new double[2] { -5,
-					5 }, 0.0001220703, function, pattern_list[index], lt->pm->size, counter,
-					this->model, 1);
+					5 }, 0.0001220703, function, pattern_list[index],
+					lt->pm->size, counter, this->model, 1);
 		}
+
+		for (int j = 0; j < size; j++) {
+			delete pattern_list[j];
+		}
+
+		delete pattern_list;
+		delete frequency_list;
 	}
 
 	void setQuadratureNodes(QuadratureNodes *nodes) {
