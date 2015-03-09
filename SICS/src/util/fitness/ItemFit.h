@@ -12,11 +12,13 @@
 #include <cmath>
 #include <type/Constant.h>
 
-void itemFit(LatentTraits* scores, PatternMatrix* data,Model* model ){
-	int nitems = data->countItems();
-	int nscores = (scores)->traits->nR();
-	int ninds = data->countIndividuals();
-	double scoresTot [nscores];
+void itemFit(LatentTraits* scores, Matrix<double> data,Model* model ){
+
+	bool ** pattern_list = scores->pm->getBitsetList();
+	int nitems = data.nC();
+	int nscores = scores->pm->matrix.size();
+	int ninds = data.nR();
+	double scoresTot [ninds];
 	int i, j, k;
 	int npatt = 0;
 
@@ -24,7 +26,8 @@ void itemFit(LatentTraits* scores, PatternMatrix* data,Model* model ){
 		for(j = 0; j < nscores; j++){
 			npatt = 0;
 			for(k = 0; k < nitems ; k++){
-				if(data->bitset_list[i][k] == scores->pm->bitset_list[j][k])
+
+				if(data(i, k) == pattern_list[j][k])
 					npatt++;
 			}
 			if(npatt == nitems){
@@ -34,9 +37,10 @@ void itemFit(LatentTraits* scores, PatternMatrix* data,Model* model ){
 	}
 
 	double  LL[ninds][nitems], P[ninds][nitems], Q[ninds][nitems];
-	double*** parameterSet = model->parameterModel->parameterSet;
+	double*** parameterSet = model->getParameterModel()->getParameterSet();
 	int model_type = model->type;
 	double a, b, c, cp;
+
 	for(j = 0; j < ninds; j++){
 		for(i = 0; i < nitems; i++){
 			switch(model->type){
@@ -68,9 +72,9 @@ void itemFit(LatentTraits* scores, PatternMatrix* data,Model* model ){
 		}
 	}
 
-	for(i = 0; i<nitems; i++){
-		for(j = 0; j<ninds; j++){
-			if(data->bitset_list[j][i] == 1){
+	for(i = 0; i < nitems; i++){
+		for(j = 0; j < ninds; j++){
+			if(data(j, i) == 1){
 				LL[j][i] = P[j][i];
 			}else{
 				LL[j][i] = Q[j][i];
@@ -89,14 +93,19 @@ void itemFit(LatentTraits* scores, PatternMatrix* data,Model* model ){
 	double sigmaCuad[nitems] = {0}, mu[nitems] = {0};
 
 	for(i = 0; i < nitems; i++){
-		  for(j = 0; j < ninds; j++){
-			  mu[i] += log(P[j][i])* P[j][i] + log(Q[j][i])* Q[j][i];
-			  sigmaCuad[i] += P[j][1] * P[j][2] *( log(P[j][1]/P[j][2])* log(P[j][1]/P[j][2])) + Q[j][1] * Q[j][2] * (log(Q[j][1]/Q[j][2])*log(Q[j][1]/Q[j][2]));
-		  }
+		for(j = 0; j < ninds; j++){
+			mu[i] += log(P[j][i])* P[j][i] + log(Q[j][i])* Q[j][i];
+			sigmaCuad[i] += P[j][1] * P[j][2] *( log(P[j][1]/P[j][2])* log(P[j][1]/P[j][2])) + Q[j][1] * Q[j][2] * (log(Q[j][1]/Q[j][2])*log(Q[j][1]/Q[j][2]));
+		}
 	}
 
-	//	  Z3 = (LL - mu) / sqrt(sigmaCuad)
+	double Z3[ninds][nitems];
 
+	for(i = 0; i < ninds; i++){
+		for(j = 0; j < nitems; j++){
+			Z3[i][j] = (LL[i][j] - mu[j])/sqrt(sigmaCuad[j]);
+		}
+	}
 }
 
 

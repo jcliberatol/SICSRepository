@@ -37,7 +37,6 @@ public:
 
 	// Methods
 	void setEstimationNodes(QuadratureNodes * );
-	void buildParameterSet(ItemModel *, DimensionModel *);
 	void successProbability(DimensionModel *, QuadratureNodes *);
 	static double logLikelihood(double*, double*, int, int);
 	static void gradient(double*,double*,int,int,double*);

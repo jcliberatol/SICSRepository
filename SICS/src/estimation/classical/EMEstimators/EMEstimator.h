@@ -101,7 +101,7 @@ public:
 		}
 	}
 	//Step M also needs the model, quad nodes, f and r
-	virtual void stepM() = 0;
+	virtual void stepM(double *** parameters) = 0;
 	//in this cases the model are needed to be filled
 	virtual void setInitialValues(int, Model*) = 0;
 	virtual void setInitialValues(double***, Model*) = 0;
@@ -137,6 +137,7 @@ public:
 			PII = 0;
 			mT = mU = mTU = mUU = 0.0;
 			for (int index = 0; index < size; index++) {
+
 				frequencyV = frequency_list[index];
 
 				T[index] = 0;
@@ -173,6 +174,7 @@ public:
 			corr = covar / (sdT * sdU);
 			pset[0][0][i] = std::sqrt((corr * corr) / (1.0 - corr * corr));
 			pset[1][0][i] = -(ppnd(PII, &ifault)) / corr;
+			pset[2][0][i] = 0.2;
 		}
 	}
 	void setProfiler(Trace* t) {

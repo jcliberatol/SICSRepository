@@ -25,7 +25,6 @@ public:
 	OnePLModel();
 
 	// Methods
-	void buildParameterSet(ItemModel *, DimensionModel *);
 	inline void successProbability(DimensionModel *, QuadratureNodes *);
 	inline static double successProbability(double, double);
 	double successProbability(double, double *);

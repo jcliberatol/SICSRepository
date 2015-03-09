@@ -58,22 +58,17 @@ void EMEstimation::setModel(Model* Model) {
 	//Discriminate by models
 	if (Model->Modeltype() == Constant::THREE_PL) {
 		estimator = new EM3PL(model, quadNodes, f, r); //Initializes estimator
-		estimator->setProfiler(profiler);
 	}
 
 	if (Model->Modeltype() == Constant::RASCH_A1) {
 		estimator = new EM1PL(model, quadNodes, f, r); //Initializes estimator
-		estimator->setProfiler(profiler);
 	}
 
 	if (Model->Modeltype() == Constant::TWO_PL) {
 		estimator = new EM2PL(model, quadNodes, f, r); //Initializes estimator with Cristian's 2PL Model
-		estimator->setProfiler(profiler);
 	}
 
 	if (Model->Modeltype() == Constant::RASCH_A_CONSTANT) {
-		//		cout << "Remember to initialize the estimator , segfault possible"
-		//				<< endl;
 		estimator = new EM1PLAC(model, quadNodes, f, r);
 	}
 
@@ -107,34 +102,51 @@ void EMEstimation::setInitialValues(int method) {
 void EMEstimation::estimate() {
 	estimator->transform();
 	iterations = 0;
-	profiler->resetTimer("estim");
-	profiler->startTimer("estim");
-	profiler->resetTimer("Et");
-	profiler->resetTimer("Mt");
+
+	double ** args_hist;
+	int size = 2 * model->getItemModel()->getDataset()->countItems();
+	(args_hist) = new double*[3];
+	(args_hist)[0] = new double[size];
+	(args_hist)[1] = new double[size];
+	(args_hist)[2] = new double[size];
+
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < size; j++)
+			args_hist[i][j] = 0;
+
 	while (!convergenceSignal) {
-		//cout << "Iteration " << iterations << endl;
-		profiler->resetTimer("estimation");
-		profiler->startTimer("Et");
+		//cout<<iterations<<endl;
+		cout<<"stepE()"<<endl;
 		estimator->stepE();
-		profiler->stopTimer("Et");
-		profiler->startTimer("Mt");
-		estimator->stepM();
-		profiler->stopTimer("Mt");
+		cout<<"stepM()"<<endl;
+		estimator->stepM(&args_hist);
+
+		if ((iterations + 1) % 3 == 0){
+			int It = model->getItemModel()->getDataset()->countItems();
+			ramsay(&args_hist, size);
+			double *** parSet = model->getParameterModel()->getParameterSet();
+
+			std::copy(&(args_hist[2][0]), &(args_hist[2][0]) + It, &(parSet[0][0][0]));
+			std::copy(&(args_hist[2][0]) + It, &(args_hist[2][0]) + (2 * It), &(parSet[1][0][0]));
+			std::copy(&(args_hist[2][0]) + (2 * It), &(args_hist[2][0]) + (3 * It), &(parSet[2][0][0]));
+
+			model->getParameterModel()->setParameterSet(parSet);
+		}
+		//cout<<"→1"<<endl;
+
 		double*** ps = model->parameterModel->getParameterSet();
 		int items = model->parameterModel->items;
 		convergenceSignal = model->itemParametersEstimated;
 		iterations++;
 		//cout<<" "<<iterations;
-		profiler->upCount("iterations");
 		if (iterations > Constant::MAX_EM_ITERS) {
 			convergenceSignal = true;
 			//cout << "more than " << Constant::MAX_EM_ITERS << "iters, stop"
-					//<< endl;
+			//<< endl;
 		}
 	}
 	estimator->untransform();
 	model->printParameterSet(cout);
-	profiler->stopTimer("estim");
 	//	cout << "Total time from estimation " << profiler->dr("estim") << endl
 	//			<< "E step time : " << profiler->dr("Et") << endl
 	//			<< "M step time : " << profiler->dr("Mt") << endl;

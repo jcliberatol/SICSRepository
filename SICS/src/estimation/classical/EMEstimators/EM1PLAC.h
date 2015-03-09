@@ -4,23 +4,6 @@
 #include <model/parameter/OnePLACModel.h>
 class EM1PLAC: public EMEstimator {
 private:
-	PatternMatrix* data;
-	Model* m;
-	int items;
-	ParameterModel* pm;
-	QuadratureNodes* nodes;
-	int q;
-	Matrix<double>* weights;
-	long double * faux;
-	long double sum;
-	Matrix<double>* f;
-	Matrix<double>* r;
-	double (*fptr)(double*, double*, int, int);
-	void (*gptr)(double*, double*, int, int, double*);
-	void (*hptr)(double*, double*, int, int, double*);
-	bool** bitset_list;
-	int size;
-	int * frequency_list;
 
 public:
 	virtual ~EM1PLAC() {
@@ -53,7 +36,7 @@ public:
 		 * The default method is OSPINA
 		 */
 		int items = m->getParameterModel()->items;
-		double *** pset = m->getParameterModel()->getParameterSet();
+		pset = m->getParameterModel()->getParameterSet();
 		if (!method == Constant::RANDOM) {
 			std::srand(std::time(0));
 			// use current time as seed for random generator
@@ -162,7 +145,7 @@ public:
 
 	}
 
-	virtual void stepM() {
+	virtual void stepM(double *** parameters) {
 		int It = m->getItemModel()->getDataset()->countItems();
 		int q = nodes->size();
 		int nargs = It + 1;
@@ -218,6 +201,11 @@ public:
 		Optimizer* optim;
 		optim = new Optimizer();
 		optim->searchOptimal(fptr, gptr, hptr, args, pars, nargs, npars);
+
+		std::copy(&((*parameters)[1][0]), (&((*parameters)[1][0])) + nargs, &((*parameters)[0][0]));
+		std::copy(&((*parameters)[2][0]), (&((*parameters)[2][0])) + nargs, &((*parameters)[1][0]));
+		std::copy(&args[0], &args[0] + nargs, &((*parameters)[2][0]));
+
 		nA = 0;
 
 		// Obtain a

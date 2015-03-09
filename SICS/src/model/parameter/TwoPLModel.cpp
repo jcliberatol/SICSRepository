@@ -19,41 +19,6 @@ string TwoPLModel::getStringParameters() {
 	return ("stringPars");
 }
 
-void TwoPLModel::buildParameterSet(ItemModel* itemModel,
-		DimensionModel* dimensionModel) {
-
-	if (typeid(*itemModel) == typeid(DichotomousModel)) {
-
-		if (typeid(*dimensionModel) == typeid(UnidimensionalModel)) {
-			parameterSet = new double **[2]; // two parameters
-
-			parameterSet[0] = new double*[1]; // parameter a
-			parameterSet[1] = new double*[1]; // parameter b
-			items = itemModel->countItems();
-			parameterSet[0][0] = new double[items];
-			parameterSet[1][0] = new double[items];
-
-			//para<meterSet[a] = new Matrix<double>(1, items);
-			//parameterSet[d] = new Matrix<double>(1, items);
-
-		}
-
-		else if (typeid(*dimensionModel) == typeid(MultidimensionalModel)) {
-			// TODO: Dichotomous Multidimensional
-		}
-
-		else if (typeid(*dimensionModel) == typeid(MultiUniDimModel)) {
-			// TODO: Dichotomous MultiUniDimensional
-		}
-
-	}
-
-	else if (typeid(*dimensionModel) == typeid(PolytomousModel)) {
-		// TODO: Polytomous Model for Unidimensional, Multidimensional and MultiUni
-	}
-
-}
-
 inline void TwoPLModel::successProbability(DimensionModel *dimensionModel,
 		QuadratureNodes *quadNodes) {
 	int q = 0;

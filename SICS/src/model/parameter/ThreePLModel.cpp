@@ -35,43 +35,6 @@ string ThreePLModel::getStringParameters(){
 void ThreePLModel::setEstimationNodes(QuadratureNodes* n) {
 	this->nodes = n;
 }
-//Nodes must be brought as a parameter of the dimension model
-void ThreePLModel::buildParameterSet(ItemModel* itemModel,
-		DimensionModel* dimensionModel) {
-
-	if (typeid(*itemModel) == typeid(DichotomousModel)) {
-
-		if (typeid(*dimensionModel) == typeid(UnidimensionalModel)) {
-
-			items = itemModel->countItems();
-
-			parameterSet = new double** [3];
-			parameterSet[0] = new double *[1];
-			parameterSet[1] = new double *[1];
-			parameterSet[2] = new double *[1];
-
-			parameterSet[0][0] = new double [items];
-			parameterSet[1][0] = new double [items];
-			parameterSet[2][0] = new double [items];
-
-
-		}
-
-		else if (typeid(*dimensionModel) == typeid(MultidimensionalModel)) {
-			// TODO: Dichotomous Multidimensional
-		}
-
-		else if (typeid(*dimensionModel) == typeid(MultiUniDimModel)) {
-			// TODO: Dichotomous MultiUniDimensional
-		}
-
-	}
-
-	else if (typeid(*dimensionModel) == typeid(PolytomousModel)) {
-		// TODO: Polytomous Model for Unidimensional, Multidimensional and MultiUni
-	}
-
-}
 
 void ThreePLModel::successProbability(DimensionModel *dimensionModel, QuadratureNodes * quadNodes) {
 
@@ -81,8 +44,6 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel, Quadrature
 	if ( dimensionModel != NULL ) {
 		q = quadNodes->size();
 	}
-
-
 
 	if(typeid(*dimensionModel)==typeid(UnidimensionalModel)) {
 		if(probabilityMatrix == NULL){

@@ -10,25 +10,6 @@
 #include <estimation/classical/EMEstimators/EMEstimator.h>
 #include <model/parameter/ThreePLModel.h>
 class EM3PL: public EMEstimator {
-private:
-	PatternMatrix* data;
-	Model* m;
-	int items;
-	ParameterModel* pm;
-	QuadratureNodes* nodes;
-	int q;
-	Matrix<double>* weights;
-	long double * faux;
-	long double sum;
-	Matrix<double>* f;
-	Matrix<double>* r;
-	double (*fptr)(double*, double*, int, int);
-	void (*gptr)(double*, double*, int, int, double*);
-	void (*hptr)(double*, double*, int, int, double*);
-	bool** bitset_list;
-	int size;
-	int * frequency_list;
-
 public:
 	virtual ~EM3PL() {
 	}
@@ -67,7 +48,8 @@ public:
 
 	virtual void setInitialValues(int method, Model* m) {
 		items = m->getParameterModel()->items;
-		double *** pset = m->getParameterModel()->getParameterSet();
+
+		pset = m->getParameterModel()->getParameterSet();
 		for (int i = 0; i < items; i++) {
 			pset[0][0][i] = 0;
 			pset[1][0][i] = 0;
@@ -95,72 +77,9 @@ public:
 		}
 		//ANDRADE O( items * numberOfPattern )
 		if (method == Constant::ANDRADE) {
-			int pSize = 0;
-			int ifault;
-			PatternMatrix* data =
-					dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
-			double Ni = data->countIndividuals();
-			double PII;
-			double frequencyV;
-			double mT;
-			double mU;
-			double mTU;
-			double mUU;
-			double covar;
-			double sdU;
-			double sdT;
-			double corr;
-			double result;
-
-			pSize = data->matrix.size();
-
-			double *T = new double[pSize];
-			double *U = new double[pSize];
-			double *TU = new double[pSize];
-			double *UU = new double[pSize];
-			double *Tm = new double[pSize];
-			double *Um = new double[pSize];
-
+			Andrade();
 			for (int i = 0; i < items; i++) {
-				PII = 0;
-				mT = mU = mTU = mUU = 0.0;
-				for (int index = 0; index < size; index++) {
-					frequencyV = frequency_list[index];
-
-					T[index] = 0;
-					T[index] = data->countBitSet(bitset_list[index], index);
-					PII += frequencyV * bitset_list[index][i];
-					U[index] = bitset_list[index][i];
-					TU[index] = T[index] * U[index];
-					UU[index] = U[index] * U[index];
-					mT += frequencyV * T[index];
-					mU += frequencyV * U[index];
-					mTU += frequencyV * TU[index];
-					mUU += frequencyV * UU[index];
-				}
-
-				PII /= Ni;
-				mT /= Ni;
-				mU /= Ni;
-				mTU /= Ni;
-				mUU /= Ni;
-				covar = mTU - mU * mT;
-				sdT = 0.0;
-				sdU = 0.0;
-
-				for (int index = 0; index < size; index++) {
-					frequencyV = frequency_list[index];
-					Tm[index] = T[index] - mT;
-					Um[index] = U[index] - mU;
-					sdT += frequencyV * Tm[index] * Tm[index];
-					sdU += frequencyV * Um[index] * Um[index];
-				}
-
-				sdT = std::sqrt(sdT / (Ni - 1.0));
-				sdU = std::sqrt(sdU / (Ni - 1.0));
-				corr = covar / (sdT * sdU);
-				pset[0][0][i] = std::sqrt((corr * corr) / (1.0 - corr * corr));
-				pset[1][0][i] = -(ppnd(PII, &ifault)) / corr;
+				pset[2][0][i] = 0.2;
 			}
 		}
 	}
@@ -189,7 +108,7 @@ public:
 
 	}
 
-	virtual void stepM() {
+	virtual void stepM(double *** parameters) {
 		/*
 		 */
 		//Step M implementation using the BFGS Algorithm
@@ -277,6 +196,9 @@ public:
 		optim = new Optimizer();
 		optim->searchOptimal(fptr, gptr, hptr, args, pars, nargs, npars);
 
+		std::copy(&((*parameters)[1][0]), (&((*parameters)[1][0])) + nargs, &((*parameters)[0][0]));
+		std::copy(&((*parameters)[2][0]), (&((*parameters)[2][0])) + nargs, &((*parameters)[1][0]));
+		std::copy(&args[0], &args[0] + nargs, &((*parameters)[2][0]));
 		// Now pass the optimals to the Arrays.
 
 		nA = 0;
@@ -294,7 +216,7 @@ public:
 			B[0][i] = args[nA++];
 			double a = A[0][i];
 			double d = B[0][i];
-			double b = -d/a;
+			double b = -d / a;
 			if (fabs(b) > abs(5)) {
 				B[0][i] = 0;
 				//cout<<"B";
