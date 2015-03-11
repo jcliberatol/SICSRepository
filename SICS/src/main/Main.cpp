@@ -9,7 +9,7 @@
 #include "Main.h"
 //#define ESTIMATION_MODEL Constant::THREE_PL
 //RASCH_A1, RASCH_A_CONSTANT, TWO_PL, THREE_PL
-#define ESTIMATION_MODEL Constant::RASCH_A1
+#define ESTIMATION_MODEL Constant::THREE_PL
 //#define ESTIMATION_MODEL Constant::RASCH_A1
 //#define ESTIMATION_MODEL Constant::RASCH_A_CONSTANT
 
@@ -155,10 +155,6 @@ void oneRun(char * args) {
 	//first create the latenTrait objects
 	LatentTraits * latentTraits;
 	latentTraits = new LatentTraits(dataSet);
-
-
-
-
 	//Now create the estimation
 	LatentTraitEstimation * lte = new LatentTraitEstimation();
 	//Pass the model
@@ -168,8 +164,8 @@ void oneRun(char * args) {
 	//Pass the quadrature nodes
 	lte->setQuadratureNodes(&nodes);
 	//Ready to estimate
-	//lte->estimateLatentTraitsEAP();
-	lte->estimateLatentTraitsMAP();
+	lte->estimateLatentTraitsEAP();
+	//lte->estimateLatentTraitsMAP();
 	//finished
 	//now read the latent traits but we will do this later
 	//lte->getLatentTraits()->print();

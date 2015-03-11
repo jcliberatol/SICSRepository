@@ -116,9 +116,9 @@ void EMEstimation::estimate() {
 
 	while (!convergenceSignal) {
 		//cout<<iterations<<endl;
-		cout<<"stepE()"<<endl;
+		//cout<<"stepE()"<<endl;
 		estimator->stepE();
-		cout<<"stepM()"<<endl;
+		//cout<<"stepM()"<<endl;
 		estimator->stepM(&args_hist);
 
 		if ((iterations + 1) % 3 == 0){

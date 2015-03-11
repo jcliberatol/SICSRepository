@@ -198,9 +198,9 @@ public:
 					lt->pm->size, counter, this->model, 1);
 		}
 
-		for (int j = 0; j < size; j++) {
-			delete pattern_list[j];
-		}
+//		for (int j = 0; j < size; j++) {
+//			delete pattern_list[j];
+//		}
 
 		//delete pattern_list;
 		//delete frequency_list;
