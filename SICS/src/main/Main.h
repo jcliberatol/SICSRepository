@@ -22,7 +22,7 @@
 #include <estimation/bayesian/LatentTraitEstimation.h>
 #include <type/LatentTraits.h>
 #include <util/fitness/ItemFit.h>
-
+#include <util/fitness/PersonFit.h>
 
 
 #endif /* SICS_H_ */

@@ -2,7 +2,7 @@
  * Fit.h
  *
  *  Created on: Mar 10, 2015
- *      Author: anmrdz
+ *      Author: anmrodriguezre
  */
 
 #ifndef UTIL_FITNESS_FIT_H_
