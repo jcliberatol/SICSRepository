@@ -94,13 +94,13 @@ double ThreePLModel::successProbability(double theta, double a, double d,
 void ThreePLModel::getParameters(double * parameters)
 {
 	int i = 0;
-	for (int j = 0; i < items; i++) {
+	for (int j = 0; j < items; j++) {
 		parameters[i++] = parameterSet[0][0][j];
 	}
-	for (int j = 0; i < items; i++) {
+	for (int j = 0; j < items; j++) {
 		parameters[i++] = parameterSet[1][0][j];
 	}
-	for (int j = 0; i < items; i++) {
+	for (int j = 0; j < items; j++) {
 		parameters[i++] = parameterSet[2][0][j];
 	}
 }
