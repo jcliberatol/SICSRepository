@@ -33,7 +33,7 @@ public:
 	Trace* profiler = 0;
 	Matrix<double> * probabilityMatrix;
 	// Methods
-	virtual void getParameters(*** ps){
+	virtual void getParameters(double *** ps){
 		ps = parameterSet;
 	};
 	virtual void buildParameterSet(ItemModel * itemModel,
