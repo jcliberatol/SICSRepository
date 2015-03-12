@@ -75,5 +75,15 @@ inline void ramsay(double *** args_hist, int size) {
 	for (int i = 0; i < size; i++)
 		last_it[i] = (1 - accel) * last_it[i] + accel * prev_it[i];
 }
-
+inline void transformHessiana( double * inputHessiana, double ** outputHessiana, int size)
+{
+	for ( int i = 0; i < size; i++ )
+	{
+		for ( int j = 0; j <= i; j++ )
+		{
+			outputHessiana[i][j] = inputHessiana[i+j];
+			outputHessiana[j][i] = inputHessiana[i+j];
+		}
+	}
+}
 #endif /* UTIL_H_ */

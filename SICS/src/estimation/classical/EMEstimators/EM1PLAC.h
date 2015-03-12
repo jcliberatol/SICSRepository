@@ -234,7 +234,9 @@ public:
 				maxDelta = fabs(DD(0, v1));
 			}
 		}
-		if (maxDelta < 0.001) {
+		Constant::EPSILONC = maxDelta;
+		Constant::LOGLIKO = fptr(args, pars, nargs, npars);
+		if (maxDelta < Constant::CONVERGENCE_DELTA) {
 			m->itemParametersEstimated = true;
 		}
 		//And set the parameter sets

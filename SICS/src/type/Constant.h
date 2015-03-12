@@ -35,6 +35,10 @@ public:
 	static double abstol ;
 	static double reltol ;
 	static double D_CONST ;
+	static int ITER;
+	static bool CAPTURE_HESSIANA;
+	static double EPSILONC;
+	static double LOGLIKO;
 
   
 };

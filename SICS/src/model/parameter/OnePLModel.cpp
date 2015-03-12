@@ -16,7 +16,13 @@ OnePLModel::OnePLModel() {
 string OnePLModel::getStringParameters() {
 	return ("stringPars");
 }
-
+void OnePLModel::getParameters(double * parameters)
+{
+	for ( int i = 0; i < items; i++ )
+	{
+		parameters[i] = parameterSet[1][0][i];
+	}
+}
 inline void OnePLModel::successProbability(DimensionModel *dimensionModel,
 		QuadratureNodes * quadNodes) {
 

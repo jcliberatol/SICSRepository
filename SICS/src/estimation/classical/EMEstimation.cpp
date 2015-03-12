@@ -116,22 +116,22 @@ void EMEstimation::estimate() {
 
 	while (!convergenceSignal) {
 		//cout<<iterations<<endl;
-		cout<<"stepE()"<<endl;
+		//cout<<"stepE()"<<endl;
 		estimator->stepE();
-		cout<<"stepM()"<<endl;
+		//cout<<"stepM()"<<endl;
 		estimator->stepM(&args_hist);
 
-		if ((iterations + 1) % 3 == 0){
-			int It = model->getItemModel()->getDataset()->countItems();
-			ramsay(&args_hist, size);
-			double *** parSet = model->getParameterModel()->getParameterSet();
-
-			std::copy(&(args_hist[2][0]), &(args_hist[2][0]) + It, &(parSet[0][0][0]));
-			std::copy(&(args_hist[2][0]) + It, &(args_hist[2][0]) + (2 * It), &(parSet[1][0][0]));
-			std::copy(&(args_hist[2][0]) + (2 * It), &(args_hist[2][0]) + (3 * It), &(parSet[2][0][0]));
-
-			model->getParameterModel()->setParameterSet(parSet);
-		}
+//		if ((iterations + 1) % 3 == 0){
+//			int It = model->getItemModel()->getDataset()->countItems();
+//			ramsay(&args_hist, size);
+//			double *** parSet = model->getParameterModel()->getParameterSet();
+//
+//			std::copy(&(args_hist[2][0]), &(args_hist[2][0]) + It, &(parSet[0][0][0]));
+//			std::copy(&(args_hist[2][0]) + It, &(args_hist[2][0]) + (2 * It), &(parSet[1][0][0]));
+//			std::copy(&(args_hist[2][0]) + (2 * It), &(args_hist[2][0]) + (3 * It), &(parSet[2][0][0]));
+//
+//			model->getParameterModel()->setParameterSet(parSet);
+//		}
 		//cout<<"→1"<<endl;
 
 		double*** ps = model->parameterModel->getParameterSet();
@@ -145,6 +145,7 @@ void EMEstimation::estimate() {
 			//<< endl;
 		}
 	}
+	Constant::ITER = iterations;
 	estimator->untransform();
 	model->printParameterSet(cout);
 	//	cout << "Total time from estimation " << profiler->dr("estim") << endl
@@ -152,7 +153,8 @@ void EMEstimation::estimate() {
 	//			<< "M step time : " << profiler->dr("Mt") << endl;
 }
 
-/**Returns the iterations that took the estimation to obtain an answer*/
+/**Returns the iterations that took t
+ * he estimation to obtain an answer*/
 int EMEstimation::getIterations() const {
 	return (iterations);
 }

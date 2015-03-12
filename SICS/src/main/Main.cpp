@@ -9,7 +9,7 @@
 #include "Main.h"
 //#define ESTIMATION_MODEL Constant::THREE_PL
 //RASCH_A1, RASCH_A_CONSTANT, TWO_PL, THREE_PL
-#define ESTIMATION_MODEL Constant::THREE_PL
+#define ESTIMATION_MODEL Constant::RASCH_A_CONSTANT
 //#define ESTIMATION_MODEL Constant::RASCH_A1
 //#define ESTIMATION_MODEL Constant::RASCH_A_CONSTANT
 
@@ -168,7 +168,7 @@ void oneRun(char * args) {
 	lte->estimateLatentTraitsMAP();
 	//finished
 	//now read the latent traits but we will do this later
-	lte->getLatentTraits()->print();
+	//lte->getLatentTraits()->print();
 	delete modelFactory;
 	delete dataSet;
 	delete em;
@@ -253,8 +253,15 @@ void runArgs(char * filename,char * initialValues){
 		}
 		break;
 	case Constant::RASCH_A_CONSTANT:
-		//matrix_initial[a] = a_init;
-		//matrix_initial[d] = b_init;
+		matrix_initial = new double** [2];
+		matrix_initial[0] = new double* [1];
+		matrix_initial[1] = new double* [1];
+		matrix_initial[0][0] = new double [1];
+		matrix_initial[1][0] = new double [items];
+		matrix_initial[0][0][0] = (*a_init)(0,0);
+		for (int var = 0; var < items; ++var) {
+			matrix_initial[1][0][var] = (*b_init)(0,var);
+		}
 		break;
 	case Constant::TWO_PL:
 		matrix_initial = new double** [2];

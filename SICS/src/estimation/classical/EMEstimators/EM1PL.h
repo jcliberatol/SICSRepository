@@ -239,10 +239,12 @@ public:
 				maxDelta = fabs(DB(0, v1));
 			}
 		}
-
+		Constant::EPSILONC = maxDelta;
+		Constant::LOGLIKO = fptr(args, pars, nargs, npars);
 		if (maxDelta < Constant::CONVERGENCE_DELTA) {
 			m->itemParametersEstimated = true;
 		}
+
 		//And set the parameter sets
 		double*** parSet;
 		//Must set the parset equal to the original memory in the parameter set
