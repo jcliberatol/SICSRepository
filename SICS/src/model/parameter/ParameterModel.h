@@ -33,6 +33,9 @@ public:
 	Trace* profiler = 0;
 	Matrix<double> * probabilityMatrix;
 	// Methods
+	virtual void getParameters(*** ps){
+		ps = parameterSet;
+	};
 	virtual void buildParameterSet(ItemModel * itemModel,
 			DimensionModel * dimensionModel) {
 		if (typeid(*itemModel) == typeid(DichotomousModel)) {
