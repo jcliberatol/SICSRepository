@@ -25,6 +25,7 @@ void Fit(double**  LL,double** P,double** Q,LatentTraits* scores, Matrix<double>
 
 	for(i = 0; i < ninds ; i++){
 		for(j = 0; j < nscores; j++){
+
 			npatt = 0;
 
 			for(k = 0; k < nitems ; k++){
@@ -48,30 +49,30 @@ void Fit(double**  LL,double** P,double** Q,LatentTraits* scores, Matrix<double>
 		for(i = 0; i < nitems; i++){
 			switch(model->type){
 			case Constant::RASCH_A1 :
-				a = 1;
-				b = parameterSet[0][0][i];
+				a = 1.0;
+				b = -a * parameterSet[0][0][i];
 				c = 0;
 				break;
 			case Constant::RASCH_A_CONSTANT :
 				a = parameterSet[0][0][0];
-				b = parameterSet[1][0][i];
+				b = -a * parameterSet[1][0][i];
 				c = 0;
 				break;
 			case Constant::TWO_PL :
 				a = parameterSet[0][0][i];
-				b = parameterSet[1][0][i];
+				b = -a * parameterSet[1][0][i];
 				c = 0;
 				break;
 			case Constant::THREE_PL:
 				a = parameterSet[0][0][i];
-				b = parameterSet[1][0][i];
+				b = -a * parameterSet[1][0][i];
 				c = parameterSet[2][0][i];
 				break;
 			}
 
-			cp = log(c/(1-c));
-			P[j][i] = 1 / (exp(cp)/(1+exp(cp))+ (1-(exp(cp)/(1+exp(cp))))*(1 + exp(-Constant::D_CONST*(a*scoresTot[j]+ b))));
-			Q[j][i] = 1 - P[j][i];
+			cp = log(c / (1.0 - c));
+			P[j][i] = 1.0 / (exp(cp)/(1.0 + exp(cp))+ (1.0 -(exp(cp)/(1.0 +exp(cp))))*(1.0 + exp(-Constant::D_CONST*(a*scoresTot[j]+ b))));
+			Q[j][i] = 1.0 - P[j][i];
 		}
 	}
 

@@ -33,6 +33,7 @@ void personFit(LatentTraits* scores, Matrix<double> data,Model* model ){
 	Fit(LL, P, Q, scores, data, model);
 
 	double sum = 0;
+
 	for(i = 0; i < ninds ; i++){
 		sum = 0;
 		for(j = 0; j < nitems; j++){
@@ -48,7 +49,7 @@ void personFit(LatentTraits* scores, Matrix<double> data,Model* model ){
 	for(i = 0; i < nitems; i++){
 		for(j = 0; j < ninds; j++){
 			mu[j] += log(P[j][i]) * P[j][i] + log(Q[j][i]) * Q[j][i];
-			sigmaCuad[j] = P[j][i] * Q[j][i] * (log(P[j][i]/Q[j][i]) * log(P[j][i]/Q[j][i]));
+			sigmaCuad[j] += P[j][i] * Q[j][i] * (log(P[j][i]/Q[j][i]) * log(P[j][i]/Q[j][i]));
 		}
 	}
 

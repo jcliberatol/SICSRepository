@@ -32,6 +32,7 @@ void itemFit(LatentTraits* scores, Matrix<double> data,Model* model ){
 	Fit(LL, P, Q, scores, data, model);
 
 	double sum = 0;
+
 	for(j = 0; j < nitems; j++){
 		sum = 0;
 		for(i = 0; i < ninds ; i++){
@@ -43,6 +44,7 @@ void itemFit(LatentTraits* scores, Matrix<double> data,Model* model ){
 	double sigmaCuad[nitems], mu[nitems];
 	memset(sigmaCuad, 0, sizeof(sigmaCuad));
 	memset(mu, 0, sizeof(mu));
+
 	for(i = 0; i < nitems; i++){
 		for(j = 0; j < ninds; j++){
 			mu[i] += log(P[j][i]) * P[j][i] + log(Q[j][i]) * Q[j][i];
@@ -57,6 +59,5 @@ void itemFit(LatentTraits* scores, Matrix<double> data,Model* model ){
 		cout << Z3[j] << "\n";
 	}
 }
-
 
 #endif /* UTIL_FITNESS_ITEMFIT_H_ */
