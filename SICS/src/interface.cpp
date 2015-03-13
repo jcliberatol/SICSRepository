@@ -39,7 +39,7 @@ void estimatingParameters(int ** dataI, int nRowsDataI, int nColumnsDataI, int m
 		vector<char> dset(nColumnsDataI);
 		for ( int _j_ = 0; _j_ < nColumnsDataI; _j_++ )
 		{
-			if ( dataI[_i_][_j_] == 1) dset[nColumnsDataI- _j_ - 1] = true;  // taken of Input.cpp
+			if ( dataI[_i_][_j_] == 1) dset[_j_] = true;  // taken of Input.cpp
 		}
 		dataSet->size = nColumnsDataI;
 		dataSet->push(dset);
