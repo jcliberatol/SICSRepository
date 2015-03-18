@@ -129,7 +129,6 @@ public:
 
 		bool ** pattern_list = lt->pm->getBitsetList();
 		int size = lt->pm->matrix.size();
-
 		int counter = 0;
 
 		for (int index = 0; index < size; index++, ++counter) {
@@ -147,11 +146,11 @@ public:
 			(*lt->traits)(counter, lt->dim - 1) = sum_num / sum_den;
 		}
 
-		for (int j = 0; j < size; j++) {
-			delete pattern_list[j];
-		}
+//		for (int j = 0; j < size; j++) {
+//			delete pattern_list[j];
+//		}
 
-		delete pattern_list;
+		//delete pattern_list;
 	}
 
 	//Deprecated
@@ -199,12 +198,12 @@ public:
 					lt->pm->size, counter, this->model, 1);
 		}
 
-		for (int j = 0; j < size; j++) {
-			delete pattern_list[j];
-		}
+//		for (int j = 0; j < size; j++) {
+//			delete pattern_list[j];
+//		}
 
-		delete pattern_list;
-		delete frequency_list;
+		//delete pattern_list;
+		//delete frequency_list;
 	}
 
 	void setQuadratureNodes(QuadratureNodes *nodes) {

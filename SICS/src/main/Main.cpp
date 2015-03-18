@@ -164,11 +164,17 @@ void oneRun(char * args) {
 	//Pass the quadrature nodes
 	lte->setQuadratureNodes(&nodes);
 	//Ready to estimate
-	//lte->estimateLatentTraitsEAP();
-	lte->estimateLatentTraitsMAP();
+	lte->estimateLatentTraitsEAP();
+	//lte->estimateLatentTraitsMAP();
 	//finished
 	//now read the latent traits but we will do this later
 	//lte->getLatentTraits()->print();
+
+	Matrix<double> data(dataSet->countIndividuals(), dataSet->countItems());
+	input.importCSV(args, data, 1, 0);
+	itemFit(latentTraits, data, model);
+	personFit(latentTraits, data, model);
+
 	delete modelFactory;
 	delete dataSet;
 	delete em;
