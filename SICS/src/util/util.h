@@ -9,9 +9,9 @@
 #define UTIL_H_
 #include <util/asa111.hpp>
 
-#define last_it (*args_hist)[2]
-#define prev_it (*args_hist)[1]
-#define b_prev_it (*args_hist)[0]
+#define iteration_0 (*args_hist)[2]
+#define iteration_1 (*args_hist)[1]
+#define iteration_2 (*args_hist)[0]
 
 /**
  * Functions part one
@@ -51,39 +51,48 @@ inline double normalInverse(double point) {
 }
 
 inline void ramsay(double *** args_hist, int size) {
+#if DEBUG
+	cout<<"Start Init values"<<endl;
+#endif
 	double dX[size];
 	double dX2[size];
 	double d2X2[size];
 	double accel;
 	double numerator = 0.0;
 	double denominator = 0.0;
+#if DEBUG
+	cout<<"End Init values"<<endl;
+#endif
+
+#if DEBUG
+	cout<<"Start for cicle"<<endl;
+#endif
 
 	for (int i = 0; i < size; i++) {
-		dX[i] = last_it[i] - prev_it[i];
-		dX2[i] = prev_it[i] - b_prev_it[i];
+		dX[i] = iteration_0[i] - iteration_1[i];
+		dX2[i] = iteration_1[i] - iteration_2[i];
 		d2X2[i] = dX[i] - dX2[i];
 
 		numerator += dX[i] * dX[i];
 		denominator += d2X2[i] * d2X2[i];
 	}
-
+#if DEBUG
+	cout<<"End for cicle"<<endl;
+#endif
 	accel = 1 - sqrt(numerator / denominator);
 
 	if (accel < -5.0)
 		accel = -5;
 
+#if DEBUG
+	cout<<"Start update values"<<endl;
+#endif
+
 	for (int i = 0; i < size; i++)
-		last_it[i] = (1 - accel) * last_it[i] + accel * prev_it[i];
+		iteration_0[i] = (1 - accel) * iteration_0[i] + accel * iteration_1[i];
+#if DEBUG
+	cout<<"End update values"<<endl;
+#endif
 }
-inline void transformHessiana( double * inputHessiana, double ** outputHessiana, int size)
-{
-	for ( int i = 0; i < size; i++ )
-	{
-		for ( int j = 0; j <= i; j++ )
-		{
-			outputHessiana[i][j] = inputHessiana[i+j];
-			outputHessiana[j][i] = inputHessiana[i+j];
-		}
-	}
-}
+
 #endif /* UTIL_H_ */
