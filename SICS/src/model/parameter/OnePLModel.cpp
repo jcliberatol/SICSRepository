@@ -76,6 +76,12 @@ double*** OnePLModel::getParameterSet() {
 	return (this->parameterSet);
 }
 
+void OnePLModel::getParameters(double * parameters) {
+	for (int i = 0; i < items; i++) {
+		parameters[i] = parameterSet[1][0][i];
+	}
+}
+
 double OnePLModel::getProbability(int node, int item) {
 	return ((*probabilityMatrix)(node, item));
 }

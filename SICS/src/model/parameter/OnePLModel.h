@@ -35,6 +35,7 @@ public:
 	void setParameterSet(double***);
 	double getProbability (int, int);
 	void printParameterSet(ostream&);
+	void getParameters(double * );
 	string getStringParameters();
 	// Destructor
 	virtual ~OnePLModel();
