@@ -19,6 +19,17 @@ string TwoPLModel::getStringParameters() {
 	return ("stringPars");
 }
 
+void TwoPLModel::getParameters(double * parameters)
+{
+    int i = 0;
+    for (int j = 0; j < items; j++) {
+        parameters[i++] = parameterSet[0][0][j];
+    }
+    for (int j = 0; j < items; j++) {
+        parameters[i++] = parameterSet[1][0][j];
+    }
+}
+
 inline void TwoPLModel::successProbability(DimensionModel *dimensionModel,
 		QuadratureNodes *quadNodes) {
 	int q = 0;
