@@ -38,6 +38,7 @@ public:
 			double* Hessian);
 	static void NHessian(double* args, double* pars, int nargs, int npars,
 			double* Hessian);
+	void getParameters(double * );
 	static void itemHessian(double* args, double* pars, int nargs, int npars,
 			double* Hessian);
 	static void itemgradient(double*, double*, int, int, double*);
