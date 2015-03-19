@@ -241,7 +241,9 @@ public:
 				maxDelta = fabs(DB(0, v1));
 			}
 		}
-
+		
+		Constant::EPSILONC = maxDelta;
+		Constant::LOGLIKO = fptr(args, pars, nargs, npars);
 		if (maxDelta < Constant::CONVERGENCE_DELTA) {
 			m->itemParametersEstimated = true;
 		}
