@@ -52,7 +52,16 @@ double *** OnePLACModel::getParameterSet() {
 	return (this->parameterSet);
 }
 
-void OnePLACModel::setParameterSet(double ***) {
+void OnePLACModel::getParameters(double * parameters)
+{
+	parameters[0] = parameterSet[0][0][0];
+	for ( int i = 0; i < items; i++ )
+	{
+		parameters[i+1] = parameterSet[1][0][i];
+	}
+}
+
+void OnePLACModel::setParameterSet(double *** parameterSet) {
 	this->parameterSet = parameterSet;
 }
 
