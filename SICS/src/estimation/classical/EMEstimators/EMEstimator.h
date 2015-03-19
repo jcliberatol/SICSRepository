@@ -101,7 +101,8 @@ public:
 		}
 	}
 	//Step M also needs the model, quad nodes, f and r
-	virtual void stepM(double *** parameters) = 0;
+	virtual void stepM(double *** parameters, int * nargs) = 0;
+	virtual void stepRamsay(double *** parameters, int * nargs, int t_size, bool continue_flag) = 0;
 	//in this cases the model are needed to be filled
 	virtual void setInitialValues(int, Model*) = 0;
 	virtual void setInitialValues(double***, Model*) = 0;

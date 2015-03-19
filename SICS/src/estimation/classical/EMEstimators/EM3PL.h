@@ -108,7 +108,7 @@ public:
 
 	}
 
-	virtual void stepM(double *** parameters) {
+	virtual void stepM(double *** parameters, int * nargs) {
 		/*
 		 */
 		//Step M implementation using the BFGS Algorithm
@@ -126,7 +126,7 @@ public:
 		int q = nodes->size();
 		double args[3 * It];
 		double pars[2 + 2 * q + q * It];
-		int nargs = 3 * It;
+		*nargs = 3 * It;
 		int npars = 2 + 2 * q + q * It;
 		//filling args
 		int nA = 0;
@@ -185,7 +185,7 @@ public:
 				nP++;
 			}
 		}
-		nargs = nA;
+		*nargs = nA;
 		npars = nP;
 		/*
 		 * Chooses the method
@@ -194,11 +194,13 @@ public:
 		 */
 		Optimizer* optim;
 		optim = new Optimizer();
-		optim->searchOptimal(fptr, gptr, hptr, args, pars, nargs, npars);
+		optim->searchOptimal(fptr, gptr, hptr, args, pars, *nargs, npars);
 
-		std::copy(&((*parameters)[1][0]), (&((*parameters)[1][0])) + nargs, &((*parameters)[0][0]));
-		std::copy(&((*parameters)[2][0]), (&((*parameters)[2][0])) + nargs, &((*parameters)[1][0]));
-		std::copy(&args[0], &args[0] + nargs, &((*parameters)[2][0]));
+		std::copy(&((*parameters)[1][0]), (&((*parameters)[1][0])) + *nargs,
+				&((*parameters)[0][0]));
+		std::copy(&((*parameters)[2][0]), (&((*parameters)[2][0])) + *nargs,
+				&((*parameters)[1][0]));
+		std::copy(&args[0], &args[0] + *nargs, &((*parameters)[2][0]));
 		// Now pass the optimals to the Arrays.
 
 		nA = 0;
@@ -257,8 +259,6 @@ public:
 
 		}
 		//TODO change by constant file
-		Constant::EPSILONC = maxDelta;
-		Constant::LOGLIKO = fptr(args, pars, nargs, npars);
 		if (maxDelta < Constant::CONVERGENCE_DELTA) {
 			m->itemParametersEstimated = true;
 		}
@@ -272,6 +272,25 @@ public:
 		// llenar las tres matrices
 		m->getParameterModel()->setParameterSet(parSet);
 
+	}
+
+	virtual void stepRamsay(double *** parameters, int * nargs, int t_size,
+			bool continue_flag) {
+		if (continue_flag) {
+			ramsay(parameters, *nargs);
+			double *** parSet = m->getParameterModel()->getParameterSet();
+
+			std::copy(&((*parameters)[2][0]),
+					&((*parameters)[2][0]) + (t_size / 3), &(parSet[0][0][0]));
+			std::copy(&((*parameters)[2][0]) + (t_size / 3),
+					&((*parameters)[2][0]) + (2 * (t_size / 3)),
+					&(parSet[1][0][0]));
+			std::copy(&((*parameters)[2][0]) + (2 * (t_size / 3)),
+					&((*parameters)[2][0]) + (3 * (t_size / 3)),
+					&(parSet[2][0][0]));
+
+			m->getParameterModel()->setParameterSet(parSet);
+		}
 	}
 };
 

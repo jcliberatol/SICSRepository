@@ -104,7 +104,8 @@ void EMEstimation::estimate() {
 	iterations = 0;
 
 	double ** args_hist;
-	int size = 2 * model->getItemModel()->getDataset()->countItems();
+	int nargs;
+	int size = 3 * model->getItemModel()->getDataset()->countItems();
 	(args_hist) = new double*[3];
 	(args_hist)[0] = new double[size];
 	(args_hist)[1] = new double[size];
@@ -114,47 +115,26 @@ void EMEstimation::estimate() {
 		for (int j = 0; j < size; j++)
 			args_hist[i][j] = 0;
 
-	while (!convergenceSignal) {
-		//cout<<iterations<<endl;
-		//cout<<"stepE()"<<endl;
+	for (;;)
+	{
+		cout << iterations << endl;
 		estimator->stepE();
-		//cout<<"stepM()"<<endl;
-		estimator->stepM(&args_hist);
+		estimator->stepM(&args_hist, &nargs);
+		estimator->stepRamsay(&args_hist, &nargs, size, iterations > 5 && (iterations) % 3 == 0);
 
-//		if ((iterations + 1) % 3 == 0){
-//			int It = model->getItemModel()->getDataset()->countItems();
-//			ramsay(&args_hist, size);
-//			double *** parSet = model->getParameterModel()->getParameterSet();
-//
-//			std::copy(&(args_hist[2][0]), &(args_hist[2][0]) + It, &(parSet[0][0][0]));
-//			std::copy(&(args_hist[2][0]) + It, &(args_hist[2][0]) + (2 * It), &(parSet[1][0][0]));
-//			std::copy(&(args_hist[2][0]) + (2 * It), &(args_hist[2][0]) + (3 * It), &(parSet[2][0][0]));
-//
-//			model->getParameterModel()->setParameterSet(parSet);
-//		}
-		//cout<<"→1"<<endl;
-
-		double*** ps = model->parameterModel->getParameterSet();
-		int items = model->parameterModel->items;
 		convergenceSignal = model->itemParametersEstimated;
-		iterations++;
-		//cout<<" "<<iterations;
-		if (iterations > Constant::MAX_EM_ITERS) {
-			convergenceSignal = true;
-			//cout << "more than " << Constant::MAX_EM_ITERS << "iters, stop"
-			//<< endl;
-		}
+
+		if (iterations++ > Constant::MAX_EM_ITERS || convergenceSignal)
+			break;
 	}
-	Constant::ITER = iterations;
 	estimator->untransform();
-	model->printParameterSet(cout);
+	//model->printParameterSet(cout);
 	//	cout << "Total time from estimation " << profiler->dr("estim") << endl
 	//			<< "E step time : " << profiler->dr("Et") << endl
 	//			<< "M step time : " << profiler->dr("Mt") << endl;
 }
 
-/**Returns the iterations that took t
- * he estimation to obtain an answer*/
+/**Returns the iterations that took the estimation to obtain an answer*/
 int EMEstimation::getIterations() const {
 	return (iterations);
 }

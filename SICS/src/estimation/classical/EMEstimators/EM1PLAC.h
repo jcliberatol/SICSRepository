@@ -145,12 +145,12 @@ public:
 
 	}
 
-	virtual void stepM(double *** parameters) {
+	virtual void stepM(double *** parameters, int * nargs) {
 		int It = m->getItemModel()->getDataset()->countItems();
 		int q = nodes->size();
-		int nargs = It + 1;
+		*nargs = It + 1;
 		int npars = 2 + 2 * q + q * It;
-		double args[nargs];
+		double args[*nargs];
 		double pars[npars];
 
 		//filling args
@@ -194,17 +194,19 @@ public:
 				pars[nP++] = (*r)(k, i);
 			}
 		}
-		nargs = nA;
+		*nargs = nA;
 		npars = nP;
 
 		//BFGS
 		Optimizer* optim;
 		optim = new Optimizer();
-		optim->searchOptimal(fptr, gptr, hptr, args, pars, nargs, npars);
+		optim->searchOptimal(fptr, gptr, hptr, args, pars, *nargs, npars);
 
-		std::copy(&((*parameters)[1][0]), (&((*parameters)[1][0])) + nargs, &((*parameters)[0][0]));
-		std::copy(&((*parameters)[2][0]), (&((*parameters)[2][0])) + nargs, &((*parameters)[1][0]));
-		std::copy(&args[0], &args[0] + nargs, &((*parameters)[2][0]));
+		std::copy(&((*parameters)[1][0]), (&((*parameters)[1][0])) + *nargs,
+				&((*parameters)[0][0]));
+		std::copy(&((*parameters)[2][0]), (&((*parameters)[2][0])) + *nargs,
+				&((*parameters)[1][0]));
+		std::copy(&args[0], &args[0] + *nargs, &((*parameters)[2][0]));
 
 		nA = 0;
 
@@ -234,9 +236,7 @@ public:
 				maxDelta = fabs(DD(0, v1));
 			}
 		}
-		Constant::EPSILONC = maxDelta;
-		Constant::LOGLIKO = fptr(args, pars, nargs, npars);
-		if (maxDelta < Constant::CONVERGENCE_DELTA) {
+		if (maxDelta < 0.001) {
 			m->itemParametersEstimated = true;
 		}
 		//And set the parameter sets
@@ -249,7 +249,20 @@ public:
 		m->getParameterModel()->setParameterSet(parSet);
 
 	}
-	;
+
+	virtual void stepRamsay(double *** parameters, int * nargs, int t_size,
+			bool continue_flag) {
+
+		if (continue_flag) {
+			ramsay(parameters, *nargs);
+			double *** parSet = m->getParameterModel()->getParameterSet();
+
+			std::copy(&((*parameters)[2][0]),
+					&((*parameters)[2][0]) + (t_size / 3), &(parSet[0][0][0]));
+
+			m->getParameterModel()->setParameterSet(parSet);
+		}
+	}
 
 };
 #endif /* EM2PL_H_ */
