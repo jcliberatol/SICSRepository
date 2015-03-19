@@ -91,19 +91,7 @@ double ThreePLModel::successProbability(double theta, double a, double d,
 	double ec = exp(c);
 	return ( (ec/(1+ec)) + (1 - (ec/(1+ec))) * (1/(1+exponential)) );
 }
-void ThreePLModel::getParameters(double * parameters)
-{
-	int i = 0;
-	for (int j = 0; j < items; j++) {
-		parameters[i++] = parameterSet[0][0][j];
-	}
-	for (int j = 0; j < items; j++) {
-		parameters[i++] = parameterSet[1][0][j];
-	}
-	for (int j = 0; j < items; j++) {
-		parameters[i++] = parameterSet[2][0][j];
-	}
-}
+
 double ThreePLModel::successProbability(double theta, double * zita) {
 
 	long double exponential = (Constant::NORM_CONST)*(zita[0]*theta+zita[1]);

@@ -33,6 +33,7 @@ ParameterModel* SICSGeneralModel::createParameterModel(int model) {
 	}
 
 	if (model == Constant::RASCH_A_CONSTANT) {
+		cout<<"SICSGeneralMOdel"<<endl;
 		ParameterModel *parameterModel;
 		parameterModel = new OnePLACModel();
 		return (parameterModel);

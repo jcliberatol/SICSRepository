@@ -73,7 +73,6 @@ public:
 	// Getters and Setters
 	virtual double *** getParameterSet() = 0;
 	virtual void setParameterSet(double *** parameterSet) = 0;
-	virtual void getParameters(double * parameters) = 0;
 	virtual double getProbability(int, int) = 0;
 	virtual void printParameterSet(ostream&)=0;
 	void setProfiler(Trace* t) {
