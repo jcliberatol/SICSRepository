@@ -172,8 +172,8 @@ void oneRun(char * args) {
 
 	Matrix<double> data(dataSet->countIndividuals(), dataSet->countItems());
 	input.importCSV(args, data, 1, 0);
-	itemFit(latentTraits, data, model);
-	personFit(latentTraits, data, model);
+	itemFit(latentTraits, data, model->getParameterModel()->getParameterSet(), model -> type);
+	personFit(latentTraits, data, model->getParameterModel()->getParameterSet(), model -> type);
 
 	delete modelFactory;
 	delete dataSet;

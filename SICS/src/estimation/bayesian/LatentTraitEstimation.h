@@ -161,11 +161,6 @@ public:
 			(*lt->traits)(counter, lt->dim - 1) = sum_num / sum_den;
 		}
 
-		for (int j = 0; j < size; j++) {
-			delete pattern_list[j];
-		}
-
-		delete pattern_list;
 	}
 
 	//Deprecated
@@ -265,11 +260,6 @@ public:
 //			cout<<"----------------I'm a separator bar.-----------------"<<endl;
 		}
 
-		for (int j = 0; j < size; j++) {
-			delete pattern_list[j];
-		}
-
-		delete pattern_list;
 		delete frequency_list;
 	}
 

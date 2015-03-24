@@ -13,7 +13,7 @@
 #include <type/Constant.h>
 
 
-void Fit(double**  LL,double** P,double** Q,LatentTraits* scores, Matrix<double> data,Model* model ){
+void Fit(double**  LL,double** P,double** Q,LatentTraits* scores, Matrix<double> data,double*** parameterSet, int model_type){
 
 	bool ** pattern_list = scores->pm->getBitsetList();
 	int nitems = data.nC();
@@ -40,14 +40,11 @@ void Fit(double**  LL,double** P,double** Q,LatentTraits* scores, Matrix<double>
 		}
 	}
 
-
-	double*** parameterSet = model->getParameterModel()->getParameterSet();
-	int model_type = model->type;
 	double a, b, c, cp;
 
 	for(j = 0; j < ninds; j++){
 		for(i = 0; i < nitems; i++){
-			switch(model->type){
+			switch(model_type){
 			case Constant::RASCH_A1 :
 				a = 1.0;
 				b = -a * parameterSet[0][0][i];

@@ -117,7 +117,7 @@ void EMEstimation::estimate() {
 
 	for (;;)
 	{
-		cout << iterations << endl;
+		//cout << iterations << endl;
 		estimator->stepE();
 		estimator->stepM(&args_hist, &nargs);
 		estimator->stepRamsay(&args_hist, &nargs, size, iterations > 5 && (iterations) % 3 == 0);
