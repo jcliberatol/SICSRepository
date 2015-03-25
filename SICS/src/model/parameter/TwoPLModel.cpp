@@ -34,10 +34,10 @@ void TwoPLModel::setParameters(double * parameters)
 {
     int i = 0;
     for (int j = 0; j < items; j++) {
-        this.parameterSet[0][0][j] = parameters[i++];
+        this->parameterSet[0][0][j] = parameters[i++];
     }
     for (int j = 0; j < items; j++) {
-        this.parameterSet[1][0][j] = parameters[i++];
+        this->parameterSet[1][0][j] = parameters[i++];
     }
 }
 

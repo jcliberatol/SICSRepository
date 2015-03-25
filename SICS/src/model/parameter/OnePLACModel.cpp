@@ -63,10 +63,10 @@ void OnePLACModel::getParameters(double * parameters)
 
 void OnePLACModel::setParameters(double * parameters)
 {
-	this.parameterSet[0][0][0] = parameters[0]; 
+	this->parameterSet[0][0][0] = parameters[0]; 
 	for ( int i = 0; i < items; i++ )
 	{
-		 this.parameterSet[1][0][i] = parameters[i+1];
+		 this->parameterSet[1][0][i] = parameters[i+1];
 	}
 }
 

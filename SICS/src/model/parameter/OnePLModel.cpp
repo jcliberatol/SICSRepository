@@ -84,7 +84,7 @@ void OnePLModel::getParameters(double * parameters) {
 
 void OnePLModel::setParameters(double * parameters) {
 	for (int i = 0; i < items; i++) {
-		this.parameterSet[1][0][i] = parameters[i];
+		this->parameterSet[1][0][i] = parameters[i];
 	}
 }
 
