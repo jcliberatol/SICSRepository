@@ -82,6 +82,12 @@ void OnePLModel::getParameters(double * parameters) {
 	}
 }
 
+void OnePLModel::setParameters(double * parameters) {
+	for (int i = 0; i < items; i++) {
+		this.parameterSet[1][0][i] = parameters[i];
+	}
+}
+
 double OnePLModel::getProbability(int node, int item) {
 	return ((*probabilityMatrix)(node, item));
 }

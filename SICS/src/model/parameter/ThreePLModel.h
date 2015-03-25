@@ -42,7 +42,8 @@ public:
 	static void gradient(double*,double*,int,int,double*);
 	// Getters and Setters
 	double*** getParameterSet() ;
-	void getParameters(double * );
+	void getParameters(double *);
+	void setParameters(double *);
 	void setParameterSet(double ***);
 	void printParameterSet(ostream&);
 	string getStringParameters();
