@@ -13,9 +13,9 @@
 #include <type/Constant.h>
 #include <optimizer/Brent_fmin.h>
 #include <cstdlib>
-#include <gsl/gsl_errno.h>
-#include <gsl/gsl_math.h>
-#include <gsl/gsl_min.h>
+//#include <gsl/gsl_errno.h>
+//#include <gsl/gsl_math.h>
+//#include <gsl/gsl_min.h>
 
 #define t_zita t_model->parameterModel->parameterSet
 #define gg t_model->parameterModel->successProbability
@@ -289,60 +289,60 @@ public:
 		delete frequency_list;
 	}
 
-	void estimateLatentTraitsMAP_GSL() {
-		int status;
-		int iter = 0, max_iter = 100;
-		const gsl_min_fminimizer_type *T;
-		parameters_logL temp;
-		gsl_min_fminimizer *s;
-		gsl_function F;
-		F.function = &logLR;
-		F.params = &temp;
-
-		T = gsl_min_fminimizer_quad_golden;
-		s = gsl_min_fminimizer_alloc(T);
-
-		double m = 2.0, m_expected = M_PI;
-		double a = -5.0, b = 5.0;
-
-		gsl_min_fminimizer_set(s, &F, m, a, b);
-
-		bool ** pattern_list = lt->pm->getBitsetList();
-		int * frequency_list = lt->pm->getFrequencyList();
-		int size = lt->pm->matrix.size();
-
-		int counter = 0;
-
-		for (int index = 0; index < size; index++, ++counter) {
-			cout << "." << endl;
-			temp.model = model;
-			temp.node = counter;
-			temp.pattern = pattern_list[index];
-			temp.size = lt->pm->size;
-
-			F.params = (void*) &temp;
-
-			do {
-				status = gsl_min_fminimizer_iterate(s);
-
-				m = gsl_min_fminimizer_x_minimum(s);
-				a = gsl_min_fminimizer_x_lower(s);
-				b = gsl_min_fminimizer_x_upper(s);
-
-				status = gsl_min_test_interval(a, b, 0.001, 0.0);
-
-			} while (status == GSL_CONTINUE && iter < max_iter);
-
-			(*lt->traits)(counter, lt->dim - 1) = m;
-		}
-
-		for (int j = 0; j < size; j++) {
-			delete pattern_list[j];
-		}
-
-		delete pattern_list;
-		delete frequency_list;
-	}
+//	void estimateLatentTraitsMAP_GSL() {
+//		int status;
+//		int iter = 0, max_iter = 100;
+//		const gsl_min_fminimizer_type *T;
+//		parameters_logL temp;
+//		gsl_min_fminimizer *s;
+//		gsl_function F;
+//		F.function = &logLR;
+//		F.params = &temp;
+//
+//		T = gsl_min_fminimizer_quad_golden;
+//		s = gsl_min_fminimizer_alloc(T);
+//
+//		double m = 2.0, m_expected = M_PI;
+//		double a = -5.0, b = 5.0;
+//
+//		gsl_min_fminimizer_set(s, &F, m, a, b);
+//
+//		bool ** pattern_list = lt->pm->getBitsetList();
+//		int * frequency_list = lt->pm->getFrequencyList();
+//		int size = lt->pm->matrix.size();
+//
+//		int counter = 0;
+//
+//		for (int index = 0; index < size; index++, ++counter) {
+//			cout << "." << endl;
+//			temp.model = model;
+//			temp.node = counter;
+//			temp.pattern = pattern_list[index];
+//			temp.size = lt->pm->size;
+//
+//			F.params = (void*) &temp;
+//
+//			do {
+//				status = gsl_min_fminimizer_iterate(s);
+//
+//				m = gsl_min_fminimizer_x_minimum(s);
+//				a = gsl_min_fminimizer_x_lower(s);
+//				b = gsl_min_fminimizer_x_upper(s);
+//
+//				status = gsl_min_test_interval(a, b, 0.001, 0.0);
+//
+//			} while (status == GSL_CONTINUE && iter < max_iter);
+//
+//			(*lt->traits)(counter, lt->dim - 1) = m;
+//		}
+//
+//		for (int j = 0; j < size; j++) {
+//			delete pattern_list[j];
+//		}
+//
+//		delete pattern_list;
+//		delete frequency_list;
+//	}
 
 	void setQuadratureNodes(QuadratureNodes *nodes) {
 		quadNodes = nodes;
