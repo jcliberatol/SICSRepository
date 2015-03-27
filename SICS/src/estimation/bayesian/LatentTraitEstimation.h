@@ -31,7 +31,6 @@ public:
 	};
 
 	LatentTraitEstimation() {
-
 	}
 
 	virtual ~LatentTraitEstimation() {
@@ -103,6 +102,23 @@ public:
 		return (p);
 	}
 
+	static double patternProbabilities(double theta, bool * pattern, int size,
+			int node, Model * t_model, double *** parSet) {
+		double p = 1;
+
+		for (int i = 0; i < size; i++) {
+			if (pattern[i] > 0) {
+				p *= gg(theta, new double[3] { parSet[0][0][i], parSet[1][0][i],
+						parSet[2][0][i] });
+
+			} else {
+				p *= 1 - gg(theta, new double[3] { parSet[0][0][i],
+						parSet[1][0][i], parSet[2][0][i] });
+			}
+		}
+		return (p);
+	}
+
 	LatentTraits * getLatentTraits() {
 		return (lt);
 	}
@@ -160,7 +176,6 @@ public:
 
 			(*lt->traits)(counter, lt->dim - 1) = sum_num / sum_den;
 		}
-
 	}
 
 	//Deprecated
@@ -174,6 +189,13 @@ public:
 	static double logL(double theta, bool * pattern, int size, int node,
 			Model *model) {
 		return (-(log(patternProbabilities(theta, pattern, size, node, model))
+				- ((theta * theta) / 2)));
+	}
+
+	static double logLP(double theta, bool * pattern, int size, int node,
+			Model *model, double *** parSet) {
+		return (-(log(
+				patternProbabilities(theta, pattern, size, node, model, parSet))
 				- ((theta * theta) / 2)));
 	}
 
@@ -192,16 +214,11 @@ public:
 
 		int counter = 0;
 
-//		for (int index = 0; index < size; index++, ++counter) {
-//			if (rand() < 214748364.7) {
-				//cout << "theta, function" << index << endl;
-				for (double i = -3.3; i <= 2.8; i += .01) {
-					cout << i << ","
-							<< logL(i, pattern_list[0], lt->pm->size,
-									counter, this->model) << endl;
-				}
-//			}
-//		}
+		for (double i = -3.3; i <= 2.8; i += .01) {
+			cout << i << ","
+					<< logL(i, pattern_list[0], lt->pm->size, counter,
+							this->model) << endl;
+		}
 	}
 
 	void evaluate_theta(double theta, int pattern) {
@@ -245,19 +262,23 @@ public:
 			(*lt->traits)(counter, lt->dim - 1) = Brent_fmin(new double[2] { -5,
 					5 }, 0.0001220703, function, pattern_list[index],
 					lt->pm->size, counter, this->model, 1);
-//			for(double i = -0.3; i <= 0.3; i+=.005){
-//				//cout<<"index: "<<index<<", i: "<<i<<endl;
-//				double first = logL((*lt->traits)(counter, lt->dim - 1)+i, pattern_list[index], lt->pm->size, counter, this->model);
-//				double second = logL((*lt->traits)(counter, lt->dim - 1), pattern_list[index], lt->pm->size, counter, this->model);
-//				cout<<"f("<<(*lt->traits)(counter, lt->dim - 1)+i<<")"<<"<"<<"f("<<(*lt->traits)(counter, lt->dim - 1)<<")"<<endl;
-//				cout<<first<<"<"<<second;
-//				if(first < second){
-//					cout<<"→Menor";
-//					(*lt->traits)(counter, lt->dim - 1) = (*lt->traits)(counter, lt->dim - 1)+i;
-//				}
-//				cout<<endl;
-//			}
-//			cout<<"----------------I'm a separator bar.-----------------"<<endl;
+		}
+
+		delete frequency_list;
+	}
+
+	void estimateLatentTraitsMAP(double *** parSet) {
+		bool ** pattern_list = lt->pm->getBitsetList();
+		int * frequency_list = lt->pm->getFrequencyList();
+		int size = lt->pm->matrix.size();
+
+		int counter = 0;
+
+		for (int index = 0; index < size; index++, ++counter) {
+			double (*function)(double, bool *, int, int, Model *, double ***) = &logLP;
+			(*lt->traits)(counter, lt->dim - 1) = Brent_fmin(new double[2] { -5,
+					5 }, 0.0001220703, function, pattern_list[index],
+					lt->pm->size, counter, this->model, parSet, 1);
 		}
 
 		delete frequency_list;

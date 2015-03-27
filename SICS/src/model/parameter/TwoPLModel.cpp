@@ -341,10 +341,10 @@ TwoPLModel::~TwoPLModel() {
 }
 
 void TwoPLModel::printParameterSet(ostream& out) {
-	out << "\"a\" \"b\" \"c\"" << endl;
+	cout << "\"a\" \"b\" \"c\"" << endl;
 
 	for (int i = 0; i < items; i++) {
-		out << parameterSet[0][0][i] << " " << parameterSet[1][0][i] << " " << 0
+		cout << parameterSet[0][0][i] << " " << parameterSet[1][0][i] << " " << 0
 				<< endl;
 	}
 //	cout<<"2PL Model Parameters :"<<endl;

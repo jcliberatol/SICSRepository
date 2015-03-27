@@ -58,18 +58,22 @@ void EMEstimation::setModel(Model* Model) {
 	//Discriminate by models
 	if (Model->Modeltype() == Constant::THREE_PL) {
 		estimator = new EM3PL(model, quadNodes, f, r); //Initializes estimator
+		return;
 	}
 
 	if (Model->Modeltype() == Constant::RASCH_A1) {
 		estimator = new EM1PL(model, quadNodes, f, r); //Initializes estimator
+		return;
 	}
 
 	if (Model->Modeltype() == Constant::TWO_PL) {
 		estimator = new EM2PL(model, quadNodes, f, r); //Initializes estimator with Cristian's 2PL Model
+		return;
 	}
 
 	if (Model->Modeltype() == Constant::RASCH_A_CONSTANT) {
 		estimator = new EM1PLAC(model, quadNodes, f, r);
+		return;
 	}
 
 }
@@ -128,7 +132,7 @@ void EMEstimation::estimate() {
 			break;
 	}
 	estimator->untransform();
-	//model->printParameterSet(cout);
+	model->printParameterSet(cout);
 	//	cout << "Total time from estimation " << profiler->dr("estim") << endl
 	//			<< "E step time : " << profiler->dr("Et") << endl
 	//			<< "M step time : " << profiler->dr("Mt") << endl;

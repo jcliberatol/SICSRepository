@@ -23,8 +23,15 @@ public:
 		delete traits;
 	};
 
-	void print(){
-		cout<<(*traits);
+	void print()
+	{
+		bool ** pattern_list = pm->getBitsetList();
+
+		for(int i = 0; i < pm->matrix.size(); i++){
+			for(int j = 0; j < pm->countItems(); j++)
+				cout << pattern_list[i][j] << " ";
+			cout<<(*traits)(i,0)<<endl;
+		}
 	}
 	PatternMatrix *pm;
 	Matrix<double> * traits;
