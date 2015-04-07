@@ -13,11 +13,11 @@
 #include <type/Constant.h>
 
 
-void Fit(double**  LL,double** P,double** Q,LatentTraits* scores, Matrix<double> data,double*** parameterSet, int model_type){
+void Fit(double**  LL,double** P,double** Q,PatternMatrix *pm,Matrix<double> traits, Matrix<double> data,double*** parameterSet, int model_type){
 
-	bool ** pattern_list = scores->pm->getBitsetList();
+	bool ** pattern_list = pm->getBitsetList();
 	int nitems = data.nC();
-	int nscores = scores->pm->matrix.size();
+	int nscores = pm->matrix.size();
 	int ninds = data.nR();
 	double scoresTot [ninds];
 	int i, j, k;
@@ -34,7 +34,7 @@ void Fit(double**  LL,double** P,double** Q,LatentTraits* scores, Matrix<double>
 			}
 
 			if(npatt == nitems){
-				scoresTot[i] = (*(scores->traits))(j, 0);
+				scoresTot[i] = (traits)(j, 0);
 				break;
 			}
 		}

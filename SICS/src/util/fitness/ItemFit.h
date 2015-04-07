@@ -14,7 +14,7 @@
 #include <cstring>
 #include <util/fitness/Fit.h>
 
-void itemFit(LatentTraits* scores, Matrix<double> data,double*** parameterSet, int model_type, double * itemsf){
+void itemFit(PatternMatrix *pm, Matrix<double> traits, Matrix<double> data,double*** parameterSet, int model_type, double * itemsf){
 
 	int nitems = data.nC();
 	int ninds = data.nR();
@@ -29,7 +29,7 @@ void itemFit(LatentTraits* scores, Matrix<double> data,double*** parameterSet, i
 		Q[i] = new double[nitems];
 	}
 
-	Fit(LL, P, Q, scores, data, parameterSet, model_type);
+	Fit(LL, P, Q, pm, traits, data, parameterSet, model_type);
 
 	double sum = 0;
 

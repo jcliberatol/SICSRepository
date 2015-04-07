@@ -128,7 +128,7 @@ void EMEstimation::estimate() {
 			break;
 	}
 	estimator->untransform();
-	//model->printParameterSet(cout);
+	model->printParameterSet(cout);
 	//	cout << "Total time from estimation " << profiler->dr("estim") << endl
 	//			<< "E step time : " << profiler->dr("Et") << endl
 	//			<< "M step time : " << profiler->dr("Mt") << endl;
