@@ -106,6 +106,20 @@ void ThreePLModel::getParameters(double * parameters)
 	}
 }
 
+void ThreePLModel::setParameters(double * parameters)
+{
+	int i = 0;
+	for (int j = 0; j < items; j++) {
+		this->parameterSet[0][0][j] = parameters[i++];
+	}
+	for (int j = 0; j < items; j++) {
+		this->parameterSet[1][0][j] = parameters[i++];
+	}
+	for (int j = 0; j < items; j++) {
+		this->parameterSet[2][0][j] = parameters[i++];
+	}
+}
+
 double ThreePLModel::successProbability(double theta, double * zita) {
 
 	long double exponential = (Constant::NORM_CONST)*(zita[0]*theta+zita[1]);

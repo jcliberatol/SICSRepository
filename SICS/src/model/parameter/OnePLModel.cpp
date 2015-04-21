@@ -78,7 +78,13 @@ double*** OnePLModel::getParameterSet() {
 
 void OnePLModel::getParameters(double * parameters) {
 	for (int i = 0; i < items; i++) {
-		parameters[i] = parameterSet[1][0][i];
+		parameters[i] = parameterSet[0][0][i];
+	}
+}
+
+void OnePLModel::setParameters(double * parameters) {
+	for (int i = 0; i < items; i++) {
+		this->parameterSet[0][0][i] = parameters[i];
 	}
 }
 

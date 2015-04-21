@@ -9,7 +9,7 @@
 #include "Main.h"
 //#define ESTIMATION_MODEL Constant::THREE_PL
 //RASCH_A1, RASCH_A_CONSTANT, TWO_PL, THREE_PL
-#define ESTIMATION_MODEL Constant::RASCH_A_CONSTANT
+#define ESTIMATION_MODEL Constant::TWO_PL
 //#define ESTIMATION_MODEL Constant::RASCH_A1
 //#define ESTIMATION_MODEL Constant::RASCH_A_CONSTANT
 
@@ -172,8 +172,10 @@ void oneRun(char * args) {
 
 	Matrix<double> data(dataSet->countIndividuals(), dataSet->countItems());
 	input.importCSV(args, data, 1, 0);
-	itemFit(latentTraits, data, model->getParameterModel()->getParameterSet(), model -> type);
-	personFit(latentTraits, data, model->getParameterModel()->getParameterSet(), model -> type);
+	
+	double* itemsf = new double[ data.nC()];
+	//itemFit(latentTraits->pm, *(latentTraits->traits), data, model->getParameterModel()->getParameterSet(), model -> type,itemsf);
+	//personFit(latentTraits->pm, *(latentTraits->traits), data, model->getParameterModel()->getParameterSet(), model -> type);
 
 	delete modelFactory;
 	delete dataSet;

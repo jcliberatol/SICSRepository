@@ -49,6 +49,7 @@ public:
 	double getProbability(int, int);
 	void printParameterSet(ostream&);
 	string getStringParameters();
+	void setParameters(double *);
 	// Destructor
 	virtual ~TwoPLModel();
 };

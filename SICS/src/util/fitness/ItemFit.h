@@ -14,7 +14,7 @@
 #include <cstring>
 #include <util/fitness/Fit.h>
 
-void itemFit(LatentTraits* scores, Matrix<double> data,double*** parameterSet, int model_type){
+void itemFit(PatternMatrix *pm, Matrix<double> traits, Matrix<double> data,double*** parameterSet, int model_type, double * itemsf){
 
 	int nitems = data.nC();
 	int ninds = data.nR();
@@ -29,7 +29,7 @@ void itemFit(LatentTraits* scores, Matrix<double> data,double*** parameterSet, i
 		Q[i] = new double[nitems];
 	}
 
-	Fit(LL, P, Q, scores, data, parameterSet, model_type);
+	Fit(LL, P, Q, pm, traits, data, parameterSet, model_type);
 
 	double sum = 0;
 
@@ -52,11 +52,10 @@ void itemFit(LatentTraits* scores, Matrix<double> data,double*** parameterSet, i
 		}
 	}
 
-	double Z3[nitems];
 
 	for(j = 0; j < nitems; j++){
-		Z3[j] = (LL[ninds - 1][j] - mu[j])/sqrt(sigmaCuad[j]);
-		cout << Z3[j] << "\n";
+		itemsf[j] = (LL[ninds - 1][j] - mu[j])/sqrt(sigmaCuad[j]);
+		cout << itemsf[j] << "\n";
 	}
 }
 
