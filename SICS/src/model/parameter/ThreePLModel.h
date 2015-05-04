@@ -28,6 +28,12 @@ class ThreePLModel: public ParameterModel {
 private:
 	QuadratureNodes* nodes;
 public:
+	static double banana(double*, double* , int , int);
+	static double Prm(int u,double a, double d, double theta);
+	static double Pr(int u,double a, double d, double c, double theta);
+	static double* grad(double* xzita,double* xRmat,double* xf, double* ptcuad, double nitems);
+	static double Loglik(double* xzita,double* xRmat,double* xf, double* xptcuad, double itemn);
+
 
 	static double successProbability(double, double, double, double);
 	double successProbability(double, double *);

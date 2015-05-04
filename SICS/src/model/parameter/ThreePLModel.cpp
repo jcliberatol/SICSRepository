@@ -402,3 +402,106 @@ void ThreePLModel::printParameterSet(ostream& out) {
 	}
 
 }
+
+
+double ThreePLModel::banana(double* args, double* pars, int nargs, int npars){
+	double x1 = args[0];
+	double x2 = args[1];
+	return (100 * (x2 - x1 * x1) * (x2 - x1 * x1) + (1 - x1) * (1 - x1));
+}
+double ThreePLModel::Loglik(double* xzita,double* xRmat,double* xf, double* xptcuad, double itemn){
+  /*
+  NumericVector xzita(zita);
+  NumericMatrix xRmat(Rmat);
+  NumericVector xf(f);
+  NumericVector xptcuad(ptcuad);
+  */
+  const int items = itemn;
+  const int numCuads = 41;
+  
+  double suma = 0;
+  for(int k = 0 ; k < numCuads ; k++){
+    for(int i = 0 ; i < items ; i++){
+      double pki = Pr(1, xzita[i], xzita[items + i], xzita[2 * items + i], xptcuad[k]);
+      double qki = 1.0 - pki;
+      suma = suma + (xRmat[k*numCuads+i] * log(pki) + (xf[k] - xRmat[k*numCuads+i] * log(qki)));
+    }    
+  }
+  return -suma;
+}
+double* ThreePLModel::grad(double* xzita,double* xRmat,double* xf, double* xptcuad, double nitems){
+  
+  int items = (int)nitems;
+  const int numCuads = 41;
+  double* h = new double[3];
+  Matrix<double>* g = new Matrix<double>(3,items);
+  Matrix<double>* retorno = new Matrix<double>(3,items);
+  bool *llamadoNear = new bool;
+  *llamadoNear = 0;
+  
+  for(int i = 0 ; i < items ; i++){
+   double *suma = new double[3];
+   //Inicializa suma a cero
+   for(int j = 0 ; j < 3 ; j++){
+     suma[j] = 0;
+   }
+   for(int k = 0 ; k < numCuads ; k++){
+     double p = Pr(1,xzita[i], xzita[items + i] ,xzita[2 * items + i], xptcuad[k]);
+     double pm = Prm(1,xzita[i] , xzita[items + i], xptcuad[k]);
+     double aux = (xRmat[k*numCuads+i] -  xf[k] * p) * ((pm * (1 - pm)) / (p * (1 - p)));
+     h[0] = xptcuad[k]*(1/(1+exp(xzita[2 * items + i])));
+     h[1] = (1/(1+exp(xzita[2 * items + i])));
+     h[2] = pow((1/(1+exp(xzita[2 * items + i]))),2) * exp(xzita[2 * items + i]) / pm;
+     for(int j = 0 ; j < 3 ; j++){
+      suma[j] = suma[j] + (aux * h[j]); 
+     }
+   }
+   for(int j = 0 ; j < 3 ; j++){
+     (*g)(j,i) = suma[j]; 
+   }
+   delete[] suma;
+  }
+  double* grad = new double[items * 3];
+  for(int j = 0 ; j < 3 ; j++){
+   for(int i = 0 ; i < items ; i++){
+    grad[j*items + i] = -(*g)(j,i); 
+   }
+  }
+  return grad;
+}
+double ThreePLModel::Prm(int u,double a, double d, double theta){
+  double p = 0;
+  double z = a * theta + d;
+  if(abs(z) > 35){
+   z = abs(z) /  z * 35; 
+  }
+  p =  (1/(1 + exp(-1*(z))));
+  if(0.0 == p){
+    p = sqrt(2.2e-16);
+  }else if(1.0 == p){
+    p = 1 - 1e-6;
+  }
+  if(1 == u){
+    return(p);
+  }else{
+    return(1-p);
+  }
+}
+double ThreePLModel::Pr(int u,double a, double d, double c, double theta){
+  double p = 0;
+  double z = a * theta + d;
+  if(abs(z) > 35){
+   z = abs(z) /  z * 35; 
+  }
+  p = exp(c) / (1+exp(c)) + (1-(exp(c) / (1+exp(c)))) * (1/(1 + exp(-1*(z))));
+  if(0.0 == p){
+    p = sqrt(2.2e-16);
+  }else if(1.0 == p){
+    p = 1 - 1e-6;
+  }
+  if(1 == u){
+    return(p);
+  }else{
+    return(1-p);
+  }
+}
