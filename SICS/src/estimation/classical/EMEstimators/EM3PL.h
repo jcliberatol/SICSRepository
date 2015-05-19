@@ -97,8 +97,8 @@ public:
 		faux = new long double[q];
 		weights = this->nodes->getWeight();
 		items = data->countItems();
-		fptr = &ThreePLModel::logLikelihood;
-		gptr = &ThreePLModel::gradient;
+		fptr = &ThreePLModel::itemLogLik;
+		gptr = &ThreePLModel::itemGradient;
 		hptr = NULL;
 
 		bitset_list = data->getBitsetList();
@@ -125,8 +125,8 @@ public:
 		int It = m->getItemModel()->getDataset()->countItems();
 		int q = nodes->size();
 		double args[3 * It];
-		double pars[2 + 2 * q + q * It];
-		*nargs = 3 * It;
+		double pars[2 + 2 * q + q * It + 1]; //Plus one for item carry.
+		*nargs = 3; //Now calculated in item per item basis.
 		int npars = 2 + 2 * q + q * It;
 		//filling args
 		int nA = 0;
@@ -186,6 +186,7 @@ public:
 			}
 		}
 		*nargs = nA;
+		pars[nP++] = 0; //For holding the item.
 		npars = nP;
 		/*
 		 * Chooses the method
@@ -194,7 +195,39 @@ public:
 		 */
 		Optimizer* optim;
 		optim = new Optimizer();
-		optim->searchOptimal(fptr, gptr, hptr, args, pars, *nargs, npars);
+		fptr = &ThreePLModel::itemLogLik2;
+		gptr = &ThreePLModel::itemGradient2;
+		for (int i = 0; i < It; i++) {
+			pars[npars - 1] = i; //Passing the item to fu nctions
+			int dims=3;
+			double* iargs = new double[3];
+			int nA = 0;
+			nA += i;
+			iargs[0] = args[nA];
+			int parA = nA;
+			nA += (items-i);
+			nA += i;
+			iargs[1] = args[nA];
+			int parB = nA;
+			nA += (items-i);
+			nA += i;
+			iargs[2] = args[nA]; //just nA;
+			if(abs(iargs[0])>5){
+			iargs[0] = 0.851;
+			}
+			double dd = 0;
+			dd = -iargs[1]/iargs[0];
+			if(abs(dd)>5){
+			iargs[1] = 0;
+
+			}
+			if(abs(iargs[2])>5){
+			iargs[2] = 0.3;
+			}
+			optim->searchOptimal(fptr, gptr, hptr, iargs, pars, dims, npars);
+			args[parA] = iargs[0];args[parB] = iargs[1];args[nA] = iargs[2];
+		}
+		//Here we call the optimizer for each of the items
 
 		std::copy(&((*parameters)[1][0]), (&((*parameters)[1][0])) + *nargs,
 				&((*parameters)[0][0]));
@@ -209,7 +242,6 @@ public:
 			A[0][i] = args[nA++];
 			if (fabs(A[0][i]) > abs(5)) { //5
 				A[0][i] = 0.851;
-				//cout<<"A";
 			}
 
 		}
@@ -221,7 +253,6 @@ public:
 			double b = -d / a;
 			if (fabs(b) > abs(5)) {
 				B[0][i] = 0;
-				//cout<<"B";
 			}
 		}
 
@@ -229,7 +260,6 @@ public:
 			C[0][i] = args[nA++];
 			if (fabs(C[0][i]) > abs(20)) {
 				C[0][i] = 0.5;
-				//cout<<"C";
 			}
 		}
 
@@ -263,7 +293,6 @@ public:
 		if (maxDelta < Constant::CONVERGENCE_DELTA) {
 			m->itemParametersEstimated = true;
 		}
-		//cout<<maxDelta<<endl;
 		//cout<<maxDelta<<endl;
 		//And set the parameter sets
 		double *** parSet = m->getParameterModel()->getParameterSet();

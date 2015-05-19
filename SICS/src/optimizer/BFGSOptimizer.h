@@ -64,7 +64,7 @@ int static bfgs(double (*&fntomin)(double*, double*, int, int),
 	X = new double[n];
 	c = new double[n];
 	//Assign memory to the triangular lower matrix
-	B = new double[n * (n + 1) / 2];
+	B = new double[n * (n + 1) / 2];      
 	//evaluate the function at the initial points
 	f = (*fntomin)(args, pars, nvars, npars);
 	if (!(f < Constant::INFINITE)) {

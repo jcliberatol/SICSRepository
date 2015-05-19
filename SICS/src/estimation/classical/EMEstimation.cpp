@@ -121,15 +121,15 @@ void EMEstimation::estimate() {
 
 	for (;;)
 	{
-		//cout << iterations << endl;
+		cout << iterations << endl;
 		estimator->stepE();
 		estimator->stepM(&args_hist, &nargs);
 		estimator->stepRamsay(&args_hist, &nargs, size, iterations > 5 && (iterations) % 3 == 0);
 
 		convergenceSignal = model->itemParametersEstimated;
-
 		if (iterations++ > Constant::MAX_EM_ITERS || convergenceSignal)
 			break;
+
 	}
 	estimator->untransform();
 	model->printParameterSet(cout);

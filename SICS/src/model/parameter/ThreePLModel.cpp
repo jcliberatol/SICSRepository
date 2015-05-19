@@ -12,7 +12,7 @@ ThreePLModel::ThreePLModel() {
 	parameterSet = NULL;
 	probabilityMatrix=NULL;
 	nodes = NULL;
-}
+} 
 
 string ThreePLModel::getStringParameters(){
 	//If the parameter set is null
@@ -141,6 +141,243 @@ double ThreePLModel::getProbability(int node, int item) {
 	return ((*probabilityMatrix)(node, item));
 }
 
+void ThreePLModel::NitemGradient(double* args, double* pars, int nargs, int npars, double* gradient){
+	itemGradient(args,pars,nargs,npars,gradient);
+ 	double hh = 1e-08;
+ 	int items = pars[1];
+ 	int* idx = new int[3];
+ 	int index = pars[npars-1];
+ 	int nA = 0;
+ 	nA = 0;
+ 	nA += index;
+	idx[0] = nA;
+	nA += (items-index);
+	nA += index;
+	idx[1] = nA;
+	nA += (items-index);
+	nA += index;
+	idx[2] = nA;
+ 	for(int i = 0 ; i < nargs; i++){
+ 		//Add hh to argument
+ 		args[idx[i]] = args[idx[i]] + hh;
+ 		//Evaluate
+ 		gradient[i] = itemLogLik(args,pars,nargs,npars);
+ 		//Remove hh to argument and evaluate
+ 		args[idx[i]] = args[idx[i]] - hh;
+ 		gradient[i] -= itemLogLik(args,pars,nargs,npars);
+ 		//Substract
+ 		gradient[i] = gradient[i]/hh;
+ 	}
+ 	delete[] idx;
+}
+
+void ThreePLModel::itemGradient (double* args, double* pars, int nargs, int npars, double* gradient){
+	int nA = 0;
+	int nP = 0;
+	int q, items;
+	double *theta, *r, *f;
+	double a, b, c;
+
+	int index = 0;
+	index = pars[npars-1];
+	// Obtain q
+	q = pars[nP ++]; // q is obtained and npars is augmented
+	// Obtain I
+	items = pars[nP ++];
+	theta = new double[q];
+	r = new double[q];
+	f = new double[q];
+	// Obtain theta
+	for (int k=0; k<q; k++) {
+		theta[k] = pars[nP ++];
+	}
+	// Obtain f
+	for (int k=0; k<q; k++) {
+		f[k] = pars[nP ++];
+	}
+	// Obtain r that becomes a vector
+	for (int k=0; k<q; k++) {
+		nP += index;
+		r[k] = pars[nP];
+		nP += (items-index); 
+	}
+	// Obtain a, b and c
+	nA += index;
+	a = args[nA];
+	nA += (items-index);
+	nA += index;
+	b = args[nA];
+	nA += (items-index);
+	nA += index;
+	c = args[nA];
+
+	double D = Constant::NORM_CONST;
+	long double *h_0; // Block Matrix of size q*I. Each block-element has size of 1*3
+	long double *h; // Block vector of size I (i.e. I blocks). Each block-element has size of 1*3
+	long double *P_Star, *P;  // Matrix of size q*I
+	long double *W;           // Matrix of size q*I
+	long double *factor;	  // Matrix of product (r-fP)W
+	long double ec;            // e^c_i
+	long double ecp1i;	// 1 / (e^c_i + 1)
+
+	h = new long double [3];
+	h_0 = new long double [q*3];
+	P = new long double [q];
+	P_Star = new long double [q];
+	factor = new long double [q];
+	W = new long double [q];
+
+	ecp1i=1/(1+exp(c));
+	ec=exp(c);
+	
+	for ( int k = 0; k < q; k++ ) {
+
+			P[k] = successProbability ( theta[k], a,b,c);
+			P_Star[k] = 1/(1+exp(-D*(a*theta[k]+b)));
+
+			W[k] = P_Star[k] * ( 1 - P_Star[k] ); // Numerator
+			W[k] /= P[k] * ( 1 - P[k] );// Denominator
+
+			factor[k] = ( r[k] - f[k]*P[k] ) * W[k];
+
+			// h_0 / (P_star*Q_star)
+			h_0[3 * k ] = D * theta[k] * ecp1i;
+			h_0[3 * k + 1] = D * ecp1i;
+			h_0[3 * k + 2] = ec * (ecp1i*ecp1i) / P_Star[k];
+	}
+	memset(h,0,sizeof(long double)*3);
+	memset(gradient,0,sizeof(double)*3);
+		for ( int k = 0; k < q; k++ ) {
+			h[0] += factor[k] * h_0[3 * k + 0];
+			h[1] += factor[k] * h_0[3 * k + 1];
+			h[2] += factor[k] * h_0[3 * k + 2];
+	}
+
+	delete [] h_0;
+	delete [] P_Star;
+	delete [] P;
+	delete [] W;
+	delete [] factor;
+
+	delete [] theta;
+	delete [] r;
+	delete [] f;
+
+	//return h as the gradient
+	int hc=0;
+	for (int n = 0; n < 3; ++n) {
+			gradient[hc++]= -static_cast<double>(h[n]);
+	}
+	//cout<<"↓";
+	delete [] h;
+}
+
+void ThreePLModel::itemGradient2 (double* args, double* pars, int nargs, int npars, double* gradient){
+	int nA = 0;
+	int nP = 0;
+	int q, items;
+	double *theta, *r, *f;
+	double a, b, c;
+
+	int index = 0;
+	index = pars[npars-1];
+	// Obtain q
+	q = pars[nP ++]; // q is obtained and npars is augmented
+	// Obtain I
+	items = pars[nP ++];
+	theta = new double[q];
+	r = new double[q];
+	f = new double[q];
+	// Obtain theta
+	for (int k=0; k<q; k++) {
+		theta[k] = pars[nP ++];
+	}
+	// Obtain f
+	for (int k=0; k<q; k++) {
+		f[k] = pars[nP ++];
+	}
+	// Obtain r that becomes a vector
+	for (int k=0; k<q; k++) {
+		nP += index;
+		r[k] = pars[nP];
+		nP += (items-index); 
+	}
+	// Obtain a, b and c
+	nA += index;
+	a = args[nA];
+	nA += (items-index);
+	nA += index;
+	b = args[nA];
+	nA += (items-index);
+	nA += index;
+	c = args[nA];
+
+	a = args[0];
+	b = args[1];
+	c = args[2];
+
+	double D = Constant::NORM_CONST;
+	long double *h_0; // Block Matrix of size q*I. Each block-element has size of 1*3
+	long double *h; // Block vector of size I (i.e. I blocks). Each block-element has size of 1*3
+	long double *P_Star, *P;  // Matrix of size q*I
+	long double *W;           // Matrix of size q*I
+	long double *factor;	  // Matrix of product (r-fP)W
+	long double ec;            // e^c_i
+	long double ecp1i;	// 1 / (e^c_i + 1)
+
+	h = new long double [3];
+	h_0 = new long double [q*3];
+	P = new long double [q];
+	P_Star = new long double [q];
+	factor = new long double [q];
+	W = new long double [q];
+
+	ecp1i=1/(1+exp(c));
+	ec=exp(c);
+	
+	for ( int k = 0; k < q; k++ ) {
+
+			P[k] = successProbability ( theta[k], a,b,c);
+			P_Star[k] = 1/(1+exp(-D*(a*theta[k]+b)));
+
+			W[k] = P_Star[k] * ( 1 - P_Star[k] ); // Numerator
+			W[k] /= P[k] * ( 1 - P[k] );// Denominator
+
+			factor[k] = ( r[k] - f[k]*P[k] ) * W[k];
+
+			// h_0 / (P_star*Q_star)
+			h_0[3 * k ] = D * theta[k] * ecp1i;
+			h_0[3 * k + 1] = D * ecp1i;
+			h_0[3 * k + 2] = ec * (ecp1i*ecp1i) / P_Star[k];
+	}
+	memset(h,0,sizeof(long double)*3);
+	memset(gradient,0,sizeof(double)*3);
+		for ( int k = 0; k < q; k++ ) {
+			h[0] += factor[k] * h_0[3 * k + 0];
+			h[1] += factor[k] * h_0[3 * k + 1];
+			h[2] += factor[k] * h_0[3 * k + 2];
+	}
+
+	delete [] h_0;
+	delete [] P_Star;
+	delete [] P;
+	delete [] W;
+	delete [] factor;
+
+	delete [] theta;
+	delete [] r;
+	delete [] f;
+
+	//return h as the gradient
+	int hc=0;
+	for (int n = 0; n < 3; ++n) {
+			gradient[hc++]= -static_cast<double>(h[n]);
+	}
+	//cout<<"↓";
+	delete [] h;
+}
+
+
 
 void ThreePLModel::gradient (double* args, double* pars, int nargs, int npars, double* gradient){
 	/*
@@ -265,7 +502,6 @@ void ThreePLModel::gradient (double* args, double* pars, int nargs, int npars, d
 	delete [] b;
 	delete [] c;
 
-//return h as the gradient
 	int hc=0;
 	for (int n = 0; n < 3; ++n) {
 		for(int i = 0 ; i < items ; ++i){
@@ -274,24 +510,142 @@ void ThreePLModel::gradient (double* args, double* pars, int nargs, int npars, d
 	}
 	delete [] h;
 }
+
+double ThreePLModel::itemLogLik (double* args, double* pars, int nargs,
+		int npars) {
+	int nA = 0;
+	int nP = 0;
+	int q, items;
+	double *theta, *r, *f, *rr;
+	double a, b, c;
+	int index = 0;
+	index = pars[npars-1];
+	//cout<<"Item : "<<index;
+	// Obtain q
+	q = pars[nP ++]; // q is obtained and npars is augmented
+	// Obtain I
+	items = pars[nP ++];
+	theta = new double[q];
+	r = new double[q];
+	f = new double[q];
+	// Obtain theta
+	for (int k=0; k<q; k++) {
+		theta[k] = pars[nP ++];
+	}
+	//cout<<"finish theta in "<<nP;
+	// Obtain f
+	double fs=0;
+	for (int k=0; k<q; k++) {
+		f[k] = pars[nP ++];
+	}
+	//cout<<" last f in "<<nP;
+	// Obtain r that becomes a vector
+	for (int k=0; k<q; k++) {
+		nP += index;
+		r[k] = pars[nP];
+		nP += (items-index); 
+	}
+	// Obtain a, b and c
+	nA += index;
+	a = args[nA];
+	nA += (items-index);
+	nA += index;
+	b = args[nA];
+	nA += (items-index);
+	nA += index;
+	c = args[nA];
+
+	//cout <<"ll for item : "<<index<<" a b and c :"<<a<<" "<<b<<" "<<c<<endl;
+	double sum=0;
+	long double tp , tq;
+	int i = index;
+	for (int k = 0; k < q; ++k) {
+			tp = (ThreePLModel::successProbability ( theta[k], a,b,c));
+			if (tp<1e-08)tp=1e-08;
+			tq = 1-tp;
+			if (tq<1e-08)tq=1e-08;
+			//cout<<"r(k)("<<r[k]<<")*log(tp)("<<log(tp)<<") + f[k]("<<f[k]<<")-r[k]("<<r[k]<<")*log(tq)("<<log(tq)<<")"<<endl;	
+			sum+=(r[k]*log(tp))+(f[k]-r[k])*log(tq);
+	}
+
+	delete[] theta;
+	delete[] f;
+	delete[] r;
+	//cout<<"sum : "<<-sum<<endl;
+	return (-sum);
+}
+
+double ThreePLModel::itemLogLik2 (double* args, double* pars, int nargs,
+		int npars) {
+	int nA = 0;
+	int nP = 0;
+	int q, items;
+	double *theta, *r, *f, *rr;
+	double a, b, c;
+	int index = 0;
+	index = pars[npars-1];
+	//cout<<"Item : "<<index;
+	// Obtain q
+	q = pars[nP ++]; // q is obtained and npars is augmented
+	// Obtain I
+	items = pars[nP ++];
+	theta = new double[q];
+	r = new double[q];
+	f = new double[q];
+	// Obtain theta
+	for (int k=0; k<q; k++) {
+		theta[k] = pars[nP ++];
+	}
+	//cout<<"finish theta in "<<nP;
+	// Obtain f
+	double fs=0;
+	for (int k=0; k<q; k++) {
+		f[k] = pars[nP ++];
+	}
+	//cout<<" last f in "<<nP;
+	// Obtain r that becomes a vector
+	for (int k=0; k<q; k++) {
+		nP += index;
+		r[k] = pars[nP];
+		nP += (items-index); 
+	}
+	// Obtain a, b and c
+	a = args[0];
+	b = args[1];
+	c = args[2];
+	//cout <<"ll for item : "<<index<<" a b and c :"<<a<<" "<<b<<" "<<c<<endl;
+	double sum=0;
+	long double tp , tq;
+	int i = index;
+	if(abs(a)>5){
+		a = 0.851;
+	}
+	double dd = 0;
+	dd = -b/a;
+	if(abs(dd)>5){
+		b = 0;
+	}
+	if(abs(c)>5){
+		c = 0.3;
+	}
+	for (int k = 0; k < q; ++k) {
+			tp = (ThreePLModel::successProbability ( theta[k], a,b,c));
+			if (tp<1e-08)tp=1e-08;
+			tq = 1-tp;
+			if (tq<1e-08)tq=1e-08;
+			sum+=(r[k]*log(tp))+(f[k]-r[k])*log(tq);
+	}
+
+	args[0] = a; args[1]=b; args[2]=c;
+	delete[] theta;
+	delete[] f;
+	delete[] r;
+	//cout<<"sum : "<<-sum<<endl;
+	return (-sum);
+}
+
 double ThreePLModel::logLikelihood (double* args, double* pars, int nargs,
 		int npars) {
-
-	//args
-	/*
-	 * a[i]
-	 * b[i]
-	 * c[i]
-	 */
-
-	//pars
-	/*
-	 * q
-	 * I
-	 * theta[q]
-	 * f[q]
-	 * r[q*I]
-	 */
 
 	int nA = 0;
 	int nP = 0;
@@ -352,19 +706,22 @@ double ThreePLModel::logLikelihood (double* args, double* pars, int nargs,
 	for (int k = 0; k < q; ++k) {
 		for (unsigned int i = 0; i < It; ++i) {
 			tp = (ThreePLModel::successProbability ( theta[k], a[i], b[i], c[i]));
-			if (tp==0)tp=1e-08;
+			if (tp<1e-08){tp=1e-08;
+			}
 			tq = 1-tp;
-			if (tq==0)tq=1e-08;
+			if (tq<1e-08){tq=1e-08;
+			}
+
 			sum+=(r[k * It + i]*log(tp))+(f[k]-r[k * It + i])*log(tq);
 		}
 	}
+
 	delete[] theta;
 	delete[] f;
 	delete[] r;
 	delete[] a;
 	delete[] b;
 	delete[] c;
-
 	return (-sum);
 
 
@@ -416,6 +773,7 @@ double ThreePLModel::Loglik(double* xzita,double* xRmat,double* xf, double* xptc
   NumericVector xf(f);
   NumericVector xptcuad(ptcuad);
   */
+  //Printing of the arguments
   const int items = itemn;
   const int numCuads = 41;
   
