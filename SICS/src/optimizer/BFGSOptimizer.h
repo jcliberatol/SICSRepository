@@ -108,7 +108,7 @@ int static bfgs(double (*&fntomin)(double*, double*, int, int),
 				count = 0;
 				for (i = 0; i < n; i++) {
 					args[l[i]] = X[i] + steplength * t[i];
-					if (Constant::reltest + X[i]
+					if (Constant::reltest + X[i]    //reltest is usually 10.
 							== Constant::reltest + args[l[i]]) { /* no change */
 						count++;
 					}
@@ -118,22 +118,24 @@ int static bfgs(double (*&fntomin)(double*, double*, int, int),
 				if (count < n) {
 					f = (*fntomin)(args, pars, nvars, npars);
 					funcount++;
-					//
+					//Wolfe condition 1
+					// f < f(x_k) + c1 * ak * pk * grad(f)
+					// Where f(x_k) is fmin
+					// c1 is acctol
+					// ak is steplength
+					// grad(f) is gradproj
 					accpoint = (f < Constant::INFINITE)
-							&& (f
-									<= fmin
-											+ gradproj * steplength
-													* Constant::acctol);
+							&& (f<= fmin+ gradproj * steplength	* Constant::acctol); //acctol is 1x10-4
 					if (!accpoint) {
-						steplength *= Constant::stepredn;
+						// Reduce the steplength by the factor if wolfe condition is not met.
+						steplength *= Constant::stepredn; //stepredn is 0.02
 					}
 				}
 			} while (!(count == n || accpoint));
-			//
-			enough = (f > Constant::abstol)
-					&& fabs(f - fmin)
-							> Constant::reltol
-									* (fabs(fmin) + Constant::reltol);
+			//abstol is 1x10-5
+			enough = (f > Constant::abstol) && fabs(f - fmin) > Constant::reltol * (fabs(fmin) + Constant::reltol);
+			// reltol is 1e-8
+									
 			/* stop if value if small or if relative change is low */
 			if (!enough) {
 				count = n;
