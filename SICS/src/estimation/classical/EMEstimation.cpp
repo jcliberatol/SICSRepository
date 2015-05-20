@@ -125,12 +125,13 @@ void EMEstimation::estimate() {
 		estimator->stepE();
 		estimator->stepM(&args_hist, &nargs);
 		estimator->stepRamsay(&args_hist, &nargs, size, iterations > 5 && (iterations) % 3 == 0);
-
 		convergenceSignal = model->itemParametersEstimated;
 		if (iterations++ > Constant::MAX_EM_ITERS || convergenceSignal)
 			break;
 
 	}
+	estimator->stepE();
+	estimator->calculateHessiana();
 	estimator->untransform();
 	model->printParameterSet(cout);
 	//	cout << "Total time from estimation " << profiler->dr("estim") << endl

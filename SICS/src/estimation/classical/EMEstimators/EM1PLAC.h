@@ -144,7 +144,10 @@ public:
 		size = data->matrix.size();
 
 	}
+	virtual void calculateHessiana()
+	{
 
+	}
 	virtual void stepM(double *** parameters, int * nargs) {
 		int It = m->getItemModel()->getDataset()->countItems();
 		int q = nodes->size();

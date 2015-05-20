@@ -52,6 +52,7 @@ public:
 	void stepE();
 	//Starts the M Step
 	void stepM();
+	void calculateHessiana();
 	//Sets the model to estimate
 	void setModel(Model* model);
 	//Check if all the conditions are met for running the model, can report an error to a logger
