@@ -4,7 +4,7 @@ Esta es la guia que muestra la implementacion de los criterios de wolfe en el bf
 
 ##Criterios de wolfe
 
-###Primer Criterio de Wolfe f < f(x_k) + c1 * ak * pk * grad(f)
+###Criterio de Wolfe f < f(x_k) + c1 * ak * pk * grad(f)
 ```
 if (count < n) {
 					f = (*fntomin)(args, pars, nvars, npars);
