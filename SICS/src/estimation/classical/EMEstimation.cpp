@@ -8,81 +8,90 @@
 #include <estimation/classical/EMEstimation.h>
 #include <util/util.h>
 
-EMEstimation::EMEstimation() {
+EMEstimation::EMEstimation()
+{
 	iterations = 0;
 	model = NULL;
-	profiler = NULL;
 	f = NULL;
 	r = NULL;
 	logger = NULL;
-	optim = NULL;
 	convergenceSignal = false;
-	optim = new Optimizer();
 	quadNodes = NULL;
 	estimator = NULL;
 }
 
-EMEstimation::~EMEstimation() {
-	if (f != NULL) {
+EMEstimation::~EMEstimation()
+{
+	if (profiler != NULL)
+	{
+		delete profiler;
+		profiler = NULL;
+	}
+	if (estimator != NULL)
+	{
+		delete estimator;
+		estimator = NULL;
+	}
+	if (quadNodes != NULL)
+		delete quadNodes;
+	if (f != NULL)
 		delete f;
-	}
-	if (r != NULL) {
+	if (r != NULL)
 		delete r;
-	}
-	if (logger != NULL) {
+	if (logger != NULL)
 		delete logger;
-	}
-	if (optim != NULL) {
-		delete optim;
-	}
+	if (model != NULL)
+		delete model;
 }
 
-void EMEstimation::setProfiler(Trace* t) {
-	profiler = t;
-	//model->parameterModel->setProfiler(t);
-}
+void EMEstimation::setProfiler(Trace* t){ profiler = t; }
 
 /**
  * Sets the model to be estimated, currently only supports 3PL model
  */
-void EMEstimation::setModel(Model* Model) {
+void EMEstimation::setModel(Model * model)
+{	
 	int q;
 	int It;
-	this->model = Model;
-	q = quadNodes->size();
-	It = model->getItemModel()->countItems();
 
-	f = new Matrix<double>(1, q);
-	r = new Matrix<double>(q, It);
+	this->model = model;
+	q = quadNodes->size();
+	It = this->model->getItemModel()->countItems();
+
+	this->f = new Matrix<double>(1, q);
+	this->r = new Matrix<double>(q, It);
 
 	//Discriminate by models
-	if (Model->Modeltype() == Constant::THREE_PL) {
-		estimator = new EM3PL(model, quadNodes, f, r); //Initializes estimator
+	if (this->model->Modeltype() == Constant::THREE_PL)
+	{
+		estimator = new EM3PL(this->model, quadNodes, f, r);
 		return;
 	}
 
-	if (Model->Modeltype() == Constant::RASCH_A1) {
-		estimator = new EM1PL(model, quadNodes, f, r); //Initializes estimator
+	if (this->model->Modeltype() == Constant::RASCH_A1)
+	{
+		estimator = new EM1PL(this->model, quadNodes, f, r);
 		return;
 	}
 
-	if (Model->Modeltype() == Constant::TWO_PL) {
-		estimator = new EM2PL(model, quadNodes, f, r); //Initializes estimator with Cristian's 2PL Model
+	if (this->model->Modeltype() == Constant::TWO_PL)
+	{
+		estimator = new EM2PL(this->model, quadNodes, f, r);
 		return;
 	}
 
-	if (Model->Modeltype() == Constant::RASCH_A_CONSTANT) {
-		estimator = new EM1PLAC(model, quadNodes, f, r);
+	if (this->model->Modeltype() == Constant::RASCH_A_CONSTANT)
+	{
+		estimator = new EM1PLAC(this->model, quadNodes, f, r);
 		return;
 	}
-
 }
+
 /**
  * Sets the initial values for the estimation, use this for inputting a matrix as initial values
  */
-void EMEstimation::setInitialValues(double*** parameterSet) {
-	estimator->setInitialValues(parameterSet, model);
-}
+void EMEstimation::setInitialValues(double*** parameterSet) { estimator->setInitialValues(parameterSet, model); }
+
 /**
  * Sets the initial values according to a method of calculating the values
  * Possible methods :
@@ -90,11 +99,9 @@ void EMEstimation::setInitialValues(double*** parameterSet) {
  * OSPINA,
  * RANDOM,
  *
- * The default method is OSPINA , this is the fastest method according to the SICS calculations
  */
-void EMEstimation::setInitialValues(int method) {
-	estimator->setInitialValues(method, model);
-}
+void EMEstimation::setInitialValues(int method) { estimator->setInitialValues(method, model); }
+
 /**
  * Main loop of the EM estimation
  * orchestrates the parameters for the estimation, and holds the estimation
@@ -103,50 +110,47 @@ void EMEstimation::setInitialValues(int method) {
  * TODO : read maxiterations as a input parameter , idea : calculate the max iterations depending on the items
  * TODO : Output last estimation onto the json for recovery in the program.
  */
-void EMEstimation::estimate() {
-	estimator->transform();
-	iterations = 0;
-
+void EMEstimation::estimate()
+{
 	double ** args_hist;
 	int nargs;
-	int size = 3 * model->getItemModel()->getDataset()->countItems();
+	int size;
+
+	iterations = 0;
+	size = 3 * model->getItemModel()->getDataset()->countItems();
+
 	(args_hist) = new double*[3];
 	(args_hist)[0] = new double[size];
 	(args_hist)[1] = new double[size];
 	(args_hist)[2] = new double[size];
 
+	estimator->transform();
+
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < size; j++)
 			args_hist[i][j] = 0;
 
-	for (;;)
+	for (;!(iterations++ > Constant::MAX_EM_ITERS || convergenceSignal);)
 	{
 		cout << iterations << endl;
 		estimator->stepE();
 		estimator->stepM(&args_hist, &nargs);
 		estimator->stepRamsay(&args_hist, &nargs, size, iterations > 5 && (iterations) % 3 == 0);
-
 		convergenceSignal = model->itemParametersEstimated;
-		if (iterations++ > Constant::MAX_EM_ITERS || convergenceSignal)
-			break;
-
 	}
+
 	estimator->untransform();
 	model->printParameterSet(cout);
-	//	cout << "Total time from estimation " << profiler->dr("estim") << endl
-	//			<< "E step time : " << profiler->dr("Et") << endl
-	//			<< "M step time : " << profiler->dr("Mt") << endl;
+
+	delete (args_hist)[0];
+	delete (args_hist)[1];
+	delete (args_hist)[2];
+	delete (args_hist);
 }
 
 /**Returns the iterations that took the estimation to obtain an answer*/
-int EMEstimation::getIterations() const {
-	return (iterations);
-}
+int EMEstimation::getIterations() const { return (iterations); }
 
-QuadratureNodes* EMEstimation::getQuadratureNodes() const {
-	return (quadNodes);
-}
+QuadratureNodes* EMEstimation::getQuadratureNodes() const { return (quadNodes); }
 
-void EMEstimation::setQuadratureNodes(QuadratureNodes* nodes) {
-	this->quadNodes = nodes;
-}
+void EMEstimation::setQuadratureNodes(QuadratureNodes* nodes) { this->quadNodes = nodes; }

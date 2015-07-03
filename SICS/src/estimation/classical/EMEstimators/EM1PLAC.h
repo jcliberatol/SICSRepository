@@ -26,18 +26,10 @@ public:
 	}
 
 	virtual void setInitialValues(int method, Model* m) {
-		//TODO MOVE ALGORITHMS TO ANOTHER FILE
-		/*TODO
-		 * Possible methods
-		 * ANDRADE
-		 * OSPINA
-		 * RANDOM
-		 *
-		 * The default method is OSPINA
-		 */
+
 		int items = m->getParameterModel()->items;
 		pset = m->getParameterModel()->getParameterSet();
-		if (!method == Constant::RANDOM) {
+		if (method == Constant::RANDOM) {
 			std::srand(std::time(0));
 			// use current time as seed for random generator
 			pset[0][0][0] = randomd() * 2;
@@ -47,75 +39,14 @@ public:
 				pset[1][0][i] = randomd() * 4 - 2;
 			}
 		}
-		if (method == Constant::ANDRADE) {
-			int pSize = 0;
+		if (method == Constant::ANDRADE)
+		{
+			double * result = Andrade();
 			int ifault;
-			PatternMatrix* data =
-					dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
-			double Ni = data->countIndividuals();
-			double PII;
-			double frequencyV;
-			double mT;
-			double mU;
-			double mTU;
-			double mUU;
-			double covar;
-			double sdU;
-			double sdT;
-			double corr;
-			double result;
-
-			pSize = data->matrix.size();
-
-			double *T = new double[pSize];
-			double *U = new double[pSize];
-			double *TU = new double[pSize];
-			double *UU = new double[pSize];
-			double *Tm = new double[pSize];
-			double *Um = new double[pSize];
-
-			for (int i = 0; i < items; i++) {
-				PII = 0;
-				mT = mU = mTU = mUU = 0.0;
-				for (int index = 0; index < size; index++) {
-					frequencyV = frequency_list[index];
-
-					T[index] = 0;
-					T[index] = data->countBitSet(bitset_list[index], index);
-					PII += frequencyV * bitset_list[index][i];
-					U[index] = bitset_list[index][i];
-					TU[index] = T[index] * U[index];
-					UU[index] = U[index] * U[index];
-					mT += frequencyV * T[index];
-					mU += frequencyV * U[index];
-					mTU += frequencyV * TU[index];
-					mUU += frequencyV * UU[index];
-				}
-
-				PII /= Ni;
-				mT /= Ni;
-				mU /= Ni;
-				mTU /= Ni;
-				mUU /= Ni;
-				covar = mTU - mU * mT;
-				sdT = 0.0;
-				sdU = 0.0;
-
-				for (int index = 0; index < size; index++) {
-					frequencyV = frequency_list[index];
-					Tm[index] = T[index] - mT;
-					Um[index] = U[index] - mU;
-					sdT += frequencyV * Tm[index] * Tm[index];
-					sdU += frequencyV * Um[index] * Um[index];
-				}
-
-				sdT = std::sqrt(sdT / (Ni - 1.0));
-				sdU = std::sqrt(sdU / (Ni - 1.0));
-				corr = covar / (sdT * sdU);
-				if (!i)
-					pset[0][0][i] = std::sqrt(
-							(corr * corr) / (1.0 - corr * corr));
-				pset[1][0][i] = -(ppnd(PII, &ifault)) / corr;
+			for (int i = 0; i < items; i++)
+			{
+				if (!i) pset[0][0][0] = std::sqrt((result[1] * result[1]) / (1.0 - result[1] * result[1]));
+			    pset[1][0][i] = -(ppnd(result[0], &ifault)) / result[1] ;
 			}
 		}
 	}

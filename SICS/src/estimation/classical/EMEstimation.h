@@ -28,7 +28,9 @@
  *this quadratures can be obtained from R, or using the supplied ones from the SICS binary quadratures
  *ranging from 1 quadrature node to 101 quadrature nodes.
  */
-class EMEstimation : public ClassicalEstimation{
+class EMEstimation : public ClassicalEstimation
+{
+
 public:
 
 	/*
@@ -53,7 +55,7 @@ public:
 	//Starts the M Step
 	void stepM();
 	//Sets the model to estimate
-	void setModel(Model* model);
+	void setModel(Model *);
 	//Check if all the conditions are met for running the model, can report an error to a logger
 	void checkRunningConditions();
 	//Sets the optimization algorithm
@@ -68,7 +70,9 @@ public:
 	QuadratureNodes* getQuadratureNodes() const;
 	void setQuadratureNodes(QuadratureNodes* latentTraitSet);
 	void setProfiler(Trace* t);
+
 private:
+
 	Trace* profiler;
 	//F and R Matrices, remember to set to zero and open memory in process
 	Matrix<double>* f;
@@ -79,8 +83,6 @@ private:
 	EMEstimator* estimator;
 	//Model on which the algorithm operates
 	Model* model;
-	//Algorithm of optimization used
-	Optimizer* optim;
 	// true when convergence is reached
 	bool convergenceSignal;
 	//Number of iterations
