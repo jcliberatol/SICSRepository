@@ -6,9 +6,25 @@
 // Description : Hello World in C++, Ansi-style
 //============================================================================
 
-#include "Main.h"
+#include <iostream>
+#include <type/Matrix.h>
+#include <boost/dynamic_bitset.hpp>
+#include <type/PatternMatrix.h>
+#include <model/Model.h>
+#include <model/ModelFactory.h>
+#include <model/SICSGeneralModel.h>
+#include <estimation/classical/EMEstimation.h>
+#include <input/Input.h>
+#include <time.h>
+#include <trace/Trace.h>
+#include <estimation/bayesian/LatentTraitEstimation.h>
+#include <type/LatentTraits.h>
+#include <util/fitness/ItemFit.h>
+#include <util/fitness/PersonFit.h>
+
 //#define ESTIMATION_MODEL Constant::THREE_PL
 //RASCH_A1, RASCH_A_CONSTANT, TWO_PL, THREE_PL
+//#define ESTIMATION_MODEL Constant::THREE_PL
 #define ESTIMATION_MODEL Constant::TWO_PL
 //#define ESTIMATION_MODEL Constant::RASCH_A1
 //#define ESTIMATION_MODEL Constant::RASCH_A_CONSTANT
@@ -134,222 +150,55 @@ void oneRun(char * args) {
 	profiler->stopTimer("input");
 	profiler->resetTimer("initial");
 	profiler->startTimer("initial");
-	EMEstimation *em = new EMEstimation();
+	EMEstimation em;
 	//Here is where quadratures must be set.
 	//create the quad nodes
-	em->setProfiler(profiler);
+	em.setProfiler(profiler);
 	QuadratureNodes nodes(theta, weight);
-	em->setQuadratureNodes(&nodes);
-	em->setModel(model);
-	em->setInitialValues(Constant::ANDRADE);
+	em.setQuadratureNodes(&nodes);
+	em.setModel(model);
+	em.setInitialValues(Constant::ANDRADE);
 	profiler->stopTimer("initial");
 	//Pass the profiler to the estimation object so it can be used to profile each step
-	em->setProfiler(profiler);
+	em.setProfiler(profiler);
 	//Run the estimation
-	em->estimate();
-
+	em.estimate();
 
 	/*
 	 * Now we will run the estimation of individual parameter
 	 */
 	//first create the latenTrait objects
-	LatentTraits * latentTraits;
-	latentTraits = new LatentTraits(dataSet);
+	//LatentTraits * latentTraits;
+	//latentTraits = new LatentTraits(dataSet);
 	//Now create the estimation
-	LatentTraitEstimation * lte = new LatentTraitEstimation();
+	//LatentTraitEstimation * lte = new LatentTraitEstimation();
 	//Pass the model
-	lte->setModel(model);
+	//lte->setModel(model);
 	//Pass the latent traits
-	lte->setLatentTraits(latentTraits);
+	//lte->setLatentTraits(latentTraits);
 	//Pass the quadrature nodes
-	lte->setQuadratureNodes(&nodes);
+	//lte->setQuadratureNodes(&nodes);
 	//Ready to estimate
-	lte->estimateLatentTraitsEAP();
+	//lte->estimateLatentTraitsEAP();
 	//lte->estimateLatentTraitsMAP();
 	//finished
 	//now read the latent traits but we will do this later
 	//lte->getLatentTraits()->print();
 
-	Matrix<double> data(dataSet->countIndividuals(), dataSet->countItems());
-	input.importCSV(args, data, 1, 0);
+	//Matrix<double> data(dataSet->countIndividuals(), dataSet->countItems());
+	//input.importCSV(args, data, 1, 0);
 	
-	double* itemsf = new double[ data.nC()];
+	//double* itemsf = new double[ data.nC()];
 	//itemFit(latentTraits->pm, *(latentTraits->traits), data, model->getParameterModel()->getParameterSet(), model -> type,itemsf);
 	//personFit(latentTraits->pm, *(latentTraits->traits), data, model->getParameterModel()->getParameterSet(), model -> type);
 
 	delete modelFactory;
 	delete dataSet;
-	delete em;
 	delete model;
 	profiler->stopTimer("total");
 	//Out the profiler here
 	profilerOut(profiler,4);
 	delete profiler;
-}
-
-void runArgs(char * filename,char * initialValues){
-	Input input;
-	Matrix<double> cuad(41, 2);
-	Trace* profiler = new Trace("Profile.log");
-	profiler->storeMessage("filename",filename);
-	profiler->startCounter("iterations");
-	profiler->resetTimer("total");
-	profiler->startTimer("total");
-	profiler->resetTimer("input");
-	profiler->startTimer("input");
-	profiler->resetTimer("for1");
-	profiler->resetTimer("for2");
-	input.importCSV((char *) "Cuads.csv", cuad, 1, 0);
-	// **** **** Run model complete and ordered process **** ****
-	// Create general pars
-
-	Model *model = new Model();
-	// Create general model
-	ModelFactory *modelFactory = new SICSGeneralModel();
-	PatternMatrix *dataSet = new PatternMatrix(0);
-	// Load matrix
-	input.importCSV(filename, *dataSet, 1, 0);
-	// set dataset
-	//RASCH_A1, RASCH_A_CONSTANT, TWO_PL, THREE_PL
-	int model_const =  ESTIMATION_MODEL;
-	model->setModel(modelFactory, model_const);
-	//This is where it is decided what model is the test to make
-	model->getItemModel()->setDataset(dataSet);//Sets the dataset.
-	// set Theta and weight for the EM Estimation
-	Matrix<double> *theta = new Matrix<double>(1, 41);
-	Matrix<double> *weight = new Matrix<double>(1, 41);
-
-	for (int k = 0; k < cuad.nR(); k++) {
-		(*theta)(0, k) = cuad(k, 0);
-		(*weight)(0, k) = cuad(k, 1);
-	}
-
-	// build parameter set
-	model->getParameterModel()->buildParameterSet(model->getItemModel(),model->getDimensionModel());
-	profiler->stopTimer("input");
-	profiler->resetTimer("initial");
-	profiler->startTimer("initial");
-	// Create estimation
-	EMEstimation *em = new EMEstimation();
-	em->setProfiler(profiler);
-	//Here is where quadratures must be set.
-	//create the quad nodes
-	QuadratureNodes nodes(theta,weight);
-	em->setQuadratureNodes(&nodes);
-	em->setModel(model);
-
-	Matrix<double> mat_initialValues(model->getItemModel()->countItems(), 3);
-	input.importCSV(initialValues, mat_initialValues, 1, 0);
-	Matrix<double> *a_init = new Matrix<double>(1,(model->getItemModel()->countItems()));
-	Matrix<double> *b_init = new Matrix<double>(1,(model->getItemModel()->countItems()));
-	Matrix<double> *c_init = new Matrix<double>(1,(model->getItemModel()->countItems()));
-
-	for (int k = 0; k < model->getItemModel()->countItems() ; k++) {
-		(*a_init)(0,k) = mat_initialValues(k,0);
-		(*b_init)(0,k) = mat_initialValues(k,1);
-		(*c_init)(0,k) = mat_initialValues(k,2);
-	}
-	double *** matrix_initial;
-	int items = model->getItemModel()->countItems();
-	switch (model_const) {
-	case Constant::RASCH_A1:
-		matrix_initial = new double** [1];
-		matrix_initial[0] = new double* [1];
-		matrix_initial[0][0] = new double [items];
-		for (int var = 0; var < items; ++var) {
-			matrix_initial[0][0][var] = (*b_init)(0,var);
-		}
-		break;
-	case Constant::RASCH_A_CONSTANT:
-		matrix_initial = new double** [2];
-		matrix_initial[0] = new double* [1];
-		matrix_initial[1] = new double* [1];
-		matrix_initial[0][0] = new double [1];
-		matrix_initial[1][0] = new double [items];
-		matrix_initial[0][0][0] = (*a_init)(0,0);
-		for (int var = 0; var < items; ++var) {
-			matrix_initial[1][0][var] = (*b_init)(0,var);
-		}
-		break;
-	case Constant::TWO_PL:
-		matrix_initial = new double** [2];
-		matrix_initial[0] = new double* [1];
-		matrix_initial[1] = new double* [1];
-
-		matrix_initial[0][0] = new double [items];
-		matrix_initial[1][0] = new double [items];
-		for (int var = 0; var < items; ++var) {
-			matrix_initial[0][0][var] = (*a_init)(0,var);
-		}
-		for (int var = 0; var < items; ++var) {
-			matrix_initial[1][0][var] = (*b_init)(0,var);
-		}
-		break;
-	case Constant::THREE_PL:
-
-		matrix_initial = new double** [3];
-		matrix_initial[0] = new double *[1];
-		matrix_initial[1] = new double *[1];
-		matrix_initial[2] = new double *[1];
-
-		matrix_initial[0][0] = new double [items];
-		matrix_initial[1][0] = new double [items];
-		matrix_initial[2][0] = new double [items];
-		for (int var = 0; var < items; ++var) {
-			matrix_initial[0][0][var] = (*a_init)(0,var);
-		}
-		for (int var = 0; var < items; ++var) {
-			matrix_initial[1][0][var] = (*b_init)(0,var);
-		}
-		for (int var = 0; var < items; ++var) {
-			matrix_initial[2][0][var] = (*c_init)(0,var);
-		}
-		break;
-	}
-	//delete a_init;
-	//delete b_init;
-	//delete c_init;
-	//Delete the matrix initial aFTER THIS REMEMBER TODO
-	em->setInitialValues(matrix_initial);
-	// run estimation
-	profiler->stopTimer("initial");
-	em->setProfiler(profiler);
-	em->estimate();
-	delete modelFactory;
-	delete dataSet;
-	delete em;
-	delete model;
-	profiler->stopTimer("total");
-	//Out the profiler here
-	profilerOut(profiler,4);
-	delete profiler;
-	switch (model_const) {
-	case Constant::THREE_PL:
-		delete[] matrix_initial[0][0] ;
-		delete[] matrix_initial[1][0] ;
-		delete[] matrix_initial[2][0] ;
-
-		delete[] matrix_initial[0] ;
-		delete[] matrix_initial[1] ;
-		delete[] matrix_initial[2] ;
-
-		delete[] matrix_initial ;
-		break;
-	case Constant::TWO_PL :
-		//delete[] matrix_initial[0][0] ;
-		//delete[] matrix_initial[1][0] ;
-		//delete[] matrix_initial[0] ;
-		//delete[] matrix_initial[1] ;
-		//delete[] matrix_initial ;
-		break;
-	case Constant::RASCH_A1 :
-		//delete[] matrix_initial[0][0] ;
-		//delete[] matrix_initial[0] ;
-		//delete[] matrix_initial ;
-		break;
-	}
-	//delete weight;
-	//delete theta;
 }
 
 int main(int argc, char *argv[]) {
