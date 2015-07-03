@@ -1,8 +1,7 @@
 /*
  * LatentTraitEstimation.h
  *
- *  Created on: Oct 16, 2014
- *      Author: jliberato
+ *      Author: cesandovalp
  */
 
 #ifndef LATENTTRAITESTIMATION_H_
@@ -13,362 +12,189 @@
 #include <type/Constant.h>
 #include <optimizer/Brent_fmin.h>
 #include <cstdlib>
-//#include <gsl/gsl_errno.h>
-//#include <gsl/gsl_math.h>
-//#include <gsl/gsl_min.h>
 
 #define t_zita t_model->parameterModel->parameterSet
 #define gg t_model->parameterModel->successProbability
+#define probability_matrix (*model->parameterModel->probabilityMatrix)
+#define _A 0][0][i
+#define _B 1][0][i
+#define _C 2][0][i
+#define _DELTA 0.0001220703
+#define _BOUNDS new double[2] { -5, 5 }
 
 class LatentTraitEstimation {
+
 public:
 
-	struct parameters_logL {
-		bool * pattern;
-		int size;
-		int node;
-		Model *model;
-	};
+    Model* model;
+    QuadratureNodes * quadNodes;
+    LatentTraits * lt;
 
-	LatentTraitEstimation() {
-	}
+    typedef struct
+    {
+        bool * pattern;
+        int size;
+        int node;
+        Model *model;
+    } parameters_logL;
 
-	virtual ~LatentTraitEstimation() {
-	}
+    LatentTraitEstimation(){}
 
-	Model* model;
-	QuadratureNodes * quadNodes;
-	LatentTraits * lt;
+    virtual ~LatentTraitEstimation()
+    {
+        delete model;
+        delete quadNodes;
+        delete lt;
+    }
 
-	//Deprecated
-	inline double patternProbabilities(vector<char> pattern, int node) {
-		double p = 1;
+    inline double probabilities(bool * pattern, int size, int node)
+    {
+        double p = 1;
 
-		for (int i = 0; i < pattern.size(); i++) {
-			if (pattern.at(i) > 0) {
-				p *= (*model->parameterModel->probabilityMatrix)(node, i);
-			} else {
-				p *= 1 - (*model->parameterModel->probabilityMatrix)(node, i);
-			}
-		}
-		return (p);
-	}
+        for (int i = 0; i < size; i++)
+            if (pattern[i])
+                p *= probability_matrix(node, i);
+            else
+                p *= 1 - probability_matrix(node, i);
 
-	inline double patternProbabilities(bool * pattern, int size, int node) {
-		double p = 1;
+        return (p);
+    }
 
-		for (int i = 0; i < size; i++) {
-			if (pattern[i]) {
-				p *= (*model->parameterModel->probabilityMatrix)(node, i);
-			} else {
-				p *= 1 - (*model->parameterModel->probabilityMatrix)(node, i);
-			}
-		}
-		return (p);
-	}
+    static double probabilities(double theta, bool * pattern, int size, int node, Model * t_model)
+    {
+        double p = 1;
 
-	//Deprecated
-	static double patternProbabilities(double theta, vector<char> pattern,
-			int node, Model * t_model) {
-		double p = 1;
+        for (int i = 0; i < size; i++)
+            if (pattern[i] > 0)
+                p *= gg(theta, new double[3] { t_zita[_A], t_zita[_B], t_zita[_C] });
+            else
+                p *= 1 - gg(theta, new double[3] { t_zita[_A], t_zita[_B], t_zita[_C] });
 
-		for (int i = 0; i < pattern.size(); i++) {
-			if (pattern.at(i) > 0) {
-				p *= gg(theta, new double[3] { t_zita[0][0][i], t_zita[1][0][i],
-				t_zita[2][0][i] });
+        return (p);
+    }
 
-			} else {
-				p *= 1 - gg(theta, new double[3] { t_zita[0][0][i],
-				t_zita[1][0][i], t_zita[2][0][i] });
-			}
-		}
-		return (p);
-	}
+    static double probabilities(double theta, bool * pattern, int size, int node, Model * t_model, double *** parSet)
+    {
+        double p = 1;
 
-	static double patternProbabilities(double theta, bool * pattern, int size,
-			int node, Model * t_model) {
-		double p = 1;
+        for (int i = 0; i < size; i++)
+            if (pattern[i] > 0)
+                p *= gg(theta, new double[3] { parSet[_A], parSet[_B], parSet[_C] });
+            else
+                p *= 1 - gg(theta, new double[3] { parSet[_A], parSet[_B], parSet[_C] });
 
-		for (int i = 0; i < size; i++) {
-			if (pattern[i] > 0) {
-				p *= gg(theta, new double[3] { t_zita[0][0][i], t_zita[1][0][i],
-				t_zita[2][0][i] });
+        return (p);
+    }
 
-			} else {
-				p *= 1 - gg(theta, new double[3] { t_zita[0][0][i],
-				t_zita[1][0][i], t_zita[2][0][i] });
-			}
-		}
-		return (p);
-	}
+    LatentTraits * getLatentTraits(){ return (lt); }
 
-	static double patternProbabilities(double theta, bool * pattern, int size,
-			int node, Model * t_model, double *** parSet) {
-		double p = 1;
+    void setLatentTraits(LatentTraits * ltt) { lt = ltt; }
 
-		for (int i = 0; i < size; i++) {
-			if (pattern[i] > 0) {
-				p *= gg(theta, new double[3] { parSet[0][0][i], parSet[1][0][i],
-						parSet[2][0][i] });
+    void setModel(Model* m) { model = m; }
 
-			} else {
-				p *= 1 - gg(theta, new double[3] { parSet[0][0][i],
-						parSet[1][0][i], parSet[2][0][i] });
-			}
-		}
-		return (p);
-	}
+    void estimateLatentTraitsEAP()
+    {
+        bool ** list = lt->pm->getBitsetList();
+        int size = lt->pm->matrix.size();
 
-	LatentTraits * getLatentTraits() {
-		return (lt);
-	}
+        int counter = 0;
 
-	void setLatentTraits(LatentTraits * ltt) {
-		lt = ltt;
-	}
+        for (int pattern = 0; pattern < size; pattern++, ++counter)
+        {
+            double sum_num = 0;
+            double sum_den = 0;
 
-	void setModel(Model* m) {
-		model = m;
-	}
+            for (int i = 0; i < quadNodes->size(); ++i)
+            {
+                double pp = probabilities(list[pattern], lt->pm->size, i);
 
-	//Deprecated
-	void estimateLatentTraitsEAP_() {
+                sum_num += (*quadNodes->getTheta())(0, i) * ((*quadNodes->getWeight())(0, i)) * pp;
+                sum_den += (*quadNodes->getWeight())(0, i) * pp;
+            }
 
-		map<vector<char>, int>::const_iterator it;
-		map<vector<char>, int>::const_iterator begin = lt->pm->matrix.begin();
-		map<vector<char>, int>::const_iterator end = lt->pm->matrix.end();
+            (*lt->traits)(counter, lt->dim - 1) = sum_num / sum_den;
+        }
+    }
 
-		int counter = 0;
+    static double logL(double theta, bool * pattern, int size, int node, Model *model)
+    { return (-(log(probabilities(theta, pattern, size, node, model)) - ((theta * theta) / 2))); }
 
-		for (it = begin; it != end; ++it, ++counter) {
-			double sum_num = 0;
-			double sum_den = 0;
+    static double logLP(double theta, bool * pattern, int size, int node, Model *model, double *** parSet)
+    { return (-(log(probabilities(theta, pattern, size, node, model, parSet)) - ((theta * theta) / 2))); }
 
-			for (int i = 0; i < quadNodes->size(); ++i) {
-				double pp = patternProbabilities(it->first, i);
-				sum_num += (*quadNodes->getTheta())(0, i)
-						* ((*quadNodes->getWeight())(0, i)) * pp;
-				sum_den += (*quadNodes->getWeight())(0, i) * pp;
-			}
+    static double logLR(double theta, void * params)
+    {
+        parameters_logL * temp = (parameters_logL*) params;
+        return (-(log(probabilities(theta, temp->pattern, temp->size, temp->node, temp->model)) - ((theta * theta) / 2)));
+    }
 
-			(*lt->traits)(counter, lt->dim - 1) = sum_num / sum_den;
-		}
-	}
+    void printVectors()
+    {
+        bool ** pattern_list = lt->pm->getBitsetList();
 
-	void estimateLatentTraitsEAP() {
+        int counter = 0;
 
-		bool ** pattern_list = lt->pm->getBitsetList();
-		int size = lt->pm->matrix.size();
+        for (double i = -3.3; i <= 2.8; i += .01)
+            cout << i << "," << logL(i, pattern_list[0], lt->pm->size, counter, this->model) << endl;
+    }
 
-		int counter = 0;
+    void evaluate_theta(double theta, int pattern)
+    {
+        bool ** pattern_list = lt->pm->getBitsetList();
 
-		for (int index = 0; index < size; index++, ++counter) {
-			double sum_num = 0;
-			double sum_den = 0;
+        int counter = 0;
 
-			for (int i = 0; i < quadNodes->size(); ++i) {
-				double pp = patternProbabilities(pattern_list[index],
-						lt->pm->size, i);
-				sum_num += (*quadNodes->getTheta())(0, i)
-						* ((*quadNodes->getWeight())(0, i)) * pp;
-				sum_den += (*quadNodes->getWeight())(0, i) * pp;
-			}
+        cout << theta << "," << logL(theta, pattern_list[pattern], lt->pm->size, counter, this->model) << endl;
+    }
 
-			(*lt->traits)(counter, lt->dim - 1) = sum_num / sum_den;
-		}
-	}
+    void estimateLatentTraitsMAP()
+    {
+        bool ** pattern_list = lt->pm->getBitsetList();
+        int size = lt->pm->matrix.size();
 
-	//Deprecated
-	static double logL_(double theta, vector<char> pattern, int node,
-			Model *model) {
-		return (-(log(patternProbabilities(theta, pattern, node, model))
-				- ((theta * theta) / 2)));
+        int counter = 0;
 
-	}
+        for (int index = 0; index < size; index++, ++counter)
+            (*lt->traits)(counter, lt->dim - 1) =
+            Brent_fmin(_BOUNDS, _DELTA, &logL, pattern_list[index], lt->pm->size, counter, this->model, 1);
+    }
 
-	static double logL(double theta, bool * pattern, int size, int node,
-			Model *model) {
-		return (-(log(patternProbabilities(theta, pattern, size, node, model))
-				- ((theta * theta) / 2)));
-	}
+    void estimateLatentTraitsMAP(double *** parSet)
+    {
+        bool ** pattern_list = lt->pm->getBitsetList();
+        int size = lt->pm->matrix.size();
 
-	static double logLP(double theta, bool * pattern, int size, int node,
-			Model *model, double *** parSet) {
-		return (-(log(
-				patternProbabilities(theta, pattern, size, node, model, parSet))
-				- ((theta * theta) / 2)));
-	}
+        int counter = 0;
 
-	static double logLR(double theta, void * params) {
-		parameters_logL * temp = (struct parameters_logL*) params;
+        for (int index = 0; index < size; index++, ++counter)
+            (*lt->traits)(counter, lt->dim - 1) = Brent_fmin(_BOUNDS, _DELTA, &logLP, pattern_list[index],
+                lt->pm->size, counter, this->model, parSet, 1);
+    }
 
-		return (-(log(
-				patternProbabilities(theta, temp->pattern, temp->size,
-						temp->node, temp->model)) - ((theta * theta) / 2)));
-	}
+    void estimateLatentTraitsMAP_R()
+    {
+        bool ** pattern_list = lt->pm->getBitsetList();
+        int size = lt->pm->matrix.size();
+        parameters_logL temp;
 
-	void printVectors() {
-		bool ** pattern_list = lt->pm->getBitsetList();
-		int * frequency_list = lt->pm->getFrequencyList();
-		int size = lt->pm->matrix.size();
+        int counter = 0;
 
-		int counter = 0;
+        for (int index = 0; index < size; index++, ++counter)
+        {
+            temp.model = model;
+            temp.node = counter;
+            temp.pattern = pattern_list[index];
+            temp.size = lt->pm->size;
 
-		for (double i = -3.3; i <= 2.8; i += .01) {
-			cout << i << ","
-					<< logL(i, pattern_list[0], lt->pm->size, counter,
-							this->model) << endl;
-		}
-	}
+            (*lt->traits)(counter, lt->dim - 1) = Brent_fmin(-5, 5, &logLR, (void*) &temp, 0.0001220703);
+        }
+    }
 
-	void evaluate_theta(double theta, int pattern) {
-		bool ** pattern_list = lt->pm->getBitsetList();
-		int * frequency_list = lt->pm->getFrequencyList();
-		int size = lt->pm->matrix.size();
-
-		int counter = 0;
-
-		cout << theta << ","
-				<< logL(theta, pattern_list[pattern], lt->pm->size, counter,
-						this->model) << endl;
-
-	}
-
-//Deprecated
-	void estimateLatentTraitsMAP_() {
-		map<vector<char>, int>::const_iterator it;
-		map<vector<char>, int>::const_iterator begin = lt->pm->matrix.begin();
-		map<vector<char>, int>::const_iterator end = lt->pm->matrix.end();
-
-		int counter = 0;
-
-		for (it = begin; it != end; ++it, ++counter) {
-			double (*function)(double, vector<char>, int, Model *) = &logL_;
-			(*lt->traits)(counter, lt->dim - 1) = Brent_fmin(new double[2] { -5,
-					5 }, 0.0001220703, function, it->first, counter,
-					this->model, 1);
-		}
-	}
-
-	void estimateLatentTraitsMAP() {
-		bool ** pattern_list = lt->pm->getBitsetList();
-		int * frequency_list = lt->pm->getFrequencyList();
-		int size = lt->pm->matrix.size();
-
-		int counter = 0;
-
-		for (int index = 0; index < size; index++, ++counter) {
-			double (*function)(double, bool *, int, int, Model *) = &logL;
-			(*lt->traits)(counter, lt->dim - 1) = Brent_fmin(new double[2] { -5,
-					5 }, 0.0001220703, function, pattern_list[index],
-					lt->pm->size, counter, this->model, 1);
-		}
-
-		delete frequency_list;
-	}
-
-	void estimateLatentTraitsMAP(double *** parSet) {
-		bool ** pattern_list = lt->pm->getBitsetList();
-		int * frequency_list = lt->pm->getFrequencyList();
-		int size = lt->pm->matrix.size();
-
-		int counter = 0;
-
-		for (int index = 0; index < size; index++, ++counter) {
-			double (*function)(double, bool *, int, int, Model *, double ***) = &logLP;
-			(*lt->traits)(counter, lt->dim - 1) = Brent_fmin(new double[2] { -5,
-					5 }, 0.0001220703, function, pattern_list[index],
-					lt->pm->size, counter, this->model, parSet, 1);
-		}
-
-		delete frequency_list;
-	}
-
-	void estimateLatentTraitsMAP_R() {
-		bool ** pattern_list = lt->pm->getBitsetList();
-		int * frequency_list = lt->pm->getFrequencyList();
-		int size = lt->pm->matrix.size();
-		parameters_logL temp;
-
-		int counter = 0;
-
-		for (int index = 0; index < size; index++, ++counter) {
-			temp.model = model;
-			temp.node = counter;
-			temp.pattern = pattern_list[index];
-			temp.size = lt->pm->size;
-			double (*function)(double, void*) = &logLR;
-			(*lt->traits)(counter, lt->dim - 1) = Brent_fmin(-5, 5, function,
-					(void*) &temp, 0.0001220703);
-		}
-
-		for (int j = 0; j < size; j++) {
-			delete pattern_list[j];
-		}
-
-		delete pattern_list;
-		delete frequency_list;
-	}
-
-//	void estimateLatentTraitsMAP_GSL() {
-//		int status;
-//		int iter = 0, max_iter = 100;
-//		const gsl_min_fminimizer_type *T;
-//		parameters_logL temp;
-//		gsl_min_fminimizer *s;
-//		gsl_function F;
-//		F.function = &logLR;
-//		F.params = &temp;
-//
-//		T = gsl_min_fminimizer_quad_golden;
-//		s = gsl_min_fminimizer_alloc(T);
-//
-//		double m = 2.0, m_expected = M_PI;
-//		double a = -5.0, b = 5.0;
-//
-//		gsl_min_fminimizer_set(s, &F, m, a, b);
-//
-//		bool ** pattern_list = lt->pm->getBitsetList();
-//		int * frequency_list = lt->pm->getFrequencyList();
-//		int size = lt->pm->matrix.size();
-//
-//		int counter = 0;
-//
-//		for (int index = 0; index < size; index++, ++counter) {
-//			cout << "." << endl;
-//			temp.model = model;
-//			temp.node = counter;
-//			temp.pattern = pattern_list[index];
-//			temp.size = lt->pm->size;
-//
-//			F.params = (void*) &temp;
-//
-//			do {
-//				status = gsl_min_fminimizer_iterate(s);
-//
-//				m = gsl_min_fminimizer_x_minimum(s);
-//				a = gsl_min_fminimizer_x_lower(s);
-//				b = gsl_min_fminimizer_x_upper(s);
-//
-//				status = gsl_min_test_interval(a, b, 0.001, 0.0);
-//
-//			} while (status == GSL_CONTINUE && iter < max_iter);
-//
-//			(*lt->traits)(counter, lt->dim - 1) = m;
-//		}
-//
-//		for (int j = 0; j < size; j++) {
-//			delete pattern_list[j];
-//		}
-//
-//		delete pattern_list;
-//		delete frequency_list;
-//	}
-
-	void setQuadratureNodes(QuadratureNodes *nodes) {
-		quadNodes = nodes;
-		model->successProbability(quadNodes);
-	}
+    void setQuadratureNodes(QuadratureNodes *nodes)
+    {
+        quadNodes = nodes;
+        model->successProbability(quadNodes);
+    }
 };
 
 #endif /* LATENTTRAITESTIMATION_H_ */
