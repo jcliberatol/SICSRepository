@@ -18,14 +18,14 @@
 #include <fstream>
 #include <type/PatternMatrix.h>
 #include <type/Matrix.h>
-#include <trace/Trace.h>
 
 using namespace std;
 
 /**
  * Class that is in charge of taking OS files, streams and other sources for inputting data into the software suite
  * */
-class Input {
+class Input
+{
 
 private:
 	/*
@@ -34,6 +34,7 @@ private:
 	char del;
 
 public:
+
 	Input();
 	virtual ~Input();
 	bool importCSV ( char*, PatternMatrix&, unsigned int, unsigned int );/**Imports binary matrices from a csv*/

@@ -14,7 +14,6 @@ EMEstimation::EMEstimation()
 	model = NULL;
 	f = NULL;
 	r = NULL;
-	logger = NULL;
 	convergenceSignal = false;
 	quadNodes = NULL;
 	estimator = NULL;
@@ -22,11 +21,6 @@ EMEstimation::EMEstimation()
 
 EMEstimation::~EMEstimation()
 {
-	if (profiler != NULL)
-	{
-		delete profiler;
-		profiler = NULL;
-	}
 	if (estimator != NULL)
 	{
 		delete estimator;
@@ -38,13 +32,9 @@ EMEstimation::~EMEstimation()
 		delete f;
 	if (r != NULL)
 		delete r;
-	if (logger != NULL)
-		delete logger;
 	if (model != NULL)
 		delete model;
 }
-
-void EMEstimation::setProfiler(Trace* t){ profiler = t; }
 
 /**
  * Sets the model to be estimated, currently only supports 3PL model

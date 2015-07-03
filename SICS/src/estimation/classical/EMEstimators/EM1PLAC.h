@@ -2,31 +2,29 @@
 #define EM1PLAC_H_
 #include <estimation/classical/EMEstimators/EMEstimator.h>
 #include <model/parameter/OnePLACModel.h>
-class EM1PLAC: public EMEstimator {
+class EM1PLAC: public EMEstimator
+{
+
 private:
 
 public:
-	virtual ~EM1PLAC() {
-	}
 
-	virtual void transform() {
+	virtual ~EM1PLAC() {}
 
-	}
+	virtual void transform() { }
 
-	virtual void untransform() {
+	virtual void untransform()
+	{
 		double *** pset = m->getParameterModel()->getParameterSet();
 		double qa = pset[0][0][0];
-		for (int i = 0; i < m->getItemModel()->countItems(); ++i) {
+		for (int i = 0; i < m->getItemModel()->countItems(); ++i)
 			pset[1][0][i] = -pset[1][0][i] / qa;
-		}
 	}
 
-	virtual void setInitialValues(double *** pset, Model* m) {
-		m->getParameterModel()->setParameterSet(pset);
-	}
+	virtual void setInitialValues(double *** pset, Model* m) { m->getParameterModel()->setParameterSet(pset); }
 
-	virtual void setInitialValues(int method, Model* m) {
-
+	virtual void setInitialValues(int method, Model* m)
+	{
 		int items = m->getParameterModel()->items;
 		pset = m->getParameterModel()->getParameterSet();
 		if (method == Constant::RANDOM) {
@@ -51,9 +49,8 @@ public:
 		}
 	}
 
-	EM1PLAC(Model* m, QuadratureNodes* nodes, Matrix<double>* f,
-			Matrix<double>* r) {
-		profiler = NULL;
+	EM1PLAC(Model* m, QuadratureNodes* nodes, Matrix<double>* f, Matrix<double>* r)
+	{
 		this->nodes = nodes;
 		this->m = m;
 		this->f = f;

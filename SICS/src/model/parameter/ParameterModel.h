@@ -19,7 +19,6 @@
 #include <model/dimension/MultiUniDimModel.h>
 #include <type/DataSet.h>
 #include <type/QuadratureNodes.h>
-#include <trace/Trace.h>
 #include <string>
 #include <typeinfo>
 
@@ -32,7 +31,6 @@ public:
 
 	double *** parameterSet;
 	int items;
-	Trace* profiler = 0;
 	Matrix<double> * probabilityMatrix;
 	
 	ParameterModel(){}
@@ -81,7 +79,6 @@ public:
 	virtual void setParameters(double * parameters) = 0;
 	virtual double getProbability(int, int) = 0;
 	virtual void printParameterSet(ostream&)=0;
-	void setProfiler(Trace* t) { profiler = t;}
 	//virtual string getStringParameters() = 0;
 	// Destructor
 	virtual ~ParameterModel(){}

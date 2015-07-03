@@ -9,7 +9,6 @@
 #define EM_H_
 #include <estimation/classical/ClassicalEstimation.h>
 #include <string>
-#include <trace/Trace.h>
 #include <type/Matrix.h>
 #include <type/PatternMatrix.h>
 #include <type/QuadratureNodes.h>
@@ -62,23 +61,18 @@ public:
 	void setOptimizationAlgorithm(string algorithm);
 	//Sets the reporter for the trace
 	void setTrace(string filename);
-	void setTrace(Trace trace);
 	//Sets the initial values
 	void setInitialValues(double*** parameterSet);
 	void setInitialValues(int method);
 	int getIterations() const;
 	QuadratureNodes* getQuadratureNodes() const;
 	void setQuadratureNodes(QuadratureNodes* latentTraitSet);
-	void setProfiler(Trace* t);
 
 private:
 
-	Trace* profiler;
 	//F and R Matrices, remember to set to zero and open memory in process
 	Matrix<double>* f;
 	Matrix<double>* r;
-	//Holds the trace for the logger outputs
-	Trace* logger;
 	//Estimator object to call estimation functions
 	EMEstimator* estimator;
 	//Model on which the algorithm operates

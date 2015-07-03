@@ -18,13 +18,11 @@ bool Input::importCSV(char* filename, Matrix<double>& M, unsigned int rowIdx, un
 	int col = 0;
 
 	ifstream inFile;
-	Trace trace("inputErrors.log");
 
 	inFile.open(filename, std::ifstream::in);
 	if (!inFile.good())
 	{
-		trace("File does not exists:");
-		trace(filename);
+		cout << "File does not exists:" << filename << endl;
 	}
 
 	// currentLine holds the characters of the current line to read
@@ -33,9 +31,9 @@ bool Input::importCSV(char* filename, Matrix<double>& M, unsigned int rowIdx, un
 	// Header lines are ignored
 	for (unsigned int i = 0; i < rowIdx; i++)
 	{
-		trace("Ignored a header line : ");
+		//cout << "Ignored a header line : " << endl;
 		getline(inFile, currentLine);
-		trace(currentLine);
+		//cout << currentLine << endl;
 	}
 	
 	while (!eof)
@@ -49,7 +47,7 @@ bool Input::importCSV(char* filename, Matrix<double>& M, unsigned int rowIdx, un
 		if (strlen(processLine) == 0)
 		{
 			eof = true;
-			trace("Unproper end of file, read cancelled");
+			//cout << "Unproper end of file, read cancelled" << endl;
 			break;
 		}
 		
@@ -86,7 +84,6 @@ bool Input::importCSV(char* filename, Matrix<double>& M, unsigned int rowIdx, un
  */
 bool Input::importCSV(char* filename, PatternMatrix& M, unsigned int rowIdx, unsigned int colIdx)
 {
-	Trace trace("inputErrors.log");
 	ifstream inFile;
 	bool eof;
 	string currentLine; // currentLine holds the characters of the current line to read
@@ -94,14 +91,11 @@ bool Input::importCSV(char* filename, PatternMatrix& M, unsigned int rowIdx, uns
 	int line;
 	eof = false;
 
-	trace("Input Errors: ");
-
 	inFile.open(filename, std::ifstream::in);
 
 	if (!inFile.good())
 	{
-		trace("File does not exists:");
-		trace(filename);
+		cout << "File does not exists:" << filename << endl;
 	}
 
 	// Header lines are ignored
@@ -123,7 +117,7 @@ bool Input::importCSV(char* filename, PatternMatrix& M, unsigned int rowIdx, uns
 		else
 			if (linelen != currentLine.length())
 			{
-				trace("Inconsistent line length , stopped importing");
+				//cout << "Inconsistent line length , stopped importing" << endl;
 				break;
 			}
 

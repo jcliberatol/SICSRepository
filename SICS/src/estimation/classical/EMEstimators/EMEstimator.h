@@ -9,13 +9,13 @@
 #ifndef EMESTIMATOR_H_
 #define EMESTIMATOR_H_
 #include <string>
-#include <trace/Trace.h>
 #include <type/Matrix.h>
 #include <type/PatternMatrix.h>
 #include <type/QuadratureNodes.h>
 #include <optimizer/Optimizer.h>
 #include <util/util.h>
 #include <type/Constant.h>
+#include <ctime>
 
 class EMEstimator
 {
@@ -41,8 +41,6 @@ public:
     void (*gptr)(double*, double*, int, int, double*);
     void (*hptr)(double*, double*, int, int, double*);
     bool ** bitset_list; // Posible leak
-
-    Trace* profiler = 0;
 
     EMEstimator() {}
 
@@ -369,8 +367,6 @@ public:
         return (result);
     }
 
-    void setProfiler(Trace* t) { profiler = t; }
-
     virtual ~EMEstimator()
     {
         // cout << "data" << endl;
@@ -390,13 +386,6 @@ public:
         // cout << "faux" << endl;
         // if( faux != NULL)
         //     delete faux;
-        cout << "profiler" << endl;
-        if( profiler != NULL)
-        {
-    	   delete profiler;
-           profiler = NULL;
-        }
-        cout << "weights" << endl;
         if( weights != NULL)
             delete weights;
         // cout << "f" << endl;
