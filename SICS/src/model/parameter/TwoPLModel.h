@@ -2,7 +2,7 @@
  * TwoPLModel.h
  *
  *  Created on: 18 Jun 2014
- *      Author: jlgpisa
+ *      Author: cesandovalp
  */
 
 #ifndef TWOPLMODEL_H_
@@ -18,9 +18,11 @@
 #include <model/item/PolytomousModel.h>
 #include <model/item/DichotomousModel.h>
 
-class TwoPLModel: public ParameterModel {
+class TwoPLModel: public ParameterModel
+{
+
 public:
-	// Constructor
+
 	TwoPLModel();
 
 	// Methods
@@ -29,28 +31,23 @@ public:
 	double successProbability(double, double*);
 	static double logLikelihood(double*, double*, int, int);
 	static double patternProbability();
-	static void gradientAux(long double tp, long double tq,
-			long double * grandient);
+	static void gradientAux(long double, long double, long double * );
 	static void gradient(double*, double*, int, int, double*);
-	static void Ngradient(double* args, double* pars, int nargs, int npars,
-			double* gradient);
-	static void Hessian(double* args, double* pars, int nargs, int npars,
-			double* Hessian);
-	static void NHessian(double* args, double* pars, int nargs, int npars,
-			double* Hessian);
-	void getParameters(double * );
-	static void itemHessian(double* args, double* pars, int nargs, int npars,
-			double* Hessian);
+	static void Ngradient(double* , double*, int, int, double*);
+	static void Hessian(double*, double*, int, int, double*);
+	static void NHessian(double*, double*, int, int, double*);
+	static void itemHessian(double*, double*, int, int, double*);
 	static void itemgradient(double*, double*, int, int, double*);
+	static void itemGradient (double*, double*, int, int, double*);
+	static double itemLogLik (double*, double*, int, int);
 
-	// Getters and Setters
 	double *** getParameterSet();
-	void setParameterSet(double***);
 	double getProbability(int, int);
-	void printParameterSet(ostream&);
-	string getStringParameters();
+	void getParameters(double *);
+	void setParameterSet(double***);
 	void setParameters(double *);
-	// Destructor
+	void printParameterSet(ostream&);
+
 	virtual ~TwoPLModel();
 };
 

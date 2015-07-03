@@ -25,20 +25,24 @@
 
 using namespace std;
 
-class ParameterModel {
+class ParameterModel
+{
+
 public:
-	//map <Parameter, Matrix<double> * > parameterSet;
+
 	double *** parameterSet;
 	int items;
 	Trace* profiler = 0;
 	Matrix<double> * probabilityMatrix;
-	// Methods
-	virtual void buildParameterSet(ItemModel * itemModel,
-			DimensionModel * dimensionModel) {
-		if (typeid(*itemModel) == typeid(DichotomousModel)) {
+	
+	ParameterModel(){}
 
-			if (typeid(*dimensionModel) == typeid(UnidimensionalModel)) {
-
+	virtual void buildParameterSet(ItemModel * itemModel, DimensionModel * dimensionModel)
+	{
+		if (typeid(*itemModel) == typeid(DichotomousModel))
+		{
+			if (typeid(*dimensionModel) == typeid(UnidimensionalModel))
+			{
 				items = itemModel->countItems();
 
 				parameterSet = new double**[3];
@@ -49,24 +53,24 @@ public:
 				parameterSet[0][0] = new double[items];
 				parameterSet[1][0] = new double[items];
 				parameterSet[2][0] = new double[items];
-
 			}
-
-			else if (typeid(*dimensionModel) == typeid(MultidimensionalModel)) {
+			else if (typeid(*dimensionModel) == typeid(MultidimensionalModel))
+			{
 				// TODO: Dichotomous Multidimensional
 			}
-
-			else if (typeid(*dimensionModel) == typeid(MultiUniDimModel)) {
+			else if (typeid(*dimensionModel) == typeid(MultiUniDimModel))
+			{
 				// TODO: Dichotomous MultiUniDimensional
 			}
 
 		}
 
-		else if (typeid(*dimensionModel) == typeid(PolytomousModel)) {
+		else if (typeid(*dimensionModel) == typeid(PolytomousModel))
+		{
 			// TODO: Polytomous Model for Unidimensional, Multidimensional and MultiUni
 		}
-	}
-	;
+	};
+
 	virtual void successProbability(DimensionModel *, QuadratureNodes *) = 0;
 	virtual double successProbability(double, double*) = 0;
 
@@ -77,12 +81,10 @@ public:
 	virtual void setParameters(double * parameters) = 0;
 	virtual double getProbability(int, int) = 0;
 	virtual void printParameterSet(ostream&)=0;
-	void setProfiler(Trace* t) {
-		profiler = t;
-	}
-	virtual string getStringParameters() = 0;
+	void setProfiler(Trace* t) { profiler = t;}
+	//virtual string getStringParameters() = 0;
 	// Destructor
-	virtual ~ParameterModel();
+	virtual ~ParameterModel(){}
 };
 
 #endif /* PARAMETERMODEL_H_ */

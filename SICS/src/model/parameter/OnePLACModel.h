@@ -13,7 +13,8 @@
 #include <cmath>
 #include <type/QuadratureNodes.h>
 
-class OnePLACModel: public ParameterModel {
+class OnePLACModel: public ParameterModel
+{
 
 private:
 	QuadratureNodes* nodes;
@@ -36,7 +37,6 @@ public:
 	void setParameterSet(double ***);
 	double getProbability(int, int);
 	void printParameterSet(ostream&);
-	string getStringParameters();
 	// Destructor
 	virtual ~OnePLACModel();
 };

@@ -23,11 +23,15 @@
  * Model for the 3pl model, uses parameters a d c.
  * unidimensional
  * */
-class ThreePLModel: public ParameterModel {
+class ThreePLModel: public ParameterModel
+{
 
 private:
+
 	QuadratureNodes* nodes;
+
 public:
+	
 	static double banana(double*, double* , int , int);
 	static double Prm(int u,double a, double d, double theta);
 	static double Pr(int u,double a, double d, double c, double theta);
@@ -56,7 +60,6 @@ public:
 	void setParameters(double *);
 	void setParameterSet(double ***);
 	void printParameterSet(ostream&);
-	string getStringParameters();
 	double getProbability(int, int);
 
 	// Destructor

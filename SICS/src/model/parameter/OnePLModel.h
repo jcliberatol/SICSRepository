@@ -18,7 +18,8 @@
 #include <type/Constant.h>
 #include <cmath>
 
-class OnePLModel : public ParameterModel {
+class OnePLModel : public ParameterModel
+{
 
 public:
 	// Constructor
@@ -37,7 +38,6 @@ public:
 	void printParameterSet(ostream&);
 	void getParameters(double *);
 	void setParameters(double *);
-	string getStringParameters();
 	// Destructor
 	virtual ~OnePLModel();
 };

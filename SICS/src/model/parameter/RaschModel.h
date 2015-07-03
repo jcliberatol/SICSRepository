@@ -20,9 +20,13 @@
 #include <cmath>
 #include <type/QuadratureNodes.h>
 
-class RaschModel: public ParameterModel {
+class RaschModel: public ParameterModel
+{
+
 private:
+
 	QuadratureNodes* nodes;
+
 public:
 
 	static double successProbability(double, double);
@@ -43,7 +47,6 @@ public:
 	double *** getParameterSet() ;
 	void setParameterSet(double ***);
 	double getProbability (int, int);
-	string getStringParameters();
 
 	// Destructor
 	virtual ~RaschModel();
