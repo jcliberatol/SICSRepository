@@ -18,8 +18,11 @@
 	 * int npars Number of parameters
 	 * double * return (Return of the function is put in this array.)
  * */
-class Optimizer {
+class Optimizer
+{
+
 public:
+	
 	void searchOptimal(double (*functionPtr)(double*,double*,int,int),
 			void (*gradientPtr)(double*,double*,int,int,double*),
 			void (*HessianPtr)(double*,double*,int,int,double*),

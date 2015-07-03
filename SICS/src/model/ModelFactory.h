@@ -12,11 +12,12 @@
 #include <model/item/ItemModel.h>
 #include <model/dimension/DimensionModel.h>
 
-class ModelFactory {
-public:
-	// Constructor
+class ModelFactory
+{
 
-	ModelFactory();
+public:
+
+	ModelFactory(){}
 
 	// Methods
 	virtual ParameterModel *createParameterModel(int) = 0;
@@ -24,7 +25,7 @@ public:
 	virtual DimensionModel *createDimensionModel() = 0;
 
 	// Destructor
-	virtual ~ModelFactory();
+	virtual ~ModelFactory(){}
 };
 
 #endif /* MODELFACTORY_H_ */

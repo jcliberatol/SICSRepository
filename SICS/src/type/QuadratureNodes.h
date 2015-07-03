@@ -9,16 +9,21 @@
 #define QUADRATURENODES_H_
 #include <type/Matrix.h>
 
-class QuadratureNodes {
+class QuadratureNodes
+{
+
 private:
+
 	Matrix<double> *theta;
 	Matrix<double> *weight;
 	int n;
+
 public:
+
 	// Getters and Setters
 	Matrix<double>* getTheta();
-	void setTheta(Matrix<double>* theta);
 	Matrix<double>* getWeight();
+	void setTheta(Matrix<double>* theta);
 	void setWeight(Matrix<double>* weight);
 	QuadratureNodes();
 	QuadratureNodes(Matrix<double>*,Matrix<double>*);

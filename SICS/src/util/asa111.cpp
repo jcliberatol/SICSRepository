@@ -6,7 +6,7 @@
 
 using namespace std;
 
-# include "asa111.hpp"
+# include "asa111.h"
 
 //****************************************************************************80
 
@@ -326,13 +326,13 @@ void timestamp ( )
 
   static char time_buffer[TIME_SIZE];
   const struct tm *tm;
-  size_t len;
+
   time_t now;
 
   now = time ( NULL );
   tm = localtime ( &now );
 
-  len = strftime ( time_buffer, TIME_SIZE, "%d %B %Y %I:%M:%S %p", tm );
+  strftime ( time_buffer, TIME_SIZE, "%d %B %Y %I:%M:%S %p", tm );
 
   cout << time_buffer << "\n";
 

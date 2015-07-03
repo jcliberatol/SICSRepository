@@ -33,49 +33,30 @@ class Trace {
 public:
 	const char * filename;
 
-	void startCounter(string id){
-		counters[id] = 0;
-	}
+	void startCounter(string id) { counters[id] = 0; }
 
-	void upCount(string id){
-		counters[id] = counters[id]+1;
-	}
+	void upCount(string id) { counters[id] = counters[id]+1; }
 
-	int readCounter(string id){
-		return (counters[id]);
-	}
+	int readCounter(string id) { return (counters[id]); }
 
-	void storeMessage(string id, string message){
-		messages[id]=message;
-	}
+	void storeMessage(string id, string message) { messages[id]=message; }
 
-	string readMessage(string id){
-		return (messages[id]);
-	}
+	string readMessage(string id) { return (messages[id]); }
 
-	void resetTimer(string s){
-		timers[s].reset();
-	}
+	void resetTimer(string s) { timers[s].reset(); }
 
-	void startTimer(string s){
-		timers[s].start();
-	}
+	void startTimer(string s) { timers[s].start(); }
 
-	void stopTimer(string s){
-		timers[s].stop();
-	}
+	void stopTimer(string s) { timers[s].stop(); }
 
-	long int timerDuration(string s){
-		return (timers[s].totalTime);
-	}
+	long int timerDuration(string s) { return (timers[s].totalTime); }
 
-	long int dr(string s){
-		return (timerDuration(s));
-	}
-//outputs a matrix
+	long int dr(string s) { return (timerDuration(s)); }
+	
+	//outputs a matrix
 	template<typename T>
-	void operator() ( Matrix<T> & message ) {
-
+	void operator() ( Matrix<T> & message )
+	{
 		ofstream file;
 		file.open ( filename, ofstream::app );
 
@@ -83,9 +64,11 @@ public:
 
 		file.close ();
 	}
-//Outputs a message with a new line
+
+	//Outputs a message with a new line
 	template<typename T>
-	void operator ()(T message) {
+	void operator ()(T message)
+	{
 		ofstream file;
 		file.open ( filename, ofstream::app );
 
@@ -96,9 +79,10 @@ public:
 		file.close ();
 	}
 
-//Outputs a message with the specified option
+	//Outputs a message with the specified option
 	template<typename T>
-	void operator ()(T message, char option) {
+	void operator ()(T message, char option)
+	{
 		ofstream file;
 		file.open ( filename, ofstream::app );
 
@@ -106,23 +90,18 @@ public:
 
 		file.close ();
 	}
-//Defines the filename for the trace
-	Trace( const char * filename ) {
-		this->filename = filename;
+	
+	//Defines the filename for the trace
+	Trace( const char * filename ) { this->filename = filename; }
 
-	}
-	~Trace() {
-		// TODO Auto-generated destructor stub
-	}
-	const char* getFilename() const {
-		return (filename);
-	}
+	~Trace(){}
 
-	void setFilename(const char* filename) {
-		this->filename = filename;
-	}
+	const char* getFilename() const { return (filename); }
 
-	void endTrace(){
+	void setFilename(const char* filename) { this->filename = filename; }
+
+	void endTrace()
+	{
 		ofstream file;
 		file.open ( filename, ofstream::app );
 		//output of the trace goes here.
@@ -132,4 +111,5 @@ public:
 	}
 
 };
+
 #endif /* TRACE_H_ */

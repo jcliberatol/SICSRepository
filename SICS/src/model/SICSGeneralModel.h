@@ -17,9 +17,11 @@
 #include <model/item/DichotomousModel.h>
 #include <model/dimension/UnidimensionalModel.h>
 
-class SICSGeneralModel : public ModelFactory {
+class SICSGeneralModel : public ModelFactory
+{
+
 public:
-	// Constructor
+
 	SICSGeneralModel();
 
 	// Methods
@@ -27,7 +29,6 @@ public:
 	ItemModel	   *createItemModel();
 	DimensionModel *createDimensionModel();
 
-	// Destructor
 	virtual ~SICSGeneralModel();
 };
 

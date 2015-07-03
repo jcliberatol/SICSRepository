@@ -16,8 +16,11 @@ using namespace std;
  * import this class when using a constant
  * TODO : Config file modification for constants
  */
-class Constant {
+class Constant
+{
+
 public:
+
 	enum model_type{RASCH_A1, RASCH_A_CONSTANT, TWO_PL, THREE_PL};
 	enum initial_value_type{ANDRADE,RANDOM,OSPINA,FIXED};
 
@@ -39,9 +42,6 @@ public:
 	static bool CAPTURE_HESSIANA;
 	static double EPSILONC;
 	static double LOGLIKO;
-
-
-  
 };
 
 #endif /* CONSTANT_H_ */

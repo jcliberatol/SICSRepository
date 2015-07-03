@@ -6,14 +6,13 @@
  */
 
 #include <model/item/ItemModel.h>
+#include <iostream>
 
-
-ItemModel::~ItemModel() {
-	// TODO Auto-generated destructor stub
-
+ItemModel::~ItemModel()
+{
+	// TODO
+	// if(dataSet != NULL)
+	// 	delete dataSet;
 }
 
-
-void ItemModel::setDataset(DataSet* dataset) {
-	this->dataSet = dataset;
-}
+void ItemModel::setDataset(DataSet* dataset) { this->dataSet = dataset; }

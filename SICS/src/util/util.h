@@ -7,7 +7,7 @@
 
 #ifndef UTIL_H_
 #define UTIL_H_
-#include <util/asa111.hpp>
+#include <util/asa111.h>
 
 #define iteration_0 (*args_hist)[2]
 #define iteration_1 (*args_hist)[1]

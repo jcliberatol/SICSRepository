@@ -44,6 +44,7 @@ private:
 	int nRow;
 	T m(char);
 	T get3x3determinant ();
+
 public:
 	//bool transposed;
 	bool symmetric;
@@ -60,6 +61,8 @@ public:
 	void copy(Matrix<T>&);/**Copy constructor*/
 	int nR(); /** Returns number of rows */
 	int nC(); /** Returns number of columns */
+	void setIndex(int, int, T);
+	T getIndex(int, int);
 	T sum(); /** Returns the sum of all objects */
 	inline T & operator()(const int nCol, const int nRow); /** Accessing operator for a element */
 	T & operator()(const int element); /**Accessing operator for a element */
@@ -96,6 +99,16 @@ int Matrix<T>::nR() {
 template<class T>
 int Matrix<T>::nC() {
 	return (nCol);
+}
+
+template<class T>
+inline void Matrix<T>::setIndex(int r, int c, T value) {
+		memory[nCol * r + c] = value;
+}
+
+template<class T>
+inline T Matrix<T>::getIndex(int r, int c) {
+		return memory[nCol * r + c];
 }
 
 template<class T>
@@ -184,10 +197,10 @@ inline void Matrix<T>::setSymmetric(bool symmetric) {
 }
 
 template<class T>
-Matrix<T>::~Matrix() {
-	if (memory != NULL) {
+Matrix<T>::~Matrix()
+{
+	if (memory != NULL)
 		delete[] memory;
-	}
 }
 
 template<class T>

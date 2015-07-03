@@ -53,7 +53,6 @@ class Model {
 
 	void printParameterSet(ostream&);
 
-	string getStringParameters();
 	// Destructor
 	virtual ~Model();
 };

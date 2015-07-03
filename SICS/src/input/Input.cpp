@@ -7,24 +7,22 @@
 
 #include "Input.h"
 
-Input::Input() {
-	// TODO Auto-generated constructor stub
-	del = ',';
-}
+Input::Input() { del = ','; }
 
-Input::~Input() {
-	// TODO Auto-generated destructor stub
-}
-bool Input::importCSV(char* filename, Matrix<double>& M, unsigned int rowIdx,
-		unsigned int colIdx) {
-	ifstream inFile;
-	Trace trace("inputErrors.log");
+Input::~Input() {}
+
+bool Input::importCSV(char* filename, Matrix<double>& M, unsigned int rowIdx, unsigned int colIdx)
+{
 	bool eof = false;
 	int row = 0;
 	int col = 0;
 
+	ifstream inFile;
+	Trace trace("inputErrors.log");
+
 	inFile.open(filename, std::ifstream::in);
-	if (!inFile.good()) {
+	if (!inFile.good())
+	{
 		trace("File does not exists:");
 		trace(filename);
 	}
@@ -33,24 +31,31 @@ bool Input::importCSV(char* filename, Matrix<double>& M, unsigned int rowIdx,
 	string currentLine;
 
 	// Header lines are ignored
-	for (unsigned int i = 0; i < rowIdx; i++) {
+	for (unsigned int i = 0; i < rowIdx; i++)
+	{
 		trace("Ignored a header line : ");
 		getline(inFile, currentLine);
 		trace(currentLine);
 	}
-	while (!eof) {
+	
+	while (!eof)
+	{
 		getline(inFile, currentLine);
 
 		eof = inFile.eof();
 
 		const char* processLine = currentLine.c_str();
-		if (strlen(processLine) == 0) {
+		
+		if (strlen(processLine) == 0)
+		{
 			eof = true;
 			trace("Unproper end of file, read cancelled");
 			break;
 		}
+		
 		//Clean string of the ignored columns
-		for (unsigned int k = 0; k < colIdx; ++k) {
+		for (unsigned int k = 0; k < colIdx; ++k)
+		{
 			processLine = strchr(processLine, del);
 			processLine = &processLine[1]; //Skip one character
 		}
@@ -60,14 +65,14 @@ bool Input::importCSV(char* filename, Matrix<double>& M, unsigned int rowIdx,
 		 *double into a string very carefully until the memory addresses are the same
 		 */
 		col = 0;
-		while (strlen(processLine) > 0) {
+		while (strlen(processLine) > 0)
+		{
 			char * auxptr;
 			M(row, col) = strtod(processLine, &auxptr);
 			col++;
 			processLine = auxptr;
-			if (strlen(processLine) > 0) {
+			if (strlen(processLine) > 0)
 				processLine = &processLine[1];
-			}
 		}
 
 		row++;
@@ -79,77 +84,80 @@ bool Input::importCSV(char* filename, Matrix<double>& M, unsigned int rowIdx,
 /*
  * Imports a CSV file whose elements repeat and generally is composed of only zeroes and ones.
  */
-bool Input::importCSV(char* filename, PatternMatrix& M, unsigned int rowIdx,
-		unsigned int colIdx) {
-
-	ifstream inFile;
+bool Input::importCSV(char* filename, PatternMatrix& M, unsigned int rowIdx, unsigned int colIdx)
+{
 	Trace trace("inputErrors.log");
-	bool eof = false;
+	ifstream inFile;
+	bool eof;
+	string currentLine; // currentLine holds the characters of the current line to read
+	unsigned int linelen;
+	int line;
+	eof = false;
 
 	trace("Input Errors: ");
 
 	inFile.open(filename, std::ifstream::in);
-	if (!inFile.good()) {
+
+	if (!inFile.good())
+	{
 		trace("File does not exists:");
 		trace(filename);
 	}
 
-	// currentLine holds the characters of the current line to read
-	string currentLine;
-
 	// Header lines are ignored
-	for (unsigned int i = 0; i < rowIdx; i++) {
+	for (unsigned int i = 0; i < rowIdx; i++)
 		getline(inFile, currentLine);
-	}
 
-	int line = 0;
-	int linelen = 0;
-	while (!eof) {
+	line = 0;
+	linelen = 0;
+	
+	while (!eof)
+	{
+		int i = 0;
+		int dlen = 0;
+		int chars = 0;
+
 		getline(inFile, currentLine);
-		if (line == 0) {
+		if (line == 0)
 			linelen = currentLine.length();
-		} else {
-			if (linelen != currentLine.length()) {
+		else
+			if (linelen != currentLine.length())
+			{
 				trace("Inconsistent line length , stopped importing");
 				break;
 			}
 
-		}
 		line++;
 		eof = inFile.eof();
 
 		const char* processLine = currentLine.c_str();
+		
 		//Clean string of the ignored columns
-		for (unsigned int k = 0; k < colIdx; ++k) {
+		for (unsigned int k = 0; k < colIdx; ++k)
+		{
 			processLine = strchr(processLine, del);
 			processLine = &processLine[1]; //Skip one character
 		}
 
 		//Count the binary characters
-		int i = 0;
-		int dlen = 0;
-
-		while (processLine[i] != '\0') {
+		while (processLine[i] != '\0')
+		{
 			if (processLine[i] == '0' || processLine[i] == '1')
 				dlen++;
 			i++;
 		}
 
-		M.size = dlen;
-		//bitset that holds the bits of a row
-		//boost::dynamic_bitset<> dset (dlen);S
-		//bool * dset = new bool[dlen];
 		vector<char> dset(dlen);
-		//cout<<&dset[0]<<" "<<dset[0]<<" ";
+		M.size = dlen;
 		i = 0;
-		int chars = 0;
+		chars = 0;
 
-		while (processLine[i] != '\0') {
-
-			if (processLine[i] == '0') {
+		while (processLine[i] != '\0')
+		{
+			if (processLine[i] == '0')
 				chars++;
-			}
-			if (processLine[i] == '1') {
+			if (processLine[i] == '1')
+			{
 				dset[chars] = true;
 				chars++;
 			}
@@ -163,13 +171,9 @@ bool Input::importCSV(char* filename, PatternMatrix& M, unsigned int rowIdx,
 
 	inFile.close();
 
-	return (1);
+	return (0);
 }
 
-char Input::getDel() const {
-	return (del);
-}
+char Input::getDel() const { return (del); }
 
-void Input::setDel(char del) {
-	this->del = del;
-}
+void Input::setDel(char del) { this->del = del; }

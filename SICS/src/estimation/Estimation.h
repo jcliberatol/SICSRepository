@@ -9,7 +9,6 @@
 #define ESTIMATION_H_
 #include <model/Model.h>
 #include <type/Matrix.h>
-#include <optimizer/Optimizer.h>
 #include <model/parameter/ThreePLModel.h>
 #include <model/parameter/OnePLModel.h>
 
@@ -26,7 +25,10 @@ public:
 	virtual void setModel ( Model * ) = 0;
 
 	// Destructor
-	virtual ~Estimation();
+	virtual ~Estimation()
+	{
+		delete model;
+	}
 };
 
 #endif /* ESTIMATION_H_ */

@@ -7,7 +7,8 @@
 
 #include "Model.h"
 
-Model::Model ( ) {
+Model::Model ( )
+{
 	parameterModel = NULL;
 	itemModel = NULL;
 	dimensionModel = NULL;
@@ -15,7 +16,8 @@ Model::Model ( ) {
 	type = 0;
 }
 
-void Model::setModel(ModelFactory * modelFactory, int modelType) {
+void Model::setModel(ModelFactory * modelFactory, int modelType)
+{
 	parameterModel = modelFactory->createParameterModel(modelType);
 	itemModel = modelFactory->createItemModel();
 	dimensionModel = modelFactory->createDimensionModel();
@@ -23,51 +25,32 @@ void Model::setModel(ModelFactory * modelFactory, int modelType) {
 	type = modelType;
 }
 
-Model::~Model() {
-	delete parameterModel;
-	delete itemModel;
-	delete dimensionModel;
-}
-DimensionModel* Model::getDimensionModel()  {
-	return (dimensionModel);
-}
-
-void Model::setDimensionModel(DimensionModel* dimensionModel) {
-	this->dimensionModel = dimensionModel;
+Model::~Model()
+{
+	if(parameterModel != NULL)
+		delete parameterModel;
+	if(itemModel != NULL)
+		delete itemModel;
+	if(dimensionModel != NULL)
+		delete dimensionModel;
 }
 
-ItemModel* Model::getItemModel() {
-	return (itemModel);
-}
+DimensionModel* Model::getDimensionModel(){ return (dimensionModel);}
 
-void Model::setItemModel(ItemModel* itemModel) {
-	this->itemModel = itemModel;
-}
+void Model::setDimensionModel(DimensionModel* dimensionModel) { this->dimensionModel = dimensionModel; }
 
-ParameterModel* Model::getParameterModel()  {
-	return (parameterModel);
-}
+ItemModel* Model::getItemModel() { return (itemModel); }
 
-void Model::setParameterModel(ParameterModel* parameterModel) {
-	this->parameterModel = parameterModel;
-}
+void Model::setItemModel(ItemModel* itemModel) { this->itemModel = itemModel; }
 
-void Model::successProbability(QuadratureNodes* q) {
-	parameterModel->successProbability(dimensionModel, q);
-}
+ParameterModel* Model::getParameterModel() { return (parameterModel); }
 
-void Model::buildParameterSet() {
-	parameterModel->buildParameterSet(itemModel, dimensionModel);
-}
+void Model::setParameterModel(ParameterModel* parameterModel) { this->parameterModel = parameterModel; }
 
-void Model::printParameterSet(ostream& k){
-	parameterModel->printParameterSet(k);
-}
+void Model::successProbability(QuadratureNodes* q) { parameterModel->successProbability(dimensionModel, q); }
 
-string Model::getStringParameters(){
-	return (parameterModel->getStringParameters());
-}
+void Model::buildParameterSet() { parameterModel->buildParameterSet(itemModel, dimensionModel); }
 
-int Model::Modeltype(){
-	return (type);
-}
+void Model::printParameterSet(ostream& k) { parameterModel->printParameterSet(k); }
+
+int Model::Modeltype(){ return (type); }

@@ -13,6 +13,8 @@ MultidimensionalModel::MultidimensionalModel() {
 }
 
 vector<int> MultidimensionalModel::getDimVector() {
+	std::vector<int> result;
+	return result;
 }
 
 MultidimensionalModel::~MultidimensionalModel() {
@@ -20,5 +22,6 @@ MultidimensionalModel::~MultidimensionalModel() {
 }
 
 int MultidimensionalModel::getNumDimensions() {
+	return 0;
 }
 

@@ -17,6 +17,8 @@ int MultiUniDimModel::getNumDimensions() {
 }
 
 vector<int> MultiUniDimModel::getDimVector() {
+	std::vector<int> result;
+	return result;
 }
 
 MultiUniDimModel::~MultiUniDimModel() {

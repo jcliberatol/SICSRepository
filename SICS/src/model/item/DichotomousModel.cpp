@@ -25,9 +25,10 @@ void DichotomousModel::setDataset(DataSet* dataset) {
 }
 */
 
-int DichotomousModel::countItems() {
-	PatternMatrix * pM = dynamic_cast<PatternMatrix *>(this->dataSet);
-	return (pM->countItems());
+int DichotomousModel::countItems()
+{
+	int result = (dynamic_cast<PatternMatrix *>(this->dataSet))->countItems();
+	return (result);
 }
 
 DichotomousModel::~DichotomousModel() {

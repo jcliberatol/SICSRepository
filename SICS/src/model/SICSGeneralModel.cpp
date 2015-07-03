@@ -7,54 +7,35 @@
 
 #include <model/SICSGeneralModel.h>
 
-SICSGeneralModel::SICSGeneralModel() {
-	// TODO Auto-generated constructor stub
+SICSGeneralModel::SICSGeneralModel() {}
 
+ParameterModel* SICSGeneralModel::createParameterModel(int model)
+{
+	if (model == Constant::THREE_PL)
+		return (new ThreePLModel());
+
+	if (model == Constant::TWO_PL)
+		return (new TwoPLModel());
+
+	if (model == Constant::RASCH_A1)
+		return (new OnePLModel());
+
+	if (model == Constant::RASCH_A_CONSTANT)
+		return (new OnePLACModel());
+	
+	return (new ThreePLModel());
 }
 
-ParameterModel* SICSGeneralModel::createParameterModel(int model) {
-
-	if (model == Constant::THREE_PL) {
-		ParameterModel *parameterModel;
-		parameterModel = new ThreePLModel();
-		return (parameterModel);
-	}
-
-	if (model == Constant::TWO_PL) {
-		ParameterModel *parameterModel;
-		parameterModel = new TwoPLModel();
-		return (parameterModel);
-	}
-
-	if (model == Constant::RASCH_A1) {
-		ParameterModel *parameterModel;
-		parameterModel = new OnePLModel();
-		return (parameterModel);
-	}
-
-	if (model == Constant::RASCH_A_CONSTANT) {
-		//cout<<"SICSGeneralMOdel"<<endl;
-		ParameterModel *parameterModel;
-		parameterModel = new OnePLACModel();
-		return (parameterModel);
-	}
-
-	// Default Parameter Model.
-	ParameterModel *parameterModel;
-	parameterModel = new ThreePLModel();
-	return (parameterModel);
+ItemModel* SICSGeneralModel::createItemModel()
+{
+	//TODO FIX FOR DECISION OF NEW MODELS
+	return (new DichotomousModel());
 }
 
-ItemModel* SICSGeneralModel::createItemModel() {
-	ItemModel *itemModel = new DichotomousModel(); //TODO FIX FOR DECISION OF NEW MODELS
-	return (itemModel);
+DimensionModel* SICSGeneralModel::createDimensionModel()
+{
+	//TODO FIX FOR DECISION OF NEW MODELS
+	return (new UnidimensionalModel());
 }
 
-DimensionModel* SICSGeneralModel::createDimensionModel() {
-	DimensionModel *dimensionModel = new UnidimensionalModel(); //TODO FIX FOR DECISION OF NEW MODELS
-	return (dimensionModel);
-}
-
-SICSGeneralModel::~SICSGeneralModel() {
-	// TODO Auto-generated destructor stub
-}
+SICSGeneralModel::~SICSGeneralModel() {}

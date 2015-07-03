@@ -8,20 +8,24 @@
 #ifndef DATASET_H_
 #define DATASET_H_
 
+#include <iostream>
 
 /**
  * Skeleton class for the datasets
  * a dataset can contain not only the raw matrices but information about the dataset
  * */
-class DataSet {
+class DataSet
+{
+
 private:
+
 public:
+
 	// Methods
 	virtual int countItems () const = 0;
 	virtual int countIndividuals () const = 0;
 
-	// Destructor
-	virtual ~DataSet();
+	virtual ~DataSet(){};
 
 };
 
