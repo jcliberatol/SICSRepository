@@ -21,7 +21,8 @@
  * multi and single dimensional models
  * future suport for multiscale and longitudinal models can be implemented.
  * */
-class Model {
+class Model
+{
 
 	public:
 
@@ -30,12 +31,11 @@ class Model {
 	DimensionModel *dimensionModel;
 	int type;
 
-
 	// Constructor
 	Model();
 	int Modeltype();
 	// Methods
-	void setModel ( ModelFactory * , int);
+	void setModel (ModelFactory * , int);
 	void successProbability (QuadratureNodes *);
 	void buildParameterSet ();
 
@@ -44,8 +44,7 @@ class Model {
 	void setDimensionModel(DimensionModel* dimensionModel);
 
 	ItemModel* getItemModel();
-	void setItemModel(ItemModel* itemModel);
-
+	
 	ParameterModel* getParameterModel();
 	void setParameterModel(ParameterModel* parameterModel);
 	//holds if the estimation has been completed.

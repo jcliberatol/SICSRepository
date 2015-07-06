@@ -207,23 +207,3 @@ void OnePLModel::gradient(double* args, double* pars, int nargs, int npars, doub
 	}
 	delete[] h;
 }
-
-OnePLModel::~OnePLModel()
-{
-	if(profiler != NULL)
-	{
-		delete profiler;
-		profiler = NULL;
-	}
-	if(probabilityMatrix != NULL)
-	{
-		delete probabilityMatrix;
-		probabilityMatrix = NULL;
-	}
-
-	if (parameterSet != NULL) {
-		delete[] parameterSet[0][0];
-		delete[] parameterSet[0];
-		delete[] parameterSet;
-	}
-}

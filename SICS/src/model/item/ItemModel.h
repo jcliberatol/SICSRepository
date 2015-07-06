@@ -8,19 +8,22 @@
 #ifndef ITEMMODEL_H_
 #define ITEMMODEL_H_
 
-#include <type/DataSet.h>
+#include <type/PatternMatrix.h>
 
-class ItemModel {
-protected:
-	DataSet *dataSet;
+class ItemModel
+{
+
 public:
+
+	PatternMatrix *dataSet;
+	
 	// Methods
 	virtual int countCategories() = 0;
 	virtual int countItems() = 0;
 
 	// Getters and Setters
-	virtual DataSet* getDataset()  = 0;
-	virtual void setDataset(DataSet* dataset); // Dataset must be set before deciding on dimensionality of the model
+	virtual PatternMatrix* getDataset()  = 0;
+	virtual void setDataset(PatternMatrix*); // Dataset must be set before deciding on dimensionality of the model
 
 	// Destructor
 	virtual ~ItemModel();

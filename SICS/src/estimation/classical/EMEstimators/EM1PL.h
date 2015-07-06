@@ -18,8 +18,6 @@ private:
 
 public:
 
-	virtual ~EM1PL() {}
-
 	virtual void transform() {}
 
 	virtual void untransform() {}
@@ -57,7 +55,7 @@ public:
 		this->r = r;
 		this->dims = 1;
 		this->sum = 0.0;
-		this->data = dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
+		this->data = m->getItemModel()->getDataset();
 		this->pm = m->getParameterModel();
 		this->q = this->nodes->size();
 		this->faux = new long double[q];

@@ -52,7 +52,7 @@ int static bfgs(double (*&fntomin)(double*, double*, int, int),
 		return (1);
 	
 	//allocate l
-	l = (int *) malloc(nvars * sizeof(int));
+	l = new int[nvars];
 	n = 0;
 
 	for (i = 0; i < nvars; i++)
@@ -226,6 +226,14 @@ int static bfgs(double (*&fntomin)(double*, double*, int, int),
 		if (gradcount - ilast > 2 * n)
 			ilast = gradcount;
 	} while (count != n || ilast != gradcount);
+
+	delete [] g;
+	delete [] t;
+	delete [] X;
+	delete [] c;
+	delete [] B;
+	delete [] l;
+
 	if (iter < maxiter)
 		//SUCCESS;
 		return (0);

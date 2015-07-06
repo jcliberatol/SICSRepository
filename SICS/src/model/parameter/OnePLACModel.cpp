@@ -230,33 +230,6 @@ double OnePLACModel::logLikelihood(double* args, double* pars, int nargs, int np
 	return (-sum);
 }
 
-OnePLACModel::~OnePLACModel()
-{
-	if(nodes != NULL)
-	{
-		delete nodes;
-		nodes = NULL;
-	}
-	if(profiler != NULL)
-	{
-		delete profiler;
-		profiler = NULL;
-	}
-	if(probabilityMatrix != NULL)
-	{
-		delete probabilityMatrix;
-		probabilityMatrix = NULL;
-	}
-	if (parameterSet != NULL)
-	{
-		delete[] parameterSet[1][0];
-		delete[] parameterSet[0][0];
-		delete[] parameterSet[0];
-		delete[] parameterSet[1];
-		delete[] parameterSet;
-	}
-}
-
 void OnePLACModel::printParameterSet(ostream& out)
 {
 	out << "\"a\" \"b\" \"c\"" << endl;

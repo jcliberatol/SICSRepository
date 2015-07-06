@@ -16,11 +16,11 @@ int PolytomousModel::countCategories() {
 	return (0);
 }
 
- DataSet* PolytomousModel::getDataset()  {
+PatternMatrix* PolytomousModel::getDataset()  {
 	return (dataSet);
 }
 
-void PolytomousModel::setDataset(DataSet* dataset) {
+void PolytomousModel::setDataset(PatternMatrix* dataset) {
 	this->dataSet = dataset;
 }
 

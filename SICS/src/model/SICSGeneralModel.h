@@ -11,7 +11,6 @@
 #include <model/ModelFactory.h>
 #include <model/parameter/ThreePLModel.h>
 #include <model/parameter/TwoPLModel.h>
-#include <model/parameter/RaschModel.h>
 #include <model/parameter/OnePLModel.h>
 #include <model/parameter/OnePLACModel.h>
 #include <model/item/DichotomousModel.h>

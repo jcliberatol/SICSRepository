@@ -17,7 +17,6 @@
 #include <estimation/classical/EMEstimators/EM2PL.h>
 #include <estimation/classical/EMEstimators/EM1PL.h>
 #include <estimation/classical/EMEstimators/EM1PLAC.h>
-//#include <optimizer/BFGSOptimizer.h>
 
 /**
  *Classical estimation through the EM algorithm, generic for the models however must be called with specific

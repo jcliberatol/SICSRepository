@@ -16,9 +16,7 @@
  * */
 class DataSet
 {
-
-private:
-
+	
 public:
 
 	// Methods

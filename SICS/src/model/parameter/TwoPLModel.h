@@ -47,8 +47,6 @@ public:
 	void setParameterSet(double***);
 	void setParameters(double *);
 	void printParameterSet(ostream&);
-
-	virtual ~TwoPLModel();
 };
 
 #endif /* TWOPLMODEL_H_ */

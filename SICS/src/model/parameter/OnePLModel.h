@@ -38,8 +38,6 @@ public:
 	void printParameterSet(ostream&);
 	void getParameters(double *);
 	void setParameters(double *);
-	// Destructor
-	virtual ~OnePLModel();
 };
 
 

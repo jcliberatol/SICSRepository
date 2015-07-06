@@ -22,7 +22,8 @@
 #define _DELTA 0.0001220703
 #define _BOUNDS new double[2] { -5, 5 }
 
-class LatentTraitEstimation {
+class LatentTraitEstimation
+{
 
 public:
 
@@ -38,14 +39,9 @@ public:
         Model *model;
     } parameters_logL;
 
-    LatentTraitEstimation(){}
+    LatentTraitEstimation() {}
 
-    virtual ~LatentTraitEstimation()
-    {
-        delete model;
-        delete quadNodes;
-        delete lt;
-    }
+    virtual ~LatentTraitEstimation() {}
 
     inline double probabilities(bool * pattern, int size, int node)
     {

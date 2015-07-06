@@ -21,13 +21,21 @@ PatternMatrix::~PatternMatrix()
     if(bitset_list != NULL)
     {
         for (unsigned int i = 0; i < matrix.size(); i++)
-                delete bitset_list[i];
-        delete bitset_list;
+                delete [] bitset_list[i];
+        delete [] bitset_list;
+        bitset_list = NULL;
     }
+
     if(count_set_bits != NULL)
-        delete count_set_bits;
+    {
+        delete [] count_set_bits;
+        count_set_bits = NULL;
+    }
     if(frequency_list != NULL)
-        delete frequency_list;
+    {
+        delete [] frequency_list;
+        frequency_list = NULL;
+    }
 }
 
 int PatternMatrix::countItems() const { return ((matrix.empty()) ? 0 : size); }

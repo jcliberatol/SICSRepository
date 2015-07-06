@@ -21,19 +21,21 @@ EMEstimation::EMEstimation()
 
 EMEstimation::~EMEstimation()
 {
-	if (estimator != NULL)
-	{
-		delete estimator;
-		estimator = NULL;
-	}
-	if (quadNodes != NULL)
-		delete quadNodes;
-	if (f != NULL)
-		delete f;
-	if (r != NULL)
-		delete r;
-	if (model != NULL)
-		delete model;
+    if (estimator != NULL)
+    {
+        delete estimator;
+        estimator = NULL;
+    }
+    if (f != NULL)
+    {
+        delete f;
+        f = NULL;
+    }
+    if (r != NULL)
+    {
+        delete r;
+        r = NULL;
+    }
 }
 
 /**
@@ -46,7 +48,7 @@ void EMEstimation::setModel(Model * model)
 
 	this->model = model;
 	q = quadNodes->size();
-	It = this->model->getItemModel()->countItems();
+	It = this->model->getItemModel()->getDataset()->countItems();
 
 	this->f = new Matrix<double>(1, q);
 	this->r = new Matrix<double>(q, It);
@@ -132,10 +134,10 @@ void EMEstimation::estimate()
 	estimator->untransform();
 	model->printParameterSet(cout);
 
-	delete (args_hist)[0];
-	delete (args_hist)[1];
-	delete (args_hist)[2];
-	delete (args_hist);
+	delete [] (args_hist)[0];
+	delete [] (args_hist)[1];
+	delete [] (args_hist)[2];
+	delete [] (args_hist);
 }
 
 /**Returns the iterations that took the estimation to obtain an answer*/

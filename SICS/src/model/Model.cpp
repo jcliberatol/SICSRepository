@@ -7,7 +7,7 @@
 
 #include "Model.h"
 
-Model::Model ( )
+Model::Model ()
 {
 	parameterModel = NULL;
 	itemModel = NULL;
@@ -21,18 +21,15 @@ void Model::setModel(ModelFactory * modelFactory, int modelType)
 	parameterModel = modelFactory->createParameterModel(modelType);
 	itemModel = modelFactory->createItemModel();
 	dimensionModel = modelFactory->createDimensionModel();
-	itemParametersEstimated = false;//Undefined behavior TODO
+	itemParametersEstimated = false;
 	type = modelType;
 }
 
 Model::~Model()
 {
-	if(parameterModel != NULL)
-		delete parameterModel;
-	if(itemModel != NULL)
-		delete itemModel;
-	if(dimensionModel != NULL)
-		delete dimensionModel;
+    delete parameterModel;
+    delete itemModel;
+    delete dimensionModel;
 }
 
 DimensionModel* Model::getDimensionModel(){ return (dimensionModel);}
@@ -40,8 +37,6 @@ DimensionModel* Model::getDimensionModel(){ return (dimensionModel);}
 void Model::setDimensionModel(DimensionModel* dimensionModel) { this->dimensionModel = dimensionModel; }
 
 ItemModel* Model::getItemModel() { return (itemModel); }
-
-void Model::setItemModel(ItemModel* itemModel) { this->itemModel = itemModel; }
 
 ParameterModel* Model::getParameterModel() { return (parameterModel); }
 

@@ -21,8 +21,6 @@ using namespace std;
 class PatternMatrix : public DataSet
 {
 
-private:
-
 public:
 
     int size;

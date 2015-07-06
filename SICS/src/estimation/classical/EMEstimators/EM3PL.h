@@ -15,7 +15,6 @@ class EM3PL: public EMEstimator
 {
 
 public:
-	virtual ~EM3PL() {}
 
 	virtual void transform()
 	{
@@ -29,7 +28,7 @@ public:
 
 	virtual void untransform()
 	{
-		for (int i = 0; i < m->getItemModel()->countItems(); ++i)
+		for (int i = 0; i < m->getItemModel()->getDataset()->countItems(); ++i)
 		{
 			double *** pset = m->getParameterModel()->getParameterSet();
 			double qa = pset[0][0][i];
@@ -101,7 +100,7 @@ public:
 		this->r = r;
 		this->dims = 3;
 		this->sum = 0.0;
-		this->data = dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
+		this->data = m->getItemModel()->getDataset();
 		this->pm = m->getParameterModel();
 		this->q = this->nodes->size();
 		this->faux = new long double[q];

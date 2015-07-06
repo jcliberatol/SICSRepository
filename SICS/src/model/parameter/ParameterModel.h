@@ -32,11 +32,16 @@ public:
 	double *** parameterSet;
 	int items;
 	Matrix<double> * probabilityMatrix;
+	ItemModel * itemModel;
+	DimensionModel * dimensionModel;
 	
-	ParameterModel(){}
+	ParameterModel() {}
 
 	virtual void buildParameterSet(ItemModel * itemModel, DimensionModel * dimensionModel)
 	{
+		this->itemModel = itemModel;
+		this->dimensionModel = dimensionModel;
+
 		if (typeid(*itemModel) == typeid(DichotomousModel))
 		{
 			if (typeid(*dimensionModel) == typeid(UnidimensionalModel))
@@ -62,7 +67,6 @@ public:
 			}
 
 		}
-
 		else if (typeid(*dimensionModel) == typeid(PolytomousModel))
 		{
 			// TODO: Polytomous Model for Unidimensional, Multidimensional and MultiUni
@@ -79,9 +83,39 @@ public:
 	virtual void setParameters(double * parameters) = 0;
 	virtual double getProbability(int, int) = 0;
 	virtual void printParameterSet(ostream&)=0;
-	//virtual string getStringParameters() = 0;
+	
 	// Destructor
-	virtual ~ParameterModel(){}
+	virtual ~ParameterModel()
+	{
+		delete probabilityMatrix;
+		
+		if (typeid(*itemModel) == typeid(DichotomousModel))
+		{
+			if (typeid(*dimensionModel) == typeid(UnidimensionalModel))
+			{
+				for(int i = 0; i < 3; i++)
+					delete [] parameterSet[i][0];
+
+				for(int i = 0; i < 3; i++)
+					delete [] parameterSet[i];
+
+				delete [] parameterSet;
+			}
+			else if (typeid(*dimensionModel) == typeid(MultidimensionalModel))
+			{
+				// TODO: Dichotomous Multidimensional
+			}
+			else if (typeid(*dimensionModel) == typeid(MultiUniDimModel))
+			{
+				// TODO: Dichotomous MultiUniDimensional
+			}
+
+		}
+		else if (typeid(*dimensionModel) == typeid(PolytomousModel))
+		{
+			// TODO: Polytomous Model for Unidimensional, Multidimensional and MultiUni
+		}
+	}
 };
 
 #endif /* PARAMETERMODEL_H_ */

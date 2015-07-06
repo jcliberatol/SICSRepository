@@ -20,8 +20,8 @@ public:
 	int countItems();
 
 	// Getters and Setters
-	 DataSet* getDataset() ;
-	void setDataset(DataSet* dataset);
+	PatternMatrix* getDataset() ;
+	void setDataset(PatternMatrix* dataset);
 
 	// Destructor
 	virtual ~PolytomousModel();

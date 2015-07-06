@@ -7,31 +7,18 @@
 
 #include <model/item/DichotomousModel.h>
 
-DichotomousModel::DichotomousModel() {
-	// TODO Auto-generated constructor stub
+DichotomousModel::DichotomousModel() {}
 
-}
+int DichotomousModel::countCategories() { return (2); }
 
-int DichotomousModel::countCategories() {
-	return (2);
-}
+PatternMatrix* DichotomousModel::getDataset() { return (dataSet); }
 
-DataSet* DichotomousModel::getDataset() {
-	return (dataSet);
-}
-/*
-void DichotomousModel::setDataset(DataSet* dataset) {
-	this->dataSet = dataset;
-}
-*/
+void DichotomousModel::setDataset(PatternMatrix* dataset) { this->dataSet = dataset; }
+
 
 int DichotomousModel::countItems()
 {
-	int result = (dynamic_cast<PatternMatrix *>(this->dataSet))->countItems();
+	int result = this->dataSet->countItems();
 	return (result);
-}
-
-DichotomousModel::~DichotomousModel() {
-	// TODO Auto-generated destructor stub
 }
 

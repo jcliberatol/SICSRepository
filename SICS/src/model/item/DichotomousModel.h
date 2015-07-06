@@ -9,7 +9,6 @@
 #define DICHOTOMOUSMODEL_H_
 
 #include <model/item/ItemModel.h>
-#include <type/PatternMatrix.h>
 
 class DichotomousModel: public ItemModel {
 public:
@@ -21,10 +20,8 @@ public:
 	int countItems();
 
 	// Getters and Setters
-	DataSet* getDataset();
-
-	// Destructor
-	virtual ~DichotomousModel();
+	PatternMatrix* getDataset();
+	void setDataset(PatternMatrix*);
 };
 
 #endif /* DICHOTOMOUSMODEL_H_ */

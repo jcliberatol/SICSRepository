@@ -9,15 +9,13 @@ private:
 
 public:
 
-	virtual ~EM1PLAC() {}
-
 	virtual void transform() { }
 
 	virtual void untransform()
 	{
 		double *** pset = m->getParameterModel()->getParameterSet();
 		double qa = pset[0][0][0];
-		for (int i = 0; i < m->getItemModel()->countItems(); ++i)
+		for (int i = 0; i < m->getItemModel()->getDataset()->countItems(); ++i)
 			pset[1][0][i] = -pset[1][0][i] / qa;
 	}
 
@@ -56,7 +54,7 @@ public:
 		this->f = f;
 		this->r = r;
 		sum = 0.0;
-		data = dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
+		data = m->getItemModel()->getDataset();
 		pm = m->getParameterModel();
 		q = this->nodes->size();
 		faux = new long double[q];

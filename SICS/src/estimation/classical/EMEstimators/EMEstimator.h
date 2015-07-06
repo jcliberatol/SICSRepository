@@ -33,14 +33,14 @@ public:
     int * frequency_list;
     long double sum;
     long double * faux;
-    double *** pset; // Posible leak
+    double *** pset;
     Matrix<double>* weights;
     Matrix<double>* f;
     Matrix<double>* r;
     double (*fptr)(double*, double*, int, int);
     void (*gptr)(double*, double*, int, int, double*);
     void (*hptr)(double*, double*, int, int, double*);
-    bool ** bitset_list; // Posible leak
+    bool ** bitset_list;
 
     EMEstimator() {}
 
@@ -56,8 +56,8 @@ public:
     virtual void stepRamsay(double *** parameters, int * nargs, int t_size, bool continue_flag) = 0;
 
     //In this cases the model are needed to be filled
-    virtual void setInitialValues(int, Model*) = 0;
-    virtual void setInitialValues(double***, Model*) = 0;
+    virtual void setInitialValues(int, Model *) = 0;
+    virtual void setInitialValues(double ***, Model *) = 0;
 
     //Step E needs the model , the f and r, and the thetas, besides from the data.
     void stepE()
@@ -125,6 +125,7 @@ public:
         double *** pset;
         double * args;
         double * pars;
+
         int It;
         int q;
         int npars;
@@ -215,7 +216,7 @@ public:
             for(for_counter = 0; for_counter < dims; for_counter++)
                 args[par_index[for_counter]] = iargs[for_counter];
 
-            delete iargs;
+            delete [] iargs;
         }
 
         std::copy(&((*parameters)[1][0]), (&((*parameters)[1][0])) + *nargs, &((*parameters)[0][0]));
@@ -276,6 +277,13 @@ public:
             parSet[i] = pset[i];
         // llenar las tres matrices
         m->getParameterModel()->setParameterSet(parSet);
+
+        for(int i = 0; i < dims; i++)
+            delete tri[i];
+
+        delete [] tri;
+        delete [] args;
+        delete [] pars;
     }
 
     //Initial values
@@ -303,7 +311,7 @@ public:
         double *Um;
         double *result;
 
-        data = dynamic_cast<PatternMatrix *>(m->getItemModel()->getDataset());
+        data = m->getItemModel()->getDataset();
         pSize = data->matrix.size();
         Ni = data->countIndividuals();
 
@@ -367,34 +375,7 @@ public:
         return (result);
     }
 
-    virtual ~EMEstimator()
-    {
-        // cout << "data" << endl;
-        // if( data != NULL)
-        //     delete data;
-        // cout << "pm" << endl;
-        // if( pm != NULL)
-        //     delete pm;
-        if( m != NULL)
-            delete m;
-        // cout << "nodes" << endl;
-        // if( nodes != NULL)
-        //     delete nodes;
-        // cout << "frequency_list" << endl;
-        // if( frequency_list != NULL)
-        //     delete frequency_list;
-        // cout << "faux" << endl;
-        // if( faux != NULL)
-        //     delete faux;
-        if( weights != NULL)
-            delete weights;
-        // cout << "f" << endl;
-        // if( f != NULL)
-        //     delete f;
-        // cout << "r" << endl;
-        // if( r != NULL)
-        //     delete r;
-    }
+    virtual ~EMEstimator() { delete [] faux; }
 };
 
 #endif /* EMESTIMATOR_H_ */

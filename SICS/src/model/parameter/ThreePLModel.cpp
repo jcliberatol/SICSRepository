@@ -858,35 +858,3 @@ double ThreePLModel::Pr(int u,double a, double d, double c, double theta)
 	else
 		return(1-p);
 }
-
-ThreePLModel::~ThreePLModel()
-{
-	if(nodes != NULL)
-	{
-		delete nodes;
-		nodes = NULL;
-	}
-	if(profiler != NULL)
-	{
-		delete profiler;
-		profiler = NULL;
-	}
-	if(probabilityMatrix != NULL)
-	{
-		delete probabilityMatrix;
-		probabilityMatrix = NULL;
-	}
-	if (parameterSet != NULL)
-	{
-		delete[] parameterSet[2][0];
-		delete[] parameterSet[1][0];
-		delete[] parameterSet[0][0];
-
-		delete[] parameterSet[0];
-		delete[] parameterSet[1];
-		delete[] parameterSet[2];
-
-		delete[] parameterSet;
-		parameterSet = NULL;
-	}
-}

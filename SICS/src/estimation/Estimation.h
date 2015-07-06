@@ -16,19 +16,20 @@
 /**
  * Parent estimation interface for all estimation methods.
  * */
-class Estimation {
+class Estimation
+{
+
 protected:
 	Model *model;
 
 public:
+
+	Estimation() {}
 	virtual void estimate () = 0;
 	virtual void setModel ( Model * ) = 0;
 
 	// Destructor
-	virtual ~Estimation()
-	{
-		delete model;
-	}
+	virtual ~Estimation() {}
 };
 
 #endif /* ESTIMATION_H_ */

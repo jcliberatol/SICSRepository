@@ -35,10 +35,4 @@ Matrix<double>* QuadratureNodes::getWeight() { return (weight); }
 
 void QuadratureNodes::setWeight(Matrix<double>* weight) { this->weight = weight; }
 
-QuadratureNodes::~QuadratureNodes()
-{
-	if (theta != NULL)
-		delete theta;
-	if (weight != NULL)
-		delete weight;
-}
+QuadratureNodes::~QuadratureNodes() {}

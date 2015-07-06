@@ -61,9 +61,6 @@ public:
 	void setParameterSet(double ***);
 	void printParameterSet(ostream&);
 	double getProbability(int, int);
-
-	// Destructor
-	virtual ~ThreePLModel();
 };
 
 #endif /* THREEPLMODEL_H_ */

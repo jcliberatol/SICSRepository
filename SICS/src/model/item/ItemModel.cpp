@@ -8,11 +8,6 @@
 #include <model/item/ItemModel.h>
 #include <iostream>
 
-ItemModel::~ItemModel()
-{
-	// TODO
-	// if(dataSet != NULL)
-	// 	delete dataSet;
-}
+ItemModel::~ItemModel() {}
 
-void ItemModel::setDataset(DataSet* dataset) { this->dataSet = dataset; }
+void ItemModel::setDataset(PatternMatrix* dataset) { this->dataSet = dataset; }

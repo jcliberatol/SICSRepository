@@ -199,8 +199,8 @@ inline void Matrix<T>::setSymmetric(bool symmetric) {
 template<class T>
 Matrix<T>::~Matrix()
 {
-	if (memory != NULL)
-		delete[] memory;
+	// if (memory != NULL)
+	// 	delete[] memory;}
 }
 
 template<class T>
