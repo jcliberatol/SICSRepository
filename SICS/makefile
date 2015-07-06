@@ -14,7 +14,6 @@ SRC =   src/type/Constant.cpp \
 	src/model/item/PolytomousModel.cpp \
 	src/model/parameter/OnePLACModel.cpp \
 	src/model/parameter/OnePLModel.cpp \
-	src/model/parameter/RaschModel.cpp \
 	src/model/parameter/ThreePLModel.cpp \
 	src/model/parameter/TwoPLModel.cpp \
 	src/optimizer/Optimizer.cpp \
@@ -39,4 +38,4 @@ desde_cero:
 	g++ $(CFLAGS) -I./src/ -o SICS $(SRC) src/main/Main.cpp
 
 debug:
-	g++ $(CFLAGS) -ggdb -I./src/ -o SICS_dbg $(SRC) src/main/Main.cpp
+	g++ $(CFLAGS) -ggdb -I./src/ -o SICS_dbg $(SRC) src/main/Main2.cpp
