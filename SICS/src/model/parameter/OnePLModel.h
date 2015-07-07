@@ -30,7 +30,10 @@ public:
 	inline static double successProbability(double, double);
 	double successProbability(double, double *);
 	static double logLikelihood(double*, double*, int, int);
+	static double itemLogLik (double*, double*, int, int);
 	static void gradient (double* , double* , int , int , double* );
+	static void NitemGradient (double* , double* , int , int , double* );
+	static void itemGradient (double*, double*, int, int, double*);
 	// Getters and Setters
 	double *** getParameterSet() ;
 	void setParameterSet(double***);

@@ -111,37 +111,22 @@ double ThreePLModel::getProbability(int node, int item) { return ((*probabilityM
 
 void ThreePLModel::NitemGradient(double* args, double* pars, int nargs, int npars, double* gradient)
 {
-	itemGradient(args,pars,nargs,npars,gradient);
-
  	double hh = 1e-08;
- 	int items = pars[1];
  	int* idx = new int[3];
- 	int index = pars[npars-1];
- 	int nA = 0;
  	
- 	nA = 0;
- 	nA += index;
-	idx[0] = nA;
-	nA += (items-index);
-	nA += index;
-	idx[1] = nA;
-	nA += (items-index);
-	nA += index;
-	idx[2] = nA;
- 	
- 	for(int i = 0 ; i < nargs; i++)
+	for(int i = 0 ; i < nargs; i++)
  	{
  		//Add hh to argument
- 		args[idx[i]] = args[idx[i]] + hh;
+ 		args[i] = args[i] + hh;
  		//Evaluate
- 		gradient[i] = itemLogLik(args,pars,nargs,npars);
+ 		gradient[i] = itemLogLik2(args,pars,nargs,npars);
  		//Remove hh to argument and evaluate
- 		args[idx[i]] = args[idx[i]] - hh;
- 		gradient[i] -= itemLogLik(args,pars,nargs,npars);
+ 		args[i] = args[i] - hh;
+ 		gradient[i] -= itemLogLik2(args,pars,nargs,npars);
  		//Substract
  		gradient[i] = gradient[i]/hh;
  	}
-
+ 	
  	delete[] idx;
 }
 
@@ -255,7 +240,6 @@ void ThreePLModel::itemGradient (double* args, double* pars, int nargs, int npar
 
 void ThreePLModel::itemGradient2 (double* args, double* pars, int nargs, int npars, double* gradient)
 {
-	int nA = 0;
 	int nP = 0;
 	int q, items;
 	double a, b, c;
@@ -296,18 +280,6 @@ void ThreePLModel::itemGradient2 (double* args, double* pars, int nargs, int npa
 		r[k] = pars[nP];
 		nP += (items-index); 
 	}
-
-	// Obtain a
-	nA += index;
-	a = args[nA];
-	nA += (items-index);
-	nA += index;
-	// Obtain b
-	b = args[nA];
-	nA += (items-index);
-	nA += index;
-	// Obtain c
-	c = args[nA];
 
 	a = args[0];
 	b = args[1];
@@ -573,58 +545,50 @@ double ThreePLModel::itemLogLik (double* args, double* pars, int nargs, int npar
 
 double ThreePLModel::itemLogLik2 (double* args, double* pars, int nargs, int npars)
 {
-	int nP = 0;
-	int q, items;
-	int index = 0;
 	double *theta, *r, *f;
-	double a, b, c;
-	double sum=0;
-	long double tp , tq;
+	unsigned int nP, q, items, index;
+	double a, b, c, sum;
+	//long double tp , tq;
+	double tp , tq;
+	sum = nP = index = 0;
 	
+	a = args[0];
+	b = args[1];
+	c = args[2];
+
+        q = pars[nP ++]; // q is obtained and npars is augmented
+        items = pars[nP ++];
 	index = pars[npars-1];
 	
-	// Obtain q
-	q = pars[nP ++]; // q is obtained and npars is augmented
-	
-	// Obtain I
-	items = pars[nP ++];
 	theta = new double[q];
 	r = new double[q];
 	f = new double[q];
 	
 	// Obtain theta
-	for (int k=0; k<q; k++)
+	for (unsigned int k=0; k<q; k++)
 		theta[k] = pars[nP ++];
 	
 	// Obtain f
-	for (int k=0; k<q; k++)
+	for (unsigned int k=0; k<q; k++)
 		f[k] = pars[nP ++];
 
 	// Obtain r that becomes a vector
-	for (int k=0; k<q; k++)
+	for (unsigned int k=0; k<q; k++)
 	{
 		nP += index;
 		r[k] = pars[nP];
 		nP += (items-index); 
 	}
-	
-	// Obtain a
-	a = args[0];
-	// Obtain b
-	b = args[1];
-	// Obtain c
-	c = args[2];
 
-	if(abs(a)>5)
+	if(abs(a) > 5)
 		a = 0.851;
-	double dd = 0;
-	dd = -b/a;
+	double dd = -b/a;
 	if(abs(dd)>5)
 		b = 0;
 	if(abs(c)>5)
-		c = 0.3;
+		c = 0.1;
 
-	for (int k = 0; k < q; ++k)
+	for (unsigned int k = 0; k < q; ++k)
 	{
 		tp = (ThreePLModel::successProbability ( theta[k], a,b,c));
 		
@@ -719,6 +683,8 @@ double ThreePLModel::logLikelihood (double* args, double* pars, int nargs, int n
 	delete[] a;
 	delete[] b;
 	delete[] c;
+	
+	cout << -sum << endl;
 	return (-sum);
 }
 

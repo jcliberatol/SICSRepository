@@ -141,13 +141,65 @@ double OnePLModel::logLikelihood(double* args, double* pars, int nargs, int npar
 
 	return (-sum);
 }
-/*
 
- void OnePLModel::Hessian(double* args, double* pars, int nargs, int npars,
- double* hessian) {
+double OnePLModel::itemLogLik (double* args, double* pars, int nargs, int npars)
+{
+	double *theta, *r, *f;
+	unsigned int nP, q, items, index;
+	double a, sum;
+	double tp , tq;
+	sum = nP = index = 0;
+	
+	a = args[0];
 
- }
- */
+        q = pars[nP ++]; // q is obtained and npars is augmented
+        items = pars[nP ++];
+	index = pars[npars-1];
+	
+	theta = new double[q];
+	r = new double[q];
+	f = new double[q];
+	
+	// Obtain theta
+	for (unsigned int k=0; k<q; k++)
+		theta[k] = pars[nP ++];
+	
+	// Obtain f
+	for (unsigned int k=0; k<q; k++)
+		f[k] = pars[nP ++];
+
+	// Obtain r that becomes a vector
+	for (unsigned int k=0; k<q; k++)
+	{
+		nP += index;
+		r[k] = pars[nP];
+		nP += (items-index); 
+	}
+
+	if(abs(a) > 5)
+		a = 0.851;
+
+	for (unsigned int k = 0; k < q; ++k)
+	{
+		tp = (OnePLModel::successProbability ( theta[k], a));
+		
+		if (tp<1e-08) tp=1e-08;
+		
+		tq = 1-tp;
+		
+		if (tq<1e-08) tq=1e-08;
+		
+		sum+=(r[k]*log(tp))+(f[k]-r[k])*log(tq);
+	}
+
+	args[0] = a;
+
+	delete[] theta;
+	delete[] f;
+	delete[] r;
+
+	return (-sum);
+}
 
 void OnePLModel::gradient(double* args, double* pars, int nargs, int npars, double* gradient)
 {
@@ -206,4 +258,88 @@ void OnePLModel::gradient(double* args, double* pars, int nargs, int npars, doub
 		gradient[i] = static_cast<double>(h[i]);
 	}
 	delete[] h;
+}
+
+void OnePLModel::itemGradient (double* args, double* pars, int nargs, int npars, double* gradient)
+{
+    double a;
+    double *theta, *r, *f;
+	int nP, q, items, index;
+	long double h;
+	long double *P;  // Matrix of size q*I
+	long double *factor;	  // Matrix of product (r-fP)W
+
+	nP = index = h = 0;
+	index = pars[npars-1];
+	
+	// Obtain q
+	q = pars[nP ++]; // q is obtained and npars is augmented
+	
+	// Obtain I
+	items = pars[nP ++];
+	theta = new double[q];
+	r = new double[q];
+	f = new double[q];
+	
+	// Obtain theta
+	for (int k=0; k<q; k++)
+		theta[k] = pars[nP ++];
+
+	// Obtain f
+	for (int k=0; k<q; k++)
+		f[k] = pars[nP ++];
+
+	// Obtain r that becomes a vector
+	for (int k=0; k<q; k++)
+	{
+		nP += index;
+		r[k] = pars[nP];
+		nP += (items-index); 
+	}
+
+	a = args[0];
+
+	P = new long double [q];
+	factor = new long double [q];
+	
+	for ( int k = 0; k < q; k++ )
+	{
+		P[k] = successProbability (theta[k], a);
+		factor[k] = ( r[k] - f[k]*P[k] );
+	}
+	
+	for ( int k = 0; k < q; k++ )
+		h += factor[k];
+
+	memset(gradient,0,sizeof(double));
+
+	delete [] P;
+	delete [] factor;
+
+	delete [] theta;
+	delete [] r;
+	delete [] f;
+
+	//return h as the gradient
+	gradient[0]= static_cast<double>(h);
+}
+
+void OnePLModel::NitemGradient (double* args, double* pars, int nargs, int npars, double* gradient)
+{
+ 	double hh = 1e-08;
+ 	
+	for(int i = 0 ; i < nargs; i++)
+ 	{
+ 		//Add hh to argument
+ 		args[i] = args[i] + hh;
+ 		//Evaluate
+ 		gradient[i] = itemLogLik(args,pars,nargs,npars);
+ 		//Remove hh to argument and evaluate
+ 		args[i] = args[i] - hh;
+ 		gradient[i] -= itemLogLik(args,pars,nargs,npars);
+ 		//Substract
+ 		gradient[i] = gradient[i]/hh;
+ 	}
+ 	
+ 	cout << "h → " << gradient[0] << endl;
 }

@@ -299,7 +299,6 @@ double TwoPLModel::logLikelihood(double* args, double* pars, int nargs, int npar
 
 void TwoPLModel::itemGradient (double* args, double* pars, int nargs, int npars, double* gradient)
 {
-	int nA = 0;
 	int nP = 0;
 	int q, items;
 	int index;
@@ -307,8 +306,8 @@ void TwoPLModel::itemGradient (double* args, double* pars, int nargs, int npars,
 	double *theta, *r, *f;
 	double a, b;
 	double D = Constant::NORM_CONST;
-	long double *h_0; // Block Matrix of size q*I. Each block-element has size of 1*3
-	long double *h; // Block vector of size I (i.e. I blocks). Each block-element has size of 1*3
+	long double *h_0; // Block Matrix of size q*I. Each block-element has size of 1*2
+	long double *h; // Block vector of size I (i.e. I blocks). Each block-element has size of 1*2
 	long double *P;  // Matrix of size q*I
 	long double *factor;	  // Matrix of product (r-fP)W
 
@@ -338,14 +337,6 @@ void TwoPLModel::itemGradient (double* args, double* pars, int nargs, int npars,
 		r[k] = pars[nP];
 		nP += (items-index);
 	}
-
-	// Obtain a
-	nA += index;
-	a = args[nA];
-	nA += (items-index);
-	nA += index;
-	// Obtain b
-	b = args[nA];
 
 	a = args[0];
 	b = args[1];
