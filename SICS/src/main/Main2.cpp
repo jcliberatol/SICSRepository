@@ -33,7 +33,6 @@ void oneRun(char * args)
     Matrix<double> *theta;
     Matrix<double> *weight;
     
-    model = new Model();
     modelFactory = new SICSGeneralModel();
     dataSet = new PatternMatrix(0);
     theta = new Matrix<double>(1, 41);
