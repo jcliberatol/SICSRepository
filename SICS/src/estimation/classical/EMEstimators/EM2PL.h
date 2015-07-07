@@ -54,7 +54,7 @@ public:
                 pset[1][0][i] = -(ppnd(result[0], &ifault)) / result[1];
             }
 
-            delete result;
+            delete [] result;
         }
     }
 

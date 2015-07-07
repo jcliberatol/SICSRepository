@@ -322,6 +322,8 @@ public:
         Tm = new double[pSize];
         Um = new double[pSize];
 
+	sdT = sdU = corr = PII = 0.0;
+	
         for (int i = 0; i < items; i++)
         {
             PII = mT = mU = mTU = mUU = 0.0;
@@ -347,7 +349,6 @@ public:
             mTU /= Ni;
             mUU /= Ni;
             covar = mTU - mU * mT;
-            sdT = sdU = 0.0;
 
             for (index = 0; index < size; index++)
             {

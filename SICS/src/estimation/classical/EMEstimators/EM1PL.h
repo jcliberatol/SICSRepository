@@ -44,6 +44,8 @@ public:
 			{
 				pset[0][0][i] = -(ppnd(result[0], &ifault)) / result[1];
 			}
+			
+			delete [] result;
 		}
 	}
 
@@ -61,8 +63,8 @@ public:
 		this->faux = new long double[q];
 		this->weights = this->nodes->getWeight();
 		this->items = data->countItems();
-		this->fptr = &OnePLModel::logLikelihood;
-		this->gptr = &OnePLModel::gradient;
+		this->fptr = &OnePLModel::itemLogLik;
+		this->gptr = &OnePLModel::itemGradient;
 		this->hptr = NULL;
 
 		this->bitset_list = data->getBitsetList();
