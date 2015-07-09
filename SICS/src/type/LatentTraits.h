@@ -26,7 +26,7 @@ public:
 		dim = dims;
 	}
 
-	virtual ~LatentTraits(){ /*delete traits;*/ };
+	virtual ~LatentTraits() { delete traits; };
 
 	void print()
 	{

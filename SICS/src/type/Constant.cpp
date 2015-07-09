@@ -24,3 +24,4 @@ int Constant::ITER = 0;
 int Constant::MAX_EM_ITERS = 200;
 bool Constant::CAPTURE_HESSIANA = true;
 string Constant::INITIAL_VALUE_METHOD = "ANDRADE";
+double * Constant::BOUNDS = new double[2] { -5, 5 };

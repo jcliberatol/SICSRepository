@@ -20,7 +20,6 @@
 #define _B 1][0][i
 #define _C 2][0][i
 #define _DELTA 0.0001220703
-#define _BOUNDS new double[2] { -5, 5 }
 
 class LatentTraitEstimation
 {
@@ -41,7 +40,9 @@ public:
 
     LatentTraitEstimation() {}
 
-    virtual ~LatentTraitEstimation() {}
+    LatentTraitEstimation(PatternMatrix * dataSet) { lt = new LatentTraits(dataSet); }
+
+    virtual ~LatentTraitEstimation() { delete lt; }
 
     inline double probabilities(bool * pattern, int size, int node)
     {
@@ -152,7 +153,7 @@ public:
 
         for (int index = 0; index < size; index++, ++counter)
             (*lt->traits)(counter, lt->dim - 1) =
-            Brent_fmin(_BOUNDS, _DELTA, &logL, pattern_list[index], lt->pm->size, counter, this->model, 1);
+            Brent_fmin(Constant::BOUNDS, _DELTA, &logL, pattern_list[index], lt->pm->size, counter, this->model, 1);
     }
 
     void estimateLatentTraitsMAP(double *** parSet)
@@ -163,7 +164,7 @@ public:
         int counter = 0;
 
         for (int index = 0; index < size; index++, ++counter)
-            (*lt->traits)(counter, lt->dim - 1) = Brent_fmin(_BOUNDS, _DELTA, &logLP, pattern_list[index],
+            (*lt->traits)(counter, lt->dim - 1) = Brent_fmin(Constant::BOUNDS, _DELTA, &logLP, pattern_list[index],
                 lt->pm->size, counter, this->model, parSet, 1);
     }
 
