@@ -70,23 +70,18 @@ void oneRun(char * args)
 	/*
 	 * Now we will run the estimation of individual parameter
 	 */
-	//first create the latenTrait objects
-	//LatentTraits * latentTraits;
-	//latentTraits = new LatentTraits(dataSet);
 	//Now create the estimation
-	//LatentTraitEstimation * lte = new LatentTraitEstimation();
+	LatentTraitEstimation lte(dataSet);
 	//Pass the model
-	//lte->setModel(model);
-	//Pass the latent traits
-	//lte->setLatentTraits(latentTraits);
+	lte.setModel(model);
 	//Pass the quadrature nodes
-	//lte->setQuadratureNodes(&nodes);
+	lte.setQuadratureNodes(&nodes);
 	//Ready to estimate
-	//lte->estimateLatentTraitsEAP();
-	//lte->estimateLatentTraitsMAP();
+	lte.estimateLatentTraitsEAP();
+	//lte.estimateLatentTraitsMAP();
 	//finished
 	//now read the latent traits but we will do this later
-	//lte->getLatentTraits()->print();
+	lte.getLatentTraits()->print();
 
 	//Matrix<double> data(dataSet->countIndividuals(), dataSet->countItems());
 	//input.importCSV(args, data, 1, 0);

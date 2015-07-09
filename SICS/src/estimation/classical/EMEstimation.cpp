@@ -120,7 +120,7 @@ void EMEstimation::estimate()
 	}
 
 	estimator->pm->untransform();
-	model->printParameterSet(cout);
+	//model->printParameterSet(cout);
 
 	delete [] (args_hist)[0];
 	delete [] (args_hist)[1];
