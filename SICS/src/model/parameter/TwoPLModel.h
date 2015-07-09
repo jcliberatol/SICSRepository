@@ -40,6 +40,8 @@ public:
 	static void itemgradient(double*, double*, int, int, double*);
 	static void itemGradient (double*, double*, int, int, double*);
 	static double itemLogLik (double*, double*, int, int);
+	virtual void transform() {}
+	virtual void untransform();
 
 	double *** getParameterSet();
 	double getProbability(int, int);

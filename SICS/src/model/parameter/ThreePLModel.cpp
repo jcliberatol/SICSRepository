@@ -13,7 +13,29 @@ ThreePLModel::ThreePLModel()
 	parameterSet = NULL;
 	probabilityMatrix = NULL;
 	nodes = NULL;
-} 
+}
+
+void ThreePLModel::transform()
+{
+	for (int i = 0; i < itemModel->countItems(); ++i)
+	{
+		double qc = parameterSet[2][0][i];
+		parameterSet[2][0][i] = log(qc / (1 - qc));
+	}
+}
+
+void ThreePLModel::untransform()
+{
+	for (int i = 0; i < itemModel->getDataset()->countItems(); ++i)
+	{
+		double qa = parameterSet[0][0][i];
+		double qb = parameterSet[1][0][i];
+		double qc = parameterSet[2][0][i];
+		double ec = exp(qc);
+		parameterSet[2][0][i] = ec / (1 + ec);
+		parameterSet[1][0][i] = -qb / qa; //Transformacion del B   d=-b/a
+	}
+}
 
 void ThreePLModel::setEstimationNodes(QuadratureNodes* n) { this->nodes = n; }
 

@@ -34,6 +34,8 @@ public:
 	static void gradient (double* , double* , int , int , double* );
 	static void NitemGradient (double* , double* , int , int , double* );
 	static void itemGradient (double*, double*, int, int, double*);
+	virtual void transform() {}
+	virtual void untransform() {}
 	// Getters and Setters
 	double *** getParameterSet() ;
 	void setParameterSet(double***);

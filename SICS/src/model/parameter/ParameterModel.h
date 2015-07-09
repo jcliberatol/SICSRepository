@@ -76,6 +76,11 @@ public:
 	virtual void successProbability(DimensionModel *, QuadratureNodes *) = 0;
 	virtual double successProbability(double, double*) = 0;
 
+	//Transforms the parameters before starting an estimation process
+    virtual void transform() = 0;
+    //Transforms back the parameters after estimating them
+    virtual void untransform() = 0;
+
 	// Getters and Setters
 	virtual double *** getParameterSet() = 0;
 	virtual void setParameterSet(double *** parameterSet) = 0;

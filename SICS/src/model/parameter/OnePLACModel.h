@@ -30,6 +30,8 @@ public:
 	void successProbability(DimensionModel *, QuadratureNodes *);
 	static double logLikelihood(double*, double*, int, int);
 	static void gradient(double*, double*, int, int, double*);
+	virtual void transform() {}
+	virtual void untransform() {}
 	// Getters and Setters
 	double *** getParameterSet();
 	void getParameters(double *);

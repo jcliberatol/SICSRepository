@@ -21,21 +21,9 @@ EMEstimation::EMEstimation()
 
 EMEstimation::~EMEstimation()
 {
-    if (estimator != NULL)
-    {
-        delete estimator;
-        estimator = NULL;
-    }
-    if (f != NULL)
-    {
-        delete f;
-        f = NULL;
-    }
-    if (r != NULL)
-    {
-        delete r;
-        r = NULL;
-    }
+    delete estimator;
+    delete f;
+    delete r;
 }
 
 /**
@@ -116,7 +104,7 @@ void EMEstimation::estimate()
 	(args_hist)[1] = new double[size];
 	(args_hist)[2] = new double[size];
 
-	estimator->transform();
+	estimator->pm->transform();
 
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < size; j++)
@@ -124,14 +112,14 @@ void EMEstimation::estimate()
 
 	for (;!(iterations++ > Constant::MAX_EM_ITERS || convergenceSignal);)
 	{
-		cout << iterations << endl;
+//		cout << iterations << endl;
 		estimator->stepE();
 		estimator->stepM(&args_hist, &nargs);
 		estimator->stepRamsay(&args_hist, &nargs, size, iterations > 5 && (iterations) % 3 == 0);
 		convergenceSignal = model->itemParametersEstimated;
 	}
 
-	estimator->untransform();
+	estimator->pm->untransform();
 	model->printParameterSet(cout);
 
 	delete [] (args_hist)[0];
