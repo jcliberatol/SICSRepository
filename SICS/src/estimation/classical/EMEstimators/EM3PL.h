@@ -16,30 +16,6 @@ class EM3PL: public EMEstimator
 
 public:
 
-	virtual void transform()
-	{
-		for (int i = 0; i < m->getItemModel()->countItems(); ++i)
-		{
-			double *** pset = m->getParameterModel()->getParameterSet();
-			double qc = pset[2][0][i];
-			pset[2][0][i] = log(qc / (1 - qc));
-		}
-	}
-
-	virtual void untransform()
-	{
-		for (int i = 0; i < m->getItemModel()->getDataset()->countItems(); ++i)
-		{
-			double *** pset = m->getParameterModel()->getParameterSet();
-			double qa = pset[0][0][i];
-			double qb = pset[1][0][i];
-			double qc = pset[2][0][i];
-			double ec = exp(qc);
-			pset[2][0][i] = ec / (1 + ec);
-			pset[1][0][i] = -qb / qa; //Transformacion del B   d=-b/a
-		}
-	}
-
 	virtual void setInitialValues(double *** npset, Model* m)
 	{
 		double *** pset = m->getParameterModel()->getParameterSet();
@@ -83,12 +59,14 @@ public:
 		{
 			double * result = Andrade();
 			int ifault;
+			
 			for (int i = 0; i < items; i++)
 			{
 				pset[0][0][i] = std::sqrt((result[1] * result[1]) / (1.0 - result[1] * result[1]));
 				pset[1][0][i] = -(ppnd(result[0], &ifault)) / result[1];
 				pset[2][0][i] = 0.2;
 			}
+
 			delete [] result;
 		}
 	}

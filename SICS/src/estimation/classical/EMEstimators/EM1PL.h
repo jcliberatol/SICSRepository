@@ -18,10 +18,6 @@ private:
 
 public:
 
-	virtual void transform() {}
-
-	virtual void untransform() {}
-
 	virtual void setInitialValues(double *** pset, Model* m) { m->getParameterModel()->setParameterSet(pset); }
 
 	virtual void setInitialValues(int method, Model* m)
@@ -40,11 +36,12 @@ public:
 		{
 			double * result = Andrade();
 			int ifault;
+			
 			for (int i = 0; i < items; i++)
 			{
 				pset[0][0][i] = -(ppnd(result[0], &ifault)) / result[1];
 			}
-			
+
 			delete [] result;
 		}
 	}

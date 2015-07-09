@@ -46,12 +46,6 @@ public:
 
     EMEstimator(Model* m, QuadratureNodes* nodes, Matrix<double>* f, Matrix<double>* r) {}
 
-    //Transforms the parameters before starting an estimation process
-    virtual void transform() = 0;
-
-    //Transforms back the parameters after estimating them
-    virtual void untransform() = 0;
-
     //Reduce iterations
     virtual void stepRamsay(double *** parameters, int * nargs, int t_size, bool continue_flag) = 0;
 
@@ -322,8 +316,6 @@ public:
         Tm = new double[pSize];
         Um = new double[pSize];
 
-	sdT = sdU = corr = PII = 0.0;
-	
         for (int i = 0; i < items; i++)
         {
             PII = mT = mU = mTU = mUU = 0.0;
@@ -349,6 +341,7 @@ public:
             mTU /= Ni;
             mUU /= Ni;
             covar = mTU - mU * mT;
+            sdT = sdU = 0.0;
 
             for (index = 0; index < size; index++)
             {

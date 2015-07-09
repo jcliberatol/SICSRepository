@@ -14,16 +14,6 @@ class EM2PL: public EMEstimator
 
 public:
 
-    virtual void transform() {}
-
-    virtual void untransform()
-    {
-        double *** pset = m->getParameterModel()->getParameterSet();
-
-        for (int i = 0; i < m->getItemModel()->getDataset()->countItems(); ++i)
-            pset[1][0][i] /= -pset[0][0][i];
-    }
-
     virtual void setInitialValues(double *** pset, Model* m) { m->getParameterModel()->setParameterSet(pset); }
 
     virtual void setInitialValues(int method, Model* m)
