@@ -89,6 +89,30 @@ public:
 
     void setModel(Model* m) { model = m; }
 
+    void estimateLatentTraitsEAP(double *** parSet)
+    {
+        bool ** list = lt->pm->getBitsetList();
+        int size = lt->pm->matrix.size();
+
+        int counter = 0;
+
+        for (int pattern = 0; pattern < size; pattern++, ++counter)
+        {
+            double sum_num = 0;
+            double sum_den = 0;
+
+            for (int i = 0; i < quadNodes->size(); ++i)
+            {
+                double pp = probabilities((*quadNodes->getTheta())(0, i), list[pattern], lt->pm->size, i, this->model, parSet);
+
+                sum_num += (*quadNodes->getTheta())(0, i) * ((*quadNodes->getWeight())(0, i)) * pp;
+                sum_den += (*quadNodes->getWeight())(0, i) * pp;
+            }
+
+            (*lt->traits)(counter, lt->dim - 1) = sum_num / sum_den;
+        }
+    }
+
     void estimateLatentTraitsEAP()
     {
         bool ** list = lt->pm->getBitsetList();

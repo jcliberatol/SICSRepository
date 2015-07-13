@@ -26,6 +26,29 @@ public:
 		dim = dims;
 	}
 
+	double ** getListPatternTheta()
+	{
+		double ** result;
+		bool ** pattern_list;
+		int items;
+
+		pattern_list = pm->getBitsetList();
+		result = new double*[pm->matrix.size()];
+		items = pm->countItems();
+
+		for(unsigned int i = 0; i < pm->matrix.size(); i++)
+		{
+			result[i] = new double[items + 1];
+
+			for(int j = 0; j < items; j++)
+				result[i][j] = pattern_list[i][j];
+			
+			result[i][items] = (*traits)(i,0);
+		}
+
+		return result;
+	}
+
 	virtual ~LatentTraits() { delete traits; };
 
 	void print()
