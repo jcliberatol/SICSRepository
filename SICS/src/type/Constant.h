@@ -42,7 +42,6 @@ public:
 	static bool CAPTURE_HESSIANA;
 	static double EPSILONC;
 	static double LOGLIKO;
-	static double * BOUNDS;
 };
 
 #endif /* CONSTANT_H_ */

@@ -20,8 +20,8 @@
  * of the input parameters
  * */
 int static bfgs(double (*&fntomin)(double*, double*, int, int),
-		void (*&gradient)(double*, double*, int, int, double*), double * args,
-		double * pars, int nvars, int npars, int maxiter)
+		void (*&gradient)(double*, double*, int, int, double*),
+		double * args, double * pars, int nvars, int npars, int maxiter)
 {
 	/*
 	 //call of function
