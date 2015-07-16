@@ -38,36 +38,17 @@ public:
 			int ifault;
 			
 			for (int i = 0; i < items; i++)
-			{
 				pset[0][0][i] = -(ppnd(result[0], &ifault)) / result[1];
-			}
 
 			delete [] result;
 		}
 	}
 
-	EM1PL(Model* m, QuadratureNodes* nodes, Matrix<double>* f, Matrix<double>* r)
+	EM1PL(Model* m, QuadratureNodes* nodes, Matrix<double>* f, Matrix<double>* r) : EMEstimator(m, nodes, f, r)
 	{
-		this->nodes = nodes;
-		this->m = m;
-		this->f = f;
-		this->r = r;
-		this->dims = 1;
-		this->sum = 0.0;
-		this->data = m->getItemModel()->getDataset();
-		this->pm = m->getParameterModel();
-		this->q = this->nodes->size();
-		this->faux = new long double[q];
-		this->weights = this->nodes->getWeight();
-		this->items = data->countItems();
 		this->fptr = &OnePLModel::itemLogLik;
-		this->gptr = &OnePLModel::itemGradient;
-		this->hptr = NULL;
-
-		this->bitset_list = data->getBitsetList();
-		this->frequency_list = data->getFrequencyList();
-
-		this->size = data->matrix.size();
+        this->gptr = &OnePLModel::itemGradient;
+		this->dims = 1;
 	}
 
 	virtual void stepRamsay(double *** parameters, int * nargs, int t_size, bool continue_flag)

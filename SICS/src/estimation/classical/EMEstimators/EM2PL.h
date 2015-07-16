@@ -48,28 +48,11 @@ public:
         }
     }
 
-    EM2PL(Model* m, QuadratureNodes* nodes, Matrix<double>* f, Matrix<double>* r)
+    EM2PL(Model* m, QuadratureNodes* nodes, Matrix<double>* f, Matrix<double>* r) : EMEstimator(m, nodes, f, r)
     {
-        this->nodes = nodes;
-        this->m = m;
-        this->f = f;
-        this->r = r;
-        this->dims = 2;
-        this->sum = 0.0;
-        this->data = m->getItemModel()->getDataset();
-        this->pm = m->getParameterModel();
-        this->q = this->nodes->size();
-        this->faux = new long double[q];
-        this->weights = this->nodes->getWeight();
-        this->items = data->countItems();
         this->fptr = &TwoPLModel::itemLogLik;
         this->gptr = &TwoPLModel::itemGradient;
-        this->hptr = NULL;
-
-        this->bitset_list = data->getBitsetList();
-        this->frequency_list = data->getFrequencyList();
-
-        this->size = data->matrix.size();
+        this->dims = 2;
     }
 
     virtual void stepRamsay(double *** parameters, int * nargs, int t_size, bool continue_flag)

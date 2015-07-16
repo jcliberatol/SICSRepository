@@ -44,7 +44,26 @@ public:
 
     EMEstimator() {}
 
-    EMEstimator(Model* m, QuadratureNodes* nodes, Matrix<double>* f, Matrix<double>* r) {}
+    EMEstimator(Model* m, QuadratureNodes* nodes, Matrix<double>* f, Matrix<double>* r)
+    {
+        this->nodes = nodes;
+        this->m = m;
+        this->f = f;
+        this->r = r;
+        this->sum = 0.0;
+        this->data = m->getItemModel()->getDataset();
+        this->pm = m->getParameterModel();
+        this->q = this->nodes->size();
+        this->faux = new long double[q];
+        this->weights = this->nodes->getWeight();
+        this->items = data->countItems();
+        this->hptr = NULL;
+
+        this->bitset_list = data->getBitsetList();
+        this->frequency_list = data->getFrequencyList();
+
+        this->size = data->matrix.size();
+    }
 
     //Reduce iterations
     virtual void stepRamsay(double *** parameters, int * nargs, int t_size, bool continue_flag) = 0;
@@ -89,7 +108,8 @@ public:
                     {
                         counter_temp[counter_set++] = i + 1;
                         prob = prob_matrix[k][i];
-                    } else 
+                    }
+                    else 
                         prob = 1 - prob_matrix[k][i];
 
                     faux[k] *= prob;
@@ -113,23 +133,19 @@ public:
     //Step M also needs the model, quad nodes, f and r
     void stepM(double *** parameters, int * nargs)
     {
+        int par_index[dims];
         Optimizer optim;
         Matrix<double> ** tri;
         Matrix<double> * thetas;
         double *** pset;
-        double * args;
-        double * pars;
+        double * args, * pars, * iargs;
 
-        int It;
-        int q;
-        int npars;
-        int nA;
-        int nP;
-        int for_counter;
+        int It, q, npars, nA, nP, for_counter;
 
         *nargs = dims;
         It = m->getItemModel()->getDataset()->countItems();
         q = nodes->size();
+        iargs = new double[dims];
         args = new double[dims * It];
         pars = new double[2 + 2 * q + q * It + 1]; 
         npars = 2 + 2 * q + q * It;
@@ -180,11 +196,7 @@ public:
 
         for (int i = 0; i < It; i++)
         {
-            double* iargs;
-            int par_index[dims];
-            
             pars[npars - 1] = i;
-            iargs = new double[dims];
 
             for(for_counter = 0; for_counter < dims; for_counter++)
             {
@@ -209,8 +221,6 @@ public:
 
             for(for_counter = 0; for_counter < dims; for_counter++)
                 args[par_index[for_counter]] = iargs[for_counter];
-
-            delete [] iargs;
         }
 
         std::copy(&((*parameters)[1][0]), (&((*parameters)[1][0])) + *nargs, &((*parameters)[0][0]));
@@ -231,20 +241,22 @@ public:
 
         // Obtain b
         if(dims > 1)
-        for (int i = 0; i < It; i++)
         {
-            pset[1][0][i] = args[nA++];
-            if (fabs(-pset[1][0][i] / pset[0][0][i]) > abs(5))
-                pset[1][0][i] = 0;
-        }
+            for (int i = 0; i < It; i++)
+            {
+                pset[1][0][i] = args[nA++];
+                if (fabs(-pset[1][0][i] / pset[0][0][i]) > abs(5))
+                    pset[1][0][i] = 0;
+            }
 
-        // Obtain c
-        if(dims > 2)
-        for (int i = 0; i < It; i++)
-        {
-            pset[2][0][i] = args[nA++];
-            if (fabs(pset[2][0][i]) > abs(20))
-                pset[2][0][i] = 0.5;
+            // Obtain c
+            if(dims > 2)
+                for (int i = 0; i < It; i++)
+                {
+                    pset[2][0][i] = args[nA++];
+                    if (fabs(pset[2][0][i]) > abs(20))
+                        pset[2][0][i] = 0.5;
+                }
         }
 
         //Obtain the deltas
@@ -258,17 +270,17 @@ public:
                 if (fabs(tri[j]->getIndex(0, v1)) > maxDelta)
                     maxDelta = fabs(tri[j]->getIndex(0, v1));
         }
+        
         //TODO change by constant file
         Constant::EPSILONC = maxDelta;
         if (maxDelta < Constant::CONVERGENCE_DELTA)
-        {
             m->itemParametersEstimated = true;
-        }
 
         //And set the parameter sets
         double *** parSet = m->getParameterModel()->getParameterSet();
         for(int i = 0; i < dims; i++)
             parSet[i] = pset[i];
+
         // llenar las tres matrices
         m->getParameterModel()->setParameterSet(parSet);
 
@@ -276,6 +288,7 @@ public:
             delete tri[i];
 
         delete [] tri;
+        delete [] iargs;
         delete [] args;
         delete [] pars;
     }
@@ -284,25 +297,10 @@ public:
     double * Andrade()
     {
         PatternMatrix* data;
-        int pSize;
-        int index;
-        double Ni;
-        double frequencyV;
-        double PII;
-        double corr;
-        double mT;
-        double mU;
-        double mTU;
-        double mUU;
-        double covar;
-        double sdU;
-        double sdT;
-        double *T;
-        double *U;
-        double *TU;
-        double *UU;
-        double *Tm;
-        double *Um;
+        int pSize, index;
+        double Ni, frequencyV, PII, corr, mT;
+        double sdT, sdU, covar, mUU, mTU, mU;
+        double *T, *U, *TU, *UU, *Tm, *Um;
         double *result;
 
         data = m->getItemModel()->getDataset();
@@ -315,6 +313,8 @@ public:
         UU = new double[pSize];
         Tm = new double[pSize];
         Um = new double[pSize];
+
+        PII = corr = 0;
 
         for (int i = 0; i < items; i++)
         {

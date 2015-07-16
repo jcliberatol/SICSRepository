@@ -29,10 +29,7 @@ public:
 	inline void successProbability(DimensionModel *, QuadratureNodes *);
 	inline static double successProbability(double, double);
 	double successProbability(double, double *);
-	static double logLikelihood(double*, double*, int, int);
 	static double itemLogLik (double*, double*, int, int);
-	static void gradient (double* , double* , int , int , double* );
-	static void NitemGradient (double* , double* , int , int , double* );
 	static void itemGradient (double*, double*, int, int, double*);
 	virtual void transform() {}
 	virtual void untransform() {}

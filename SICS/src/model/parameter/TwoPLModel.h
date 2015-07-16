@@ -29,15 +29,7 @@ public:
 	inline void successProbability(DimensionModel *, QuadratureNodes *);
 	inline static double successProbability(double , double , double );
 	double successProbability(double, double*);
-	static double logLikelihood(double*, double*, int, int);
 	static double patternProbability();
-	static void gradientAux(long double, long double, long double * );
-	static void gradient(double*, double*, int, int, double*);
-	static void Ngradient(double* , double*, int, int, double*);
-	static void Hessian(double*, double*, int, int, double*);
-	static void NHessian(double*, double*, int, int, double*);
-	static void itemHessian(double*, double*, int, int, double*);
-	static void itemgradient(double*, double*, int, int, double*);
 	static void itemGradient (double*, double*, int, int, double*);
 	static double itemLogLik (double*, double*, int, int);
 	virtual void transform() {}
