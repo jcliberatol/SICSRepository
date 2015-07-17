@@ -17,10 +17,10 @@ ParameterModel* SICSGeneralModel::createParameterModel(int model)
 	if (model == Constant::TWO_PL)
 		return (new TwoPLModel());
 
-	if (model == Constant::RASCH_A1)
+	if (model == Constant::ONE_PL)
 		return (new OnePLModel());
 
-	if (model == Constant::RASCH_A_CONSTANT)
+	if (model == Constant::RASCH)
 		return (new OnePLACModel());
 	
 	return (new ThreePLModel());

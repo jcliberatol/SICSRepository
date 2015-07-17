@@ -78,17 +78,7 @@ inline double TwoPLModel::successProbability(double theta, double a, double d)
 	return (1 / (1 + exp(-exponential)));
 }
 
-inline double TwoPLModel::successProbability(double theta, double * zita)
-{
-	long double exponential = (Constant::D_CONST * ((zita[0] * theta) + zita[1]));
-
-	if (exponential > Constant::MAX_EXP)
-		exponential = Constant::MAX_EXP;
-	else if (exponential < -(Constant::MAX_EXP)) 
-		exponential = -Constant::MAX_EXP;
-
-	return (1 / (1 + exp(-exponential)));
-}
+inline double TwoPLModel::successProbability(double theta, double * zita) { return successProbability(theta, zita[0], zita[1]); }
 
 double *** TwoPLModel::getParameterSet() { return (this->parameterSet); }
 
@@ -111,6 +101,7 @@ void TwoPLModel::itemGradient (double* args, double* pars, int nargs, int npars,
 	D = Constant::NORM_CONST;
 	a = args[0];
 	b = args[1];
+        
 	q = pars[nP ++];
 	items = pars[nP ++];
 	theta = new double[q];

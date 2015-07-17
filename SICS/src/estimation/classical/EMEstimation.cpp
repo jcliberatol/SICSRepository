@@ -48,7 +48,7 @@ void EMEstimation::setModel(Model * model)
 		return;
 	}
 
-	if (this->model->Modeltype() == Constant::RASCH_A1)
+	if (this->model->Modeltype() == Constant::ONE_PL)
 	{
 		estimator = new EM1PL(this->model, quadNodes, f, r);
 		return;
@@ -60,7 +60,7 @@ void EMEstimation::setModel(Model * model)
 		return;
 	}
 
-	if (this->model->Modeltype() == Constant::RASCH_A_CONSTANT)
+	if (this->model->Modeltype() == Constant::RASCH)
 	{
 		estimator = new EM1PLAC(this->model, quadNodes, f, r);
 		return;
