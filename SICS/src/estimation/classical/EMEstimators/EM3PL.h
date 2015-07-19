@@ -36,13 +36,6 @@ public:
 
 		pset = m->getParameterModel()->getParameterSet();
 
-		for (int i = 0; i < items; i++)
-		{
-			pset[0][0][i] = 0;
-			pset[1][0][i] = 0;
-			pset[2][0][i] = 0;
-		}
-
 		if (method == Constant::RANDOM)
 		{
 			std::srand(std::time(0));
@@ -75,7 +68,7 @@ public:
     {
         this->fptr = &ThreePLModel::itemLogLik;
         this->gptr = &ThreePLModel::itemGradient;
-        this->dims = 2;
+        this->dims = 3;
     }
 
 	virtual void stepRamsay(double *** parameters, int * nargs, int t_size, bool continue_flag)
