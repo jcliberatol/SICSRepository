@@ -19,7 +19,7 @@ class ClassicalEstimation : public Estimation
 public:
 	ClassicalEstimation (){}
 
-	virtual void estimate () = 0;/** Estimation method for the item parameters , after executed, the item parameters must be equal to the best parameters for the item according to the model*/
+	virtual void ** estimate () = 0;/** Estimation method for the item parameters , after executed, the item parameters must be equal to the best parameters for the item according to the model*/
 	virtual void setModel ( Model * ) = 0;/** Sets the model for the classical estimation to use.*/
 
 	virtual ~ClassicalEstimation(){}

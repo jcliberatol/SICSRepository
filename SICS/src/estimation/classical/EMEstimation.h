@@ -44,10 +44,9 @@ public:
 	 */
 	EMEstimation();
 
-
 	virtual ~EMEstimation();
 	//Executes the estimation
-	void estimate();
+	void ** estimate();
 	//Starts the E Step
 	void stepE();
 	//Starts the M Step

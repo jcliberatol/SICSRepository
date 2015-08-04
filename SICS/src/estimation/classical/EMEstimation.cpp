@@ -90,11 +90,15 @@ void EMEstimation::setInitialValues(int method) { estimator->setInitialValues(me
  * TODO : read maxiterations as a input parameter , idea : calculate the max iterations depending on the items
  * TODO : Output last estimation onto the json for recovery in the program.
  */
-void EMEstimation::estimate()
+void ** EMEstimation::estimate()
 {
 	double ** args_hist;
 	int nargs;
 	int size;
+
+	// [1] -> iterations
+	// [2] -> convergenceSignal
+	void ** return_list = new void*[2];
 
 	iterations = 0;
 	size = 3 * model->getItemModel()->getDataset()->countItems();
@@ -112,12 +116,15 @@ void EMEstimation::estimate()
 
 	for (;!(iterations++ > Constant::MAX_EM_ITERS || convergenceSignal);)
 	{
-//		cout << iterations << endl;
+    //    cout << iterations << endl;
 		estimator->stepE();
 		estimator->stepM(&args_hist, &nargs);
 		estimator->stepRamsay(&args_hist, &nargs, size, iterations > 5 && (iterations) % 3 == 0);
 		convergenceSignal = model->itemParametersEstimated;
 	}
+
+	return_list[0] = new int(iterations);
+	return_list[1] = new bool(convergenceSignal);
 
 	estimator->pm->untransform();
 	//model->printParameterSet(cout);
@@ -126,6 +133,8 @@ void EMEstimation::estimate()
 	delete [] (args_hist)[1];
 	delete [] (args_hist)[2];
 	delete [] (args_hist);
+
+	return return_list;
 }
 
 /**Returns the iterations that took the estimation to obtain an answer*/

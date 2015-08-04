@@ -25,7 +25,7 @@ protected:
 public:
 
 	Estimation() {}
-	virtual void estimate () = 0;
+	virtual void ** estimate () = 0;
 	virtual void setModel ( Model * ) = 0;
 
 	// Destructor
