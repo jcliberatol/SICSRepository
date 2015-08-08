@@ -10,8 +10,6 @@
 
 enum variables { v, w, x, u, fv, fw, fx, fu };
 
-const double * default_interval = new double[2] { -5, 5 };
-
 double static Brent_fmin(double * interval, double tol,
                          double (*function)(double, vector<char>, int, Model*),
                          vector<char> pattern, int node, Model *model, int maxIters)
