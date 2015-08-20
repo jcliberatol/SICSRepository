@@ -102,14 +102,14 @@ public:
                 //Calculate the p (iterate over the items in the productory)
                 counter_set = 0;
 
-                for (i = 0; i < items; i++) 
+                for (i = 0; i < items; i++)
                 {
                     if (bitset_list[index][i])
                     {
                         counter_temp[counter_set++] = i + 1;
                         prob = prob_matrix[k][i];
                     }
-                    else 
+                    else
                         prob = 1 - prob_matrix[k][i];
 
                     faux[k] *= prob;
@@ -147,15 +147,15 @@ public:
         q = nodes->size();
         iargs = new double[dims];
         args = new double[dims * It];
-        pars = new double[2 + 2 * q + q * It + 1]; 
+        pars = new double[2 + 2 * q + q * It + 1];
         npars = 2 + 2 * q + q * It;
-        
+
         //filling args
         nA = 0;
         pset = m->getParameterModel()->getParameterSet();
 
         tri = new Matrix<double>*[dims];
-        
+
         for(int i = 0; i < dims; i++)
             tri[i] = new Matrix<double>(pset[i], 1, items);
 
@@ -165,7 +165,7 @@ public:
 
         //Filling pars
         nP = 0;
-        
+
         // Obtain q
         pars[nP] = q;
         nP++;
@@ -178,11 +178,11 @@ public:
         thetas = nodes->getTheta();
         for (int k = 0; k < q; k++, nP++)
             pars[nP] = (*thetas)(0, k);
-        
+
         // Obtain f
         for (int k = 0; k < q; k++, nP++)
             pars[nP] = (*f)(0, k);
-        
+
         // Obtain r
         for (int k = 0; k < q; k++)
             for (int i = 0; i < It; i++, nP++)
@@ -203,6 +203,9 @@ public:
                 par_index[for_counter] = i + (i*for_counter) + (for_counter*(items - i));
                 iargs[for_counter] = args[par_index[for_counter]];
             }
+
+            if(iargs[0]<0)
+              iargs[0] = 0.851;
 
             if(abs(iargs[0]) > 5)
                 iargs[0] = 0.851;
@@ -270,7 +273,7 @@ public:
                 if (fabs(tri[j]->getIndex(0, v1)) > maxDelta)
                     maxDelta = fabs(tri[j]->getIndex(0, v1));
         }
-        
+
         //TODO change by constant file
         Constant::EPSILONC = maxDelta;
         if (maxDelta < Constant::CONVERGENCE_DELTA)
