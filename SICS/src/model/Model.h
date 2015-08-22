@@ -30,6 +30,8 @@ class Model
 	ItemModel *itemModel;
 	DimensionModel *dimensionModel;
 	int type;
+	//holds if the estimation has been completed.
+	bool itemParametersEstimated;
 
 	// Constructor
 	Model();
@@ -47,8 +49,6 @@ class Model
 	
 	ParameterModel* getParameterModel();
 	void setParameterModel(ParameterModel* parameterModel);
-	//holds if the estimation has been completed.
-	bool itemParametersEstimated;
 
 	void printParameterSet(ostream&);
 

@@ -92,7 +92,7 @@ public:
 	// Destructor
 	virtual ~ParameterModel()
 	{
-		delete probabilityMatrix;
+		//delete probabilityMatrix;
 		
 		if (typeid(*itemModel) == typeid(DichotomousModel))
 		{

@@ -98,7 +98,7 @@ void ** EMEstimation::estimate()
 
 	// [1] -> iterations
 	// [2] -> convergenceSignal
-	void ** return_list = new void*[2];
+	void ** return_list = new void*[3];
 
 	iterations = 0;
 	size = 3 * model->getItemModel()->getDataset()->countItems();
@@ -125,6 +125,7 @@ void ** EMEstimation::estimate()
 
 	return_list[0] = new int(iterations);
 	return_list[1] = new bool(convergenceSignal);
+	return_list[2] = model->parameterModel->probabilityMatrix;
 
 	estimator->pm->untransform();
 	//model->printParameterSet(cout);
