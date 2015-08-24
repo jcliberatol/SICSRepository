@@ -36,5 +36,5 @@ $(SRC_DIR)/%.o: $(SRC_DIR)/%.cpp
 lib$(LIBRARY).a : $(OBJS)
 	ar rsv $@ $^
 
-#clean:
-#	$(RM) *.o *.a
+clean:
+	$(RM) $(OBJS)
