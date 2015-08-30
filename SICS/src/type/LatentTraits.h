@@ -51,9 +51,8 @@ public:
 
     void deleteListPatternTheta(double ** p)
     {
-        for(int i = 0; i < 10; i++) delete [] p[i];
+        for(int i = 0; i < pm->matrix.size(); i++) delete [] p[i];
         delete [] p;
-
     }
 
     virtual ~LatentTraits() { delete traits; };
