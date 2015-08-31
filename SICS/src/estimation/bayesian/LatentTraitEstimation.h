@@ -183,11 +183,7 @@ public:
                 lt->pm->size, counter, this->model, parSet, 1);
     }
 
-    void setQuadratureNodes(QuadratureNodes *nodes)
-    {
-        quadNodes = nodes;
-        model->successProbability(quadNodes);
-    }
+    void setQuadratureNodes(QuadratureNodes *nodes) { quadNodes = nodes; }
 };
 
 #endif /* LATENTTRAITESTIMATION_H_ */
