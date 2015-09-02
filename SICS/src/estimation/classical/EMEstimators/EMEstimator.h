@@ -75,7 +75,6 @@ public:
     //Step E needs the model , the f and r, and the thetas, besides from the data.
     void stepE()
     {
-        double prob;
         double prob_matrix[q][(int) items];
         int k, i;
         int counter_temp[items];
@@ -107,12 +106,10 @@ public:
                     if (bitset_list[index][i])
                     {
                         counter_temp[counter_set++] = i + 1;
-                        prob = prob_matrix[k][i];
+                        faux[k] *= prob_matrix[k][i];
                     }
                     else
-                        prob = 1 - prob_matrix[k][i];
-
-                    faux[k] *= prob;
+                        faux[k] *= 1 - prob_matrix[k][i];
                 }
                 //At this point the productory is calculated and faux[k] is equivalent to p(u_j,theta_k)
                 //Now multiply by the weight
