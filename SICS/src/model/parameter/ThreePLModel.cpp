@@ -17,7 +17,7 @@ ThreePLModel::ThreePLModel()
 
 void ThreePLModel::transform()
 {
-	for (int i = 0; i < itemModel->countItems(); ++i)
+	for (unsigned int i = 0; i < itemModel->countItems(); ++i)
 	{
 		double qc = parameterSet[2][0][i];
 		parameterSet[2][0][i] = log(qc / (1 - qc));
@@ -26,7 +26,7 @@ void ThreePLModel::transform()
 
 void ThreePLModel::untransform()
 {
-	for (int i = 0; i < itemModel->getDataset()->countItems(); ++i)
+	for (unsigned int i = 0; i < itemModel->getDataset()->countItems(); ++i)
 	{
 		double qa = parameterSet[0][0][i];
 		double qb = parameterSet[1][0][i];
@@ -41,7 +41,7 @@ void ThreePLModel::setEstimationNodes(QuadratureNodes* n) { this->nodes = n; }
 
 void ThreePLModel::successProbability(DimensionModel *dimensionModel, QuadratureNodes * quadNodes)
 {
-	int q = 0;
+	unsigned int q = 0;
 	double a_d, d_d, c_d, theta_d; // d stands from "double"
 
 	if ( dimensionModel != NULL )
@@ -53,9 +53,9 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel, Quadrature
 			//Creates the matrix if it is not already created
 			probabilityMatrix = new Matrix<double>(q,items);
 
-		for (int k = 0; k < q; k++)
+		for (unsigned int k = 0; k < q; k++)
 		{
-			for ( int i = 0; i < items; i++ )
+			for (unsigned int i = 0; i < items; i++ )
 			{
 				// 3PL Success Probability Function
 				theta_d = (*quadNodes->getTheta())(0,k);
@@ -93,25 +93,25 @@ double ThreePLModel::successProbability(double theta, double * zita) { return su
 
 void ThreePLModel::getParameters(double * parameters)
 {
-	int i = 0;
+	unsigned int i = 0;
 
-	for (int j = 0; j < items; j++)
+	for (unsigned int j = 0; j < items; j++)
 		parameters[i++] = parameterSet[0][0][j];
-	for (int j = 0; j < items; j++)
+	for (unsigned int j = 0; j < items; j++)
 		parameters[i++] = parameterSet[1][0][j];
-	for (int j = 0; j < items; j++)
+	for (unsigned int j = 0; j < items; j++)
 		parameters[i++] = parameterSet[2][0][j];
 }
 
 void ThreePLModel::setParameters(double * parameters)
 {
-	int i = 0;
-
-	for (int j = 0; j < items; j++)
+	unsigned int i = 0;
+	
+	for (unsigned int j = 0; j < items; j++)
 		this->parameterSet[0][0][j] = parameters[i++];
-	for (int j = 0; j < items; j++)
+	for (unsigned int j = 0; j < items; j++)
 		this->parameterSet[1][0][j] = parameters[i++];
-	for (int j = 0; j < items; j++)
+	for (unsigned int j = 0; j < items; j++)
 		this->parameterSet[2][0][j] = parameters[i++];
 }
 
@@ -292,7 +292,7 @@ void ThreePLModel::printParameterSet(ostream& out)
 {
 	out << "\"a\" \"b\" \"c\"" << endl;
 
-	for (int i = 0; i < items; i++)
+	for (unsigned int i = 0; i < items; i++)
 		out << parameterSet[0][0][i] << " "
 		    << parameterSet[1][0][i] << " "
 		    << parameterSet[2][0][i] << endl;

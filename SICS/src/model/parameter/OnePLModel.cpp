@@ -15,7 +15,7 @@ OnePLModel::OnePLModel()
 
 inline void OnePLModel::successProbability(DimensionModel *dimensionModel, QuadratureNodes * quadNodes)
 {
-    int q = 0;
+    unsigned int q = 0;
 
     if (dimensionModel != NULL)
         q = quadNodes->size();
@@ -26,8 +26,8 @@ inline void OnePLModel::successProbability(DimensionModel *dimensionModel, Quadr
             //Creates the matrix if it is not already created
             probabilityMatrix = new Matrix<double>(q, items);
 
-        for (int k = 0; k < q; k++)
-            for (int i = 0; i < items; i++)
+        for (unsigned int k = 0; k < q; k++)
+            for (unsigned int i = 0; i < items; i++)
                 // Rasch Success Probability Function
                 (*probabilityMatrix)(k, i) = successProbability((*quadNodes->getTheta())(0, k), (parameterSet[0][0][i]));
     }
@@ -53,15 +53,15 @@ double*** OnePLModel::getParameterSet() { return (this->parameterSet); }
 
 void OnePLModel::getParameters(double * parameters)
 {
-    for(int i = 0; i < items; i++)
+    for(unsigned int i = 0; i < items; i++)
         parameters[i] = 1;
-    for(int i = items; i < 2*items; i++)
+    for(unsigned int i = items; i < 2*items; i++)
         parameters[i] = parameterSet[0][0][i - items];
 }
 
 void OnePLModel::setParameters(double * parameters)
 {
-    for (int i = 0; i < items; i++)
+    for (unsigned int i = 0; i < items; i++)
         this->parameterSet[0][0][i] = parameters[i];
 }
 
@@ -71,7 +71,7 @@ void OnePLModel::printParameterSet(ostream& out)
 {
     out << "\"a\" \"b\" \"c\"" << "\n";
 
-    for (int k = 0; k < items; k++)
+    for (unsigned int k = 0; k < items; k++)
         out << 1 << " " << (parameterSet[0][0][k]) << " " << 0 << "\n";
 }
 

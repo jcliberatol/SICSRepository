@@ -12,7 +12,7 @@ void OnePLACModel::setEstimationNodes(QuadratureNodes* n) { this->nodes = n; }
 
 void OnePLACModel::successProbability(DimensionModel *dimensionModel, QuadratureNodes * quadNodes)
 {
-	int q = 0;
+	unsigned int q = 0;
 	double a_d, d_d, theta_d; // d stands from "double"
 
 	if (dimensionModel != NULL)
@@ -26,9 +26,9 @@ void OnePLACModel::successProbability(DimensionModel *dimensionModel, Quadrature
 
 		a_d = parameterSet[0][0][0];
 
-		for (int k = 0; k < q; k++)
+		for (unsigned int k = 0; k < q; k++)
 		{
-			for (int i = 0; i < items; i++)
+			for (unsigned int i = 0; i < items; i++)
 			{
 				theta_d = (*quadNodes->getTheta())(0, k);
 				d_d = parameterSet[1][0][i];
@@ -44,7 +44,7 @@ void OnePLACModel::getParameters(double * parameters)
 {
 	parameters[0] = parameterSet[0][0][0];
 
-	for ( int i = 0; i < items; i++ )
+	for (unsigned  int i = 0; i < items; i++ )
 		parameters[i+1] = parameterSet[1][0][i];
 }
 
@@ -52,7 +52,7 @@ void OnePLACModel::setParameters(double * parameters)
 {
 	this->parameterSet[0][0][0] = parameters[0];
 
-	for ( int i = 0; i < items; i++ )
+	for (unsigned  int i = 0; i < items; i++ )
 		 this->parameterSet[1][0][i] = parameters[i+1];
 }
 
@@ -234,7 +234,7 @@ void OnePLACModel::printParameterSet(ostream& out)
 {
 	out << "\"a\" \"b\" \"c\"" << endl;
 
-	for (int _i = 0; _i < items; _i++)
+	for (unsigned int _i = 0; _i < items; _i++)
 		out << parameterSet[0][0][0] <<
 		" " << parameterSet[1][0][_i] <<
 		" 0.25" << endl;

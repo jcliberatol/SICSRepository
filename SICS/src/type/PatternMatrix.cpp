@@ -38,14 +38,14 @@ PatternMatrix::~PatternMatrix()
     }
 }
 
-int PatternMatrix::countItems() const { return ((matrix.empty()) ? 0 : size); }
+unsigned int PatternMatrix::countItems() const { return ((matrix.empty()) ? 0 : size); }
 
 int PatternMatrix::freq(vector<char> bitset) { return (matrix[bitset]); }
 
-int PatternMatrix::countIndividuals() const
+unsigned int PatternMatrix::countIndividuals() const
 {
     map<vector<char>, int>::const_iterator it;
-    int counter = 0;
+    unsigned int counter = 0;
 
     for (it = matrix.begin(); it != matrix.end(); ++it)
         counter += it->second;
@@ -63,9 +63,9 @@ void PatternMatrix::print()
 {
     for (iterator = matrix.begin(); iterator != matrix.end(); ++iterator)
     {
-        for (int var = 0; var < size; ++var)
+        for (unsigned int var = 0; var < size; ++var)
         {
-            int k = iterator->first[var];
+            unsigned int k = iterator->first[var];
             cout << k;
         }
         cout << " " << iterator->second << std::endl;
@@ -84,7 +84,7 @@ int PatternMatrix::countBitSet(bool * bitset, int index)
     if (count_set_bits[index] == -1)
     {
         count_set_bits[index] = 0;
-        for (int i = 0; i < size; i++)
+        for (unsigned int i = 0; i < size; i++)
             if (bitset[i])
                 count_set_bits[index]++;
     }

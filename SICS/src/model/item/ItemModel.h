@@ -19,7 +19,7 @@ public:
 	
 	// Methods
 	virtual int countCategories() = 0;
-	virtual int countItems() = 0;
+	virtual unsigned int countItems() = 0;
 
 	// Getters and Setters
 	virtual PatternMatrix* getDataset()  = 0;

@@ -24,7 +24,7 @@ void PolytomousModel::setDataset(PatternMatrix* dataset) {
 	this->dataSet = dataset;
 }
 
-int PolytomousModel::countItems() {
+unsigned int PolytomousModel::countItems() {
 	return (0);
 }
 

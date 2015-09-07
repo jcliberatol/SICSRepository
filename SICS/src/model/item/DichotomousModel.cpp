@@ -16,9 +16,9 @@ PatternMatrix* DichotomousModel::getDataset() { return (dataSet); }
 void DichotomousModel::setDataset(PatternMatrix* dataset) { this->dataSet = dataset; }
 
 
-int DichotomousModel::countItems()
+unsigned int DichotomousModel::countItems()
 {
-	int result = this->dataSet->countItems();
+	unsigned int result = this->dataSet->countItems();
 	return (result);
 }
 

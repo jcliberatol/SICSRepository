@@ -17,7 +17,7 @@ public:
 
 	// Methods
 	int countCategories();
-	int countItems();
+	unsigned int countItems();
 
 	// Getters and Setters
 	PatternMatrix* getDataset() ;
