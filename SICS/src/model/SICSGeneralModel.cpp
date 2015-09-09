@@ -22,7 +22,7 @@ ParameterModel* SICSGeneralModel::createParameterModel(int model)
 
 	if (model == Constant::RASCH)
 		return (new OnePLACModel());
-	
+
 	return (new ThreePLModel());
 }
 
@@ -32,10 +32,18 @@ ItemModel* SICSGeneralModel::createItemModel()
 	return (new DichotomousModel());
 }
 
-DimensionModel* SICSGeneralModel::createDimensionModel()
+DimensionModel* SICSGeneralModel::createDimensionModel(int dimstype)
 {
 	//TODO FIX FOR DECISION OF NEW MODELS
-	return (new UnidimensionalModel());
+	if (dims == 1) {
+		return (new UnidimensionalModel());
+	}
+	if (dims == 2){
+		return (new MultidimensionalModel());
+	}
+	if (dimstype == 3){
+		return ((new MultiUniDimModel()));
+	}
 }
 
 SICSGeneralModel::~SICSGeneralModel() {}
