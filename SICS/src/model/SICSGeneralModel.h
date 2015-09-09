@@ -26,7 +26,7 @@ public:
 	// Methods
 	ParameterModel *createParameterModel(int model);
 	ItemModel	   *createItemModel();
-	DimensionModel *createDimensionModel();
+	DimensionModel *createDimensionModel(int dimstype);
 
 	virtual ~SICSGeneralModel();
 };

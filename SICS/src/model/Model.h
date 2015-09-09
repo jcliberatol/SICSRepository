@@ -37,7 +37,7 @@ class Model
 	Model();
 	int Modeltype();
 	// Methods
-	void setModel (ModelFactory * , int);
+	void setModel (ModelFactory * , int, int);
 	void successProbability (QuadratureNodes *);
 	void buildParameterSet ();
 
@@ -46,7 +46,7 @@ class Model
 	void setDimensionModel(DimensionModel* dimensionModel);
 
 	ItemModel* getItemModel();
-	
+
 	ParameterModel* getParameterModel();
 	void setParameterModel(ParameterModel* parameterModel);
 

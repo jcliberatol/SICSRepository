@@ -34,11 +34,11 @@ ItemModel* SICSGeneralModel::createItemModel()
 
 DimensionModel* SICSGeneralModel::createDimensionModel(int dimstype)
 {
-	//TODO FIX FOR DECISION OF NEW MODELS
-	if (dims == 1) {
+
+	if (dimstype == 1) {
 		return (new UnidimensionalModel());
 	}
-	if (dims == 2){
+	if (dimstype == 2){
 		return (new MultidimensionalModel());
 	}
 	if (dimstype == 3){
