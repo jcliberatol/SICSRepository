@@ -39,3 +39,6 @@ desde_cero:
 
 debug:
 	g++ $(CFLAGS) -ggdb -I./src/ -o SICS_dbg $(SRC) src/main/Main2.cpp
+
+clean:
+	rm $(OBJ)

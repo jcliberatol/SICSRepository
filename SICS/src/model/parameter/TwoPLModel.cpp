@@ -15,33 +15,33 @@ TwoPLModel::TwoPLModel()
 
 void TwoPLModel::untransform()
 {
-    for (unsigned int i = 0; i < itemModel->getDataset()->countItems(); ++i)
+    for (  int i = 0; i < itemModel->getDataset()->countItems(); ++i)
         parameterSet[1][0][i] /= -parameterSet[0][0][i];
 }
 
 void TwoPLModel::getParameters(double * parameters)
 {
-    unsigned int i = 0;
+      int i = 0;
 
-    for (unsigned int j = 0; j < items; j++)
+    for (  int j = 0; j < items; j++)
         parameters[i++] = parameterSet[0][0][j];
-    for (unsigned int j = 0; j < items; j++)
+    for (  int j = 0; j < items; j++)
         parameters[i++] = parameterSet[1][0][j];
 }
 
 void TwoPLModel::setParameters(double * parameters)
 {
-    unsigned int i = 0;
+      int i = 0;
 
-    for (unsigned int j = 0; j < items; j++)
+    for (  int j = 0; j < items; j++)
         this->parameterSet[0][0][j] = parameters[i++];
-    for (unsigned int j = 0; j < items; j++)
+    for (  int j = 0; j < items; j++)
         this->parameterSet[1][0][j] = parameters[i++];
 }
 
 inline void TwoPLModel::successProbability(DimensionModel *dimensionModel, QuadratureNodes *quadNodes)
 {
-	unsigned int q = 0;
+	  int q = 0;
 	double a_d, d_d, theta_d; // d stands from "double"
 
 	if (dimensionModel != NULL)
@@ -53,9 +53,9 @@ inline void TwoPLModel::successProbability(DimensionModel *dimensionModel, Quadr
 			//Creates the matrix if it is not already created
 			probabilityMatrix = new Matrix<double>(q, items);
 		
-		for (unsigned int k = 0; k < q; k++)
+		for (  int k = 0; k < q; k++)
 		{
-			for (unsigned int i = 0; i < items; i++)
+			for (  int i = 0; i < items; i++)
 			{
 				theta_d = (*quadNodes->getTheta())(0, k);
 				a_d = parameterSet[0][0][i];
@@ -163,7 +163,7 @@ void TwoPLModel::itemGradient (double* args, double* pars, int nargs, int npars,
 double TwoPLModel::itemLogLik (double* args, double* pars, int nargs, int npars)
 {
 	int nP = 0;
-	unsigned int q, items;
+	  int q, items;
 	int index = 0;
 	double *theta, *r, *f;
 	double a, b;
@@ -184,15 +184,15 @@ double TwoPLModel::itemLogLik (double* args, double* pars, int nargs, int npars)
 	f = new double[q];
 
 	// Obtain theta
-	for (unsigned int k=0; k<q; k++)
+	for (  int k=0; k<q; k++)
 		theta[k] = pars[nP ++];
 
 	// Obtain f
-	for (unsigned int k=0; k<q; k++)
+	for (  int k=0; k<q; k++)
 		f[k] = pars[nP ++];
 
 	// Obtain r that becomes a vector
-	for (unsigned int k=0; k<q; k++)
+	for (  int k=0; k<q; k++)
 	{
 		nP += index;
 		r[k] = pars[nP];
@@ -208,7 +208,7 @@ double TwoPLModel::itemLogLik (double* args, double* pars, int nargs, int npars)
 	if(abs(dd)>5)
 		b = 0;
 
-	for (unsigned int k = 0; k < q; ++k)
+	for (  int k = 0; k < q; ++k)
 	{
 		tp = (TwoPLModel::successProbability ( theta[k], a,b));
 		
@@ -235,7 +235,7 @@ void TwoPLModel::printParameterSet(ostream& out)
 {
 	cout << "\"a\" \"b\" \"c\"" << endl;
 	
-	for (unsigned int i = 0; i < items; i++)
+	for (  int i = 0; i < items; i++)
 		cout << parameterSet[0][0][i] << " "
 		     << parameterSet[1][0][i] << " "
 		     << 0 << endl;

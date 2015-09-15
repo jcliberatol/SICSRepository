@@ -23,7 +23,7 @@ class PatternMatrix : public DataSet
 
 public:
 
-    unsigned int size;
+      int size;
     map<vector<char>, int> matrix;
     bool** bitset_list;
     int * count_set_bits;
@@ -51,8 +51,8 @@ public:
     friend std::ostream& operator<< (std::ostream &, PatternMatrix &);/**Output operator*/
 
     //DataSet implementations
-    unsigned int countItems () const;
-    unsigned int countIndividuals () const;
+      int countItems () const;
+      int countIndividuals () const;
     bool ** getBitsetList();
     int * getFrequencyList();
 

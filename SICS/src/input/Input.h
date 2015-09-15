@@ -37,8 +37,8 @@ public:
 
 	Input();
 	virtual ~Input();
-	bool importCSV ( char*, PatternMatrix&, unsigned int, unsigned int );/**Imports binary matrices from a csv*/
-	bool importCSV ( char*, Matrix<double>&, unsigned int , unsigned int);/**Imports generic type matrices from a csv*/
+	bool importCSV ( char*, PatternMatrix&,   int,   int );/**Imports binary matrices from a csv*/
+	bool importCSV ( char*, Matrix<double>&,   int ,   int);/**Imports generic type matrices from a csv*/
 	char getDel() const;/**Gets the delimitier used for inputting*/
 	void setDel(char);/**Sets the delimitier for inputting text matrices*/
 

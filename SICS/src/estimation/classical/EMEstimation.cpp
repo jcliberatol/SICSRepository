@@ -31,10 +31,10 @@ EMEstimation::~EMEstimation()
  * Sets the model to be estimated, currently only supports 3PL model
  */
 void EMEstimation::setModel(Model * model)
-{    
-    unsigned int q;
-    unsigned int It;
-    unsigned int d = 1;
+{
+     int q;
+     int It;
+     int d = 1;
 
     this->model = model;
     q = quadNodes->size();

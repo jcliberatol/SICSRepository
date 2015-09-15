@@ -20,7 +20,7 @@ PatternMatrix::~PatternMatrix()
 {
     if(bitset_list != NULL)
     {
-        for (unsigned int i = 0; i < matrix.size(); i++)
+        for (  int i = 0; i < matrix.size(); i++)
                 delete [] bitset_list[i];
         delete [] bitset_list;
         bitset_list = NULL;
@@ -38,14 +38,14 @@ PatternMatrix::~PatternMatrix()
     }
 }
 
-unsigned int PatternMatrix::countItems() const { return ((matrix.empty()) ? 0 : size); }
+  int PatternMatrix::countItems() const { return ((matrix.empty()) ? 0 : size); }
 
 int PatternMatrix::freq(vector<char> bitset) { return (matrix[bitset]); }
 
-unsigned int PatternMatrix::countIndividuals() const
+  int PatternMatrix::countIndividuals() const
 {
     map<vector<char>, int>::const_iterator it;
-    unsigned int counter = 0;
+      int counter = 0;
 
     for (it = matrix.begin(); it != matrix.end(); ++it)
         counter += it->second;
@@ -63,9 +63,9 @@ void PatternMatrix::print()
 {
     for (iterator = matrix.begin(); iterator != matrix.end(); ++iterator)
     {
-        for (unsigned int var = 0; var < size; ++var)
+        for (  int var = 0; var < size; ++var)
         {
-            unsigned int k = iterator->first[var];
+              int k = iterator->first[var];
             cout << k;
         }
         cout << " " << iterator->second << std::endl;
@@ -77,14 +77,14 @@ int PatternMatrix::countBitSet(bool * bitset, int index)
     if (count_set_bits == NULL)
     {
         count_set_bits = new int[matrix.size()];
-        for (unsigned int i = 0; i < matrix.size(); i++)
+        for (  int i = 0; i < matrix.size(); i++)
             count_set_bits[i] = -1;
     }
 
     if (count_set_bits[index] == -1)
     {
         count_set_bits[index] = 0;
-        for (unsigned int i = 0; i < size; i++)
+        for (  int i = 0; i < size; i++)
             if (bitset[i])
                 count_set_bits[index]++;
     }
@@ -102,7 +102,7 @@ bool ** PatternMatrix::getBitsetList()
 
         bitset_list = new bool*[matrix.size()];
 
-        for (unsigned int j = 0; j < matrix.size(); j++)
+        for (  int j = 0; j < matrix.size(); j++)
             bitset_list[j] = new bool[size];
 
         frequency_list = new int[matrix.size()];
