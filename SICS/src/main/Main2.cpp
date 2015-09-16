@@ -18,32 +18,36 @@
 #include <time.h>
 #include <estimation/bayesian/LatentTraitEstimation.h>
 #include <type/LatentTraits.h>
-#include <util/fitness/ItemFit.h>
-#include <util/fitness/PersonFit.h>
 
-#define ESTIMATION_MODEL Constant::TWO_PL
+#define ESTIMATION_MODEL Constant::THREE_PL
 
 void oneRun(char * args)
 {
     Input input;
     Matrix<double> cuad(41, 2);
+    cuad.reset();
     Model *model = new Model();
     ModelFactory *modelFactory;
     PatternMatrix *dataSet;
     Matrix<double> *theta;
     Matrix<double> *weight;
-    
+
     modelFactory = new SICSGeneralModel();
     dataSet = new PatternMatrix(0);
     theta = new Matrix<double>(1, 41);
     weight = new Matrix<double>(1, 41);
-
+    //std::cout<<cuad<<std::endl;
     input.importCSV((char *) "Cuads.csv", cuad, 1, 0);
     input.importCSV(args, *dataSet, 1, 0);
-    
-    model->setModel(modelFactory, ESTIMATION_MODEL);
+    //Start by telling the model that it is a multidimensional model.
+    int dimstype = 2;
+    model->setModel(modelFactory, ESTIMATION_MODEL, dimstype);
+    //Here we must set the number of dimensions to estimate in the given model
+    model->getDimensionModel()->setDims(2);
+    int dims = model->getDimensionModel()->getNumDimensions();
+    std::cout<<"Dims used : "<<dims<<std::endl;
     delete modelFactory;
-    
+
     model->getItemModel()->setDataset(dataSet);
 
     for (int k = 0; k < cuad.nR(); k++)
@@ -85,7 +89,7 @@ void oneRun(char * args)
 
 	//Matrix<double> data(dataSet->countIndividuals(), dataSet->countItems());
 	//input.importCSV(args, data, 1, 0);
-	
+
 	//double* itemsf = new double[ data.nC()];
 	//itemFit(latentTraits->pm, *(latentTraits->traits), data, model->getParameterModel()->getParameterSet(), model -> type,itemsf);
 	//personFit(latentTraits->pm, *(latentTraits->traits), data, model->getParameterModel()->getParameterSet(), model -> type);

@@ -24,4 +24,3 @@ vector<int> MultiUniDimModel::getDimVector() {
 MultiUniDimModel::~MultiUniDimModel() {
 	// TODO Auto-generated destructor stub
 }
-

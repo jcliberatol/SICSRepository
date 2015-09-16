@@ -27,4 +27,3 @@ vector<int> UnidimensionalModel::getDimVector() {
 UnidimensionalModel::~UnidimensionalModel(){
 
 }
-

@@ -106,7 +106,7 @@ void ThreePLModel::getParameters(double * parameters)
 void ThreePLModel::setParameters(double * parameters)
 {
 	unsigned int i = 0;
-	
+
 	for (unsigned int j = 0; j < items; j++)
 		this->parameterSet[0][0][j] = parameters[i++];
 	for (unsigned int j = 0; j < items; j++)
@@ -148,7 +148,7 @@ void ThreePLModel::itemGradient(double* args, double* pars, int nargs, int npars
 	P_Star = new long double [q];
 	factor = new long double [q];
 	W = new long double [q];
-	
+
 	// Obtain theta
 	for (int k=0; k<q; k++)
 		theta[k] = pars[nP ++];
@@ -162,12 +162,12 @@ void ThreePLModel::itemGradient(double* args, double* pars, int nargs, int npars
 	{
 		nP += index;
 		r[k] = pars[nP];
-		nP += (items-index); 
+		nP += (items-index);
 	}
 
 	ecp1i=1/(1+exp(c));
 	ec=exp(c);
-	
+
 	for ( int k = 0; k < q; k++ )
 	{
 		P[k] = successProbability ( theta[k], a,b,c);
@@ -221,7 +221,7 @@ double ThreePLModel::itemLogLik(double* args, double* pars, int nargs, int npars
 	//long double tp , tq;
 	double tp , tq;
 	sum = nP = index = 0;
-	
+
 	a = args[0];
 	b = args[1];
 	c = args[2];
@@ -229,15 +229,15 @@ double ThreePLModel::itemLogLik(double* args, double* pars, int nargs, int npars
         q = pars[nP ++]; // q is obtained and npars is augmented
         items = pars[nP ++];
 	index = pars[npars-1];
-	
+
 	theta = new double[q];
 	r = new double[q];
 	f = new double[q];
-	
+
 	// Obtain theta
 	for (unsigned int k=0; k<q; k++)
 		theta[k] = pars[nP ++];
-	
+
 	// Obtain f
 	for (unsigned int k=0; k<q; k++)
 		f[k] = pars[nP ++];
@@ -247,7 +247,7 @@ double ThreePLModel::itemLogLik(double* args, double* pars, int nargs, int npars
 	{
 		nP += index;
 		r[k] = pars[nP];
-		nP += (items-index); 
+		nP += (items-index);
 	}
 
 	if(abs(a) > 5)
@@ -261,13 +261,13 @@ double ThreePLModel::itemLogLik(double* args, double* pars, int nargs, int npars
 	for (unsigned int k = 0; k < q; ++k)
 	{
 		tp = (ThreePLModel::successProbability ( theta[k], a,b,c));
-		
+
 		if (tp<1e-08) tp=1e-08;
-		
+
 		tq = 1-tp;
-		
+
 		if (tq<1e-08) tq=1e-08;
-		
+
 		sum+=(r[k]*log(tp))+(f[k]-r[k])*log(tq);
 	}
 

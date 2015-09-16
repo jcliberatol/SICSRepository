@@ -8,10 +8,17 @@
 #include "MultidimensionalModel.h"
 
 MultidimensionalModel::MultidimensionalModel() {
-	// TODO Auto-generated constructor stub
-
 }
 
+int MultidimensionalModel::getNumDimensions() {
+	return (dims);
+}
+
+
+
+
+
+//I dont wha
 vector<int> MultidimensionalModel::getDimVector() {
 	std::vector<int> result;
 	return result;
@@ -20,8 +27,3 @@ vector<int> MultidimensionalModel::getDimVector() {
 MultidimensionalModel::~MultidimensionalModel() {
 	// TODO Auto-generated destructor stub
 }
-
-int MultidimensionalModel::getNumDimensions() {
-	return 0;
-}
-

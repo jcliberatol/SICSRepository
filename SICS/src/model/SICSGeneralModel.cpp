@@ -36,14 +36,24 @@ DimensionModel* SICSGeneralModel::createDimensionModel(int dimstype)
 {
 
 	if (dimstype == 1) {
+		std::cout<<"Estimating unidimensional model"<<std::endl;
 		return (new UnidimensionalModel());
 	}
-	if (dimstype == 2){
+	else if (dimstype == 2){
+		std::cout<<"Estimating multidimensional model"<<std::endl;
 		return (new MultidimensionalModel());
 	}
-	if (dimstype == 3){
+	else if (dimstype == 3){
+		std::cout<<"Estimating Multi-unidimensional model"<<std::endl;
 		return ((new MultiUniDimModel()));
 	}
+	else{
+		//Dummy return for wrong values
+		std::cout<<"WARNING : WRONG dimstype when creating dimensionalmodel , using UnidimensionalModel"<<std::endl;
+		std::cout<<"DIMSTYPE used : "<<dimstype<<std::endl;
+		return (new UnidimensionalModel());
+	}
+
 }
 
 SICSGeneralModel::~SICSGeneralModel() {}
