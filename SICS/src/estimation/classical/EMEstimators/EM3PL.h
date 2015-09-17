@@ -65,9 +65,9 @@ public:
 
 				delete [] result;
 			}
+			//Enable multidimensional
 			else if (typeid(*dimensionModel) == typeid(MultidimensionalModel)) {
 				std::cout<<"Andrade multidimensional enabled"<<std::endl;
-				if (typeid(*dimensionModel) == typeid(UnidimensionalModel)){
 					double * result = Andrade();
 					int ifault;
 					int dims = dimensionModel->getNumDimensions();
@@ -77,18 +77,15 @@ public:
 							pset[0][0][i*dims+k] = std::sqrt((result[1] * result[1]) / (1.0 - result[1] * result[1]));
 							std::cout<<"a  : " <<i<<" "<<k<<" "<<pset[0][0][i*dims+k]<<std::endl;
 						}
-						pset[1][0][i] = -(ppnd(result[0], &ifault)) / result[1];
-						std::cout<<"b  : " <<i<<" "<<pset[1][0][i]<<std::endl;
+						pset[1][0][i] = -(ppnd(result[0], &ifault));
+						std::cout<<"d  : " <<i<<" "<<pset[1][0][i]<<std::endl;
 						pset[2][0][i] = 0.2;
 					}
 
 					delete [] result;
-				}
-
-				//Enable multidimensional
 			}
 		}
-
+	}
 		EM3PL(Model* m, QuadratureNodes* nodes, Matrix<double>* f, Matrix<double>* r) : EMEstimator(m, nodes, f, r)
 		{
 			this->fptr = &ThreePLModel::itemLogLik;
@@ -113,5 +110,4 @@ public:
 			}
 		}
 	};
-
 	#endif /* EM3PL_H_ */

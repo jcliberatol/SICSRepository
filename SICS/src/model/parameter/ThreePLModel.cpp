@@ -7,6 +7,7 @@
 
 #include <model/parameter/ThreePLModel.h>
 #include <string>
+#include <math.h>
 
 ThreePLModel::ThreePLModel()
 {
@@ -15,6 +16,7 @@ ThreePLModel::ThreePLModel()
 	nodes = NULL;
 }
 
+//Same method in uni and multidimensional
 void ThreePLModel::transform()
 {
 	for (unsigned int i = 0; i < itemModel->countItems(); ++i)
@@ -67,11 +69,58 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel, Quadrature
 			}
 		}
 	}
+
+	if(typeid(*dimensionModel)==typeid(MultidimensionalModel))
+	{
+		std::cout << "Multidim prob matrix" << std::endl;
+		if(probabilityMatrix == NULL){
+			//Creates the matrix if it is not already created
+			//This matrix has many more columns because in the multidim case it stores
+			int dims = dimensionModel->getNumDimensions();
+			int totalNodes = pow(q,dims);
+			probabilityMatrix = new Matrix<double>(totalNodes,items);
+			//Filling the matrix
+			//Perform times selections in
+		}
+
+
+		for (unsigned int k = 0; k < q; k++)
+		{
+			for (unsigned int i = 0; i < items; i++ )
+			{
+				// 3PL Success Probability Function
+				theta_d = (*quadNodes->getTheta())(0,k);
+				a_d = parameterSet[0][0][i];
+				d_d = parameterSet[1][0][i];
+				c_d = parameterSet[2][0][i];
+
+				(*probabilityMatrix)(k,i) = successProbability ( theta_d, a_d, d_d, c_d );
+			}
+		}
+	}
 }
 
 double *** ThreePLModel::getParameterSet() { return (this->parameterSet); }
 
 void ThreePLModel::setParameterSet(double ***) { this->parameterSet = parameterSet; }
+
+double ThreePLModel::successProbabilityMD(double * theta, double * a , double d , double c , int dims ){
+	double exponential = 0;
+	for (int i = 0; i < dims; i++) {
+		exponential += theta[i] * a[i];
+	}
+	exponential += d;
+	if ( exponential > Constant::MAX_EXP )
+		exponential = Constant::MAX_EXP;
+
+	else if ( exponential < -(Constant::MAX_EXP*1.0) )
+		exponential = -Constant::MAX_EXP;
+
+	exponential = exp(-exponential) ;
+	double ec = exp(c);
+
+	return ( (ec/(1+ec)) + (1 - (ec/(1+ec))) * (1/(1+exponential)) );
+}
 
 double ThreePLModel::successProbability(double theta, double a, double d, double c)
 {

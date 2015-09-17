@@ -21,7 +21,7 @@ SRC =   src/type/Constant.cpp \
 	src/util/asa111.cpp
 OBJ = $(SRC:.cpp=.o)
 INCL = -I/home/cristian/git/CppAD/ -I./src/
-CFLAGS = -std=c++11 -Wunused-function -g3
+CFLAGS = -std=c++11 -Wunused-function -g3 -fdiagnostics-color
 
 all: SICS
 

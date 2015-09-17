@@ -7,8 +7,6 @@
 
 #include <estimation/classical/EMEstimation.h>
 #include <util/util.h>
-#include <ctime>
-#include <chrono>
 
 EMEstimation::EMEstimation()
 {
@@ -32,7 +30,7 @@ EMEstimation::~EMEstimation()
  * Sets the model to be estimated, currently only supports 3PL model
  */
 void EMEstimation::setModel(Model * model)
-{	
+{
 	unsigned int q;
 	unsigned int It;
 	unsigned int d = 1;
@@ -98,60 +96,50 @@ void ** EMEstimation::estimate()
 	double ** args_hist;
 	int nargs;
 	int size;
+	int dims;
+	int itemn;
 	double time_counter[5];
 	for(int i = 0; i < 5; i++) time_counter[i] = 0;
 
 	// [1] -> iterations
 	// [2] -> convergenceSignal
 	void ** return_list = new void*[3];
-
+	std::cout << "Entering the estimation loop" << std::endl;
 	iterations = 0;
-	size = 3 * model->getItemModel()->getDataset()->countItems();
 
+	itemn = model->getItemModel()->getDataset()->countItems();
+	dims = model->getDimensionModel()->getNumDimensions();
+	size = 2 * itemn + (itemn * dims);
+	std::cout << "Using  " <<dims<<" dimensions "<< std::endl;
+	std::cout << "Size of array : " <<size <<std::endl;
+
+	//Arrays used for ramsay and M step history store all the parameterSet
 	(args_hist) = new double*[3];
 	(args_hist)[0] = new double[size];
 	(args_hist)[1] = new double[size];
 	(args_hist)[2] = new double[size];
 
+	//Transformation on this model (EM3PL)
 	estimator->pm->transform();
 
-	auto start = std::chrono::system_clock::now();
+
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < size; j++)
 			args_hist[i][j] = 0;
-	auto end = std::chrono::system_clock::now();
 
-	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-
-	cout << "1st: " << elapsed.count()/1000.0 << endl;
 
 	for (;!(iterations++ > Constant::MAX_EM_ITERS || convergenceSignal);)
 	{
-    //    cout << iterations << endl;
-		start = std::chrono::system_clock::now();
+       std::cout <<"Iteration : "<< iterations << std::endl;
+		std::cout << "E step" << std::endl;
 		estimator->stepE();
-		end = std::chrono::system_clock::now();
-		elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-		time_counter[0] += elapsed.count()/1000.0;
-
-		start = std::chrono::system_clock::now();
+		std::cout << "M step" << std::endl;
 		estimator->stepM(&args_hist, &nargs);
-		end = std::chrono::system_clock::now();
-		elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-		time_counter[1] += elapsed.count()/1000.0;
-
-		start = std::chrono::system_clock::now();
 		estimator->stepRamsay(&args_hist, &nargs, size, iterations > 5 && (iterations) % 3 == 0);
-		end = std::chrono::system_clock::now();
-		elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-		time_counter[2] += elapsed.count()/1000.0;
 
 		convergenceSignal = model->itemParametersEstimated;
 	}
 
-	cout << "E: " << time_counter[0] << endl;
-	cout << "M: " << time_counter[1] << endl;
-	cout << "R: " << time_counter[2] << endl;
 
 	return_list[0] = new int(iterations);
 	return_list[1] = new bool(convergenceSignal);

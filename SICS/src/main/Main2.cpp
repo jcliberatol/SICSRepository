@@ -18,11 +18,21 @@
 #include <time.h>
 #include <estimation/bayesian/LatentTraitEstimation.h>
 #include <type/LatentTraits.h>
+#include <util/util.h>
 
 #define ESTIMATION_MODEL Constant::THREE_PL
 
 void oneRun(char * args)
 {
+
+    std::cout <<43%5 << std::endl;
+    int * arr = new int[3];
+int count = pow(15,3);
+    for (size_t ll = 0; ll < count; ll++) {
+        fullpermutations(3,15,ll,arr);
+        std::cout<<arr[0]<<" "<<arr[1]<<" "<<arr[2]<<std::endl;
+    }
+
   Input input;
   Matrix<double> cuad(41, 2);
   cuad.reset();
