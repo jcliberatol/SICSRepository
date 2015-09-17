@@ -69,7 +69,7 @@ public:
 				parameterSet[1] = new double *[1];
 				parameterSet[2] = new double *[1];
 				//TODO Correct number of dimensions in a parameter
-				parameterSet[0][0] = new double[items];
+				parameterSet[0][0] = new double[items*dims]; // multidim a parameter
 				parameterSet[1][0] = new double[items];
 				parameterSet[2][0] = new double[items];
 
