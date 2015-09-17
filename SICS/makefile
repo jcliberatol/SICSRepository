@@ -20,8 +20,8 @@ SRC =   src/type/Constant.cpp \
 	src/output/Output.cpp \
 	src/util/asa111.cpp
 OBJ = $(SRC:.cpp=.o)
-INCL = -I./src/
-CFLAGS = -std=c++11 -Wunused-function -O2 -fno-omit-frame-pointer
+INCL = -I/home/cristian/git/CppAD/ -I./src/
+CFLAGS = -std=c++11 -Wunused-function -O2
 
 all: SICS
 
@@ -32,13 +32,12 @@ src/%.o: src/%.cpp
 	g++ $(CFLAGS) -Wall -c -I./src/ -o $@ $<
 
 SICS: $(OBJ)
+	g++ -Wall $(CFLAGS) -I./src/ $^ src/main/Main1.cpp -o $@1
 	g++ -Wall $(CFLAGS) -I./src/ $^ src/main/Main2.cpp -o $@2
+	g++ -Wall $(CFLAGS) -I./src/ $^ src/main/Main3.cpp -o $@3
 
 desde_cero:
 	g++ $(CFLAGS) -I./src/ -o SICS $(SRC) src/main/Main.cpp
 
 debug:
 	g++ $(CFLAGS) -ggdb -I./src/ -o SICS_dbg $(SRC) src/main/Main2.cpp
-
-clean:
-	rm $(OBJ)

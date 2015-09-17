@@ -18,6 +18,8 @@
 #include <time.h>
 #include <estimation/bayesian/LatentTraitEstimation.h>
 #include <type/LatentTraits.h>
+#include <util/fitness/ItemFit.h>
+#include <util/fitness/PersonFit.h>
 
 #define ESTIMATION_MODEL Constant::TWO_PL
 

@@ -29,18 +29,18 @@ inline double randomd() {
 	return ((double) ((double) random_variable / (double) RAND_MAX));
 }
 
-inline long double stdDev_bin(int tsum, int tN) {
-	long double avg;
-	long double N = (long double) tN;
-	long double sum = (long double) tsum;
+inline double stdDev_bin(int tsum, int tN) {
+	double avg;
+	double N = (double) tN;
+	double sum = (double) tsum;
 	avg = sum / N;
 	return (std::sqrt(
 			(sum * (1 - avg) * (1 - avg) + (N - sum) * (avg * avg)) / N));
 }
 
-inline long double stdDev_bin(int tsum, int tN, double avg) {
-	long double N = (long double) tN;
-	long double sum = (long double) tsum;
+inline double stdDev_bin(int tsum, int tN, double avg) {
+	double N = (double) tN;
+	double sum = (double) tsum;
 	return (sqrt(
 			(((1 - avg) * (1 - avg) * sum) + ((-avg) * (-avg) * (N - sum))) / N));
 }

@@ -15,7 +15,7 @@ OnePLModel::OnePLModel()
 
 inline void OnePLModel::successProbability(DimensionModel *dimensionModel, QuadratureNodes * quadNodes)
 {
-      int q = 0;
+    int q = 0;
 
     if (dimensionModel != NULL)
         q = quadNodes->size();
@@ -26,8 +26,8 @@ inline void OnePLModel::successProbability(DimensionModel *dimensionModel, Quadr
             //Creates the matrix if it is not already created
             probabilityMatrix = new Matrix<double>(q, items);
 
-        for (  int k = 0; k < q; k++)
-            for (  int i = 0; i < items; i++)
+        for (int k = 0; k < q; k++)
+            for (int i = 0; i < items; i++)
                 // Rasch Success Probability Function
                 (*probabilityMatrix)(k, i) = successProbability((*quadNodes->getTheta())(0, k), (parameterSet[0][0][i]));
     }
@@ -35,7 +35,7 @@ inline void OnePLModel::successProbability(DimensionModel *dimensionModel, Quadr
 
 inline double OnePLModel::successProbability(double theta, double b)
 {
-    long double exponential = ((theta) - b);
+    double exponential = ((theta) - b);
 
     if (exponential > Constant::MAX_EXP)
         exponential = Constant::MAX_EXP;
@@ -53,15 +53,15 @@ double*** OnePLModel::getParameterSet() { return (this->parameterSet); }
 
 void OnePLModel::getParameters(double * parameters)
 {
-    for(  int i = 0; i < items; i++)
+    for(int i = 0; i < items; i++)
         parameters[i] = 1;
-    for(  int i = items; i < 2*items; i++)
+    for(int i = items; i < 2*items; i++)
         parameters[i] = parameterSet[0][0][i - items];
 }
 
 void OnePLModel::setParameters(double * parameters)
 {
-    for (  int i = 0; i < items; i++)
+    for (int i = 0; i < items; i++)
         this->parameterSet[0][0][i] = parameters[i];
 }
 
@@ -71,14 +71,14 @@ void OnePLModel::printParameterSet(ostream& out)
 {
     out << "\"a\" \"b\" \"c\"" << "\n";
 
-    for (  int k = 0; k < items; k++)
+    for (int k = 0; k < items; k++)
         out << 1 << " " << (parameterSet[0][0][k]) << " " << 0 << "\n";
 }
 
 double OnePLModel::itemLogLik (double* args, double* pars, int nargs, int npars)
 {
     double *theta, *r, *f;
-      int nP, q, items, index;
+    int nP, q, items, index;
     double a, sum;
     double tp , tq;
 
@@ -91,25 +91,25 @@ double OnePLModel::itemLogLik (double* args, double* pars, int nargs, int npars)
     r = new double[q];
     f = new double[q];
     // Obtain theta
-    for (  int k=0; k<q; k++)
+    for (int k=0; k<q; k++)
         theta[k] = pars[nP ++];
 
     // Obtain f
-    for (  int k=0; k<q; k++)
+    for (int k=0; k<q; k++)
         f[k] = pars[nP ++];
 
     // Obtain r that becomes a vector
-    for (  int k=0; k<q; k++)
+    for (int k=0; k<q; k++)
     {
         nP += index;
         r[k] = pars[nP];
-        nP += (items-index);
+        nP += (items-index); 
     }
 
     if(abs(a) > 5)
         a = 0.851;
 
-    for (  int k = 0; k < q; ++k)
+    for (int k = 0; k < q; ++k)
     {
         tp = (OnePLModel::successProbability ( theta[k], a));
 
@@ -134,17 +134,17 @@ void OnePLModel::itemGradient (double* args, double* pars, int nargs, int npars,
     double a;
     double *theta, *r, *f;
     int nP, q, items, index;
-    long double h;
-    long double *P;  // Matrix of size q*I
-    long double *factor;
+    double h;
+    double *P;  // Matrix of size q*I
+    double *factor;
 
     nP = index = h = 0;
     index = pars[npars-1];
     a = args[0];
-
+    
     q = pars[nP ++];
-    P = new long double [q];
-    factor = new long double [q];
+    P = new double [q];
+    factor = new double [q];
     theta = new double[q];
     r = new double[q];
     f = new double[q];
@@ -165,7 +165,7 @@ void OnePLModel::itemGradient (double* args, double* pars, int nargs, int npars,
     {
         nP += index;
         r[k] = pars[nP];
-        nP += (items-index);
+        nP += (items-index); 
     }
 
     for ( int k = 0; k < q; k++ )

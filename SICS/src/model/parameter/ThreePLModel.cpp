@@ -17,7 +17,7 @@ ThreePLModel::ThreePLModel()
 
 void ThreePLModel::transform()
 {
-	for (  int i = 0; i < itemModel->countItems(); ++i)
+	for (int i = 0; i < itemModel->countItems(); ++i)
 	{
 		double qc = parameterSet[2][0][i];
 		parameterSet[2][0][i] = log(qc / (1 - qc));
@@ -26,7 +26,7 @@ void ThreePLModel::transform()
 
 void ThreePLModel::untransform()
 {
-	for (  int i = 0; i < itemModel->getDataset()->countItems(); ++i)
+	for (int i = 0; i < itemModel->getDataset()->countItems(); ++i)
 	{
 		double qa = parameterSet[0][0][i];
 		double qb = parameterSet[1][0][i];
@@ -41,7 +41,7 @@ void ThreePLModel::setEstimationNodes(QuadratureNodes* n) { this->nodes = n; }
 
 void ThreePLModel::successProbability(DimensionModel *dimensionModel, QuadratureNodes * quadNodes)
 {
-	  int q = 0;
+	int q = 0;
 	double a_d, d_d, c_d, theta_d; // d stands from "double"
 
 	if ( dimensionModel != NULL )
@@ -53,9 +53,9 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel, Quadrature
 			//Creates the matrix if it is not already created
 			probabilityMatrix = new Matrix<double>(q,items);
 
-		for (  int k = 0; k < q; k++)
+		for (int k = 0; k < q; k++)
 		{
-			for (  int i = 0; i < items; i++ )
+			for (int i = 0; i < items; i++ )
 			{
 				// 3PL Success Probability Function
 				theta_d = (*quadNodes->getTheta())(0,k);
@@ -75,7 +75,7 @@ void ThreePLModel::setParameterSet(double ***) { this->parameterSet = parameterS
 
 double ThreePLModel::successProbability(double theta, double a, double d, double c)
 {
-	long double exponential = (Constant::NORM_CONST)*(a*theta+d);
+	double exponential = (Constant::NORM_CONST)*(a*theta+d);
 
 	if ( exponential > Constant::MAX_EXP )
 		exponential = Constant::MAX_EXP;
@@ -93,25 +93,25 @@ double ThreePLModel::successProbability(double theta, double * zita) { return su
 
 void ThreePLModel::getParameters(double * parameters)
 {
-	  int i = 0;
+	int i = 0;
 
-	for (  int j = 0; j < items; j++)
+	for (int j = 0; j < items; j++)
 		parameters[i++] = parameterSet[0][0][j];
-	for (  int j = 0; j < items; j++)
+	for (int j = 0; j < items; j++)
 		parameters[i++] = parameterSet[1][0][j];
-	for (  int j = 0; j < items; j++)
+	for (int j = 0; j < items; j++)
 		parameters[i++] = parameterSet[2][0][j];
 }
 
 void ThreePLModel::setParameters(double * parameters)
 {
-	  int i = 0;
-
-	for (  int j = 0; j < items; j++)
+	int i = 0;
+	
+	for (int j = 0; j < items; j++)
 		this->parameterSet[0][0][j] = parameters[i++];
-	for (  int j = 0; j < items; j++)
+	for (int j = 0; j < items; j++)
 		this->parameterSet[1][0][j] = parameters[i++];
-	for (  int j = 0; j < items; j++)
+	for (int j = 0; j < items; j++)
 		this->parameterSet[2][0][j] = parameters[i++];
 }
 
@@ -123,13 +123,13 @@ void ThreePLModel::itemGradient(double* args, double* pars, int nargs, int npars
 	double a, b, c;
 	double D = Constant::NORM_CONST;
 	double *theta, *r, *f;
-	long double *h_0; // Block Matrix of size q*I. Each block-element has size of 1*3
-	long double *h; // Block vector of size I (i.e. I blocks). Each block-element has size of 1*3
-	long double *P_Star, *P;  // Matrix of size q*I
-	long double *W;           // Matrix of size q*I
-	long double *factor;	  // Matrix of product (r-fP)W
-	long double ec;            // e^c_i
-	long double ecp1i;	// 1 / (e^c_i + 1)
+	double *h_0; // Block Matrix of size q*I. Each block-element has size of 1*3
+	double *h; // Block vector of size I (i.e. I blocks). Each block-element has size of 1*3
+	double *P_Star, *P;  // Matrix of size q*I
+	double *W;           // Matrix of size q*I
+	double *factor;	  // Matrix of product (r-fP)W
+	double ec;            // e^c_i
+	double ecp1i;	// 1 / (e^c_i + 1)
 
 	index = pars[npars-1];
 	nP = 0;
@@ -142,13 +142,13 @@ void ThreePLModel::itemGradient(double* args, double* pars, int nargs, int npars
 	theta = new double[q];
 	r = new double[q];
 	f = new double[q];
-	h = new long double [3];
-	h_0 = new long double [q*3];
-	P = new long double [q];
-	P_Star = new long double [q];
-	factor = new long double [q];
-	W = new long double [q];
-
+	h = new double [3];
+	h_0 = new double [q*3];
+	P = new double [q];
+	P_Star = new double [q];
+	factor = new double [q];
+	W = new double [q];
+	
 	// Obtain theta
 	for (int k=0; k<q; k++)
 		theta[k] = pars[nP ++];
@@ -162,12 +162,12 @@ void ThreePLModel::itemGradient(double* args, double* pars, int nargs, int npars
 	{
 		nP += index;
 		r[k] = pars[nP];
-		nP += (items-index);
+		nP += (items-index); 
 	}
 
 	ecp1i=1/(1+exp(c));
 	ec=exp(c);
-
+	
 	for ( int k = 0; k < q; k++ )
 	{
 		P[k] = successProbability ( theta[k], a,b,c);
@@ -184,7 +184,7 @@ void ThreePLModel::itemGradient(double* args, double* pars, int nargs, int npars
 		h_0[3 * k + 2] = ec * (ecp1i*ecp1i) / P_Star[k];
 	}
 
-	memset(h,0,sizeof(long double)*3);
+	memset(h,0,sizeof(double)*3);
 	memset(gradient,0,sizeof(double)*3);
 
 	for ( int k = 0; k < q; k++ )
@@ -216,12 +216,12 @@ void ThreePLModel::itemGradient(double* args, double* pars, int nargs, int npars
 double ThreePLModel::itemLogLik(double* args, double* pars, int nargs, int npars)
 {
 	double *theta, *r, *f;
-	  int nP, q, items, index;
+	int nP, q, items, index;
 	double a, b, c, sum;
-	//long double tp , tq;
+	//double tp , tq;
 	double tp , tq;
 	sum = nP = index = 0;
-
+	
 	a = args[0];
 	b = args[1];
 	c = args[2];
@@ -229,25 +229,25 @@ double ThreePLModel::itemLogLik(double* args, double* pars, int nargs, int npars
         q = pars[nP ++]; // q is obtained and npars is augmented
         items = pars[nP ++];
 	index = pars[npars-1];
-
+	
 	theta = new double[q];
 	r = new double[q];
 	f = new double[q];
-
+	
 	// Obtain theta
-	for (  int k=0; k<q; k++)
+	for (int k=0; k<q; k++)
 		theta[k] = pars[nP ++];
-
+	
 	// Obtain f
-	for (  int k=0; k<q; k++)
+	for (int k=0; k<q; k++)
 		f[k] = pars[nP ++];
 
 	// Obtain r that becomes a vector
-	for (  int k=0; k<q; k++)
+	for (int k=0; k<q; k++)
 	{
 		nP += index;
 		r[k] = pars[nP];
-		nP += (items-index);
+		nP += (items-index); 
 	}
 
 	if(abs(a) > 5)
@@ -258,16 +258,16 @@ double ThreePLModel::itemLogLik(double* args, double* pars, int nargs, int npars
 	if(abs(c)>5)
 		c = 0.1;
 
-	for (  int k = 0; k < q; ++k)
+	for (int k = 0; k < q; ++k)
 	{
 		tp = (ThreePLModel::successProbability ( theta[k], a,b,c));
-
+		
 		if (tp<1e-08) tp=1e-08;
-
+		
 		tq = 1-tp;
-
+		
 		if (tq<1e-08) tq=1e-08;
-
+		
 		sum+=(r[k]*log(tp))+(f[k]-r[k])*log(tq);
 	}
 
@@ -284,7 +284,7 @@ double ThreePLModel::itemLogLik(double* args, double* pars, int nargs, int npars
 
 double ThreePLModel::successProbability_cPrime(double theta, double a, double b, double c)
 {
-	long double cPrime = exp(c)/(1+exp(c));
+	double cPrime = exp(c)/(1+exp(c));
 	return (successProbability ( theta, a, b, cPrime ));
 }
 
@@ -292,7 +292,7 @@ void ThreePLModel::printParameterSet(ostream& out)
 {
 	out << "\"a\" \"b\" \"c\"" << endl;
 
-	for (  int i = 0; i < items; i++)
+	for (int i = 0; i < items; i++)
 		out << parameterSet[0][0][i] << " "
 		    << parameterSet[1][0][i] << " "
 		    << parameterSet[2][0][i] << endl;

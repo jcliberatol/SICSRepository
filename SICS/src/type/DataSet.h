@@ -20,8 +20,8 @@ class DataSet
 public:
 
 	// Methods
-	virtual   int countItems () const = 0;
-	virtual   int countIndividuals () const = 0;
+	virtual int countItems () const = 0;
+	virtual int countIndividuals () const = 0;
 
 	virtual ~DataSet(){};
 

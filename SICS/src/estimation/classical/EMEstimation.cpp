@@ -8,16 +8,17 @@
 #include <estimation/classical/EMEstimation.h>
 #include <util/util.h>
 #include <ctime>
+#include <chrono>
 
 EMEstimation::EMEstimation()
 {
-    iterations = 0;
-    model = NULL;
-    f = NULL;
-    r = NULL;
-    convergenceSignal = false;
-    quadNodes = NULL;
-    estimator = NULL;
+	iterations = 0;
+	model = NULL;
+	f = NULL;
+	r = NULL;
+	convergenceSignal = false;
+	quadNodes = NULL;
+	estimator = NULL;
 }
 
 EMEstimation::~EMEstimation()
@@ -31,42 +32,42 @@ EMEstimation::~EMEstimation()
  * Sets the model to be estimated, currently only supports 3PL model
  */
 void EMEstimation::setModel(Model * model)
-{
-     int q;
-     int It;
-     int d = 1;
+{	
+	int q;
+	int It;
+	int d = 1;
 
-    this->model = model;
-    q = quadNodes->size();
-    It = this->model->getItemModel()->getDataset()->countItems();
+	this->model = model;
+	q = quadNodes->size();
+	It = this->model->getItemModel()->getDataset()->countItems();
 
-    this->f = new Matrix<double>(d, q);
-    this->r = new Matrix<double>(q, It);
+	this->f = new Matrix<double>(d, q);
+	this->r = new Matrix<double>(q, It);
 
-    //Discriminate by models
-    if (this->model->Modeltype() == Constant::THREE_PL)
-    {
-        estimator = new EM3PL(this->model, quadNodes, f, r);
-        return;
-    }
+	//Discriminate by models
+	if (this->model->Modeltype() == Constant::THREE_PL)
+	{
+		estimator = new EM3PL(this->model, quadNodes, f, r);
+		return;
+	}
 
-    if (this->model->Modeltype() == Constant::ONE_PL)
-    {
-        estimator = new EM1PL(this->model, quadNodes, f, r);
-        return;
-    }
+	if (this->model->Modeltype() == Constant::ONE_PL)
+	{
+		estimator = new EM1PL(this->model, quadNodes, f, r);
+		return;
+	}
 
-    if (this->model->Modeltype() == Constant::TWO_PL)
-    {
-        estimator = new EM2PL(this->model, quadNodes, f, r);
-        return;
-    }
+	if (this->model->Modeltype() == Constant::TWO_PL)
+	{
+		estimator = new EM2PL(this->model, quadNodes, f, r);
+		return;
+	}
 
-    if (this->model->Modeltype() == Constant::RASCH)
-    {
-        estimator = new EM1PLAC(this->model, quadNodes, f, r);
-        return;
-    }
+	if (this->model->Modeltype() == Constant::RASCH)
+	{
+		estimator = new EM1PLAC(this->model, quadNodes, f, r);
+		return;
+	}
 }
 
 /**
@@ -94,51 +95,52 @@ void EMEstimation::setInitialValues(int method) { estimator->setInitialValues(me
  */
 void ** EMEstimation::estimate()
 {
-    double ** args_hist;
-    int nargs;
-    int size;
+	double ** args_hist;
+	int nargs;
+	int size;
+	double time_counter[5];
+	for(int i = 0; i < 5; i++) time_counter[i] = 0;
 
-    // [1] -> iterations
-    // [2] -> convergenceSignal
-    void ** return_list = new void*[3];
+	// [1] -> iterations
+	// [2] -> convergenceSignal
+	void ** return_list = new void*[3];
 
-    iterations = 0;
-    size = 3 * model->getItemModel()->getDataset()->countItems();
+	iterations = 0;
+	size = 3 * model->getItemModel()->getDataset()->countItems();
 
-    (args_hist) = new double*[3];
-    (args_hist)[0] = new double[size];
-    (args_hist)[1] = new double[size];
-    (args_hist)[2] = new double[size];
+	(args_hist) = new double*[3];
+	(args_hist)[0] = new double[size];
+	(args_hist)[1] = new double[size];
+	(args_hist)[2] = new double[size];
 
-    estimator->pm->transform();
+	estimator->pm->transform();
 
-    for (int i = 0; i < 3; i++)
-        for (int j = 0; j < size; j++)
-            args_hist[i][j] = 0;
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < size; j++)
+			args_hist[i][j] = 0;
 
-    for (;!(iterations++ > Constant::MAX_EM_ITERS || convergenceSignal);)
-    {
-    //    cout << iterations << endl;
-        estimator->stepE();
-        estimator->stepM(&args_hist, &nargs);
-        estimator->stepRamsay(&args_hist, &nargs, size, iterations > 5 && (iterations) % 3 == 0);
+	for (;!(iterations++ > Constant::MAX_EM_ITERS || convergenceSignal);)
+	{
+//        cout << iterations << endl;
+		estimator->stepE();
+		estimator->stepM(&args_hist, &nargs);
+		estimator->stepRamsay(&args_hist, &nargs, size, iterations > 5 && (iterations) % 3 == 0);
+		convergenceSignal = model->itemParametersEstimated;
+	}
 
-        convergenceSignal = model->itemParametersEstimated;
-    }
+	return_list[0] = new int(iterations);
+	return_list[1] = new bool(convergenceSignal);
+	return_list[2] = model->parameterModel->probabilityMatrix;
 
-    return_list[0] = new int(iterations);
-    return_list[1] = new bool(convergenceSignal);
-    return_list[2] = model->parameterModel->probabilityMatrix;
+	estimator->pm->untransform();
+	//model->printParameterSet(cout);
 
-    estimator->pm->untransform();
-    //model->printParameterSet(cout);
+	delete [] (args_hist)[0];
+	delete [] (args_hist)[1];
+	delete [] (args_hist)[2];
+	delete [] (args_hist);
 
-    delete [] (args_hist)[0];
-    delete [] (args_hist)[1];
-    delete [] (args_hist)[2];
-    delete [] (args_hist);
-
-    return return_list;
+	return return_list;
 }
 
 /**Returns the iterations that took the estimation to obtain an answer*/

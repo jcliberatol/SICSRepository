@@ -11,7 +11,7 @@ Input::Input() { del = ','; }
 
 Input::~Input() {}
 
-bool Input::importCSV(char* filename, Matrix<double>& M,   int rowIdx,   int colIdx)
+bool Input::importCSV(char* filename, Matrix<double>& M, int rowIdx, int colIdx)
 {
 	bool eof = false;
 	int row = 0;
@@ -29,7 +29,7 @@ bool Input::importCSV(char* filename, Matrix<double>& M,   int rowIdx,   int col
 	string currentLine;
 
 	// Header lines are ignored
-	for (  int i = 0; i < rowIdx; i++)
+	for (int i = 0; i < rowIdx; i++)
 	{
 		//cout << "Ignored a header line : " << endl;
 		getline(inFile, currentLine);
@@ -52,7 +52,7 @@ bool Input::importCSV(char* filename, Matrix<double>& M,   int rowIdx,   int col
 		}
 		
 		//Clean string of the ignored columns
-		for (  int k = 0; k < colIdx; ++k)
+		for (int k = 0; k < colIdx; ++k)
 		{
 			processLine = strchr(processLine, del);
 			processLine = &processLine[1]; //Skip one character
@@ -82,12 +82,12 @@ bool Input::importCSV(char* filename, Matrix<double>& M,   int rowIdx,   int col
 /*
  * Imports a CSV file whose elements repeat and generally is composed of only zeroes and ones.
  */
-bool Input::importCSV(char* filename, PatternMatrix& M,   int rowIdx,   int colIdx)
+bool Input::importCSV(char* filename, PatternMatrix& M, int rowIdx, int colIdx)
 {
 	ifstream inFile;
 	bool eof;
 	string currentLine; // currentLine holds the characters of the current line to read
-	  int linelen;
+	int linelen;
 	int line;
 	eof = false;
 
@@ -99,7 +99,7 @@ bool Input::importCSV(char* filename, PatternMatrix& M,   int rowIdx,   int colI
 	}
 
 	// Header lines are ignored
-	for (  int i = 0; i < rowIdx; i++)
+	for (int i = 0; i < rowIdx; i++)
 		getline(inFile, currentLine);
 
 	line = 0;
@@ -127,7 +127,7 @@ bool Input::importCSV(char* filename, PatternMatrix& M,   int rowIdx,   int colI
 		const char* processLine = currentLine.c_str();
 		
 		//Clean string of the ignored columns
-		for (  int k = 0; k < colIdx; ++k)
+		for (int k = 0; k < colIdx; ++k)
 		{
 			processLine = strchr(processLine, del);
 			processLine = &processLine[1]; //Skip one character

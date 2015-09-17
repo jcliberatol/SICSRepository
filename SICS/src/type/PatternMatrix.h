@@ -23,7 +23,7 @@ class PatternMatrix : public DataSet
 
 public:
 
-      int size;
+    int size;
     map<vector<char>, int> matrix;
     bool** bitset_list;
     int * count_set_bits;
@@ -40,7 +40,7 @@ public:
     inline bool checkEnd(){return (iterator==matrix.end());}
     inline void iterate(){++iterator;}
     inline vector<char> getCurrentBitSet(){return (iterator->first);}
-    inline long int getCurrentFrequency(){return (iterator->second);}
+    inline int getCurrentFrequency(){return (iterator->second);}
     int countBitSet(bool * bitset, int index);
     void push(vector<char>);/**Use this to fill the pattern matrix*/
     void push(vector<char>,int);/**Use this to fill the pattern matrix many times with a pattern*/
@@ -51,8 +51,8 @@ public:
     friend std::ostream& operator<< (std::ostream &, PatternMatrix &);/**Output operator*/
 
     //DataSet implementations
-      int countItems () const;
-      int countIndividuals () const;
+    int countItems () const;
+    int countIndividuals () const;
     bool ** getBitsetList();
     int * getFrequencyList();
 

@@ -30,11 +30,11 @@ class ParameterModel
 public:
 
 	double *** parameterSet;
-	  int items;
+	int items;
 	Matrix<double> * probabilityMatrix;
 	ItemModel * itemModel;
 	DimensionModel * dimensionModel;
-
+	
 	ParameterModel() {}
 
 	virtual void buildParameterSet(ItemModel * itemModel, DimensionModel * dimensionModel)
@@ -88,12 +88,12 @@ public:
 	virtual void setParameters(double * parameters) = 0;
 	virtual double getProbability(int, int) = 0;
 	virtual void printParameterSet(ostream&)=0;
-
+	
 	// Destructor
 	virtual ~ParameterModel()
 	{
 		//delete probabilityMatrix;
-
+		
 		if (typeid(*itemModel) == typeid(DichotomousModel))
 		{
 			if (typeid(*dimensionModel) == typeid(UnidimensionalModel))

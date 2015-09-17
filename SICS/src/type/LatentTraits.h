@@ -14,11 +14,11 @@ class LatentTraits
 
 public:
 
-      int dim;
+    int dim;
 
-    LatentTraits(PatternMatrix * p, const   int dims = 1)
+    LatentTraits(PatternMatrix * p, const int dims = 1)
     {
-          int rows;
+        int rows;
         
         pm = p;
         rows = pm->matrix.size();
@@ -30,17 +30,17 @@ public:
     {
         double ** result;
         bool ** pattern_list;
-          int items;
+        int items;
 
         pattern_list = pm->getBitsetList();
         result = new double*[pm->matrix.size()];
         items = pm->countItems();
 
-        for(  int i = 0; i < pm->matrix.size(); i++)
+        for(int i = 0; i < pm->matrix.size(); i++)
         {
             result[i] = new double[items + 1];
 
-            for(  int j = 0; j < items; j++)
+            for(int j = 0; j < items; j++)
                 result[i][j] = pattern_list[i][j];
             
             result[i][items] = (*traits)(i,0);
@@ -51,7 +51,7 @@ public:
 
     void deleteListPatternTheta(double ** p)
     {
-        for(  int i = 0; i < pm->matrix.size(); i++)
+        for(int i = 0; i < pm->matrix.size(); i++)
             delete [] p[i];
         delete [] p;
     }
@@ -62,9 +62,9 @@ public:
     {
         bool ** pattern_list = pm->getBitsetList();
 
-        for(  int i = 0; i < pm->matrix.size(); i++)
+        for(int i = 0; i < pm->matrix.size(); i++)
         {
-            for(  int j = 0; j < pm->countItems(); j++)
+            for(int j = 0; j < pm->countItems(); j++)
                 cout << pattern_list[i][j] << " ";
             cout<<(*traits)(i,0)<<endl;
         }

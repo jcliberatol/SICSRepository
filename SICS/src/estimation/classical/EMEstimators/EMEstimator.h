@@ -31,8 +31,8 @@ public:
     int size;
     int dims;
     int * frequency_list;
-    long double sum;
-    long double * faux;
+    double sum;
+    double * faux;
     double *** pset;
     Matrix<double>* weights;
     Matrix<double>* f;
@@ -54,7 +54,7 @@ public:
         this->data = m->getItemModel()->getDataset();
         this->pm = m->getParameterModel();
         this->q = this->nodes->size();
-        this->faux = new long double[q];
+        this->faux = new double[q];
         this->weights = this->nodes->getWeight();
         this->items = data->countItems();
         this->hptr = NULL;
@@ -76,6 +76,7 @@ public:
     void stepE()
     {
         double prob_matrix[q][(int) items];
+        //double prob_matrix[q * ((int) items)];
         int k, i;
         int counter_temp[items];
         int counter_set;
@@ -88,6 +89,7 @@ public:
 
         for (k = 0; k < q; ++k)
             for (i = 0; i < items; ++i)
+                //prob_matrix[(k*items) + i] = pm->getProbability(k, i);
                 prob_matrix[k][i] = pm->getProbability(k, i);
 
         for (int index = 0; index < size; index++)
@@ -103,13 +105,17 @@ public:
 
                 for (i = 0; i < items; i++)
                 {
+                    //cout << "(" << index << "," << k << "," << i << ")" << endl;
                     if (bitset_list[index][i])
                     {
                         counter_temp[counter_set++] = i + 1;
+                        //cout << "counter_temp[" << counter_set << "] = " << i + 1 << endl;
+                        //faux[k] *= prob_matrix[(k*q) + i];
                         faux[k] *= prob_matrix[k][i];
                     }
                     else
                         faux[k] *= 1 - prob_matrix[k][i];
+                        //faux[k] *= 1 - prob_matrix[(k*q) + i];
                 }
                 //At this point the productory is calculated and faux[k] is equivalent to p(u_j,theta_k)
                 //Now multiply by the weight
@@ -122,7 +128,9 @@ public:
                 (*f)(0, k) += faux[k];
 
                 for (i = 0; i < counter_set; i++)
+                {
                     (*r)(k, counter_temp[i] - 1) += faux[k];
+                }
             }
         }
     }
