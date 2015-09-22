@@ -24,17 +24,8 @@
 
 void oneRun(char * args)
 {
-
-    std::cout <<43%5 << std::endl;
-    int * arr = new int[3];
-int count = pow(15,3);
-    for (size_t ll = 0; ll < count; ll++) {
-        fullpermutations(3,15,ll,arr);
-        std::cout<<arr[0]<<" "<<arr[1]<<" "<<arr[2]<<std::endl;
-    }
-
   Input input;
-  Matrix<double> cuad(41, 2);
+  Matrix<double> cuad(10, 2);
   cuad.reset();
   Model *model = new Model();
   ModelFactory *modelFactory;
@@ -44,10 +35,11 @@ int count = pow(15,3);
 
   modelFactory = new SICSGeneralModel();
   dataSet = new PatternMatrix(0);
-  theta = new Matrix<double>(1, 41);
-  weight = new Matrix<double>(1, 41);
-  //std::cout<<cuad<<std::endl;
-  input.importCSV((char *) "Cuads.csv", cuad, 1, 0);
+  theta = new Matrix<double>(1, 10);
+  weight = new Matrix<double>(1, 10);
+
+  input.importCSV((char *) "quads10.csv", cuad, 1, 0);
+ std::cout<<cuad<<std::endl;
   input.importCSV(args, *dataSet, 1, 0);
   //Start by telling the model that it is a multidimensional model.
   int dimstype = 2;

@@ -8,6 +8,7 @@
 #include <model/parameter/ThreePLModel.h>
 #include <string>
 #include <math.h>
+#include <util/util.h>
 
 ThreePLModel::ThreePLModel()
 {
@@ -81,9 +82,35 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel, Quadrature
 			probabilityMatrix = new Matrix<double>(totalNodes,items);
 			//Filling the matrix
 			//Perform times selections in
+			std::cout << "total nodes in matrix : " <<totalNodes<< std::endl;
+			//For each node every place in the probmatrix must be filled.
+			double * theta = new double[q];
+			int * theta_index = new int[q];
+			for (int k = 0; k < totalNodes; k++) {
+				/* code */
+				//Calculate theta index
+				fullpermutations(dims,q,k,theta_index);
+				//Index the theta array at the theta_index
+				for (int j = 0; j < q; j++) {
+					theta[j] = (*quadNodes->getTheta())(0,theta_index[j]);
+				}
+
+				//Now calculate the probability for each item using the theta array.
+				// a alias :   parameterSet[0][0] *
+				for (unsigned int i = 0; i < items; i++ )
+				{
+					// 3PL Success Probability Function
+					d_d = parameterSet[1][0][i];
+					c_d = parameterSet[2][0][i];
+
+					(*probabilityMatrix)(k,i) = successProbabilityMD ( theta,
+					parameterSet[0][0]+(dims*i)  //This is a array passed directly
+					, d_d, c_d , dims );
+				}
+			}
 		}
 
-
+		//////////////////////////////////////////////////////// Oooolde code
 		for (unsigned int k = 0; k < q; k++)
 		{
 			for (unsigned int i = 0; i < items; i++ )
@@ -97,6 +124,8 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel, Quadrature
 				(*probabilityMatrix)(k,i) = successProbability ( theta_d, a_d, d_d, c_d );
 			}
 		}
+
+		/// Oldeee code finished
 	}
 }
 
