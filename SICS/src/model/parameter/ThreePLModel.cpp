@@ -15,6 +15,7 @@ ThreePLModel::ThreePLModel()
 	parameterSet = NULL;
 	probabilityMatrix = NULL;
 	nodes = NULL;
+	multiweights = NULL;
 }
 
 //Same method in uni and multidimensional
@@ -42,6 +43,8 @@ void ThreePLModel::untransform()
 
 void ThreePLModel::setEstimationNodes(QuadratureNodes* n) { this->nodes = n; }
 
+
+//remember that model class wraps this so only quad nodes is needed to call this.
 void ThreePLModel::successProbability(DimensionModel *dimensionModel, QuadratureNodes * quadNodes)
 {
 	unsigned int q = 0;
@@ -73,44 +76,54 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel, Quadrature
 
 	if(typeid(*dimensionModel)==typeid(MultidimensionalModel))
 	{
-		std::cout << "Multidim prob matrix" << std::endl;
+		//std::cout << "Multidim prob matrix lolololo" << std::endl;
+		int dims = dimensionModel->getNumDimensions();
+		int totalNodes = pow(q,dims);
 		if(probabilityMatrix == NULL){
 			//Creates the matrix if it is not already created
 			//This matrix has many more columns because in the multidim case it stores
-			int dims = dimensionModel->getNumDimensions();
-			int totalNodes = pow(q,dims);
-			probabilityMatrix = new Matrix<double>(totalNodes,items);
+
+			probabilityMatrix = new Matrix<double>(totalNodes,items);}
 			//Filling the matrix
 			//Perform times selections in
-			std::cout << "total nodes in matrix : " <<totalNodes<< std::endl;
+			//std::cout << "total nodes in matrix : " <<totalNodes<< std::endl;
 			//For each node every place in the probmatrix must be filled.
-			double * theta = new double[q];
-			int * theta_index = new int[q];
+			//LEAKS
+			double * theta = new double[dims];
+			int * theta_index = new int[dims];
+			multiweights = new double[totalNodes];
 			for (int k = 0; k < totalNodes; k++) {
-				/* code */
+				multiweights[k] = 1;
+			}
+			for (int k = 0; k < q; k++) {
+				theta_index[k] = 0;
+			}
+			for (int k = 0; k < totalNodes; k++) {
 				//Calculate theta index
 				fullpermutations(dims,q,k,theta_index);
 				//Index the theta array at the theta_index
-				for (int j = 0; j < q; j++) {
+				for (int j = 0; j < dims; j++) {
 					theta[j] = (*quadNodes->getTheta())(0,theta_index[j]);
+					multiweights[k] *= (*quadNodes->getWeight())(0,theta_index[j]);
 				}
 
 				//Now calculate the probability for each item using the theta array.
 				// a alias :   parameterSet[0][0] *
-				for (unsigned int i = 0; i < items; i++ )
+				//std::cout << "Must enter the universe" << std::endl;
+				for (int i = 0; i < items; i++ )
 				{
 					// 3PL Success Probability Function
 					d_d = parameterSet[1][0][i];
 					c_d = parameterSet[2][0][i];
-
+					//std::cout<<"d : "<< d_d << "th : "<< theta[0]<<"  "<< theta[1]<<"	"<<std::endl;
 					(*probabilityMatrix)(k,i) = successProbabilityMD ( theta,
 					parameterSet[0][0]+(dims*i)  //This is a array passed directly
 					, d_d, c_d , dims );
 				}
 			}
-		}
 
 		//////////////////////////////////////////////////////// Oooolde code
+		/*
 		for (unsigned int k = 0; k < q; k++)
 		{
 			for (unsigned int i = 0; i < items; i++ )
@@ -126,6 +139,7 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel, Quadrature
 		}
 
 		/// Oldeee code finished
+		*/
 	}
 }
 
@@ -194,6 +208,10 @@ void ThreePLModel::setParameters(double * parameters)
 }
 
 double ThreePLModel::getProbability(int node, int item) { return ((*probabilityMatrix)(node, item)); }
+
+void ThreePLModel::destroyWeights(){
+	delete [] multiweights;
+}
 
 void ThreePLModel::itemGradient(double* args, double* pars, int nargs, int npars, double* gradient)
 {

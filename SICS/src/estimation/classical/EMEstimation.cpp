@@ -39,9 +39,16 @@ void EMEstimation::setModel(Model * model)
 	q = quadNodes->size();
 	It = this->model->getItemModel()->getDataset()->countItems();
 
+	int dims = this->model->getDimensionModel()->getNumDimensions();
+
+	if(dims < 2){
+		q = quadNodes->size();
+}else{
+	q = pow(quadNodes->size(),dims);
+}
+
 	this->f = new Matrix<double>(d, q);
 	this->r = new Matrix<double>(q, It);
-
 	//Discriminate by models
 	if (this->model->Modeltype() == Constant::THREE_PL)
 	{

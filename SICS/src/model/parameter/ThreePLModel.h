@@ -29,6 +29,7 @@ class ThreePLModel: public ParameterModel
 private:
 
 	QuadratureNodes* nodes;
+	//double* multiweights;
 
 public:
 
@@ -51,6 +52,7 @@ public:
 	void getParameters(double *);
 	void setParameters(double *);
 	void setParameterSet(double ***);
+	void destroyWeights();
 	void printParameterSet(ostream&);
 	double getProbability(int, int);
 };

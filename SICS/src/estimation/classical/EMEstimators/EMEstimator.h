@@ -53,12 +53,17 @@ public:
         this->sum = 0.0;
         this->data = m->getItemModel()->getDataset();
         this->pm = m->getParameterModel();
-        this->q = this->nodes->size();
+        this->items = data->countItems();
+        //Here q must change =? in the multidim case ?
+        if(m->getDimensionModel()->getNumDimensions() == 1){
+           this->q = this->nodes->size();
+        }
+        else{
+            this->q = (int) pow(items,m->getDimensionModel()->getNumDimensions());
+        }
         this->faux = new long double[q];
         this->weights = this->nodes->getWeight();
-        this->items = data->countItems();
         this->hptr = NULL;
-
         this->bitset_list = data->getBitsetList();
         this->frequency_list = data->getFrequencyList();
 
@@ -127,8 +132,78 @@ public:
             }
         }
     }
-    
+
     void stepEMultidim(){
+            //Things to do in EStep multidim
+
+                    /* code */
+                    int counter_temp[items];
+                    int counter_set;
+
+                    //calling to m function successProbability also needs the dimensional model now.
+
+                    m->successProbability(nodes);
+
+                    cout<<*(m->getParameterModel()->probabilityMatrix);
+                    cout<<m->getParameterModel()->probabilityMatrix->nC()<<std::endl;
+                    cout<<m->getParameterModel()->probabilityMatrix->nR()<<std::endl;
+                    int totalNodes = m->getParameterModel()->probabilityMatrix->nR();
+                    //With this two indexes now we can compute the matrix
+                    double prob_matrix[totalNodes][(int) items];
+                    //And copy that bitch!
+                    for (int k = 0; k < totalNodes; ++k)
+                    for (int i = 0; i < items; ++i)
+                    prob_matrix[k][i] = pm->getProbability(k, i);
+                    //The new node array must be forged with the permutations so some way to forge it must pass
+                    //Bringing the weights array.
+                    double * mweights = m->getParameterModel()->multiweights;
+                    for (int i = 0; i < totalNodes; i++) {
+                            /* code */
+                            std::cout<<mweights[i]<<", ";
+                    }
+
+                    std::cout<<std::endl;
+
+                    for (int index = 0; index < size; index++)
+                    {
+                        sum = 0.0;
+                        //Calculate g*(k) for all the k's
+                        //first calculate the P for each k and store it in the array f aux
+                        for (int k = 0; k < q; k++)
+                        {
+                            faux[k] = mweights[k];
+                            //Calculate the p (iterate over the items in the productory)
+                            counter_set = 0;
+
+                            for (int i = 0; i < items; i++)
+                            {
+                                if (bitset_list[index][i])
+                                {
+                                    counter_temp[counter_set++] = i + 1;
+                                    faux[k] *= prob_matrix[k][i];
+                                }
+                                else
+                                faux[k] *= 1 - prob_matrix[k][i];
+                            }
+                            //At this point the productory is calculated and faux[k] is equivalent to p(u_j,theta_k)
+                            //Now multiply by the weight
+                            sum += faux[k];
+                        }
+
+                        for (int k = 0; k < q; k++)
+                        {
+                            faux[k] *= frequency_list[index] / sum; //This is g*_j_k
+                            (*f)(0, k) += faux[k];
+
+                            for (int i = 0; i < counter_set; i++)
+                            (*r)(k, counter_temp[i] - 1) += faux[k];
+                        }
+                    }
+
+            // 1. Create quadnodes in a wavy fashion
+            // 2 . Bring probabilityMatrix
+            //3. ?
+            //Start Now
 
     }
 

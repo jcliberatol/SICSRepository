@@ -29,7 +29,6 @@
  	if(dims == 1)
  	{
  		indexes[0] = index;
-
  	}
  	//Other cases
  	if(dims > 1){

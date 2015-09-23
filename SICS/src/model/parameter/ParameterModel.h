@@ -34,6 +34,7 @@ public:
 	Matrix<double> * probabilityMatrix;
 	ItemModel * itemModel;
 	DimensionModel * dimensionModel;
+	double * multiweights;
 
 	ParameterModel() {}
 
