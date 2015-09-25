@@ -370,6 +370,17 @@ double ThreePLModel::itemLogLikMultiDim(double* args, double* pars, int nargs, i
 	return -sum;
 }
 
+static void itemGradientMultiDim(double* args, double* pars, int nargs, int npars, double* grad ){
+	double h = 0.00001;
+	double loglik = ThreePLModel::itemLogLikMultiDim(args,pars,nargs,npars);
+
+	for (int i = 0;  i < nargs; i++) {
+		args[i] += h;
+		grad[i] = (ThreePLModel::itemLogLikMultiDim(args,pars,nargs,npars) - loglik)  / h;
+		args[i] -= h;
+	}
+}
+
 double ThreePLModel::itemLogLik(double* args, double* pars, int nargs, int npars)
 {
 	double *theta, *r, *f;
