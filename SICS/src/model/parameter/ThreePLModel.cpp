@@ -122,24 +122,6 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel, Quadrature
 				}
 			}
 
-		//////////////////////////////////////////////////////// Oooolde code
-		/*
-		for (unsigned int k = 0; k < q; k++)
-		{
-			for (unsigned int i = 0; i < items; i++ )
-			{
-				// 3PL Success Probability Function
-				theta_d = (*quadNodes->getTheta())(0,k);
-				a_d = parameterSet[0][0][i];
-				d_d = parameterSet[1][0][i];
-				c_d = parameterSet[2][0][i];
-
-				(*probabilityMatrix)(k,i) = successProbability ( theta_d, a_d, d_d, c_d );
-			}
-		}
-
-		/// Oldeee code finished
-		*/
 	}
 }
 
@@ -307,6 +289,85 @@ void ThreePLModel::itemGradient(double* args, double* pars, int nargs, int npars
 			gradient[hc++]= -static_cast<double>(h[n]);
 
 	delete [] h;
+}
+
+double ThreePLModel::itemLogLikMultiDim(double* args, double* pars, int nargs, int npars){
+	// args are a array of dims size, b and c , singles ...
+	// nargs thus is dims + 2.
+	int dims = nargs - 2;
+	double tp , tq; //Probabilities
+	double * a = new double [dims];
+	double * thetafull , *r , *f;
+ 	int nP = 0;
+	double sum = 0;
+	int q = pars[nP ++ ]; // totalNodes ( 10 nodes at 3 dimensions  = 1000 nodes for instance)
+	int qs  = pars[nP ++]; //Small Nodes (10 nodes for instance)
+
+	// pars are : number of quads  (dims), f and r, theta. and thats  it.
+	//Pars contain number of thetas,
+
+	thetafull = new double[qs]; // qs is number of quadrature nodes
+	r = new double[q];
+	f = new double[q];
+
+	// Obtain theta
+	for (unsigned int k=0; k<qs; k++)
+		thetafull[k] = pars[nP ++];
+
+	// Obtain f
+	for (unsigned int k=0; k<q; k++)
+		f[k] = pars[nP ++];
+
+	// Obtain r that becomes a vector
+	for (unsigned int k=0; k<q; k++)
+	{
+		r[k] = pars[nP++];
+	}
+	//Restart
+	nP = 0;
+	for (unsigned int k=0; k<dims; k++){
+		a[k] = args[nP ++];
+		if(a[k] > 5 ) a[k] = 0.851;
+	}
+
+	double d = args[nP ++];
+	double c = args[nP ++];
+
+
+	if(abs(d)>5)
+		d = 0;
+	if(abs(c)>5)
+		c = 0.1;
+
+	//Here things change because the two thetas must be send to the optimizing function
+	//Ergo the same permutations must occur here
+	double * theta = new double[dims];
+	int * theta_index = new int[dims];
+
+	for (int k = 0; k < dims; k++) {
+		theta_index[k] = 0;
+	}
+	for (int k = 0; k < q; k++) {
+		//Calculate theta index
+		fullpermutations(dims,qs,k,theta_index);
+		//Index the theta array at the theta_index
+		for (int j = 0; j < dims; j++) {
+			theta[j]  = thetafull[theta_index[k]];
+			tp = ThreePLModel::successProbabilityMD(theta, a, d, c , dims);
+			if (tp<1e-08) tp=1e-08;
+			tq = 1-tp;
+			if (tq<1e-08) tq=1e-08;
+			sum+=(r[k]*log(tp))+(f[k]-r[k])*log(tq);
+		}
+	}
+
+	delete[] theta;
+	delete[] f;
+	delete[] r;
+	delete[] a;
+	delete[] thetafull;
+
+	return -sum;
 }
 
 double ThreePLModel::itemLogLik(double* args, double* pars, int nargs, int npars)

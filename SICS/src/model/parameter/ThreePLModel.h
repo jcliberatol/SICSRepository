@@ -34,10 +34,11 @@ private:
 public:
 
 	static double itemLogLik(double*, double* , int, int);
+	static double itemLogLikMultiDim(double* , double* , int , int);
 	static void itemGradient(double*, double*, int, int, double*);
 	static double successProbability(double, double, double, double);
 	double successProbability(double, double *);
-	double successProbabilityMD(double * theta, double * a , double d , double c , int dims );
+	static double successProbabilityMD(double * theta, double * a , double d , double c , int dims );
 	static double successProbability_cPrime (double, double, double, double);
 	virtual void transform();
 	virtual void untransform();

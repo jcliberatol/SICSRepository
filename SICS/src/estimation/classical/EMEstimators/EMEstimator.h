@@ -217,9 +217,9 @@ public:
         }
     }
 
-    //Step M also needs the model, quad nodes, f and r
-    void stepM(double *** parameters, int * nargs)
-    {
+
+    void stepMUnidim(double *** parameters, int * nargs){
+
         int par_index[dims];
         Optimizer optim;
         Matrix<double> ** tri;
@@ -381,6 +381,14 @@ public:
         delete [] iargs;
         delete [] args;
         delete [] pars;
+
+    }
+        void stepMMultidim(double *** parameters, int * nargs){}
+    //Step M also needs the model, quad nodes, f and r
+    void stepM(double *** parameters, int * nargs)
+    {
+
+
     }
 
     //Initial values
