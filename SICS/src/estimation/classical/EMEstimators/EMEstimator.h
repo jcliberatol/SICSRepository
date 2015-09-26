@@ -220,6 +220,8 @@ public:
 
     void stepMUnidim(double *** parameters, int * nargs){
 
+        std::cout<<"Starting , this is going to be implauslbe"<<std::endl;
+        std::cout<<"Dims  "<<dims<<std::endl;
         int par_index[dims];
         Optimizer optim;
         Matrix<double> ** tri;
@@ -383,11 +385,161 @@ public:
         delete [] pars;
 
     }
-        void stepMMultidim(double *** parameters, int * nargs){}
+        void stepMMultidim(double *** parameters, int * nargs){
+
+                std::cout<<"Starting , this is going to be implauslbe"<<std::endl;
+                std::cout<<"Dims  "<<dims<<std::endl;
+
+                //We need all item pars and all f's and r's nothing more, except for the QuadratureNodes
+
+                Optimizer optim;
+
+                //Number of items
+                It = m->getItemModel()->getDataset()->countItems();
+                //Number of quadnodes
+                q = nodes->size();
+
+                pset = m->getParameterModel()->getParameterSet();
+
+                tri = new Matrix<double>*[dims];
+
+                for(int i = 0; i < dims; i++)
+                tri[i] = new Matrix<double>(pset[i], 1, items);
+
+                for(int j = 0; j < dims; j++)
+                for (int i = 0; i < It; i++, nA++)
+                args[nA] = pset[j][0][i];
+
+                // Obtain theta
+                thetas = nodes->getTheta();
+                for (int k = 0; k < q; k++, nP++)
+                pars[nP] = (*thetas)(0, k);
+
+                // Obtain f
+                for (int k = 0; k < q; k++, nP++)
+                pars[nP] = (*f)(0, k);
+
+                // Obtain r
+                for (int k = 0; k < q; k++)
+                for (int i = 0; i < It; i++, nP++)
+                pars[nP] = (*r)(k, i);
+
+                *nargs = nA;
+                pars[nP++] = 0; //For holding the item.
+                npars = nP;
+
+                for_counter = 0;
+
+                for (int i = 0; i < It; i++)
+                {
+                    pars[npars - 1] = i;
+
+                    for(for_counter = 0; for_counter < dims; for_counter++)
+                    {
+                        par_index[for_counter] = i + (i*for_counter) + (for_counter*(items - i));
+                        iargs[for_counter] = args[par_index[for_counter]];
+                    }
+
+                    if(iargs[0]<0)
+                    iargs[0] = 0.851;
+
+                    if(abs(iargs[0]) > 5)
+                    iargs[0] = 0.851;
+
+                    if(dims > 1)
+                    {
+                        if(abs(-iargs[1]/iargs[0]) > 5)
+                        iargs[1] = 0;
+
+                        if(dims > 2)
+                        if(abs(iargs[2]) > 5)
+                        iargs[2] = 0.3;
+                    }
+
+                    optim.searchOptimal(fptr, gptr, hptr, iargs, pars, dims, npars);
+
+                    for(for_counter = 0; for_counter < dims; for_counter++)
+                    args[par_index[for_counter]] = iargs[for_counter];
+                }
+
+                std::copy(&((*parameters)[1][0]), (&((*parameters)[1][0])) + *nargs, &((*parameters)[0][0]));
+                std::copy(&((*parameters)[2][0]), (&((*parameters)[2][0])) + *nargs, &((*parameters)[1][0]));
+                std::copy(&args[0], &args[0] + *nargs, &((*parameters)[2][0]));
+
+                // Now pass the optimals to the Arrays.
+                nA = 0;
+
+                // Obtain a
+                for (int i = 0; i < It; i++)
+                {
+                    pset[0][0][i] = args[nA++];
+                    if (fabs(pset[0][0][i]) > abs(5))
+                    pset[0][0][i] = 0.851;
+
+                }
+
+                // Obtain b
+                if(dims > 1)
+                {
+                    for (int i = 0; i < It; i++)
+                    {
+                        pset[1][0][i] = args[nA++];
+                        if (fabs(-pset[1][0][i] / pset[0][0][i]) > abs(5))
+                        pset[1][0][i] = 0;
+                    }
+
+                    // Obtain c
+                    if(dims > 2)
+                    for (int i = 0; i < It; i++)
+                    {
+                        pset[2][0][i] = args[nA++];
+                        if (fabs(pset[2][0][i]) > abs(20))
+                        pset[2][0][i] = 0.5;
+                    }
+                }
+
+                //Obtain the deltas
+                double maxDelta = 0;
+                for (int v1 = 0; v1 < It; ++v1)
+                {
+                    for(int j = 0; j < dims; j++)
+                    tri[j]->setIndex(0, v1, tri[j]->getIndex(0, v1) - pset[j][0][v1]);
+
+                    for(int j = 0; j < dims; j++)
+                    if (fabs(tri[j]->getIndex(0, v1)) > maxDelta)
+                    maxDelta = fabs(tri[j]->getIndex(0, v1));
+                }
+
+                //TODO change by constant file
+                Constant::EPSILONC = maxDelta;
+                if (maxDelta < Constant::CONVERGENCE_DELTA)
+                m->itemParametersEstimated = true;
+
+                //And set the parameter sets
+                double *** parSet = m->getParameterModel()->getParameterSet();
+                for(int i = 0; i < dims; i++)
+                parSet[i] = pset[i];
+
+                // llenar las tres matrices
+                m->getParameterModel()->setParameterSet(parSet);
+
+                for(int i = 0; i < dims; i++)
+                delete tri[i];
+
+                delete [] tri;
+                delete [] iargs;
+                delete [] args;
+                delete [] pars;
+        }
     //Step M also needs the model, quad nodes, f and r
     void stepM(double *** parameters, int * nargs)
     {
-
+            if(m->getDimensionModel()->getNumDimensions() == 1){
+                stepMUnidim(parameters, nargs);
+            }
+            else{
+                stepMMultidim(parameters, nargs);
+            }
 
     }
 

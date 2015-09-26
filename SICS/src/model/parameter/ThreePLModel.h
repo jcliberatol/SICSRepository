@@ -36,6 +36,7 @@ public:
 	static double itemLogLik(double*, double* , int, int);
 	static double itemLogLikMultiDim(double* , double* , int , int);
 	static void itemGradient(double*, double*, int, int, double*);
+	static void itemGradientMultiDim(double*, double*, int, int, double*);
 	static double successProbability(double, double, double, double);
 	double successProbability(double, double *);
 	static double successProbabilityMD(double * theta, double * a , double d , double c , int dims );
