@@ -387,9 +387,8 @@ public:
     }
         void stepMMultidim(double *** parameters, int * nargs){
                 Matrix<double> * thetas;
-                std::cout<<"Starting , this is going to be implauslbe"<<std::endl;
                 dims = m->getDimensionModel()->getNumDimensions();
-                std::cout<<"Dims  "<<dims<<std::endl;
+                //std::cout<<"Dims  "<<dims<<std::endl;
 
                 //We need all item pars and all f's and r's nothing more, except for the QuadratureNodes
 
@@ -400,37 +399,20 @@ public:
                 //Number of quadnodes
                 q = nodes->size();
                 //std::cout<<" the pset is ;: "<<pset<<std::endl;
-                std::cout<<" Dims ;: "<<dims<<std::endl;
+                //std::cout<<" Dims ;: "<<dims<<std::endl;
 
                 pset = m->getParameterModel()->getParameterSet();
                 //Pset is accessed with tripple pointers
-                cout<<endl;
-                cout<<"A ;"<<std::endl;
-                for (size_t yy = 0; yy < dims * It; yy++) {
-                        std::cout<<"  : "<<pset[0][0][yy]<<" ";
-                }
-                cout<<endl;
-                cout<<"D ;"<<std::endl;
-                for (size_t yy = 0; yy < It; yy++) {
-                        std::cout<<"  : "<<pset[1][0][yy]<<" ";
-                }
-                cout<<endl;
-                cout<<"C ;"<<std::endl;
-                for (size_t yy = 0; yy <  It; yy++) {
-                        std::cout<<"  : "<<pset[2][0][yy]<<" ";
-                }
 
                 //Now the f's and R's
                  //(*f); 1 x 100
                  //(*r) 100 x 10;   k, i
-                std::cout<<" the f  is ;: "<<"R"<<std::endl<<f->nR()<<"   "<<f->nC()<<std::endl<<"R"<<"  "<<std::endl<<r->nR()<<"   "<<r->nC()<<std::endl;
 
 
                 //Now the motherfreaking nodules.
 
 
                 thetas = nodes->getTheta();
-                std::cout<<*(thetas)<<"     "<<thetas->nR()<<" "<<thetas->nC()<<std::endl;
                 //
 
 
@@ -483,11 +465,7 @@ public:
                         //Arrays seem to be complete-
                         int npars = 2 + thetas -> nC() + f->nC() *  2;
                         int numargs = dims + 2 ;
-                        std::cout<<"Ready to optimize , nargs and npars  : "<<numargs<<"  "<<npars<<"  In item : "<<i<<std::endl;
                         optim.searchOptimal(fptr, gptr, hptr, args, pars, numargs, npars);
-                        for (int arr = 0; arr < numargs; arr++) {
-                                std::cout<<"  "<<args[arr]<<" ";
-                        }std::cout<<std::endl;
                         double delta = 0;
                         //Copy the optimal to the pset.
                         for (int oo = 0; oo < dims; oo++) {
@@ -504,46 +482,14 @@ public:
                         if(delta > maxDelta){maxDelta = delta;}
                         pset[2][0][i] = args[nP ++ ];
                 }
-                cout<<"Max Delta "<<maxDelta<<std::endl;
 
+
+
+                cout<<"Max Delta "<<maxDelta<<" ";
+                if (maxDelta < Constant::CONVERGENCE_DELTA_MD){
+                m->itemParametersEstimated = true;}
                 delete [] args;
                 delete [] pars;
-                /*
-
-
-                //Obtain the deltas
-                double maxDelta = 0;
-                for (int v1 = 0; v1 < It; ++v1)
-                {
-                    for(int j = 0; j < dims; j++)
-                    tri[j]->setIndex(0, v1, tri[j]->getIndex(0, v1) - pset[j][0][v1]);
-
-                    for(int j = 0; j < dims; j++)
-                    if (fabs(tri[j]->getIndex(0, v1)) > maxDelta)
-                    maxDelta = fabs(tri[j]->getIndex(0, v1));
-                }
-
-                //TODO change by constant file
-                Constant::EPSILONC = maxDelta;
-                if (maxDelta < Constant::CONVERGENCE_DELTA)
-                m->itemParametersEstimated = true;
-
-                //And set the parameter sets
-                double *** parSet = m->getParameterModel()->getParameterSet();
-                for(int i = 0; i < dims; i++)
-                parSet[i] = pset[i];
-
-                // llenar las tres matrices
-                m->getParameterModel()->setParameterSet(parSet);
-
-                for(int i = 0; i < dims; i++)
-                delete tri[i];
-
-                delete [] tri;
-                delete [] iargs;
-                delete [] args;
-                delete [] pars;
-                */
         }
     //Step M also needs the model, quad nodes, f and r
     void stepM(double *** parameters, int * nargs)

@@ -113,14 +113,14 @@ void ** EMEstimation::estimate()
 	// [1] -> iterations
 	// [2] -> convergenceSignal
 	void ** return_list = new void*[3];
-	std::cout << "Entering the estimation loop" << std::endl;
+	//std::cout << "Entering the estimation loop" << std::endl;
 	iterations = 0;
 
 	itemn = model->getItemModel()->getDataset()->countItems();
 	dims = model->getDimensionModel()->getNumDimensions();
 	size = 2 * itemn + (itemn * dims);
-	std::cout << "Using  " <<dims<<" dimensions "<< std::endl;
-	std::cout << "Size of array : " <<size <<std::endl;
+	//std::cout << "Using  " <<dims<<" dimensions "<< std::endl;
+	//std::cout << "Size of array : " <<size <<std::endl;
 
 	//Arrays used for ramsay and M step history store all the parameterSet
 	(args_hist) = new double*[3];
@@ -140,12 +140,13 @@ void ** EMEstimation::estimate()
 	for (;!(iterations++ > Constant::MAX_EM_ITERS || convergenceSignal);)
 	{
        std::cout <<"Iteration : "<< iterations << std::endl;
-		std::cout << "E step" << std::endl;
+		//std::cout << "E step" << std::endl;
 		estimator->stepE();
-		std::cout << "M step" << std::endl;
+		//std::cout << "M step" << std::endl;
 		estimator->stepM(&args_hist, &nargs);
-		//estimator->stepRamsay(&args_hist, &nargs, size, iterations > 5 && (iterations) % 3 == 0);
-
+		if(dims < 2){
+		estimator->stepRamsay(&args_hist, &nargs, size, iterations > 5 && (iterations) % 3 == 0);
+	}
 		convergenceSignal = model->itemParametersEstimated;
 	}
 

@@ -27,6 +27,7 @@ public:
 	enum initial_value_type{ANDRADE,RANDOM,OSPINA,FIXED};
 
 	static double CONVERGENCE_DELTA;
+	static double CONVERGENCE_DELTA_MD;
 	static int MAX_EM_ITERS;
 	static double NORM_CONST;
 	static double MAX_EXP;
