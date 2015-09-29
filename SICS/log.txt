@@ -1,0 +1,522 @@
+==21468== Memcheck, a memory error detector
+==21468== Copyright (C) 2002-2013, and GNU GPL'd, by Julian Seward et al.
+==21468== Using Valgrind-3.10.0 and LibVEX; rerun with -h for copyright info
+==21468== Command: ./SICS2 out.csv
+==21468== 
+-3.43616 7.64043e-06 
+-2.53273 0.00134365 
+-1.75668 0.0338744 
+-1.03661 0.240139 
+-0.342901 0.610863 
+0.342901 0.610863 
+1.03661 0.240139 
+1.75668 0.0338744 
+2.53273 0.00134365 
+3.43616 7.64043e-06 
+
+Estimating multidimensional model
+Dims used : 2
+Building parameterSet
+Building multidimensional parameter model
+With 2 Dimensions
+Creating EMEstimation
+Declaring QuadratureNodes
+Setting them
+Setting Model
+Multi dim functions used
+Ready to ANDRADE
+Andrade multidimensional enabled
+a  : 0 0 0.608082
+a  : 0 1 0.608082
+d  : 0 -0.732276
+a  : 1 0 0.608082
+a  : 1 1 0.608082
+d  : 1 -0.732276
+a  : 2 0 0.608082
+a  : 2 1 0.608082
+d  : 2 -0.732276
+a  : 3 0 0.608082
+a  : 3 1 0.608082
+d  : 3 -0.732276
+a  : 4 0 0.608082
+a  : 4 1 0.608082
+d  : 4 -0.732276
+a  : 5 0 0.608082
+a  : 5 1 0.608082
+d  : 5 -0.732276
+a  : 6 0 0.608082
+a  : 6 1 0.608082
+d  : 6 -0.732276
+a  : 7 0 0.608082
+a  : 7 1 0.608082
+d  : 7 -0.732276
+a  : 8 0 0.608082
+a  : 8 1 0.608082
+d  : 8 -0.732276
+a  : 9 0 0.608082
+a  : 9 1 0.608082
+d  : 9 -0.732276
+em.estimate
+Entering the estimation loop
+Using  2 dimensions 
+Size of array : 40
+Iteration : 1
+E step
+MU WEIS IS NULL
+M step
+Starting , this is going to be implauslbe
+Dims  2
+ Dims ;: 2
+
+A ;
+  : 0.608082   : 0.608082   : 0.608082   : 0.608082   : 0.608082   : 0.608082   : 0.608082   : 0.608082   : 0.608082   : 0.608082   : 0.608082   : 0.608082   : 0.608082   : 0.608082   : 0.608082   : 0.608082   : 0.608082   : 0.608082   : 0.608082   : 0.608082 
+D ;
+  : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276 
+C ;
+  : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629  the f  is ;: R
+1   100
+R  
+100   10
+-3.43616 -2.53273 -1.75668 -1.03661 -0.342901 0.342901 1.03661 1.75668 2.53273 3.43616 
+     1 10
+Ready to optimize , nargs and npars  : 4  212  In item : 0
+  0.492726   0.492782   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 1
+  0.62928   0.629279   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 2
+  1.41128   1.41111   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 3
+  0.312016   0.311924   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 4
+  0.3224   0.322205   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 5
+  0.498052   0.49805   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 6
+  0.365355   0.365408   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 7
+  1.41156   1.4115   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 8
+  0.622906   0.622906   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 9
+  1.24995   1.24994   -0.732276   -1.38629 
+Max Delta 0.803475
+Iteration : 2
+E step
+M step
+Starting , this is going to be implauslbe
+Dims  2
+ Dims ;: 2
+
+A ;
+  : 0.492726   : 0.492782   : 0.62928   : 0.629279   : 1.41128   : 1.41111   : 0.312016   : 0.311924   : 0.3224   : 0.322205   : 0.498052   : 0.49805   : 0.365355   : 0.365408   : 1.41156   : 1.4115   : 0.622906   : 0.622906   : 1.24995   : 1.24994 
+D ;
+  : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276 
+C ;
+  : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629  the f  is ;: R
+1   100
+R  
+100   10
+-3.43616 -2.53273 -1.75668 -1.03661 -0.342901 0.342901 1.03661 1.75668 2.53273 3.43616 
+     1 10
+Ready to optimize , nargs and npars  : 4  212  In item : 0
+  0.909171   0.49408   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 1
+  0.926399   0.657012   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 2
+  0.379765   1.34786   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 3
+  0.923195   0.275457   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 4
+  0.939103   0.288211   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 5
+  0.846052   0.511839   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 6
+  0.909576   0.342441   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 7
+  0.158589   1.50309   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 8
+  0.890715   0.655907   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 9
+  0.0986405   0.93234   -0.732276   -1.38629 
+Max Delta 1.25297
+Iteration : 3
+E step
+M step
+Starting , this is going to be implauslbe
+Dims  2
+ Dims ;: 2
+
+A ;
+  : 0.909171   : 0.49408   : 0.926399   : 0.657012   : 0.379765   : 1.34786   : 0.923195   : 0.275457   : 0.939103   : 0.288211   : 0.846052   : 0.511839   : 0.909576   : 0.342441   : 0.158589   : 1.50309   : 0.890715   : 0.655907   : 0.0986405   : 0.93234 
+D ;
+  : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276 
+C ;
+  : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629  the f  is ;: R
+1   100
+R  
+100   10
+-3.43616 -2.53273 -1.75668 -1.03661 -0.342901 0.342901 1.03661 1.75668 2.53273 3.43616 
+     1 10
+Ready to optimize , nargs and npars  : 4  212  In item : 0
+  1.04152   0.48297   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 1
+  1.03621   0.67016   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 2
+  0.318838   1.44441   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 3
+  1.076   0.240774   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 4
+  1.09339   0.253242   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 5
+  0.960199   0.513709   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 6
+  1.0571   0.313177   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 7
+  -0.106274   1.13596   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 8
+  0.987735   0.681647   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 9
+  0.112625   1.13184   -0.732276   -1.38629 
+Max Delta 0.367128
+Iteration : 4
+E step
+M step
+Starting , this is going to be implauslbe
+Dims  2
+ Dims ;: 2
+
+A ;
+  : 1.04152   : 0.48297   : 1.03621   : 0.67016   : 0.318838   : 1.44441   : 1.076   : 0.240774   : 1.09339   : 0.253242   : 0.960199   : 0.513709   : 1.0571   : 0.313177   : -0.106274   : 1.13596   : 0.987735   : 0.681647   : 0.112625   : 1.13184 
+D ;
+  : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276 
+C ;
+  : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629  the f  is ;: R
+1   100
+R  
+100   10
+-3.43616 -2.53273 -1.75668 -1.03661 -0.342901 0.342901 1.03661 1.75668 2.53273 3.43616 
+     1 10
+Ready to optimize , nargs and npars  : 4  212  In item : 0
+  1.12108   0.481677   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 1
+  1.1018   0.684684   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 2
+  0.322612   1.59009   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 3
+  1.16711   0.228144   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 4
+  1.18514   0.240699   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 5
+  1.02842   0.521033   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 6
+  1.14514   0.30324   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 7
+  -0.101585   1.27183   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 8
+  1.04472   0.706161   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 9
+  0.119454   1.26644   -0.732276   -1.38629 
+Max Delta 0.145684
+Iteration : 5
+E step
+M step
+Starting , this is going to be implauslbe
+Dims  2
+ Dims ;: 2
+
+A ;
+  : 1.12108   : 0.481677   : 1.1018   : 0.684684   : 0.322612   : 1.59009   : 1.16711   : 0.228144   : 1.18514   : 0.240699   : 1.02842   : 0.521033   : 1.14514   : 0.30324   : -0.101585   : 1.27183   : 1.04472   : 0.706161   : 0.119454   : 1.26644 
+D ;
+  : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276 
+C ;
+  : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629  the f  is ;: R
+1   100
+R  
+100   10
+-3.43616 -2.53273 -1.75668 -1.03661 -0.342901 0.342901 1.03661 1.75668 2.53273 3.43616 
+     1 10
+Ready to optimize , nargs and npars  : 4  212  In item : 0
+  1.17983   0.481356   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 1
+  1.15021   0.697885   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 2
+  0.333536   1.71475   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 3
+  1.23337   0.219368   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 4
+  1.25179   0.231988   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 5
+  1.0788   0.528062   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 6
+  1.20946   0.296443   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 7
+  -0.094989   1.3821   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 8
+  1.0858   0.729836   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 9
+  0.129248   1.37737   -0.732276   -1.38629 
+Max Delta 0.124656
+Iteration : 6
+E step
+M step
+Starting , this is going to be implauslbe
+Dims  2
+ Dims ;: 2
+
+A ;
+  : 1.17983   : 0.481356   : 1.15021   : 0.697885   : 0.333536   : 1.71475   : 1.23337   : 0.219368   : 1.25179   : 0.231988   : 1.0788   : 0.528062   : 1.20946   : 0.296443   : -0.094989   : 1.3821   : 1.0858   : 0.729836   : 0.129248   : 1.37737 
+D ;
+  : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276 
+C ;
+  : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629  the f  is ;: R
+1   100
+R  
+100   10
+-3.43616 -2.53273 -1.75668 -1.03661 -0.342901 0.342901 1.03661 1.75668 2.53273 3.43616 
+     1 10
+Ready to optimize , nargs and npars  : 4  212  In item : 0
+  1.22666   0.48143   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 1
+  1.18867   0.710186   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 2
+  0.346101   1.8224   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 3
+  1.28562   0.212599   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 4
+  1.30433   0.22527   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 5
+  1.11899   0.534706   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 6
+  1.26036   0.291267   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 7
+  -0.0881162   1.47465   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 8
+  1.1176   0.753248   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 9
+  0.139443   1.47136   -0.732276   -1.38629 
+Max Delta 0.107651
+Iteration : 7
+E step
+M step
+Starting , this is going to be implauslbe
+Dims  2
+ Dims ;: 2
+
+A ;
+  : 1.22666   : 0.48143   : 1.18867   : 0.710186   : 0.346101   : 1.8224   : 1.28562   : 0.212599   : 1.30433   : 0.22527   : 1.11899   : 0.534706   : 1.26036   : 0.291267   : -0.0881162   : 1.47465   : 1.1176   : 0.753248   : 0.139443   : 1.47136 
+D ;
+  : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276 
+C ;
+  : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629  the f  is ;: R
+1   100
+R  
+100   10
+-3.43616 -2.53273 -1.75668 -1.03661 -0.342901 0.342901 1.03661 1.75668 2.53273 3.43616 
+     1 10
+Ready to optimize , nargs and npars  : 4  212  In item : 0
+  1.2657   0.4817   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 1
+  1.22059   0.721826   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 2
+  0.358791   1.91676   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 3
+  1.32886   0.207073   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 4
+  1.34777   0.219784   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 5
+  1.15251   0.540985   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 6
+  1.30256   0.287085   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 7
+  -0.0814369   1.55421   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 8
+  1.14324   0.776729   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 9
+  0.149355   1.55274   -0.732276   -1.38629 
+Max Delta 0.09436
+Iteration : 8
+E step
+M step
+Starting , this is going to be implauslbe
+Dims  2
+ Dims ;: 2
+
+A ;
+  : 1.2657   : 0.4817   : 1.22059   : 0.721826   : 0.358791   : 1.91676   : 1.32886   : 0.207073   : 1.34777   : 0.219784   : 1.15251   : 0.540985   : 1.30256   : 0.287085   : -0.0814369   : 1.55421   : 1.14324   : 0.776729   : 0.149355   : 1.55274 
+D ;
+  : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276 
+C ;
+  : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629  the f  is ;: R
+1   100
+R  
+100   10
+-3.43616 -2.53273 -1.75668 -1.03661 -0.342901 0.342901 1.03661 1.75668 2.53273 3.43616 
+     1 10
+Ready to optimize , nargs and npars  : 4  212  In item : 0
+  1.29924   0.482073   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 1
+  1.24789   0.732961   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 2
+  0.371106   2.0006   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 3
+  1.36576   0.202398   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 4
+  1.38483   0.215143   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 5
+  1.18131   0.546939   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 6
+  1.33865   0.28358   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 7
+  -0.0750697   1.62387   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 8
+  1.16445   0.800538   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 9
+  0.158786   1.6244   -0.732276   -1.38629 
+Max Delta 0.083838
+Iteration : 9
+E step
+M step
+Starting , this is going to be implauslbe
+Dims  2
+ Dims ;: 2
+
+A ;
+  : 1.29924   : 0.482073   : 1.24789   : 0.732961   : 0.371106   : 2.0006   : 1.36576   : 0.202398   : 1.38483   : 0.215143   : 1.18131   : 0.546939   : 1.33865   : 0.28358   : -0.0750697   : 1.62387   : 1.16445   : 0.800538   : 0.158786   : 1.6244 
+D ;
+  : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276 
+C ;
+  : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629  the f  is ;: R
+1   100
+R  
+100   10
+-3.43616 -2.53273 -1.75668 -1.03661 -0.342901 0.342901 1.03661 1.75668 2.53273 3.43616 
+     1 10
+Ready to optimize , nargs and npars  : 4  212  In item : 0
+  1.32868   0.482503   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 1
+  1.2717   0.743706   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 2
+  0.382885   2.07595   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 3
+  1.39797   0.198344   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 4
+  1.41718   0.211116   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 5
+  1.20659   0.552607   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 6
+  1.37022   0.280555   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 7
+  -0.0690531   1.68573   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 8
+  1.1823   0.824885   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 9
+  0.167705   1.68835   -0.732276   -1.38629 
+Max Delta 0.0753558
+Iteration : 10
+E step
+M step
+Starting , this is going to be implauslbe
+Dims  2
+ Dims ;: 2
+
+A ;
+  : 1.32868   : 0.482503   : 1.2717   : 0.743706   : 0.382885   : 2.07595   : 1.39797   : 0.198344   : 1.41718   : 0.211116   : 1.20659   : 0.552607   : 1.37022   : 0.280555   : -0.0690531   : 1.68573   : 1.1823   : 0.824885   : 0.167705   : 1.68835 
+D ;
+  : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276 
+C ;
+  : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629  the f  is ;: R
+1   100
+R  
+100   10
+-3.43616 -2.53273 -1.75668 -1.03661 -0.342901 0.342901 1.03661 1.75668 2.53273 3.43616 
+     1 10
+Ready to optimize , nargs and npars  : 4  212  In item : 0
+  1.35492   0.482965   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 1
+  1.2928   0.754149   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 2
+  0.394093   2.14435   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 3
+  1.42656   0.194764   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 4
+  1.44588   0.207558   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 5
+  1.2291   0.558035   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 6
+  1.39828   0.277898   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 7
+  -0.0633751   1.74131   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 8
+  1.19745   0.849965   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 9
+  0.176109   1.74606   -0.732276   -1.38629 
+Max Delta 0.0683963
+Iteration : 11
+E step
+M step
+Starting , this is going to be implauslbe
+Dims  2
+ Dims ;: 2
+
+A ;
+  : 1.35492   : 0.482965   : 1.2928   : 0.754149   : 0.394093   : 2.14435   : 1.42656   : 0.194764   : 1.44588   : 0.207558   : 1.2291   : 0.558035   : 1.39828   : 0.277898   : -0.0633751   : 1.74131   : 1.19745   : 0.849965   : 0.176109   : 1.74606 
+D ;
+  : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276   : -0.732276 
+C ;
+  : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629   : -1.38629  the f  is ;: R
+1   100
+R  
+100   10
+-3.43616 -2.53273 -1.75668 -1.03661 -0.342901 0.342901 1.03661 1.75668 2.53273 3.43616 
+     1 10
+Ready to optimize , nargs and npars  : 4  212  In item : 0
+  1.37862   0.483441   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 1
+  1.31171   0.764359   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 2
+  0.404743   2.20695   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 3
+  1.45229   0.191557   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 4
+  1.47171   0.204372   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 5
+  1.24945   0.56323   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 6
+  1.42355   0.275531   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 7
+  -0.0580128   1.79171   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 8
+  1.21043   0.875937   -0.732276   -1.38629 
+Ready to optimize , nargs and npars  : 4  212  In item : 9
+  0.184042   1.79859   -0.732276   -1.38629 
+Max Delta 0.0625962
+==21468== 
+==21468== HEAP SUMMARY:
+==21468==     in use at exit: 8,869 bytes in 6 blocks
+==21468==   total heap usage: 32,558 allocs, 32,552 frees, 8,394,360 bytes allocated
+==21468== 
+==21468== 800 bytes in 1 blocks are definitely lost in loss record 4 of 6
+==21468==    at 0x4C298A0: operator new[](unsigned long) (vg_replace_malloc.c:389)
+==21468==    by 0x410FBF: ThreePLModel::successProbability(DimensionModel*, QuadratureNodes*) (ThreePLModel.cpp:98)
+==21468==    by 0x40CE22: Model::successProbability(QuadratureNodes*) (Model.cpp:45)
+==21468==    by 0x407BD8: EMEstimator::stepEMultidim() (EMEstimator.h:145)
+==21468==    by 0x4081C2: EMEstimator::stepE() (EMEstimator.h:216)
+==21468==    by 0x406B89: EMEstimation::estimate() (EMEstimation.cpp:144)
+==21468==    by 0x417DD8: oneRun(char*) (Main2.cpp:81)
+==21468==    by 0x417F8D: main (Main2.cpp:117)
+==21468== 
+==21468== 8,069 (24 direct, 8,045 indirect) bytes in 1 blocks are definitely lost in loss record 6 of 6
+==21468==    at 0x4C298A0: operator new[](unsigned long) (vg_replace_malloc.c:389)
+==21468==    by 0x40692D: EMEstimation::estimate() (EMEstimation.cpp:115)
+==21468==    by 0x417DD8: oneRun(char*) (Main2.cpp:81)
+==21468==    by 0x417F8D: main (Main2.cpp:117)
+==21468== 
+==21468== LEAK SUMMARY:
+==21468==    definitely lost: 824 bytes in 2 blocks
+==21468==    indirectly lost: 8,045 bytes in 4 blocks
+==21468==      possibly lost: 0 bytes in 0 blocks
+==21468==    still reachable: 0 bytes in 0 blocks
+==21468==         suppressed: 0 bytes in 0 blocks
+==21468== 
+==21468== For counts of detected and suppressed errors, rerun with: -v
+==21468== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)

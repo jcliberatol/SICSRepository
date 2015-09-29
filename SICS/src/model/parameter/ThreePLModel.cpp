@@ -47,7 +47,7 @@ void ThreePLModel::setEstimationNodes(QuadratureNodes* n) { this->nodes = n; }
 //remember that model class wraps this so only quad nodes is needed to call this.
 void ThreePLModel::successProbability(DimensionModel *dimensionModel, QuadratureNodes * quadNodes)
 {
-	unsigned int q = 0;
+	int q = 0;
 	double a_d, d_d, c_d, theta_d; // d stands from "double"
 
 	if ( dimensionModel != NULL )
@@ -92,11 +92,16 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel, Quadrature
 		//LEAKS
 		double * theta = new double[dims];
 		int * theta_index = new int[dims];
-		multiweights = new double[totalNodes];
+
+		if(multiweights == NULL){
+			//cout<<"MU WEIS IS NULL"<<endl;
+			multiweights = new double[totalNodes];
+		}
+
 		for (int k = 0; k < totalNodes; k++) {
 			multiweights[k] = 1;
 		}
-		for (int k = 0; k < q; k++) {
+		for (int k = 0; k < dims; k++) {
 			theta_index[k] = 0;
 		}
 		for (int k = 0; k < totalNodes; k++) {
@@ -122,7 +127,8 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel, Quadrature
 					, d_d, c_d , dims );
 				}
 		}
-
+		delete [] theta;
+		delete [] theta_index;
 		}
 	}
 
@@ -312,21 +318,21 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel, Quadrature
 		f = new double[q];
 
 		// Obtain theta
-		for (unsigned int k=0; k<qs; k++)
+		for (int k=0; k<qs; k++)
 		thetafull[k] = pars[nP ++];
 
 		// Obtain f
-		for (unsigned int k=0; k<q; k++)
+		for (int k=0; k<q; k++)
 		f[k] = pars[nP ++];
 
 		// Obtain r that becomes a vector
-		for (unsigned int k=0; k<q; k++)
+		for (int k=0; k<q; k++)
 		{
 			r[k] = pars[nP++];
 		}
 		//Restart
 		nP = 0;
-		for (unsigned int k=0; k<dims; k++){
+		for (int k=0; k<dims; k++){
 			a[k] = args[nP ++];
 			//std::cout<<" a : "<<a[k];
 			//if(a[k] > 5 ) a[k] = 0.851;
@@ -379,6 +385,7 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel, Quadrature
 		delete[] r;
 		delete[] a;
 		delete[] thetafull;
+		delete[] theta_index;
 		return -sum;
 	}
 

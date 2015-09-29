@@ -144,8 +144,8 @@ public:
 
                     m->successProbability(nodes);
 
-                    cout<<*(m->getParameterModel()->probabilityMatrix);
-                    cout<<m->getParameterModel()->probabilityMatrix->nC()<<std::endl;
+                   // cout<<*(m->getParameterModel()->probabilityMatrix);
+                   // cout<<m->getParameterModel()->probabilityMatrix->nC()<<std::endl;
                     //cout<<m->getParameterModel()->probabilityMatrix->nR()<<std::endl;
                     int totalNodes = m->getParameterModel()->probabilityMatrix->nR();
                     //With this two indexes now we can compute the matrix
@@ -199,6 +199,7 @@ public:
                         }
                     }
 
+                    m->getParameterModel()->destroyWeights();
             // 1. Create quadnodes in a wavy fashion
             // 2 . Bring probabilityMatrix
             //3. ?
@@ -439,6 +440,15 @@ public:
                 double * args = new double [dims+2];
                 // 2 parametreras one for total nodes , this is f->nC() , other for small nodes, this is thetas nC()
                 double * pars = new double[2 + (f->nC() ) * 2 + thetas->nC()];
+
+                for (int pp = 0; pp < (2 + (f->nC() ) * 2 + thetas->nC()); pp++) {
+                        pars[pp] = pp;
+                }
+                for (int pp = 0; pp < (dims+2); pp++) {
+                        /* code */
+                        args[pp] = pp;
+                }
+                //cout<<"Hola ya inicialize !!"<<endl;
                 int nP = 2;
                 pars[0] = f->nC();
                 pars[1] = thetas->nC();
@@ -474,10 +484,6 @@ public:
                         int npars = 2 + thetas -> nC() + f->nC() *  2;
                         int numargs = dims + 2 ;
                         std::cout<<"Ready to optimize , nargs and npars  : "<<numargs<<"  "<<npars<<"  In item : "<<i<<std::endl;
-                        for (int arr = 0; arr < numargs; arr++) {
-                                std::cout<<"  "<<args[arr]<<" ";
-                        }std::cout<<std::endl;
-
                         optim.searchOptimal(fptr, gptr, hptr, args, pars, numargs, npars);
                         for (int arr = 0; arr < numargs; arr++) {
                                 std::cout<<"  "<<args[arr]<<" ";

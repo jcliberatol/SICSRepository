@@ -21,6 +21,6 @@ double Constant::D_CONST = 1;
 double Constant::EPSILONC = 10000;
 double Constant::LOGLIKO = 0;
 int Constant::ITER = 0;
-int Constant::MAX_EM_ITERS = 1;
+int Constant::MAX_EM_ITERS = 10;
 bool Constant::CAPTURE_HESSIANA = true;
 string Constant::INITIAL_VALUE_METHOD = "ANDRADE";

@@ -49,6 +49,8 @@ void EMEstimation::setModel(Model * model)
 
 	this->f = new Matrix<double>(d, q);
 	this->r = new Matrix<double>(q, It);
+	f->reset();
+	r->reset();
 	//Discriminate by models
 	if (this->model->Modeltype() == Constant::THREE_PL)
 	{
@@ -142,7 +144,7 @@ void ** EMEstimation::estimate()
 		estimator->stepE();
 		std::cout << "M step" << std::endl;
 		estimator->stepM(&args_hist, &nargs);
-		estimator->stepRamsay(&args_hist, &nargs, size, iterations > 5 && (iterations) % 3 == 0);
+		//estimator->stepRamsay(&args_hist, &nargs, size, iterations > 5 && (iterations) % 3 == 0);
 
 		convergenceSignal = model->itemParametersEstimated;
 	}

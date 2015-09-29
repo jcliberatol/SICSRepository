@@ -95,6 +95,12 @@ public:
     //Transforms back the parameters after estimating them
     virtual void untransform() = 0;
 
+    //Destroys the wieght in the multidim casw
+
+    void destroyWeights(){
+	    
+    }
+
 	// Getters and Setters
 	virtual double *** getParameterSet() = 0;
 	virtual void setParameterSet(double *** parameterSet) = 0;
@@ -122,7 +128,14 @@ public:
 			}
 			else if (typeid(*dimensionModel) == typeid(MultidimensionalModel))
 			{
-				// TODO: Dichotomous Multidimensional
+				//destroyWeights();
+				for(int i = 0; i < 3; i++)
+					delete [] parameterSet[i][0];
+
+				for(int i = 0; i < 3; i++)
+					delete [] parameterSet[i];
+
+				delete [] parameterSet;
 			}
 			else if (typeid(*dimensionModel) == typeid(MultiUniDimModel))
 			{
