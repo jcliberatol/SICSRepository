@@ -88,9 +88,20 @@ public:
 	}
 		EM3PL(Model* m, QuadratureNodes* nodes, Matrix<double>* f, Matrix<double>* r) : EMEstimator(m, nodes, f, r)
 		{
-			this->fptr = &ThreePLModel::itemLogLik;
-			this->gptr = &ThreePLModel::itemGradient;
-			this->dims = 3;
+			//Discriminate by dimensionality
+			if (m->getDimensionModel()->getNumDimensions() == 1) {
+				this->fptr = &ThreePLModel::itemLogLik;
+				this->gptr = &ThreePLModel::itemGradient;
+				this->dims = 3;
+			}
+			else {
+				std::cout<<"Multi dim functions used"<<std::endl;
+				this->fptr = &ThreePLModel::itemLogLikMultiDim;
+				this->gptr = &ThreePLModel::itemGradientMultiDim;
+				this->dims = 3;
+			}
+
+
 		}
 
 		virtual void stepRamsay(double *** parameters, int * nargs, int t_size, bool continue_flag)
