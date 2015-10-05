@@ -32,7 +32,7 @@ EMEstimation::~EMEstimation()
  * Sets the model to be estimated, currently only supports 3PL model
  */
 void EMEstimation::setModel(Model * model)
-{	
+{
 	int q;
 	int It;
 	int d = 1;
@@ -141,6 +141,10 @@ void ** EMEstimation::estimate()
 	delete [] (args_hist);
 
 	return return_list;
+}
+
+double EMEstimation::getLoglik(){
+	return estimator->LLEstep;
 }
 
 /**Returns the iterations that took the estimation to obtain an answer*/
