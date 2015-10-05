@@ -32,6 +32,8 @@ public:
     int dims;
     int * frequency_list;
     double sum;
+    double LLEstep;
+
     double * faux;
     double *** pset;
     Matrix<double>* weights;
@@ -144,6 +146,7 @@ public:
         Matrix<double> * thetas;
         double *** pset;
         double * args, * pars, * iargs;
+        double finalLL = 0;
 
         int It, q, npars, nA, nP, for_counter;
 
@@ -226,6 +229,11 @@ public:
             }
 
             optim.searchOptimal(fptr, gptr, hptr, iargs, pars, dims, npars);
+            //Call the pointer at the optimal.
+            double result;
+   	   result = (*fptr)(iargs, pars, dims, npars);
+           finalLL += result;
+          // std::cout<<"loglik : "<<result<<std::endl;
 
             for(for_counter = 0; for_counter < dims; for_counter++)
                 args[par_index[for_counter]] = iargs[for_counter];
@@ -294,6 +302,9 @@ public:
 
         for(int i = 0; i < dims; i++)
             delete tri[i];
+
+        //Passes the loglike.
+        this->LLEstep = finalLL;
 
         delete [] tri;
         delete [] iargs;
