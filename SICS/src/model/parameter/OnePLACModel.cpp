@@ -12,7 +12,7 @@ void OnePLACModel::setEstimationNodes(QuadratureNodes* n) { this->nodes = n; }
 
 void OnePLACModel::successProbability(DimensionModel *dimensionModel, QuadratureNodes * quadNodes)
 {
-	unsigned int q = 0;
+	int q = 0;
 	double a_d, d_d, theta_d; // d stands from "double"
 
 	if (dimensionModel != NULL)
@@ -26,9 +26,9 @@ void OnePLACModel::successProbability(DimensionModel *dimensionModel, Quadrature
 
 		a_d = parameterSet[0][0][0];
 
-		for (unsigned int k = 0; k < q; k++)
+		for (int k = 0; k < q; k++)
 		{
-			for (unsigned int i = 0; i < items; i++)
+			for (int i = 0; i < items; i++)
 			{
 				theta_d = (*quadNodes->getTheta())(0, k);
 				d_d = parameterSet[1][0][i];
@@ -44,7 +44,7 @@ void OnePLACModel::getParameters(double * parameters)
 {
 	parameters[0] = parameterSet[0][0][0];
 
-	for (unsigned  int i = 0; i < items; i++ )
+	for ( int i = 0; i < items; i++ )
 		parameters[i+1] = parameterSet[1][0][i];
 }
 
@@ -52,7 +52,7 @@ void OnePLACModel::setParameters(double * parameters)
 {
 	this->parameterSet[0][0][0] = parameters[0];
 
-	for (unsigned  int i = 0; i < items; i++ )
+	for ( int i = 0; i < items; i++ )
 		 this->parameterSet[1][0][i] = parameters[i+1];
 }
 
@@ -60,7 +60,7 @@ void OnePLACModel::setParameterSet(double *** parameterSet) { this->parameterSet
 
 double OnePLACModel::successProbability(double theta, double a, double d)
 {
-	long double exponential = (Constant::NORM_CONST) * (a * theta + d);
+	double exponential = (Constant::NORM_CONST) * (a * theta + d);
 	
 	if (exponential > Constant::MAX_EXP)
 		exponential = Constant::MAX_EXP;
@@ -72,7 +72,7 @@ double OnePLACModel::successProbability(double theta, double a, double d)
 
 double OnePLACModel::successProbability(double theta, double * zita)
 {
-	long double exponential = (Constant::NORM_CONST) * (zita[0] * theta + zita[1]);
+	double exponential = (Constant::NORM_CONST) * (zita[0] * theta + zita[1]);
 
 	if (exponential > Constant::MAX_EXP)
 		exponential = Constant::MAX_EXP;
@@ -168,10 +168,10 @@ double OnePLACModel::logLikelihood(double* args, double* pars, int nargs, int np
 
 	int nA = 0;
 	int nP = 0;
-	unsigned int q, It;
+	int q, It;
 	double *theta, *r, *f, *a, *d;
-	long double tp, tq;
-	long double sum = 0;
+	double tp, tq;
+	double sum = 0;
 
 	// Obtain q
 	q = pars[nP++]; // q is obtained and npars is augmented
@@ -186,28 +186,28 @@ double OnePLACModel::logLikelihood(double* args, double* pars, int nargs, int np
 	d = new double[It];
 
 	// Obtain theta
-	for (unsigned int k = 0; k < q; k++)
+	for (int k = 0; k < q; k++)
 		theta[k] = pars[nP++];
 
 	// Obtain f
-	for (unsigned int k = 0; k < q; k++)
+	for (int k = 0; k < q; k++)
 		f[k] = pars[nP++];
 
 	// Obtain r
-	for (unsigned int k = 0; k < q; k++)
-		for (unsigned int i = 0; i < It; i++)
+	for (int k = 0; k < q; k++)
+		for (int i = 0; i < It; i++)
 			r[k * It + i] = pars[nP++];
 
 	// Obtain a
 	a[0] = args[nA++];
 
 	// Obtain b
-	for (unsigned int i = 0; i < It; i++)
+	for (int i = 0; i < It; i++)
 		d[i] = args[nA++];
 
-	for (unsigned int k = 0; k < q; ++k)
+	for (int k = 0; k < q; ++k)
 	{
-		for (unsigned int i = 0; i < It; ++i)
+		for (int i = 0; i < It; ++i)
 		{
 			tp = (OnePLACModel::successProbability(theta[k], a[0], d[i]));
 
@@ -234,7 +234,7 @@ void OnePLACModel::printParameterSet(ostream& out)
 {
 	out << "\"a\" \"b\" \"c\"" << endl;
 
-	for (unsigned int _i = 0; _i < items; _i++)
+	for (int _i = 0; _i < items; _i++)
 		out << parameterSet[0][0][0] <<
 		" " << parameterSet[1][0][_i] <<
 		" 0.25" << endl;

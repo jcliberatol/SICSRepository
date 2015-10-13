@@ -31,8 +31,10 @@ public:
     int size;
     int dims;
     int * frequency_list;
-    long double sum;
-    long double * faux;
+    double sum;
+    double LLEstep;
+
+    double * faux;
     double *** pset;
     Matrix<double>* weights;
     Matrix<double>* f;
@@ -81,6 +83,7 @@ public:
     //Unidim step E
     void stepEUnidim(){
         double prob_matrix[q][(int) items];
+        //double prob_matrix[q * ((int) items)];
         int k, i;
         int counter_temp[items];
         int counter_set;
@@ -109,13 +112,17 @@ public:
 
                 for (i = 0; i < items; i++)
                 {
+                    //cout << "(" << index << "," << k << "," << i << ")" << endl;
                     if (bitset_list[index][i])
                     {
                         counter_temp[counter_set++] = i + 1;
+                        //cout << "counter_temp[" << counter_set << "] = " << i + 1 << endl;
+                        //faux[k] *= prob_matrix[(k*q) + i];
                         faux[k] *= prob_matrix[k][i];
                     }
                     else
                     faux[k] *= 1 - prob_matrix[k][i];
+
                 }
                 //At this point the productory is calculated and faux[k] is equivalent to p(u_j,theta_k)
                 //Now multiply by the weight
@@ -128,7 +135,9 @@ public:
                 (*f)(0, k) += faux[k];
 
                 for (i = 0; i < counter_set; i++)
-                (*r)(k, counter_temp[i] - 1) += faux[k];
+                {
+                    (*r)(k, counter_temp[i] - 1) += faux[k];
+                }
             }
         }
     }
@@ -228,6 +237,7 @@ public:
         Matrix<double> * thetas;
         double *** pset;
         double * args, * pars, * iargs;
+        double finalLL = 0;
 
         int It, q, npars, nA, nP, for_counter;
 
@@ -310,6 +320,11 @@ public:
             }
 
             optim.searchOptimal(fptr, gptr, hptr, iargs, pars, dims, npars);
+            //Call the pointer at the optimal.
+            double result;
+   	   result = (*fptr)(iargs, pars, dims, npars);
+           finalLL += result;
+          // std::cout<<"loglik : "<<result<<std::endl;
 
             for(for_counter = 0; for_counter < dims; for_counter++)
             args[par_index[for_counter]] = iargs[for_counter];
@@ -378,6 +393,9 @@ public:
 
         for(int i = 0; i < dims; i++)
         delete tri[i];
+
+        //Passes the loglike.
+        this->LLEstep = finalLL;
 
         delete [] tri;
         delete [] iargs;

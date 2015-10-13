@@ -31,9 +31,15 @@ EMEstimation::~EMEstimation()
  */
 void EMEstimation::setModel(Model * model)
 {
+<<<<<<< HEAD
 	unsigned int q;
 	unsigned int It;
 	unsigned int d = 1;
+=======
+	int q;
+	int It;
+	int d = 1;
+>>>>>>> master
 
 	this->model = model;
 	q = quadNodes->size();
@@ -131,6 +137,7 @@ void ** EMEstimation::estimate()
 	//Transformation on this model (EM3PL)
 	estimator->pm->transform();
 
+<<<<<<< HEAD
 
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < size; j++)
@@ -151,6 +158,21 @@ void ** EMEstimation::estimate()
 	}
 
 
+=======
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < size; j++)
+			args_hist[i][j] = 0;
+
+	for (;!(iterations++ > Constant::MAX_EM_ITERS || convergenceSignal);)
+	{
+//        cout << iterations << endl;
+		estimator->stepE();
+		estimator->stepM(&args_hist, &nargs);
+		estimator->stepRamsay(&args_hist, &nargs, size, iterations > 5 && (iterations) % 3 == 0);
+		convergenceSignal = model->itemParametersEstimated;
+	}
+
+>>>>>>> master
 	return_list[0] = new int(iterations);
 	return_list[1] = new bool(convergenceSignal);
 	return_list[2] = model->parameterModel->probabilityMatrix;
@@ -164,6 +186,10 @@ void ** EMEstimation::estimate()
 	delete [] (args_hist);
 
 	return return_list;
+}
+
+double EMEstimation::getLoglik(){
+	return estimator->LLEstep;
 }
 
 /**Returns the iterations that took the estimation to obtain an answer*/

@@ -47,6 +47,8 @@ public:
 	virtual ~EMEstimation();
 	//Executes the estimation
 	void ** estimate();
+	//Get the loglik from estimator.
+	double getLoglik();
 	//Starts the E Step
 	void stepE();
 	//Starts the M Step

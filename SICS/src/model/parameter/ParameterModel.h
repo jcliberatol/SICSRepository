@@ -30,7 +30,7 @@ class ParameterModel
 public:
 
 	double *** parameterSet;
-	unsigned int items;
+	int items;
 	Matrix<double> * probabilityMatrix;
 	ItemModel * itemModel;
 	DimensionModel * dimensionModel;

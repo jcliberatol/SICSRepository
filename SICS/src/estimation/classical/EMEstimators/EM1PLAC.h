@@ -50,7 +50,7 @@ public:
 		data = m->getItemModel()->getDataset();
 		pm = m->getParameterModel();
 		q = this->nodes->size();
-		faux = new long double[q];
+		faux = new double[q];
 		weights = this->nodes->getWeight();
 		items = data->countItems();
 		fptr = &OnePLACModel::logLikelihood;
