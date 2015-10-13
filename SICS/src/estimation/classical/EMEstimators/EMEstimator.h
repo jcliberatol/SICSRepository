@@ -63,7 +63,7 @@ public:
         else{
             this->q = (int) pow(items,m->getDimensionModel()->getNumDimensions());
         }
-        this->faux = new long double[q];
+        this->faux = new double[q];
         this->weights = this->nodes->getWeight();
         this->hptr = NULL;
         this->bitset_list = data->getBitsetList();
