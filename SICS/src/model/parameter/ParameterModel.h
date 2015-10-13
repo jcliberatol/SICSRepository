@@ -34,7 +34,8 @@ public:
 	Matrix<double> * probabilityMatrix;
 	ItemModel * itemModel;
 	DimensionModel * dimensionModel;
-	
+	double * multiweights;
+
 	ParameterModel() {}
 
 	virtual void buildParameterSet(ItemModel * itemModel, DimensionModel * dimensionModel)
@@ -59,7 +60,20 @@ public:
 			}
 			else if (typeid(*dimensionModel) == typeid(MultidimensionalModel))
 			{
-				// TODO: Dichotomous Multidimensional
+
+				std::cout<<"Building multidimensional parameter model"<<std::endl;
+				items = itemModel->countItems();
+				int dims = dimensionModel->getNumDimensions();
+				std::cout<<"With "<<dims<<" Dimensions"<<std::endl;
+				parameterSet = new double**[3];
+				parameterSet[0] = new double *[1];
+				parameterSet[1] = new double *[1];
+				parameterSet[2] = new double *[1];
+				//TODO Correct number of dimensions in a parameter
+				parameterSet[0][0] = new double[items*dims]; // multidim a parameter
+				parameterSet[1][0] = new double[items];
+				parameterSet[2][0] = new double[items];
+
 			}
 			else if (typeid(*dimensionModel) == typeid(MultiUniDimModel))
 			{
@@ -81,6 +95,12 @@ public:
     //Transforms back the parameters after estimating them
     virtual void untransform() = 0;
 
+    //Destroys the wieght in the multidim casw
+
+    void destroyWeights(){
+	    
+    }
+
 	// Getters and Setters
 	virtual double *** getParameterSet() = 0;
 	virtual void setParameterSet(double *** parameterSet) = 0;
@@ -88,12 +108,12 @@ public:
 	virtual void setParameters(double * parameters) = 0;
 	virtual double getProbability(int, int) = 0;
 	virtual void printParameterSet(ostream&)=0;
-	
+
 	// Destructor
 	virtual ~ParameterModel()
 	{
 		//delete probabilityMatrix;
-		
+
 		if (typeid(*itemModel) == typeid(DichotomousModel))
 		{
 			if (typeid(*dimensionModel) == typeid(UnidimensionalModel))
@@ -108,7 +128,14 @@ public:
 			}
 			else if (typeid(*dimensionModel) == typeid(MultidimensionalModel))
 			{
-				// TODO: Dichotomous Multidimensional
+				//destroyWeights();
+				for(int i = 0; i < 3; i++)
+					delete [] parameterSet[i][0];
+
+				for(int i = 0; i < 3; i++)
+					delete [] parameterSet[i];
+
+				delete [] parameterSet;
 			}
 			else if (typeid(*dimensionModel) == typeid(MultiUniDimModel))
 			{

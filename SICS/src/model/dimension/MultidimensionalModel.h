@@ -11,17 +11,15 @@
 #include <vector>
 #include <model/dimension/DimensionModel.h>
 
-using namespace std;
 
 class MultidimensionalModel : public DimensionModel {
 public:
+
 	// Constructor
 	MultidimensionalModel();
-
 	// Methods
 	int getNumDimensions ();
 	vector<int> getDimVector();
-
 
 	// Destructor
 	virtual ~MultidimensionalModel();

@@ -14,9 +14,14 @@ using namespace std;
 
 class DimensionModel {
 public:
+	//Number of dimensions
+	int dims = 0;
 	// Methods
 	virtual int getNumDimensions () = 0;
 	virtual vector<int> getDimVector() = 0;
+	void setDims(int dim) {
+		dims = dim;
+	}
 
 	// Destructor
 	virtual ~DimensionModel();

@@ -8,6 +8,7 @@
 #ifndef UTIL_H_
 #define UTIL_H_
 #include <util/asa111.h>
+#include <math.h>
 
 #define iteration_0 (*args_hist)[2]
 #define iteration_1 (*args_hist)[1]
@@ -22,6 +23,21 @@
  * ExpTransform : Transforms from the real scale to the 0 , 1 scale (read antilogit)
  * PCheck : checks if a number is a probability, if it is one returns a very big probability, if its zero, a very small but not null.
  */
+
+ inline void fullpermutations (int dims, int nodes , int index, int* indexes){
+ 	//Base case
+ 	if(dims == 1)
+ 	{
+ 		indexes[0] = index;
+ 	}
+ 	//Other cases
+ 	if(dims > 1){
+ 		dims --;
+ 		indexes[0] = floor(index / pow(nodes,dims) );
+ 		index = index - indexes[0]*pow(nodes,dims);
+ 		fullpermutations(dims,nodes,index,indexes+1);
+ 	}
+ }
 
 inline double randomd() {
 
@@ -51,22 +67,13 @@ inline double normalInverse(double point) {
 }
 
 inline void ramsay(double *** args_hist, int size) {
-#if DEBUG
-	cout<<"Start Init values"<<endl;
-#endif
 	double dX[size];
 	double dX2[size];
 	double d2X2[size];
 	double accel;
 	double numerator = 0.0;
 	double denominator = 0.0;
-#if DEBUG
-	cout<<"End Init values"<<endl;
-#endif
 
-#if DEBUG
-	cout<<"Start for cicle"<<endl;
-#endif
 
 	for (int i = 0; i < size; i++) {
 		dX[i] = iteration_0[i] - iteration_1[i];
@@ -76,23 +83,16 @@ inline void ramsay(double *** args_hist, int size) {
 		numerator += dX[i] * dX[i];
 		denominator += d2X2[i] * d2X2[i];
 	}
-#if DEBUG
-	cout<<"End for cicle"<<endl;
-#endif
 	accel = 1 - sqrt(numerator / denominator);
 
 	if (accel < -5.0)
 		accel = -5;
 
-#if DEBUG
-	cout<<"Start update values"<<endl;
-#endif
+
 
 	for (int i = 0; i < size; i++)
 		iteration_0[i] = (1 - accel) * iteration_0[i] + accel * iteration_1[i];
-#if DEBUG
-	cout<<"End update values"<<endl;
-#endif
+
 }
 
 inline void transformHessiana( double * inputHessiana, double ** outputHessiana, int size)
@@ -106,5 +106,9 @@ inline void transformHessiana( double * inputHessiana, double ** outputHessiana,
     	}
     }
 }
+
+
+
+
 
 #endif /* UTIL_H_ */

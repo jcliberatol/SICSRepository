@@ -1,9 +1,9 @@
 /*
- * Matrix.h
- *
- *  Created on: May 28, 2014
- *      Author: mirt
- */
+* Matrix.h
+*
+*  Created on: May 28, 2014
+*      Author: mirt
+*/
 #ifndef MATRIX_H_
 #define MATRIX_H_
 
@@ -41,7 +41,7 @@ private:
   int nRow;
   T m(char);
   T get3x3determinant ();
-  
+
 public:
   //bool transposed;
   bool symmetric;
@@ -76,11 +76,11 @@ template<class T>
 T Matrix<T>::sum()
 {
   T sum = 0;
-  
+
   for (int i = 0; i < nRow; i++)
     for (int j = 0; j < nCol; j++)
       sum += memory[i];
-  
+
   return (sum);
 }
 
@@ -122,7 +122,7 @@ Matrix<T>::Matrix(int r, int c) {
   memory = new T*[r];
   for(int i = 0; i < r; i++)
     memory[i] = new T[c];
-  
+
   symmetric = false;
   ld = c;
 }
@@ -137,7 +137,7 @@ Matrix<T>::Matrix(T** mem , int r, int c) {
     memory[i] = new T[c];
   symmetric = false;
   ld = c;
-  
+
   for (int var = 0; var < r; ++var) {
     for (int j = 0; j < c; ++j) {
       memory[var][j] = mem[var][j];
@@ -148,7 +148,7 @@ Matrix<T>::Matrix(T** mem , int r, int c) {
 template<class T>
 inline T & Matrix<T>::operator()(const int r, const int c) {
   return (memory[r][c]);
-  
+
 }
 
 template<class T>
@@ -185,7 +185,7 @@ void Matrix<T>::copy(Matrix<T>& a) {
   memory = new T*[a.nR()];
   for(int i = 0; i < a.nR(); i++)
     memory[i] = new T[a.nC()];
-  
+
   memcpy(memory,a.memory,sizeof(T)*a.nC()*a.nR());
   symmetric = a.symmetric;
 }

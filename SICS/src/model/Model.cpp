@@ -16,11 +16,11 @@ Model::Model ()
 	type = 0;
 }
 
-void Model::setModel(ModelFactory * modelFactory, int modelType)
+void Model::setModel(ModelFactory * modelFactory, int modelType, int dimtype)
 {
 	parameterModel = modelFactory->createParameterModel(modelType);
 	itemModel = modelFactory->createItemModel();
-	dimensionModel = modelFactory->createDimensionModel();
+	dimensionModel = modelFactory->createDimensionModel(dimtype);
 	itemParametersEstimated = false;
 	type = modelType;
 }

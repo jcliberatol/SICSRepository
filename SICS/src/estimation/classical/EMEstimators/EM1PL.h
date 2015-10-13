@@ -24,7 +24,7 @@ public:
 	{
 		int items = m->getParameterModel()->items;
 		pset = m->getParameterModel()->getParameterSet();
-		
+
 		if (method == Constant::RANDOM)
 		{
 			std::srand(std::time(0));
@@ -36,7 +36,7 @@ public:
 		{
 			double * result = Andrade();
 			int ifault;
-			
+
 			for (int i = 0; i < items; i++)
 				pset[0][0][i] = -(ppnd(result[0], &ifault)) / result[1];
 
@@ -47,7 +47,7 @@ public:
 	EM1PL(Model* m, QuadratureNodes* nodes, Matrix<double>* f, Matrix<double>* r) : EMEstimator(m, nodes, f, r)
 	{
 		this->fptr = &OnePLModel::itemLogLik;
-        this->gptr = &OnePLModel::itemGradient;
+        	this->gptr = &OnePLModel::itemGradient;
 		this->dims = 1;
 	}
 

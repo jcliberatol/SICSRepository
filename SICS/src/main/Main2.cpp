@@ -18,89 +18,102 @@
 #include <time.h>
 #include <estimation/bayesian/LatentTraitEstimation.h>
 #include <type/LatentTraits.h>
-#include <util/fitness/ItemFit.h>
-#include <util/fitness/PersonFit.h>
+#include <util/util.h>
 
-#define ESTIMATION_MODEL Constant::TWO_PL
+#define ESTIMATION_MODEL Constant::THREE_PL
 
 void oneRun(char * args)
 {
-    Input input;
-    Matrix<double> cuad(41, 2);
-    Model *model = new Model();
-    ModelFactory *modelFactory;
-    PatternMatrix *dataSet;
-    Matrix<double> *theta;
-    Matrix<double> *weight;
-    
-    modelFactory = new SICSGeneralModel();
-    dataSet = new PatternMatrix(0);
-    theta = new Matrix<double>(1, 41);
-    weight = new Matrix<double>(1, 41);
+  Input input;
+  Matrix<double> cuad(10, 2);
+  cuad.reset();
+  Model *model = new Model();
+  ModelFactory *modelFactory;
+  PatternMatrix *dataSet;
+  Matrix<double> *theta;
+  Matrix<double> *weight;
 
-    input.importCSV((char *) "Cuads.csv", cuad, 1, 0);
-    input.importCSV(args, *dataSet, 1, 0);
-    
-    model->setModel(modelFactory, ESTIMATION_MODEL);
-    delete modelFactory;
-    
-    model->getItemModel()->setDataset(dataSet);
+  modelFactory = new SICSGeneralModel();
+  dataSet = new PatternMatrix(0);
+  theta = new Matrix<double>(1, 10);
+  weight = new Matrix<double>(1, 10);
 
-    for (int k = 0; k < cuad.nR(); k++)
-    {
-		(*theta)(0, k) = cuad(k, 0);
-		(*weight)(0, k) = cuad(k, 1);
-	}
+  input.importCSV((char *) "quads10.csv", cuad, 1, 0);
+ std::cout<<cuad<<std::endl;
+  input.importCSV(args, *dataSet, 1, 0);
+  //Start by telling the model that it is a multidimensional model.
+  int dimstype = 2;
+  model->setModel(modelFactory, ESTIMATION_MODEL, dimstype);
+  //Here we must set the number of dimensions to estimate in the given model
+  model->getDimensionModel()->setDims(2);
+  int dims = model->getDimensionModel()->getNumDimensions();
+  std::cout<<"Dims used : "<<dims<<std::endl;
+  delete modelFactory;
 
-	// build parameter set
-	model->getParameterModel()->buildParameterSet(model->getItemModel(), model->getDimensionModel());
+  model->getItemModel()->setDataset(dataSet);
 
-	// Create estimation
-	EMEstimation em;
-	//Here is where quadratures must be set.
-	//create the quad nodes
-	QuadratureNodes nodes(theta, weight);
-	em.setQuadratureNodes(&nodes);
-	em.setModel(model);
-	em.setInitialValues(Constant::ANDRADE);
-	//Pass the profiler to the estimation object so it can be used to profile each step
-	//Run the estimation
-	em.estimate();
+  for (int k = 0; k < cuad.nR(); k++)
+  {
+    (*theta)(0, k) = cuad(k, 0);
+    (*weight)(0, k) = cuad(k, 1);
+  }
 
-	/*
-	 * Now we will run the estimation of individual parameter
-	 */
-	//Now create the estimation
-	LatentTraitEstimation lte(dataSet);
-	//Pass the model
-	lte.setModel(model);
-	//Pass the quadrature nodes
-	lte.setQuadratureNodes(&nodes);
-	//Ready to estimate
-	lte.estimateLatentTraitsEAP();
-	//lte.estimateLatentTraitsMAP();
-	//finished
-	//now read the latent traits but we will do this later
-	lte.getLatentTraits()->print();
+  // build parameter set
+    std::cout << "Building parameterSet" << std::endl;
+model->getParameterModel()->buildParameterSet(model->getItemModel(), model->getDimensionModel());
 
-	//Matrix<double> data(dataSet->countIndividuals(), dataSet->countItems());
-	//input.importCSV(args, data, 1, 0);
-	
-	//double* itemsf = new double[ data.nC()];
-	//itemFit(latentTraits->pm, *(latentTraits->traits), data, model->getParameterModel()->getParameterSet(), model -> type,itemsf);
-	//personFit(latentTraits->pm, *(latentTraits->traits), data, model->getParameterModel()->getParameterSet(), model -> type);
+  // Create estimation
+std::cout << "Creating EMEstimation" << std::endl;
+  EMEstimation em;
+  //Here is where quadratures must be set.
+  //create the quad nodes
+std::cout << "Declaring QuadratureNodes" << std::endl;
+  QuadratureNodes nodes(theta, weight);
+std::cout << "Setting them" << std::endl;
+  em.setQuadratureNodes(&nodes);
+std::cout << "Setting Model" << std::endl;
+  em.setModel(model);
+    std::cout << "Ready to ANDRADE" << std::endl;
+  em.setInitialValues(Constant::ANDRADE);
 
-	delete dataSet;
-	delete model;
-	delete theta;
-	delete weight;
+  //Run the estimation
+std::cout << "em.estimate" << std::endl;
+  em.estimate();
+
+  /*
+  * Now we will run the estimation of individual parameter
+  */
+  //Now create the estimation
+ // LatentTraitEstimation lte(dataSet);
+  //Pass the model
+  //lte.setModel(model);
+  //Pass the quadrature nodes
+  //lte.setQuadratureNodes(&nodes);
+  //Ready to estimate
+  //lte.estimateLatentTraitsEAP();
+  //lte.estimateLatentTraitsMAP();
+  //finished
+  //now read the latent traits but we will do this later
+  //lte.getLatentTraits()->print();
+
+  //Matrix<double> data(dataSet->countIndividuals(), dataSet->countItems());
+  //input.importCSV(args, data, 1, 0);
+
+  //double* itemsf = new double[ data.nC()];
+  //itemFit(latentTraits->pm, *(latentTraits->traits), data, model->getParameterModel()->getParameterSet(), model -> type,itemsf);
+  //personFit(latentTraits->pm, *(latentTraits->traits), data, model->getParameterModel()->getParameterSet(), model -> type);
+
+  delete dataSet;
+  delete model;
+  delete theta;
+  delete weight;
 }
 
 int main(int argc, char *argv[]) {
-	if (argc < 2) {
-		cout << "Please specify an input file" << endl;
-		return (0);
-	}
-	oneRun(argv[1]);
-	return (0);
+  if (argc < 2) {
+    cout << "Please specify an input file" << endl;
+    return (0);
+  }
+  oneRun(argv[1]);
+  return (0);
 }

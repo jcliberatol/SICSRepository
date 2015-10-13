@@ -22,7 +22,7 @@ ParameterModel* SICSGeneralModel::createParameterModel(int model)
 
 	if (model == Constant::RASCH)
 		return (new OnePLACModel());
-	
+
 	return (new ThreePLModel());
 }
 
@@ -32,10 +32,28 @@ ItemModel* SICSGeneralModel::createItemModel()
 	return (new DichotomousModel());
 }
 
-DimensionModel* SICSGeneralModel::createDimensionModel()
+DimensionModel* SICSGeneralModel::createDimensionModel(int dimstype)
 {
-	//TODO FIX FOR DECISION OF NEW MODELS
-	return (new UnidimensionalModel());
+
+	if (dimstype == 1) {
+		std::cout<<"Estimating unidimensional model"<<std::endl;
+		return (new UnidimensionalModel());
+	}
+	else if (dimstype == 2){
+		std::cout<<"Estimating multidimensional model"<<std::endl;
+		return (new MultidimensionalModel());
+	}
+	else if (dimstype == 3){
+		std::cout<<"Estimating Multi-unidimensional model"<<std::endl;
+		return ((new MultiUniDimModel()));
+	}
+	else{
+		//Dummy return for wrong values
+		std::cout<<"WARNING : WRONG dimstype when creating dimensionalmodel , using UnidimensionalModel"<<std::endl;
+		std::cout<<"DIMSTYPE used : "<<dimstype<<std::endl;
+		return (new UnidimensionalModel());
+	}
+
 }
 
 SICSGeneralModel::~SICSGeneralModel() {}

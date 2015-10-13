@@ -22,9 +22,12 @@ class Constant
 public:
 
 	enum model_type{RASCH, ONE_PL, TWO_PL, THREE_PL};
+	enum dims_type{UNI, MULTI , MULTIUNI};
+	enum itemtype {DICH , POLY};
 	enum initial_value_type{ANDRADE,RANDOM,OSPINA,FIXED};
 
 	static double CONVERGENCE_DELTA;
+	static double CONVERGENCE_DELTA_MD;
 	static int MAX_EM_ITERS;
 	static double NORM_CONST;
 	static double MAX_EXP;
