@@ -80,6 +80,23 @@ std::cout << "Setting Model" << std::endl;
 std::cout << "em.estimate" << std::endl;
   em.estimate();
 
+  double fulloglik = em.getLoglik();
+      std::cout<<"Ll : "<<fulloglik<<std::endl;
+      double* returnpars;
+      double* pars;
+
+
+      returnpars = new double[(dims+2)*dataSet->size];
+      pars = new double[(dims+2)*dataSet->size];
+      model->parameterModel->getParameters(returnpars);
+
+
+          // Return in list
+          for (int i = 0; i < (dims+2)*dataSet->size; i++){
+              pars[i] = returnpars[i];
+              std::cout<<pars[i]<<" . "<<std::endl;
+      }
+
   /*
   * Now we will run the estimation of individual parameter
   */

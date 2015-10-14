@@ -128,10 +128,11 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel, Quadrature
 		}
 		delete [] theta;
 		delete [] theta_index;
-		}
 	}
+}
 
-	double *** ThreePLModel::getParameterSet() { return (this->parameterSet); }
+double *** ThreePLModel::getParameterSet() {
+	return (this->parameterSet); }
 
 
 	void ThreePLModel::setParameterSet(double ***) { this->parameterSet = parameterSet; }
@@ -176,8 +177,16 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel, Quadrature
 	{
 		unsigned int i = 0;
 
+		int dims = 1;
+		dims = dimensionModel->getNumDimensions();
+
 		for (unsigned int j = 0; j < items; j++)
-		parameters[i++] = parameterSet[0][0][j];
+		{	
+			for (int d = 0; d < dims; d++) {
+				/* code */
+				parameters[i++] = parameterSet[0][0][j*dims+d];
+			}
+		}
 		for (unsigned int j = 0; j < items; j++)
 		parameters[i++] = parameterSet[1][0][j];
 		for (unsigned int j = 0; j < items; j++)

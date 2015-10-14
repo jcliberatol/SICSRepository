@@ -463,7 +463,7 @@ public:
                  int nPbk = nP;
                 //Now the item filling
                 double maxDelta = 0;
-
+                double finalLL = 0;
                 for (int i = 0; i < It; i++) {
                         nP = nPbk;
                         //Item optimization
@@ -484,6 +484,12 @@ public:
                         int npars = 2 + thetas -> nC() + f->nC() *  2;
                         int numargs = dims + 2 ;
                         optim.searchOptimal(fptr, gptr, hptr, args, pars, numargs, npars);
+
+                        //Call the pointer at the optimal.
+                        double result;
+               	        result = (*fptr)(args, pars, numargs, npars);
+                        finalLL += result;
+
                         double delta = 0;
                         //Copy the optimal to the pset.
                         for (int oo = 0; oo < dims; oo++) {
@@ -506,6 +512,12 @@ public:
                 cout<<"Max Delta "<<maxDelta<<" ";
                 if (maxDelta < Constant::CONVERGENCE_DELTA_MD){
                 m->itemParametersEstimated = true;}
+
+
+                        //Passes the loglike.
+                        this->LLEstep = finalLL;
+                        cout << "LL : "<<finalLL<<std::endl;
+
                 delete [] args;
                 delete [] pars;
         }

@@ -32,7 +32,7 @@ private:
 	//double* multiweights;
 
 public:
-
+	
 	static double itemLogLik(double*, double* , int, int);
 	static double itemLogLikMultiDim(double* , double* , int , int);
 	static void itemGradient(double*, double*, int, int, double*);
