@@ -31,23 +31,26 @@ EMEstimation::~EMEstimation()
  */
 void EMEstimation::setModel(Model * model)
 {
-
+	std::cout<<"Welcome , here we are setting the modelel"<<std::endl;
 	int q;
 	int It;
 	int d = 1;
-
+	std::cout<<"about to tis model"<<std::endl;
 	this->model = model;
 	q = quadNodes->size();
 	It = this->model->getItemModel()->getDataset()->countItems();
 
 	int dims = this->model->getDimensionModel()->getNumDimensions();
 
+	std::cout<<"my dimz are : "<<dims<<std::endl;
 	if(dims < 2){
 		q = quadNodes->size();
 }else{
 	q = pow(quadNodes->size(),dims);
 }
 
+
+std::cout<<"abut to set f and r , meine q is .. "<<q<<std::endl;
 	this->f = new Matrix<double>(d, q);
 	this->r = new Matrix<double>(q, It);
 	f->reset();
@@ -55,6 +58,7 @@ void EMEstimation::setModel(Model * model)
 	//Discriminate by models
 	if (this->model->Modeltype() == Constant::THREE_PL)
 	{
+		std::cout<<"About to create the estimator "<<std::endl;
 		estimator = new EM3PL(this->model, quadNodes, f, r);
 		return;
 	}
@@ -140,10 +144,10 @@ void ** EMEstimation::estimate()
 
 	for (;!(iterations++ > Constant::MAX_EM_ITERS || convergenceSignal);)
 	{
-       std::cout <<"Iteration : "<< iterations << std::endl;
-		//std::cout << "E step" << std::endl;
+       std::cout <<"Iteratioon : "<< iterations << std::endl;
+		std::cout << "E step" << std::endl;
 		estimator->stepE();
-		//std::cout << "M step" << std::endl;
+		std::cout << "M step" << std::endl;
 		estimator->stepM(&args_hist, &nargs);
 		if(dims < 2){
 		estimator->stepRamsay(&args_hist, &nargs, size, iterations > 5 && (iterations) % 3 == 0);

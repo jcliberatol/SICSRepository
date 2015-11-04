@@ -229,8 +229,7 @@ public:
 
     void stepMUnidim(double *** parameters, int * nargs){
 
-        std::cout<<"Starting , this is going to be implauslbe"<<std::endl;
-        std::cout<<"Dims  "<<dims<<std::endl;
+
         int par_index[dims];
         Optimizer optim;
         Matrix<double> ** tri;
