@@ -67,7 +67,7 @@ public:
 	int getIterations() const;
 	QuadratureNodes* getQuadratureNodes() const;
 	void setQuadratureNodes(QuadratureNodes* latentTraitSet);
-
+	void setRestrictedItem(double * restricted , int resn){ estimator->setRestrictedItem(restricted,resn);}
 private:
 
 	//F and R Matrices, remember to set to zero and open memory in process

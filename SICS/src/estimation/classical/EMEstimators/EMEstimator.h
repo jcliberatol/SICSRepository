@@ -34,6 +34,9 @@ public:
     double sum;
     double LLEstep;
 
+    int nres = 0;
+    double * restrictitem ;
+
     double * faux;
     double *** pset;
     Matrix<double>* weights;
@@ -43,6 +46,8 @@ public:
     void (*gptr)(double*, double*, int, int, double*);
     void (*hptr)(double*, double*, int, int, double*);
     bool ** bitset_list;
+
+
 
     EMEstimator() {}
 
@@ -61,7 +66,7 @@ public:
            this->q = this->nodes->size();
         }
         else{
-            this->q = (int) pow(items,m->getDimensionModel()->getNumDimensions());
+            this->q = (int) pow(this->nodes->size(),m->getDimensionModel()->getNumDimensions());
         }
         this->faux = new double[q];
         this->weights = this->nodes->getWeight();
@@ -154,8 +159,9 @@ public:
                     m->successProbability(nodes);
 
                    // cout<<*(m->getParameterModel()->probabilityMatrix);
-                   // cout<<m->getParameterModel()->probabilityMatrix->nC()<<std::endl;
-                    //cout<<m->getParameterModel()->probabilityMatrix->nR()<<std::endl;
+                   //cout<<"Inside multidim EStep"<<endl;
+                    cout<<m->getParameterModel()->probabilityMatrix->nC()<<std::endl;
+                    cout<<m->getParameterModel()->probabilityMatrix->nR()<<std::endl;
                     int totalNodes = m->getParameterModel()->probabilityMatrix->nR();
                     //With this two indexes now we can compute the matrix
                     double prob_matrix[totalNodes][(int) items];
@@ -171,14 +177,16 @@ public:
                     }*/
 
                     //std::cout<<std::endl;
-
+                   // cout<<"Patterns : "<<endl;
                     for (int index = 0; index < size; index++)
                     {
                         sum = 0.0;
                         //Calculate g*(k) for all the k's
                         //first calculate the P for each k and store it in the array f aux
+                        //cout<<"Pat :  "<<index<<endl;
                         for (int k = 0; k < q; k++)
                         {
+                                //cout<<"f & mwei : "<<endl;
                             faux[k] = mweights[k];
                             //Calculate the p (iterate over the items in the productory)
                             counter_set = 0;
@@ -186,7 +194,7 @@ public:
                             for (int i = 0; i < items; i++)
                             {
                                 if (bitset_list[index][i])
-                                {
+                                {      //cout<<"cte & pm : "<<endl;
                                     counter_temp[counter_set++] = i + 1;
                                     faux[k] *= prob_matrix[k][i];
                                 }
@@ -198,14 +206,18 @@ public:
                             sum += faux[k];
                         }
 
+                        //cout<<"Snd for q :"<<q<<endl;
+
                         for (int k = 0; k < q; k++)
                         {
                             faux[k] *= frequency_list[index] / sum; //This is g*_j_k
+                            //std::cout<<" k : "<<k<<endl;
                             (*f)(0, k) += faux[k];
 
                             for (int i = 0; i < counter_set; i++)
                             (*r)(k, counter_temp[i] - 1) += faux[k];
                         }
+                        //std::cout<<"got to the end"<<endl;
                     }
 
                     m->getParameterModel()->destroyWeights();
@@ -226,6 +238,13 @@ public:
         }
     }
 
+
+    void setRestrictedItem(double  * restricted, int resn){
+            restrictitem = new double[resn];
+            for (int i = 0; i < resn; i++) {
+                        restrictitem[i] = restricted[i];
+        }
+    }
 
     void stepMUnidim(double *** parameters, int * nargs){
 
@@ -404,6 +423,11 @@ public:
     }
         void stepMMultidim(double *** parameters, int * nargs){
                 Matrix<double> * thetas;
+
+                for (int i = 0; i < nres; i++) {
+                        /* code */
+                }
+
                 dims = m->getDimensionModel()->getNumDimensions();
                 //std::cout<<"Dims  "<<dims<<std::endl;
 
@@ -463,7 +487,15 @@ public:
                 //Now the item filling
                 double maxDelta = 0;
                 double finalLL = 0;
+
+                int resi = 0;
+
+
+
+
+
                 for (int i = 0; i < It; i++) {
+                        bool skipoptim = false;
                         nP = nPbk;
                         //Item optimization
                         //Fill the R-
@@ -482,8 +514,19 @@ public:
                         //Arrays seem to be complete-
                         int npars = 2 + thetas -> nC() + f->nC() *  2;
                         int numargs = dims + 2 ;
-                        optim.searchOptimal(fptr, gptr, hptr, args, pars, numargs, npars);
+                        std::cout<<"it : "<<i<<std::endl;
+                        if(i == (restrictitem[resi]-1)){
+                                resi ++;
+                                skipoptim = true;
+                                std::cout<<"Not optimizing item.";
+                        }
 
+                        if(!skipoptim){
+                                optim.searchOptimal(fptr, gptr, hptr, args, pars, numargs, npars);
+                        }
+                        for (int kk = 0; kk < numargs; kk++) {
+                                cout<<" "<<args[kk]<<" ";
+                        }cout<<endl;
                         //Call the pointer at the optimal.
                         double result;
                	        result = (*fptr)(args, pars, numargs, npars);
@@ -608,7 +651,10 @@ public:
         return (result);
     }
 
-    virtual ~EMEstimator() { delete [] faux; }
+    virtual ~EMEstimator() {
+            delete [] faux;
+            delete [] restrictitem;
+     }
 };
 
 #endif /* EMESTIMATOR_H_ */

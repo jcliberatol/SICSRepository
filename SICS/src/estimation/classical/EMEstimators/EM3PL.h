@@ -18,16 +18,38 @@ public:
 
 	virtual void setInitialValues(double *** npset, Model* m)
 	{
+
+		DimensionModel * dimensionModel = m->getDimensionModel();
 		double *** pset = m->getParameterModel()->getParameterSet();
-
 		items = m->getParameterModel()->items;
-
-		for (int i = 0; i < items; i++)
-		{
-			pset[0][0][i] = npset[0][0][i];
-			pset[1][0][i] = npset[1][0][i];
-			pset[2][0][i] = npset[2][0][i];
+		if (typeid(*dimensionModel) == typeid(UnidimensionalModel)){
+			for (int i = 0; i < items; i++)
+			{
+				pset[0][0][i] = npset[0][0][i];
+				pset[1][0][i] = npset[1][0][i];
+				pset[2][0][i] = npset[2][0][i];
+			}
 		}
+
+		else if (typeid(*dimensionModel) == typeid(MultidimensionalModel)) {
+			int dims = dimensionModel->getNumDimensions();
+			std::cout<<"Kasting init prs"<<endl;
+			for (int d = 0;  d< dims*items; d++) {
+				pset[0][0][d] = npset[0][0][d];
+			}
+
+			for (int i = 0; i < items; i++)
+			{
+
+				pset[1][0][i] = npset[1][0][i];
+				pset[2][0][i] = npset[2][0][i];
+			}
+		}
+
+
+
+
+		//Multidimensional case
 	}
 
 	virtual void setInitialValues(int method, Model* m)
@@ -67,7 +89,7 @@ public:
 			}
 			//Enable multidimensional
 			else if (typeid(*dimensionModel) == typeid(MultidimensionalModel)) {
-				std::cout<<"Andrade multidimensional enabled"<<std::endl;
+				//std::cout<<"Andrade multidimensional enabled"<<std::endl;
 					double * result = Andrade();
 					int ifault;
 					int dims = dimensionModel->getNumDimensions();
@@ -75,10 +97,10 @@ public:
 					{
 						for (int k = 0; k < dims; k++) {
 							pset[0][0][i*dims+k] = std::sqrt((result[1] * result[1]) / (1.0 - result[1] * result[1]));
-							std::cout<<"a  : " <<i<<" "<<k<<" "<<pset[0][0][i*dims+k]<<std::endl;
+							//std::cout<<"a  : " <<i<<" "<<k<<" "<<pset[0][0][i*dims+k]<<std::endl;
 						}
 						pset[1][0][i] = -(ppnd(result[0], &ifault));
-						std::cout<<"d  : " <<i<<" "<<pset[1][0][i]<<std::endl;
+						//std::cout<<"d  : " <<i<<" "<<pset[1][0][i]<<std::endl;
 						pset[2][0][i] = 0.2;
 					}
 
@@ -95,7 +117,7 @@ public:
 				this->dims = 3;
 			}
 			else {
-				std::cout<<"Multi dim functions used"<<std::endl;
+				//std::cout<<"Multi dim functions used"<<std::endl;
 				this->fptr = &ThreePLModel::itemLogLikMultiDim;
 				this->gptr = &ThreePLModel::itemGradientMultiDim;
 				this->dims = 3;

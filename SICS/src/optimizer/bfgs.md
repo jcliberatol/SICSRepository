@@ -29,7 +29,7 @@ if (count < n) {
 ### Actualizacion del B con d1 y d2
 
 ```
-//la actualización de B se da con los parámetros D1 y D2. Página 3 del documento de Yuli 
+//la actualización de B se da con los parámetros D1 y D2. Página 3 del documento de Yuli
 				D1 = 0.0; //Paso 13 del algoritmo de nash, prepararse para la actualizacion de la matriz.
 				for (i = 0; i < n; i++) {
 					t[i] = steplength * t[i];
@@ -63,13 +63,13 @@ if (count < n) {
 
 ### Caso 1 : Direccion hacia arriba
 ```
-				
+
 	//Case 1 for convergence criteria.
 		} else { /* uphill search */ //if linea 114
 			count = 0;
 			if (ilast == gradcount) //termina el programa con el while principal
 				count = n;
-			else 
+			else
 				ilast = gradcount; //si no solo reinicia B
 			/* Resets unless has just been reset */
 		}
@@ -86,7 +86,7 @@ if (count < n) {
 	return (3); //N_CONVERGENCE; //BFGS agoto iteraciones.
 
 
-			
+
 ```
 ###Caso 2 :Cambio pequeño.
 ```
