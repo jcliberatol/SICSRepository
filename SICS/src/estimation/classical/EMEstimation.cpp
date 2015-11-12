@@ -31,18 +31,15 @@ EMEstimation::~EMEstimation()
  */
 void EMEstimation::setModel(Model * model)
 {
-	std::cout<<"Welcome , here we are setting the modelel"<<std::endl;
 	int q;
 	int It;
 	int d = 1;
-	std::cout<<"about to tis model"<<std::endl;
 	this->model = model;
 	q = quadNodes->size();
 	It = this->model->getItemModel()->getDataset()->countItems();
 
 	int dims = this->model->getDimensionModel()->getNumDimensions();
 
-	std::cout<<"my dimz are : "<<dims<<std::endl;
 	if(dims < 2){
 		q = quadNodes->size();
 }else{

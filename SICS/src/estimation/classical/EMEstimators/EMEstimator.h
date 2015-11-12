@@ -321,21 +321,27 @@ public:
                 iargs[for_counter] = args[par_index[for_counter]];
             }
 
-            if(iargs[0]<0)
-            iargs[0] = 0.851;
+            bool boundaries = true;
 
-            if(abs(iargs[0]) > 5)
+            if(boundaries){
+            if(iargs[0]<0){
             iargs[0] = 0.851;
+    }
+
+            if(abs(iargs[0]) > 5){
+            iargs[0] = 0.851;
+    }
 
             if(dims > 1)
             {
-                if(abs(-iargs[1]/iargs[0]) > 5)
+                if(abs(-iargs[1]/iargs[0]) > 5){
                 iargs[1] = 0;
+        }
 
-                if(dims > 2)
+                if(dims > 2){
                 if(abs(iargs[2]) > 5)
-                iargs[2] = 0.3;
-            }
+                iargs[2] = -1.3;
+        }}}
 
             optim.searchOptimal(fptr, gptr, hptr, iargs, pars, dims, npars);
             //Call the pointer at the optimal.
@@ -502,31 +508,48 @@ public:
                         for (int oo = 0; oo < f->nC(); oo++) {
                                 pars[nP ++ ] = (*r)(oo,i);
                         }
+
+                        //To put zeros in a components, calculate the cluster of the item , and then put zeros in all other components
+                        int clustit = dims;
+                        int binw = floor(items/dims);
+                        int curbin = ceil(i / binw)-1;
+                        //std::cout<<"bin : "<<curbin<<endl;
+
+                        if(i == (restrictitem[resi]-1)){
+                                resi ++;
+                                skipoptim = true;
+                        }
+
                         //Fill the a's
                         for (int oo = 0; oo < dims; oo++) {
                                 args[oo] = pset[0][0][i*dims+oo];
+                                if(abs(args[oo])>5){
+                                        //args[oo] = 0.85;
+                                }
                         }
                         //Fill the b's and c's
                         nP = dims;
                         args[nP ++ ] = pset[1][0][i];
+                        //if(abs(args[nP]>5)){args[nP] = -0.6;}
                         args[nP ++] = pset[2][0][i];
+                        //if(abs(args[nP]>5)){args[nP] = -1.3;}
 
                         //Arrays seem to be complete-
                         int npars = 2 + thetas -> nC() + f->nC() *  2;
                         int numargs = dims + 2 ;
-                        std::cout<<"it : "<<i<<std::endl;
-                        if(i == (restrictitem[resi]-1)){
-                                resi ++;
-                                skipoptim = true;
-                                std::cout<<"Not optimizing item.";
-                        }
 
+
+
+                        /*std::cout<<"it : "<<i;
+
+                        for (int kk = 0; kk < numargs; kk++) {
+                                cout<<" "<<args[kk]<<"  ";
+                        }cout<<endl;
+                        std::cout<<"it : "<<i;
+                        */
                         if(!skipoptim){
                                 optim.searchOptimal(fptr, gptr, hptr, args, pars, numargs, npars);
                         }
-                        for (int kk = 0; kk < numargs; kk++) {
-                                cout<<" "<<args[kk]<<" ";
-                        }cout<<endl;
                         //Call the pointer at the optimal.
                         double result;
                	        result = (*fptr)(args, pars, numargs, npars);

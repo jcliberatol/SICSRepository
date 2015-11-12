@@ -37,7 +37,10 @@ void ThreePLModel::untransform()
 		double qc = parameterSet[2][0][i];
 		double ec = exp(qc);
 		parameterSet[2][0][i] = ec / (1 + ec);
-		parameterSet[1][0][i] = -qb / qa; //Transformacion del B   d=-b/a
+		int dims = dimensionModel->getNumDimensions();
+		if(dims == 1){
+			parameterSet[1][0][i] = -qb / qa; //Transformacion del B   d=-b/a
+		}
 	}
 }
 
@@ -125,14 +128,15 @@ void ThreePLModel::successProbability(DimensionModel *dimensionModel, Quadrature
 					parameterSet[0][0]+(dims*i)  //This is a array passed directly
 					, d_d, c_d , dims );
 				}
+			}
+			delete [] theta;
+			delete [] theta_index;
 		}
-		delete [] theta;
-		delete [] theta_index;
 	}
-}
 
-double *** ThreePLModel::getParameterSet() {
-	return (this->parameterSet); }
+	double *** ThreePLModel::getParameterSet() {
+		return (this->parameterSet);
+	}
 
 
 	void ThreePLModel::setParameterSet(double ***) { this->parameterSet = parameterSet; }
@@ -142,7 +146,9 @@ double *** ThreePLModel::getParameterSet() {
 		for (int i = 0; i < dims; i++) {
 			exponential += theta[i] * a[i];
 		}
-		exponential += d;
+
+		exponential -=d;
+
 		if ( exponential > Constant::MAX_EXP )
 		exponential = Constant::MAX_EXP;
 
@@ -154,6 +160,26 @@ double *** ThreePLModel::getParameterSet() {
 
 		return ( (ec/(1+ec)) + (1 - (ec/(1+ec))) * (1/(1+exponential)) );
 	}
+
+/*
+double ThreePLModel::successProbabilityMD(double * theta, double * a , double d , double c , int dims ){
+	double exponential = 0;
+	for (int i = 0; i < dims; i++) {
+		exponential += theta[i] * a[i];
+	}
+	exponential += d;
+	if ( exponential > Constant::MAX_EXP )
+	exponential = Constant::MAX_EXP;
+
+	else if ( exponential < -(Constant::MAX_EXP*1.0) )
+	exponential = -Constant::MAX_EXP;
+
+	exponential = exp(-exponential) ;
+	double ec = exp(c);
+
+	return ( (ec/(1+ec)) + (1 - (ec/(1+ec))) * (1/(1+exponential)) );
+}
+*/
 
 	double ThreePLModel::successProbability(double theta, double a, double d, double c)
 	{
@@ -181,320 +207,325 @@ double *** ThreePLModel::getParameterSet() {
 		dims = dimensionModel->getNumDimensions();
 
 		for (unsigned int j = 0; j < items; j++)
-		{	
+		{
 			for (int d = 0; d < dims; d++) {
 				/* code */
 				parameters[i++] = parameterSet[0][0][j*dims+d];
+				cout<<"a : "<<parameters[i-1];
 			}
 		}
-		for (unsigned int j = 0; j < items; j++)
-		parameters[i++] = parameterSet[1][0][j];
-		for (unsigned int j = 0; j < items; j++)
-		parameters[i++] = parameterSet[2][0][j];
-	}
-
-	void ThreePLModel::setParameters(double * parameters)
-	{
-		unsigned int i = 0;
-
-		for (unsigned int j = 0; j < items; j++)
-		this->parameterSet[0][0][j] = parameters[i++];
-		for (unsigned int j = 0; j < items; j++)
-		this->parameterSet[1][0][j] = parameters[i++];
-		for (unsigned int j = 0; j < items; j++)
-		this->parameterSet[2][0][j] = parameters[i++];
-	}
-
-	double ThreePLModel::getProbability(int node, int item) { return ((*probabilityMatrix)(node, item)); }
-
-
-	void ThreePLModel::destroyWeights(){
-		delete [] multiweights;
-	}
-
-	void ThreePLModel::itemGradient(double* args, double* pars, int nargs, int npars, double* gradient)
-	{
-		int nP, q, items, index;
-		double a, b, c;
-		double D = Constant::NORM_CONST;
-		double *theta, *r, *f;
-		long double *h_0; // Block Matrix of size q*I. Each block-element has size of 1*3
-		long double *h; // Block vector of size I (i.e. I blocks). Each block-element has size of 1*3
-		long double *P_Star, *P;  // Matrix of size q*I
-		long double *W;           // Matrix of size q*I
-		long double *factor;	  // Matrix of product (r-fP)W
-		long double ec;            // e^c_i
-		long double ecp1i;	// 1 / (e^c_i + 1)
-
-		index = pars[npars-1];
-		nP = 0;
-		a = args[0];
-		b = args[1];
-		c = args[2];
-
-		q = pars[nP ++];
-		items = pars[nP ++];
-		theta = new double[q];
-		r = new double[q];
-		f = new double[q];
-		h = new long double [3];
-		h_0 = new long double [q*3];
-		P = new long double [q];
-		P_Star = new long double [q];
-		factor = new long double [q];
-		W = new long double [q];
-
-		// Obtain theta
-		for (int k=0; k<q; k++)
-
-		theta[k] = pars[nP ++];
-
-		// Obtain f
-		for (int k=0; k<q; k++)
-		f[k] = pars[nP ++];
-
-		// Obtain r that becomes a vector
-		for (int k=0; k<q; k++)
-		{
-			nP += index;
-			r[k] = pars[nP];
-			nP += (items-index);
-		}
-
-		ecp1i=1/(1+exp(c));
-		ec=exp(c);
-
-		for ( int k = 0; k < q; k++ )
-		{
-			P[k] = successProbability ( theta[k], a,b,c);
-			P_Star[k] = 1/(1+exp(-D*(a*theta[k]+b)));
-
-			W[k] = P_Star[k] * ( 1 - P_Star[k] ); // Numerator
-			W[k] /= P[k] * ( 1 - P[k] );// Denominator
-
-			factor[k] = ( r[k] - f[k]*P[k] ) * W[k];
-
-			// h_0 / (P_star*Q_star)
-			h_0[3 * k ] = D * theta[k] * ecp1i;
-			h_0[3 * k + 1] = D * ecp1i;
-			h_0[3 * k + 2] = ec * (ecp1i*ecp1i) / P_Star[k];
-		}
-
-
-		memset(h,0,sizeof(long double)*3);
-		memset(gradient,0,sizeof(double)*3);
-
-		for ( int k = 0; k < q; k++ )
-		{
-			h[0] += factor[k] * h_0[3 * k + 0];
-			h[1] += factor[k] * h_0[3 * k + 1];
-			h[2] += factor[k] * h_0[3 * k + 2];
-		}
-
-		delete [] h_0;
-		delete [] P_Star;
-		delete [] P;
-		delete [] W;
-		delete [] factor;
-
-		delete [] theta;
-		delete [] r;
-		delete [] f;
-
-		//return h as the gradient
-		int hc=0;
-
-		for (int n = 0; n < 3; ++n)
-		gradient[hc++]= -static_cast<double>(h[n]);
-
-		delete [] h;
-	}
-
-	double ThreePLModel::itemLogLikMultiDim(double* args, double* pars, int nargs, int npars){
-		// args are a array of dims size, b and c , singles ...
-		// nargs thus is dims + 2.
-		int dims = nargs - 2;
-		double tp , tq; //Probabilities
-		double * a = new double [dims];
-		double * thetafull , *r , *f;
-		int nP = 0;
-		double sum = 0;
-		int q = pars[nP ++ ]; // totalNodes ( 10 nodes at 3 dimensions  = 1000 nodes for instance)
-		int qs  = pars[nP ++]; //Small Nodes (10 nodes for instance)
-
-		// pars are : number of quads  (dims), f and r, theta. and thats  it.
-		//Pars contain number of thetas,
-
-		thetafull = new double[qs]; // qs is number of quadrature nodes
-		r = new double[q];
-		f = new double[q];
-
-		// Obtain theta
-		for (int k=0; k<qs; k++)
-		thetafull[k] = pars[nP ++];
-
-		// Obtain f
-		for (int k=0; k<q; k++)
-		f[k] = pars[nP ++];
-
-		// Obtain r that becomes a vector
-		for (int k=0; k<q; k++)
-		{
-			r[k] = pars[nP++];
-		}
-		//Restart
-		nP = 0;
-		for (int k=0; k<dims; k++){
-			a[k] = args[nP ++];
-			//std::cout<<" a : "<<a[k];
-			//if(a[k] > 5 ) a[k] = 0.851;
-		}
-
-		double d = args[nP ++];
-		//std::cout<<" d : "<<d;
-		//if(abs(d) > 20) d = -0.6;
-		double c = args[nP ++];
-		//std::cout<<" c : "<<c;
-		//if(abs(c) > 10) c = -1.3;
-		//std::cout<<endl;
-
-
-		//if(abs(d)>5)
-		d = 0;
-		//if(abs(c)>5)
-		c = 0.1;
-
-		//Here things change because the two thetas must be send to the optimizing function
-		//Ergo the same permutations must occur here
-		double * theta = new double[dims];
-		int * theta_index = new int[dims];
-
-		for (int k = 0; k < dims; k++) {
-			theta_index[k] = 0;
-		}
-		for (int k = 0; k < q; k++) {
-			//Calculate theta index
-			fullpermutations(dims,qs,k,theta_index);
-			//Index the theta array at the theta_index
-			//std::cout<<"theta  :"<<std::endl;
-			for (int j = 0; j < dims; j++) {
-				theta[j]  = thetafull[theta_index[j]];
-				//std::cout<<" "<<theta[j];
+		for (unsigned int j = 0; j < items; j++){
+			parameters[i++] = parameterSet[1][0][j];
+			cout<<"b : "<<parameters[i-1];}
+			for (unsigned int j = 0; j < items; j++){
+				parameters[i++] = parameterSet[2][0][j];
+				cout<<"c : "<<parameters[i-1];}
 			}
-			//std::cout<<std::endl;
-			//std::cout<<"SUMD"<<std::endl;
-			tp = ThreePLModel::successProbabilityMD(theta, a, d, c , dims);
-			if (tp<1e-08) tp=1e-08;
-			tq = 1-tp;
-			if (tq<1e-08) tq=1e-08;
-			//std::cout<<" tp and tq "<<tp<<"  "<<tq<<std::endl;
-			sum+=(r[k]*log(tp))+(f[k]-r[k])*log(tq);
 
-		}
+			void ThreePLModel::setParameters(double * parameters)
+			{
+				unsigned int i = 0;
 
-		delete[] theta;
-		delete[] f;
-		delete[] r;
-		delete[] a;
-		delete[] thetafull;
-		delete[] theta_index;
-		return -sum;
-	}
+				for (unsigned int j = 0; j < items; j++)
+				this->parameterSet[0][0][j] = parameters[i++];
+				for (unsigned int j = 0; j < items; j++)
+				this->parameterSet[1][0][j] = parameters[i++];
+				for (unsigned int j = 0; j < items; j++)
+				this->parameterSet[2][0][j] = parameters[i++];
+			}
 
-	void ThreePLModel::itemGradientMultiDim(double* args, double* pars, int nargs, int npars, double* grad ){
-		double h = 0.00001;
-		double loglik = ThreePLModel::itemLogLikMultiDim(args,pars,nargs,npars);
-
-		for (int i = 0;  i < nargs; i++) {
-			args[i] += h;
-			grad[i] = (ThreePLModel::itemLogLikMultiDim(args,pars,nargs,npars) - loglik)  / h;
-			args[i] -= h;
-		}
-	}
-
-	double ThreePLModel::itemLogLik(double* args, double* pars, int nargs, int npars)
-	{
-		double *theta, *r, *f;
-		unsigned int nP, q, items, index;
-		double a, b, c, sum;
-		//long double tp , tq;
-		double tp , tq;
-		sum = nP = index = 0;
-
-		a = args[0];
-		b = args[1];
-		c = args[2];
-
-		q = pars[nP ++]; // q is obtained and npars is augmented
-		items = pars[nP ++];
-		index = pars[npars-1];
-
-		theta = new double[q];
-		r = new double[q];
-		f = new double[q];
-
-		// Obtain theta
-		for (unsigned int k=0; k<q; k++)
-		theta[k] = pars[nP ++];
-
-		// Obtain f
-		for (unsigned int k=0; k<q; k++)
-		f[k] = pars[nP ++];
-
-		// Obtain r that becomes a vector
-		for (unsigned int k=0; k<q; k++)
-		{
-			nP += index;
-			r[k] = pars[nP];
-			nP += (items-index);
-		}
-
-		if(abs(a) > 5)
-		a = 0.851;
-		double dd = -b/a;
-		if(abs(dd)>5)
-		b = 0;
-		if(abs(c)>5)
-		c = 0.1;
-
-		for (unsigned int k = 0; k < q; ++k)
-		{
-			tp = (ThreePLModel::successProbability ( theta[k], a,b,c));
+			double ThreePLModel::getProbability(int node, int item) { return ((*probabilityMatrix)(node, item)); }
 
 
-			if (tp<1e-08) tp=1e-08;
+			void ThreePLModel::destroyWeights(){
+				delete [] multiweights;
+			}
 
-			tq = 1-tp;
+			void ThreePLModel::itemGradient(double* args, double* pars, int nargs, int npars, double* gradient)
+			{
+				int nP, q, items, index;
+				double a, b, c;
+				double D = Constant::NORM_CONST;
+				double *theta, *r, *f;
+				long double *h_0; // Block Matrix of size q*I. Each block-element has size of 1*3
+				long double *h; // Block vector of size I (i.e. I blocks). Each block-element has size of 1*3
+				long double *P_Star, *P;  // Matrix of size q*I
+				long double *W;           // Matrix of size q*I
+				long double *factor;	  // Matrix of product (r-fP)W
+				long double ec;            // e^c_i
+				long double ecp1i;	// 1 / (e^c_i + 1)
 
-			if (tq<1e-08) tq=1e-08;
+				index = pars[npars-1];
+				nP = 0;
+				a = args[0];
+				b = args[1];
+				c = args[2];
 
-			sum+=(r[k]*log(tp))+(f[k]-r[k])*log(tq);
-		}
+				q = pars[nP ++];
+				items = pars[nP ++];
+				theta = new double[q];
+				r = new double[q];
+				f = new double[q];
+				h = new long double [3];
+				h_0 = new long double [q*3];
+				P = new long double [q];
+				P_Star = new long double [q];
+				factor = new long double [q];
+				W = new long double [q];
+
+				// Obtain theta
+				for (int k=0; k<q; k++)
+
+				theta[k] = pars[nP ++];
+
+				// Obtain f
+				for (int k=0; k<q; k++)
+				f[k] = pars[nP ++];
+
+				// Obtain r that becomes a vector
+				for (int k=0; k<q; k++)
+				{
+					nP += index;
+					r[k] = pars[nP];
+					nP += (items-index);
+				}
+
+				ecp1i=1/(1+exp(c));
+				ec=exp(c);
+
+				for ( int k = 0; k < q; k++ )
+				{
+					P[k] = successProbability ( theta[k], a,b,c);
+					P_Star[k] = 1/(1+exp(-D*(a*theta[k]+b)));
+
+					W[k] = P_Star[k] * ( 1 - P_Star[k] ); // Numerator
+					W[k] /= P[k] * ( 1 - P[k] );// Denominator
+
+					factor[k] = ( r[k] - f[k]*P[k] ) * W[k];
+
+					// h_0 / (P_star*Q_star)
+					h_0[3 * k ] = D * theta[k] * ecp1i;
+					h_0[3 * k + 1] = D * ecp1i;
+					h_0[3 * k + 2] = ec * (ecp1i*ecp1i) / P_Star[k];
+				}
 
 
-		args[0] = a;
-		args[1] = b;
-		args[2] = c;
+				memset(h,0,sizeof(long double)*3);
+				memset(gradient,0,sizeof(double)*3);
 
-		delete[] theta;
-		delete[] f;
-		delete[] r;
+				for ( int k = 0; k < q; k++ )
+				{
+					h[0] += factor[k] * h_0[3 * k + 0];
+					h[1] += factor[k] * h_0[3 * k + 1];
+					h[2] += factor[k] * h_0[3 * k + 2];
+				}
 
-		return (-sum);
-	}
+				delete [] h_0;
+				delete [] P_Star;
+				delete [] P;
+				delete [] W;
+				delete [] factor;
 
-	double ThreePLModel::successProbability_cPrime(double theta, double a, double b, double c)
-	{
-		long double cPrime = exp(c)/(1+exp(c));
-		return (successProbability ( theta, a, b, cPrime ));
-	}
+				delete [] theta;
+				delete [] r;
+				delete [] f;
 
-	void ThreePLModel::printParameterSet(ostream& out)
-	{
-		out << "\"a\" \"b\" \"c\"" << endl;
+				//return h as the gradient
+				int hc=0;
 
-		for (int i = 0; i < items; i++)
-		out << parameterSet[0][0][i] << " "
-		<< parameterSet[1][0][i] << " "
-		<< parameterSet[2][0][i] << endl;
-	}
+				for (int n = 0; n < 3; ++n)
+				gradient[hc++]= -static_cast<double>(h[n]);
+
+				delete [] h;
+			}
+
+			double ThreePLModel::itemLogLikMultiDim(double* args, double* pars, int nargs, int npars){
+				// args are a array of dims size, b and c , singles ...
+				// nargs thus is dims + 2.
+				int dims = nargs - 2;
+				double tp , tq; //Probabilities
+				double * a = new double [dims];
+				double * thetafull , *r , *f;
+				int nP = 0;
+				double sum = 0;
+				int q = pars[nP ++ ]; // totalNodes ( 10 nodes at 3 dimensions  = 1000 nodes for instance)
+				int qs  = pars[nP ++]; //Small Nodes (10 nodes for instance)
+
+				// pars are : number of quads  (dims), f and r, theta. and thats  it.
+				//Pars contain number of thetas,
+
+				thetafull = new double[qs]; // qs is number of quadrature nodes
+				r = new double[q];
+				f = new double[q];
+
+				// Obtain theta
+				for (int k=0; k<qs; k++)
+				thetafull[k] = pars[nP ++];
+
+				// Obtain f
+				for (int k=0; k<q; k++)
+				f[k] = pars[nP ++];
+
+				// Obtain r that becomes a vector
+				for (int k=0; k<q; k++)
+				{
+					r[k] = pars[nP++];
+				}
+				//Restart
+				nP = 0;
+				double maxa = 0;
+				int maxk = 0;
+				for (int k=0; k<dims; k++){
+					a[k] = args[nP ++];
+					//if(abs(a[k])>5){a[k]=0.85;}
+					if(a[k]>maxa){
+						maxa = a[k];
+						maxk = k;
+					}
+				}
+
+				for (int k=0; k<dims; k++){
+					if(k != maxk){
+						a[k] = 0;
+					}
+				}
+
+				double d = args[nP ++];
+				//if(abs(d)>10){d=0;}
+				double c = args[nP ++];
+
+
+				//Here things change because the two thetas must be send to the optimizing function
+				//Ergo the same permutations must occur here
+				double * theta = new double[dims];
+				int * theta_index = new int[dims];
+
+				for (int k = 0; k < dims; k++) {
+					theta_index[k] = 0;
+				}
+				for (int k = 0; k < q; k++) {
+					//Calculate theta index
+					fullpermutations(dims,qs,k,theta_index);
+					//Index the theta array at the theta_index
+					//std::cout<<"theta  :"<<std::endl;
+					for (int j = 0; j < dims; j++) {
+						theta[j]  = thetafull[theta_index[j]];
+						//std::cout<<" "<<theta[j];
+					}
+					//std::cout<<std::endl;
+					//std::cout<<"SUMD"<<std::endl;
+					tp = ThreePLModel::successProbabilityMD(theta, a, d, c , dims);
+					if (tp<1e-08) tp=1e-08;
+					tq = 1-tp;
+					if (tq<1e-08) tq=1e-08;
+					//std::cout<<" tp and tq "<<tp<<"  "<<tq<<std::endl;
+					sum+=(r[k]*log(tp))+(f[k]-r[k])*log(tq);
+
+				}
+
+				delete[] theta;
+				delete[] f;
+				delete[] r;
+				delete[] a;
+				delete[] thetafull;
+				delete[] theta_index;
+				return -sum;
+			}
+
+			void ThreePLModel::itemGradientMultiDim(double* args, double* pars, int nargs, int npars, double* grad ){
+				double h = 0.00001;
+				double loglik = ThreePLModel::itemLogLikMultiDim(args,pars,nargs,npars);
+
+				for (int i = 0;  i < nargs; i++) {
+					args[i] += h;
+					grad[i] = (ThreePLModel::itemLogLikMultiDim(args,pars,nargs,npars) - loglik)  / h;
+					args[i] -= h;
+				}
+			}
+
+			double ThreePLModel::itemLogLik(double* args, double* pars, int nargs, int npars)
+			{
+				double *theta, *r, *f;
+				unsigned int nP, q, items, index;
+				double a, b, c, sum;
+				//long double tp , tq;
+				double tp , tq;
+				sum = nP = index = 0;
+
+				a = args[0];
+				b = args[1];
+				c = args[2];
+
+				q = pars[nP ++]; // q is obtained and npars is augmented
+				items = pars[nP ++];
+				index = pars[npars-1];
+
+				theta = new double[q];
+				r = new double[q];
+				f = new double[q];
+
+				// Obtain theta
+				for (unsigned int k=0; k<q; k++)
+				theta[k] = pars[nP ++];
+
+				// Obtain f
+				for (unsigned int k=0; k<q; k++)
+				f[k] = pars[nP ++];
+
+				// Obtain r that becomes a vector
+				for (unsigned int k=0; k<q; k++)
+				{
+					nP += index;
+					r[k] = pars[nP];
+					nP += (items-index);
+				}
+
+				if(abs(a) > 5)
+				a = 0.851;
+				double dd = -b/a;
+				if(abs(dd)>5)
+				b = 0;
+				if(abs(c)>5)
+				c = 0.1;
+
+				for (unsigned int k = 0; k < q; ++k)
+				{
+					tp = (ThreePLModel::successProbability ( theta[k], a,b,c));
+
+
+					if (tp<1e-08) tp=1e-08;
+
+					tq = 1-tp;
+
+					if (tq<1e-08) tq=1e-08;
+
+					sum+=(r[k]*log(tp))+(f[k]-r[k])*log(tq);
+				}
+
+
+				args[0] = a;
+				args[1] = b;
+				args[2] = c;
+
+				delete[] theta;
+				delete[] f;
+				delete[] r;
+
+				return (-sum);
+			}
+
+			double ThreePLModel::successProbability_cPrime(double theta, double a, double b, double c)
+			{
+				long double cPrime = exp(c)/(1+exp(c));
+				return (successProbability ( theta, a, b, cPrime ));
+			}
+
+			void ThreePLModel::printParameterSet(ostream& out)
+			{
+				out << "\"a\" \"b\" \"c\"" << endl;
+
+				for (int i = 0; i < items; i++)
+				out << parameterSet[0][0][i] << " "
+				<< parameterSet[1][0][i] << " "
+				<< parameterSet[2][0][i] << endl;
+			}
