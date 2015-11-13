@@ -61,10 +61,10 @@ public:
 			else if (typeid(*dimensionModel) == typeid(MultidimensionalModel))
 			{
 
-				std::cout<<"Building multidimensional parameter model"<<std::endl;
+				//std::cout<<"Building multidimensional parameter model"<<std::endl;
 				items = itemModel->countItems();
 				int dims = dimensionModel->getNumDimensions();
-				std::cout<<"With "<<dims<<" Dimensions"<<std::endl;
+				//std::cout<<"With "<<dims<<" Dimensions"<<std::endl;
 				parameterSet = new double**[3];
 				parameterSet[0] = new double *[1];
 				parameterSet[1] = new double *[1];
@@ -98,7 +98,7 @@ public:
     //Destroys the wieght in the multidim casw
 
     void destroyWeights(){
-	    
+
     }
 
 	// Getters and Setters

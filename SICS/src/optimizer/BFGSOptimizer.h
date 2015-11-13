@@ -50,7 +50,7 @@ int static bfgs(double (*&fntomin)(double*, double*, int, int),
 	if (maxiter <= 0)
 		//MAX_ITER_REACHED;
 		return (1);
-	
+
 	//allocate l
 	l = new int[nvars];
 	n = 0;
@@ -66,10 +66,10 @@ int static bfgs(double (*&fntomin)(double*, double*, int, int),
 	X = new double[n];
 	c = new double[n];
 	//Assign memory to the triangular lower matrix
-	B = new double[n * (n + 1) / 2];      
+	B = new double[n * (n + 1) / 2];
 	//evaluate the function at the initial points
 	f = (*fntomin)(args, pars, nvars, npars);
-	
+
 	if (!(f < Constant::INFINITE))
 		//BAD_INITIAL_VALUES;
 		return (2);
@@ -111,7 +111,7 @@ int static bfgs(double (*&fntomin)(double*, double*, int, int),
 				s -= B[(((i + 1) * (i + 2) / 2) - (i - j) - 1)] * g[l[j]];
 			for (j = i + 1; j < n; j++)
 				s -= B[(((j + 1) * (j + 2) / 2) - (j - i) - 1)] * g[l[j]];
-			
+
 			t[i] = s;
 			gradproj += s * g[l[i]];
 		}
@@ -145,16 +145,16 @@ int static bfgs(double (*&fntomin)(double*, double*, int, int),
 					// grad(f) is gradproj
 					accpoint = (f < Constant::INFINITE)
 							&& (f<= fmin+ gradproj * steplength	* Constant::acctol); //acctol is 1x10-4
-					
+
 					if (!accpoint)
 						// Reduce the steplength by the factor if wolfe condition is not met.
 						steplength *= Constant::stepredn;
 				}
 			} while (!(count == n || accpoint));
-			
+
 			//abstol is 1x10-5, reltol is 1e-8
 			enough = (f > Constant::abstol) && fabs(f - fmin) > Constant::reltol * (fabs(fmin) + Constant::reltol);
-									
+
 			/* stop if value if small or if relative change is low */
 			if (!enough)
 			{

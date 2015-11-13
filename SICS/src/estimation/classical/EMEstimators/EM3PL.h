@@ -33,7 +33,7 @@ public:
 
 		else if (typeid(*dimensionModel) == typeid(MultidimensionalModel)) {
 			int dims = dimensionModel->getNumDimensions();
-			std::cout<<"Kasting init prs"<<endl;
+			//std::cout<<"Kasting init prs"<<endl;
 			for (int d = 0;  d< dims*items; d++) {
 				pset[0][0][d] = npset[0][0][d];
 			}

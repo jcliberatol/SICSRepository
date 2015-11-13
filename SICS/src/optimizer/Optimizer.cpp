@@ -7,7 +7,7 @@ void Optimizer::searchOptimal(double (*functionPtr)(double*,double*,int,int),
 {
 	//TODO REAL OPTIMIZER
 	//FOR NOW ONLY OPTIMIZE USING BFGS
-	int r = bfgs(functionPtr,gradientPtr,args,pars,nargs,npars,15);
+	int r = bfgs(functionPtr,gradientPtr,args,pars,nargs,npars,100);
 	r = 4;
 
 	switch(r)

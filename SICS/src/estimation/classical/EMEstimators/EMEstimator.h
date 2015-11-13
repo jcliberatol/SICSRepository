@@ -160,8 +160,8 @@ public:
 
                    // cout<<*(m->getParameterModel()->probabilityMatrix);
                    //cout<<"Inside multidim EStep"<<endl;
-                    cout<<m->getParameterModel()->probabilityMatrix->nC()<<std::endl;
-                    cout<<m->getParameterModel()->probabilityMatrix->nR()<<std::endl;
+                    //cout<<m->getParameterModel()->probabilityMatrix->nC()<<std::endl;
+                    //cout<<m->getParameterModel()->probabilityMatrix->nR()<<std::endl;
                     int totalNodes = m->getParameterModel()->probabilityMatrix->nR();
                     //With this two indexes now we can compute the matrix
                     double prob_matrix[totalNodes][(int) items];
@@ -221,10 +221,6 @@ public:
                     }
 
                     m->getParameterModel()->destroyWeights();
-            // 1. Create quadnodes in a wavy fashion
-            // 2 . Bring probabilityMatrix
-            //3. ?
-            //Start Now
 
     }
 
@@ -509,12 +505,6 @@ public:
                                 pars[nP ++ ] = (*r)(oo,i);
                         }
 
-                        //To put zeros in a components, calculate the cluster of the item , and then put zeros in all other components
-                        int clustit = dims;
-                        int binw = floor(items/dims);
-                        int curbin = ceil(i / binw)-1;
-                        //std::cout<<"bin : "<<curbin<<endl;
-
                         if(i == (restrictitem[resi]-1)){
                                 resi ++;
                                 skipoptim = true;
@@ -523,14 +513,14 @@ public:
                         //Fill the a's
                         for (int oo = 0; oo < dims; oo++) {
                                 args[oo] = pset[0][0][i*dims+oo];
-                                if(abs(args[oo])>5){
-                                        //args[oo] = 0.85;
+                                if(abs(args[oo])>3){
+                                        //args[oo] = 0;
                                 }
                         }
                         //Fill the b's and c's
                         nP = dims;
                         args[nP ++ ] = pset[1][0][i];
-                        //if(abs(args[nP]>5)){args[nP] = -0.6;}
+                        //if(abs(args[nP]>5)){args[nP] = 0;}
                         args[nP ++] = pset[2][0][i];
                         //if(abs(args[nP]>5)){args[nP] = -1.3;}
 
@@ -540,13 +530,13 @@ public:
 
 
 
-                        /*std::cout<<"it : "<<i;
+                        //std::cout<<"it : "<<i;
 
-                        for (int kk = 0; kk < numargs; kk++) {
-                                cout<<" "<<args[kk]<<"  ";
-                        }cout<<endl;
-                        std::cout<<"it : "<<i;
-                        */
+                        for (int kk = 0; kk < npars; kk++) {
+                                //cout<<","<<pars[kk]<<"  ";
+                        }//cout<<endl;
+                        //std::cout<<"it : "<<i;
+
                         if(!skipoptim){
                                 optim.searchOptimal(fptr, gptr, hptr, args, pars, numargs, npars);
                         }
