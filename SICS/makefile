@@ -18,7 +18,8 @@ SRC =   src/type/Constant.cpp \
 	src/model/parameter/TwoPLModel.cpp \
 	src/optimizer/Optimizer.cpp \
 	src/output/Output.cpp \
-	src/util/asa111.cpp
+	src/util/asa111.cpp \
+	src/util/util.cpp
 OBJ = $(SRC:.cpp=.o)
 INCL = -I/home/cristian/git/CppAD/ -I./src/
 CFLAGS = -std=c++11 -Wunused-function -g3 -fdiagnostics-color

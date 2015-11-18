@@ -9,6 +9,8 @@
 #define UTIL_H_
 #include <util/asa111.h>
 #include <math.h>
+#include <cstdlib>
+
 
 #define iteration_0 (*args_hist)[2]
 #define iteration_1 (*args_hist)[1]
@@ -24,6 +26,11 @@
  * PCheck : checks if a number is a probability, if it is one returns a very big probability, if its zero, a very small but not null.
  */
 
+
+void filelog(const char * file, const  char * message);
+void filelog(const char * file, int message);
+void filelog(const char * file, double message);
+
  inline void fullpermutations (int dims, int nodes , int index, int* indexes){
  	//Base case
  	if(dims == 1)
@@ -37,11 +44,13 @@
  		index = index - indexes[0]*pow(nodes,dims);
  		fullpermutations(dims,nodes,index,indexes+1);
  	}
- }
+}
+
+ //void filelog(const char * file, const  char * message);
 
 inline double randomd() {
 
-	int random_variable = std::rand();
+	int random_variable = rand();
 	return ((double) ((double) random_variable / (double) RAND_MAX));
 }
 
@@ -50,8 +59,7 @@ inline double stdDev_bin(int tsum, int tN) {
 	double N = (double) tN;
 	double sum = (double) tsum;
 	avg = sum / N;
-	return (std::sqrt(
-			(sum * (1 - avg) * (1 - avg) + (N - sum) * (avg * avg)) / N));
+	return (sqrt((sum * (1 - avg) * (1 - avg) + (N - sum) * (avg * avg)) / N));
 }
 
 inline double stdDev_bin(int tsum, int tN, double avg) {
@@ -107,6 +115,10 @@ inline void transformHessiana( double * inputHessiana, double ** outputHessiana,
     }
 }
 
+
+inline void cov(int vars, int  obs, double * data, double* cov){
+
+}
 
 
 

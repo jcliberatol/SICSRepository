@@ -3,6 +3,8 @@
 # include <iomanip>
 # include <cmath>
 # include <ctime>
+#include <fstream>
+#include <string.h>
 
 using namespace std;
 

@@ -18,7 +18,8 @@ SRCS =   src/type/Constant.cpp \
 	src/model/parameter/TwoPLModel.cpp \
 	src/optimizer/Optimizer.cpp \
 	src/output/Output.cpp \
-	src/util/asa111.cpp
+	src/util/asa111.cpp \
+	src/util/util.cpp
 
 LIBRARY = irtpp
 SRC_DIR = src

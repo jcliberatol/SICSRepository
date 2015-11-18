@@ -32,11 +32,13 @@ private:
 	//double* multiweights;
 
 public:
-	
+
 	static double itemLogLik(double*, double* , int, int);
 	static double itemLogLikMultiDim(double* , double* , int , int);
 	static void itemGradient(double*, double*, int, int, double*);
 	static void itemGradientMultiDim(double*, double*, int, int, double*);
+	double itemLLGradientMD(double* args, double* pars, int nargs, int npars, double* grad);
+	double gradientProbMD(double * theta, double * a , double d , double c , int dims, double * grad);
 	static double successProbability(double, double, double, double);
 	double successProbability(double, double *);
 	static double successProbabilityMD(double * theta, double * a , double d , double c , int dims );

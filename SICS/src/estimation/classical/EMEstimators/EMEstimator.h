@@ -165,7 +165,7 @@ public:
                     int totalNodes = m->getParameterModel()->probabilityMatrix->nR();
                     //With this two indexes now we can compute the matrix
                     double prob_matrix[totalNodes][(int) items];
-                    //And copy that bitch!
+
                     for (int k = 0; k < totalNodes; ++k)
                     for (int i = 0; i < items; ++i)
                     prob_matrix[k][i] = pm->getProbability(k, i);
@@ -175,7 +175,14 @@ public:
                    /* for (int i = 0; i < totalNodes; i++) {
                             std::cout<<mweights[i]<<", ";
                     }*/
+                    //Zero out the sums
+                    for (int k = 0; k < q; k++)
+                    {
+                        (*f)(0, k) = 0;
 
+                        for (int i = 0; i < items; i++)
+                        (*r)(k, i) = 0;
+                    }
                     //std::cout<<std::endl;
                    // cout<<"Patterns : "<<endl;
                     for (int index = 0; index < size; index++)
@@ -187,7 +194,7 @@ public:
                         for (int k = 0; k < q; k++)
                         {
                                 //cout<<"f & mwei : "<<endl;
-                            faux[k] = mweights[k];
+                            faux[k] = 1;// mweights[k];
                             //Calculate the p (iterate over the items in the productory)
                             counter_set = 0;
 
@@ -203,11 +210,11 @@ public:
                             }
                             //At this point the productory is calculated and faux[k] is equivalent to p(u_j,theta_k)
                             //Now multiply by the weight
-                            sum += faux[k];
+                            sum += (faux[k] * mweights[k]);
                         }
 
                         //cout<<"Snd for q :"<<q<<endl;
-
+                        //filelog("loglik.txt","33.33");
                         for (int k = 0; k < q; k++)
                         {
                             faux[k] *= frequency_list[index] / sum; //This is g*_j_k
@@ -219,6 +226,13 @@ public:
                         }
                         //std::cout<<"got to the end"<<endl;
                     }
+
+                    for (int k = 0; k < q; k++)
+                    {
+                        filelog("farr.log",(*f)(0, k));
+                        filelog("farr.log",",");
+                    }
+                    filelog("farr.log","\n");
 
                     m->getParameterModel()->destroyWeights();
 
@@ -321,11 +335,11 @@ public:
 
             if(boundaries){
             if(iargs[0]<0){
-            iargs[0] = 0.851;
-    }
+            iargs[0] = 0.5;
+                }
 
             if(abs(iargs[0]) > 5){
-            iargs[0] = 0.851;
+            iargs[0] = 0.5;
     }
 
             if(dims > 1)
@@ -440,9 +454,6 @@ public:
                 //Number of items
                 int It = m->getItemModel()->getDataset()->countItems();
                 //Number of quadnodes
-                q = nodes->size();
-                //std::cout<<" the pset is ;: "<<pset<<std::endl;
-                //std::cout<<" Dims ;: "<<dims<<std::endl;
 
                 pset = m->getParameterModel()->getParameterSet();
                 //Pset is accessed with tripple pointers
@@ -513,16 +524,16 @@ public:
                         //Fill the a's
                         for (int oo = 0; oo < dims; oo++) {
                                 args[oo] = pset[0][0][i*dims+oo];
-                                if(abs(args[oo])>3){
-                                        //args[oo] = 0;
+                                if(abs(args[oo])>10){
+                                        args[oo] = 0;
                                 }
                         }
                         //Fill the b's and c's
                         nP = dims;
                         args[nP ++ ] = pset[1][0][i];
-                        //if(abs(args[nP]>5)){args[nP] = 0;}
+                        if(abs(args[nP]>5)){args[nP] = 0;}
                         args[nP ++] = pset[2][0][i];
-                        //if(abs(args[nP]>5)){args[nP] = -1.3;}
+                        if(abs(args[nP]>5)){args[nP] = -1.3;}
 
                         //Arrays seem to be complete-
                         int npars = 2 + thetas -> nC() + f->nC() *  2;
@@ -532,9 +543,12 @@ public:
 
                         //std::cout<<"it : "<<i;
 
-                        for (int kk = 0; kk < npars; kk++) {
-                                //cout<<","<<pars[kk]<<"  ";
+                        for (int kk = 0; kk < numargs; kk++) {
+                                filelog("args.log",args[kk]);
+                                filelog("args.log",",");
+                                //cout<<","<<args[kk]<<"  ";
                         }//cout<<endl;
+                        filelog("args.log","\n");
                         //std::cout<<"it : "<<i;
 
                         if(!skipoptim){
@@ -572,7 +586,7 @@ public:
                         //Passes the loglike.
                         this->LLEstep = finalLL;
                         cout << "LL : "<<finalLL<<std::endl;
-
+                        //filelog("loglik.txt","33.33");
                 delete [] args;
                 delete [] pars;
         }
