@@ -23,9 +23,10 @@ SRCS =   src/type/Constant.cpp \
 
 LIBRARY = irtpp
 SRC_DIR = src
-CPPFLAGS = -std=c++11 -march=native -g3 -Wall -fPIC -Wsign-compare
+CPPFLAGS = -std=c++11 -march=native -g3 -fPIC -Wsign-compare
 #CPPFLAGS = -std=c++11 -march=native -g2 -Wall -fPIC
 INCLUDES = -I./$(SRC_DIR)
+#INCLUDES = -I./
 OBJS = $(SRCS:.cpp=.o)
 
 all : lib$(LIBRARY).a
@@ -40,3 +41,4 @@ lib$(LIBRARY).a : $(OBJS)
 
 clean:
 	$(RM) $(OBJS)
+	$(RM) lib$(LIBRARY).a
