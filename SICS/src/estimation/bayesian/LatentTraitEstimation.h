@@ -172,6 +172,13 @@ public:
 
     void estimateLatentTraitsMAP(double *** parSet)
     {
+	for (int i = 0; i < lt->pm->size; ++i)
+		{
+		  double qc = parSet[2][0][i];
+		  parSet[2][0][i] = log(qc / (1 - qc));
+		  parSet[1][0][i] = -parSet[1][0][i]*parSet[0][0][i];
+		}
+
         double BOUNDS[] = {-5,5};
         bool ** pattern_list = lt->pm->getBitsetList();
         int size = lt->pm->matrix.size();
